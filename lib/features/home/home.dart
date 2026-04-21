@@ -244,6 +244,482 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
+
+              SizedBox(height: 20),
+              Container(
+                height: 250,
+                width: double.infinity,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: HexColor.fromHex("#132e3a"),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.bedtime_rounded,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Imsak",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "04:27",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.bedtime_rounded,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Subuh",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "04:37",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.sunny,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Dzuhur",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "11:55",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Divider(
+                        color: HexColor.fromHex("#5a7b8a"),
+                        thickness: 0.1,
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.sunny_snowing,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Ashar",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "15:14",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.bedtime_rounded,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Maghrib",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "04:27",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(
+                                Icons.bedtime_rounded,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Isya",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "04:27",
+                                style: TextStyle(
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: HexColor.fromHex("#132e3a"),
+                        ),
+                        child: Icon(
+                          Icons.grid_view_rounded,
+                          color: HexColor.fromHex("#2dc8b9"),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        "Menu",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 40,
+                    width: 140,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: HexColor.fromHex("#132e3a"),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Lihat Semua",
+                          style: TextStyle(
+                            color: HexColor.fromHex("#2f9993"),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.arrow_circle_down_rounded,
+                          size: 20,
+                          color: HexColor.fromHex("#2dc8b9"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Imsak
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Quran",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: HexColor.fromHex("#5a7b8a"),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Subuh
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Doa",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Dzuhur
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Kiblat",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 12),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Ashar
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Dzikir",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Maghrib
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Masjid Terdekat",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Isya
+                      Container(
+                        width: 115,
+                        height: 120,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex("#132e3a"),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#17404a"),
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 30,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Pemutar Audio",
+                              style: TextStyle(
+                                color: HexColor.fromHex("#5a7b8a"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
