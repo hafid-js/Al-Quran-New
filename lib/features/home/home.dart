@@ -1,5 +1,7 @@
+import 'package:alquran_new/features/alquran/alquran.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -488,45 +490,46 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Imsak
-                      Container(
-                        width: 115,
-                        height: 120,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: HexColor.fromHex("#132e3a"),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 55,
-                              width: 55,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: HexColor.fromHex("#17404a"),
+                      InkWell(
+                        onTap: () => Get.to(() => AlQuranScreen()),
+                        child: Container(
+                          width: 115,
+                          height: 120,
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: HexColor.fromHex("#132e3a"),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 55,
+                                width: 55,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: HexColor.fromHex("#17404a"),
+                                ),
+                                child: Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 30,
+                                  color: HexColor.fromHex("#2dc8b9"),
+                                ),
                               ),
-                              child: Icon(
-                                Icons.menu_book_rounded,
-                                size: 30,
-                                color: HexColor.fromHex("#2dc8b9"),
+                              SizedBox(height: 10),
+                              Text(
+                                "Quran",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: HexColor.fromHex("#5a7b8a"),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "Quran",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: HexColor.fromHex("#5a7b8a"),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
 
-                      // Subuh
                       Container(
                         width: 115,
                         height: 120,
@@ -546,7 +549,7 @@ class HomeScreen extends StatelessWidget {
                                 color: HexColor.fromHex("#17404a"),
                               ),
                               child: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.feed_outlined,
                                 size: 30,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
@@ -562,8 +565,6 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
-                      // Dzuhur
                       Container(
                         width: 115,
                         height: 120,
@@ -583,7 +584,7 @@ class HomeScreen extends StatelessWidget {
                                 color: HexColor.fromHex("#17404a"),
                               ),
                               child: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.my_location_rounded,
                                 size: 30,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
@@ -607,7 +608,6 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Ashar
                       Container(
                         width: 115,
                         height: 120,
@@ -627,7 +627,7 @@ class HomeScreen extends StatelessWidget {
                                 color: HexColor.fromHex("#17404a"),
                               ),
                               child: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.repeat_rounded,
                                 size: 30,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
@@ -644,7 +644,6 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
 
-                      // Maghrib
                       Container(
                         width: 115,
                         height: 120,
@@ -664,7 +663,7 @@ class HomeScreen extends StatelessWidget {
                                 color: HexColor.fromHex("#17404a"),
                               ),
                               child: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.route_rounded,
                                 size: 30,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
@@ -681,7 +680,6 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
 
-                      // Isya
                       Container(
                         width: 115,
                         height: 120,
@@ -701,7 +699,7 @@ class HomeScreen extends StatelessWidget {
                                 color: HexColor.fromHex("#17404a"),
                               ),
                               child: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.headset_rounded,
                                 size: 30,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
