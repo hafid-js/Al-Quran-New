@@ -1,0 +1,850 @@
+import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+class PemutarAudioScreen extends StatefulWidget {
+  const PemutarAudioScreen({super.key});
+
+  @override
+  State<PemutarAudioScreen> createState() => _PemutarAudioScreenState();
+}
+
+class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
+  final ExpansibleController controller = ExpansibleController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: HexColor.fromHex("#0c1d27"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 280,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    HexColor.fromHex("#23867c"),
+                    HexColor.fromHex("#37b0a5"),
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Get.back(),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex(
+                                  "#19554d",
+                                ).withAlpha(140),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.arrow_circle_left_rounded,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: HexColor.fromHex("#19554d").withAlpha(140),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.list_alt_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.headset_rounded, color: Colors.white, size: 50),
+                    SizedBox(height: 10),
+                    Text(
+                      "Pemutar Audio",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Pembukaan",
+                      style: TextStyle(fontSize: 16, color: Colors.white70),
+                    ),
+                    SizedBox(height: 12),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 370),
+                      child: Container(
+                        height: 45,
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(40),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundImage: NetworkImage(
+                                "https://way2quran.com/_next/image?url=https%3A%2F%2Fmedia.way2quran.com%2Fimgs%2Fibrahim-al-dosari.png&w=640&q=75",
+                              ),
+                            ),
+                            SizedBox(width: 8),
+
+                            Flexible(
+                              child: Text(
+                                "Ibrahim Al-Dossari",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(width: 8),
+                            InkWell(
+                              onTap: () {
+                                showBarModalBottomSheet(
+                                  backgroundColor: HexColor.fromHex("#132e3a"),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SafeArea(child: SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 16,
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                                                                                Center(
+                                                      child: Text("Pilih Qari", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),),
+                                                      
+                                                    ),
+                                                    SizedBox(height: 12),
+                                            InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                                                  color: HexColor.fromHex(
+                                                    "#5a7b8a",
+                                                  ).withAlpha(30),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          child: Image.network(
+                                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                                            width: 35,
+                                                            height: 35,
+                                                              fit: BoxFit.cover
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 14),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Abdullah Al-Jullany",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                                                  color: HexColor.fromHex(
+                                                    "#5a7b8a",
+                                                  ).withAlpha(30),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          child: Image.network(
+                                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQllapfTGkxIcHenjBNxvs3o44Ac9YLtvL0xg&s",
+                                                            width: 35,
+                                                            height: 35,
+                                                              fit: BoxFit.cover
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 14),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Abdul Muhsin Al-Qasim",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                                                  color: HexColor.fromHex(
+                                                    "#5a7b8a",
+                                                  ).withAlpha(30),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          child: Image.network(
+                                                            "https://www.madaninews.id/wp-content/uploads/2018/07/Abdul-Rahman-Al-Sudais-at-digital-mode-by-syed-noman-zafar-855x1024.jpg",
+                                                            width: 35,
+                                                            height: 35,
+                                                              fit: BoxFit.cover
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 14),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Abdurrahman as-Sudais",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                        color: HexColor.fromHex("#2cc4b6").withAlpha(20),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          width: 1,
+                          color: HexColor.fromHex("#2cc4b6"),
+                        ),
+                      ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          child: Image.network(
+                                                            "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
+                                                            width: 35,
+                                                            height: 35,
+                                                              fit: BoxFit.cover
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 14),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Ibrahim Al-Dossari",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: HexColor.fromHex("#2cc4b6"),
+                                                                fontWeight: FontWeight.w500
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Icon(Icons.check_circle_rounded, color: HexColor.fromHex("#2cc4b6"), size: 22,)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                                                  color: HexColor.fromHex(
+                                                    "#5a7b8a",
+                                                  ).withAlpha(30),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          child: Image.network(
+                                                            "https://static.republika.co.id/uploads/images/inpicture_slide/syekh-misyari-rasyid-al-afasy-syekh-mishari-rashid-alafasy-_190929201241-104.jpg",
+                                                            width: 35,
+                                                            height: 35,
+                                                            fit: BoxFit.cover
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 14),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Misyari Raysid Al-Afasi",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                                  },
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_drop_down_circle_rounded,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              child: Column(
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: HexColor.fromHex("#132e3a"),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      color: HexColor.fromHex(
+                                        "#5a7b8a",
+                                      ).withAlpha(30),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "1",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#2cc4b6"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Al-Fatihah",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Pembukaan",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.circle,
+                                        size: 5,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "7 Ayat",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "الفاتحة",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: HexColor.fromHex("#8da6b7"),
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              Icon(
+                                Icons.download_for_offline_outlined,
+                                color: HexColor.fromHex("#2cc4b6"),
+                                size: 22,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: HexColor.fromHex("#132e3a"),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      color: HexColor.fromHex(
+                                        "#5a7b8a",
+                                      ).withAlpha(30),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "1",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#2cc4b6"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Al-Fatihah",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Container(
+                                        height: 20,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: HexColor.fromHex(
+                                            "#2cc4b6",
+                                          ).withAlpha(40),
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Offline",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: HexColor.fromHex(
+                                                "#2cc4b6",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Pembukaan",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.circle,
+                                        size: 5,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "7 Ayat",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "الفاتحة",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: HexColor.fromHex("#8da6b7"),
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              Icon(
+                                Icons.delete_rounded,
+                                color: HexColor.fromHex("#5a7b8a"),
+                                size: 22,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: HexColor.fromHex("#2cc4b6").withAlpha(20),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          width: 1,
+                          color: HexColor.fromHex("#2cc4b6"),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      color: HexColor.fromHex(
+                                        "#2cc4b6",
+                                      ).withAlpha(30),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.pause_circle_filled_rounded,
+                                        color: HexColor.fromHex("#2cc4b6"),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Al-Baqarah",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Sapi",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.circle,
+                                        size: 5,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "256 Ayat",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: HexColor.fromHex("#5a7b8a"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "الفاتحة",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: HexColor.fromHex("#2cc4b6"),
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              Icon(
+                                Icons.download_for_offline_rounded,
+                                color: HexColor.fromHex("#2cc4b6"),
+                                size: 22,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

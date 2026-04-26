@@ -2,14 +2,14 @@ import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
-class DetailSurat extends StatefulWidget {
-  const DetailSurat({super.key});
+class DetailSuratScreen extends StatefulWidget {
+  const DetailSuratScreen({super.key});
 
   @override
-  State<DetailSurat> createState() => _DetailSuratState();
+  State<DetailSuratScreen> createState() => _DetailSuratScreenState();
 }
 
-class _DetailSuratState extends State<DetailSurat> {
+class _DetailSuratScreenState extends State<DetailSuratScreen> {
   final ExpansibleController controller = ExpansibleController();
   @override
   Widget build(BuildContext context) {
@@ -142,13 +142,13 @@ class _DetailSuratState extends State<DetailSurat> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.mosque,
+                                  Icons.feed_outlined,
                                   size: 14,
                                   color: Colors.white,
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  "Makkiyah",
+                                  "7 Ayat",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -254,7 +254,7 @@ class _DetailSuratState extends State<DetailSurat> {
                                       ),
                                       child: Icon(
                                         Icons.menu_book_rounded,
-                                        color: HexColor.fromHex("#5a7b8a"),
+                                        color: Colors.amber,
                                       ),
                                     ),
                                   ),

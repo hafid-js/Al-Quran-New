@@ -1,5 +1,5 @@
 import 'package:alquran_new/features/alquran/data/surats.dart';
-import 'package:alquran_new/features/alquran/surat/detail_surat.dart';
+import 'package:alquran_new/features/surat/detail_surat.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +94,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                 ),
                 Text(
                   "114 Surat",
-                  style: TextStyle(color: HexColor.fromHex("#7c97a6"), fontSize: 14),
+                  style: TextStyle(
+                    color: HexColor.fromHex("#7c97a6"),
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -120,7 +123,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
 
                       child: Row(
                         children: [
-                          Icon(Icons.search, color: HexColor.fromHex("#7c97a6"),),
+                          Icon(
+                            Icons.search,
+                            color: HexColor.fromHex("#7c97a6"),
+                          ),
                           SizedBox(width: 15),
                           Expanded(
                             child: Text(
@@ -138,7 +144,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                 ),
               ],
             ),
-                        SizedBox(height: 10),
+            SizedBox(height: 10),
 
             CategoryFilter(
               categories: categories,
@@ -161,134 +167,140 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                   return Column(
                     children: [
                       InkWell(
-                        onTap: () => Get.to(() => DetailSurat()),
+                        onTap: () => Get.to(() => DetailSuratScreen()),
                         child: Container(
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: HexColor.fromHex("#132e3a"),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
+                          height: 90,
+                          decoration: BoxDecoration(
+                            color: HexColor.fromHex("#132e3a"),
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Text(
-                                        surat['nomor']!,
-                                        style: TextStyle(
-                                          color: HexColor.fromHex("#28ab9e"),
-                                          fontWeight: FontWeight.w500,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Text(
+                                          surat['nomor']!,
+                                          style: TextStyle(
+                                            color: HexColor.fromHex("#28ab9e"),
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                      ),
-                                      Icon(
-                                        Icons.brightness_5_sharp,
-                                        color: HexColor.fromHex(
-                                          "#28ab9e",
-                                        ).withAlpha(90),
-                                        size: 40,
-                                      ),
-                                    ],
-                                  ),
+                                        Icon(
+                                          Icons.brightness_5_sharp,
+                                          color: HexColor.fromHex(
+                                            "#28ab9e",
+                                          ).withAlpha(90),
+                                          size: 40,
+                                        ),
+                                      ],
+                                    ),
 
-                                  SizedBox(width: 12),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        surat['nama_surat']!,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
+                                    SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          surat['nama_surat']!,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 20,
-                                            width:
-                                                surat['tempat_turun'] ==
-                                                    "Makkiyah"
-                                                ? 70
-                                                : 80,
-                                            decoration: BoxDecoration(
-                                              color:
+                                        SizedBox(height: 3),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              height: 20,
+                                              width:
                                                   surat['tempat_turun'] ==
                                                       "Makkiyah"
-                                                  ? HexColor.fromHex("#19393b")
-                                                  : HexColor.fromHex("#133550"),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                surat['tempat_turun']!,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color:
-                                                      surat['tempat_turun'] ==
-                                                          "Madaniyah"
-                                                      ? HexColor.fromHex(
-                                                          "#4d9ee1",
-                                                        )
-                                                      : HexColor.fromHex(
-                                                          "#57aa5e",
-                                                        ),
+                                                  ? 70
+                                                  : 80,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    surat['tempat_turun'] ==
+                                                        "Makkiyah"
+                                                    ? HexColor.fromHex(
+                                                        "#19393b",
+                                                      )
+                                                    : HexColor.fromHex(
+                                                        "#133550",
+                                                      ),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  surat['tempat_turun']!,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        surat['tempat_turun'] ==
+                                                            "Madaniyah"
+                                                        ? HexColor.fromHex(
+                                                            "#4d9ee1",
+                                                          )
+                                                        : HexColor.fromHex(
+                                                            "#57aa5e",
+                                                          ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            "${surat['jumlah_ayat']!} Ayat",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: HexColor.fromHex(
-                                                "#5a7b8a",
+                                            SizedBox(width: 10),
+                                            Text(
+                                              "${surat['jumlah_ayat']!} Ayat",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: HexColor.fromHex(
+                                                  "#5a7b8a",
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      surat['nama_surat_arab']!,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        color: HexColor.fromHex("#28ab9e"),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    surat['nama_surat_arab']!,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w500,
-                                      color: HexColor.fromHex("#28ab9e"),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    surat['arti']!,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: HexColor.fromHex("#5a7b8a"),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      surat['arti']!,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                       ),
                       SizedBox(height: 10),
                     ],

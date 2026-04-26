@@ -1,4 +1,6 @@
 import 'package:alquran_new/features/alquran/alquran.dart';
+import 'package:alquran_new/features/dzikir/dzikir.dart';
+import 'package:alquran_new/features/pemutar-audio/pemutar_audio.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -608,7 +610,9 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      InkWell(
+                        onTap: () => Get.to(() => DzikirScreen()),
+                        child: Container(
                         width: 115,
                         height: 120,
                         padding: EdgeInsets.symmetric(vertical: 12),
@@ -642,6 +646,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
                       ),
 
                       Container(
@@ -680,7 +685,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
 
-                      Container(
+                      InkWell(
+                        onTap: () => Get.to(() => PemutarAudioScreen()),
+                        child: Container(
                         width: 115,
                         height: 120,
                         padding: EdgeInsets.symmetric(vertical: 12),
@@ -714,6 +721,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      )
                     ],
                   ),
                 ],
