@@ -322,41 +322,50 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: ExpansionTile(
-                  controller: controller,
-                  tilePadding: EdgeInsets.zero,
-                  childrenPadding: EdgeInsets.zero,
-                  minTileHeight: 0,
-                  visualDensity: VisualDensity.compact,
-                  shape: Border(),
-                  collapsedShape: Border(),
-                  showTrailingIcon: false,
-                  title: SizedBox.shrink(),
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.menu_book_rounded,
-                                color: Colors.amber,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Tafsir",
-                                style: TextStyle(
-                                  fontSize: 16,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: ExpansionTile(
+                    controller: controller,
+                    tilePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.zero,
+                    minTileHeight: 0,
+                    visualDensity: VisualDensity.compact,
+                    shape: Border(),
+                    collapsedShape: Border(),
+                    showTrailingIcon: false,
+                    title: SizedBox.shrink(),
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.amber.withAlpha(10),
+                          borderRadius: BorderRadius.all(Radius.circular(16))
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.menu_book_rounded,
                                   color: Colors.amber,
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Text(
-                            ''' Surah al-Fatihah dimulai dengan Basmalah
+                                SizedBox(width: 10),
+                                Text(
+                                  "Tafsir",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.amber,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              ''' Surah al-Fatihah dimulai dengan Basmalah
 
 Ada beberapa pendapat ulama berkenaan dengan Basmalah yang terdapat pada permulaan surah Al-Fatihah. Di antara pendapat-pendapat itu, yang termasyhur ialah:
 
@@ -397,15 +406,16 @@ Nabi saw bersabda:
 "Setiap pekerjaan penting yang tidak dimulai dengan menyebut Basmalah adalah buntung (kurang berkahnya)." (Riwayat Abdul-Qadir ar-Rahawi).
 
 Orang Arab sebelum datang Islam mengerjakan sesuatu dengan menyebut al-Lata dan al-'Uzza, nama-nama berhala mereka. Sebab itu, Allah mengajarkan kepada penganut-penganut agama Islam yang telah mengesakan-Nya, agar mereka mengerjakan sesuatu dengan menyebut nama Allah. ''',
-                            style: TextStyle(
-                              color: HexColor.fromHex("#7c97a6"),
+                              style: TextStyle(
+                                color: HexColor.fromHex("#7c97a6"),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),),
+                    ],
+                  ),
+                ),
 
                 SizedBox(height: 10),
                 Padding(

@@ -1,4 +1,5 @@
 import 'package:alquran_new/features/alquran/alquran.dart';
+import 'package:alquran_new/features/doa/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/dzikir.dart';
 import 'package:alquran_new/features/pemutar-audio/pemutar_audio.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
@@ -532,7 +533,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
 
-                      Container(
+                      InkWell(
+                        onTap: () => Get.to(() => DoaScreen()),
+                        child: Container(
                         width: 115,
                         height: 120,
                         padding: EdgeInsets.symmetric(vertical: 12),
@@ -566,6 +569,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
                       ),
                       Container(
                         width: 115,

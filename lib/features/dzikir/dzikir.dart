@@ -4,7 +4,6 @@ import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
-import 'package:input_quantity/input_quantity.dart';
 
 class DzikirScreen extends StatefulWidget {
   const DzikirScreen({super.key});
@@ -14,6 +13,7 @@ class DzikirScreen extends StatefulWidget {
 }
 
 class _DzikirScreenState extends State<DzikirScreen> {
+  int target = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -334,57 +334,66 @@ class _DzikirScreenState extends State<DzikirScreen> {
                         children: [
                           Text(
                             "Target:",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: TextStyle(color:  HexColor.fromHex("#7c97a6"), fontSize: 16),
                           ),
                           SizedBox(width: 15),
-                          InputQty(
-                            qtyFormProps: QtyFormProps(
-                              enableTyping: true,
-                              style: TextStyle(
-                                backgroundColor: HexColor.fromHex(
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if(target > 0) target --;
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex(
                                   "#5a7b8a",
                                 ).withAlpha(30),
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.indeterminate_check_box_rounded,
+                                color: HexColor.fromHex("#7c97a6"),
+                                size: 20,
                               ),
                             ),
-                            decoration: QtyDecorationProps(
-                              minusBtn: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: HexColor.fromHex(
-                                    "#5a7b8a",
-                                  ).withAlpha(30),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.indeterminate_check_box_rounded,
-                                  color: HexColor.fromHex("#7c97a6"),
-                                  size: 20,
-                                ),
+                          ),
+                          SizedBox(width: 15),
+                          Container(
+                              height: 50,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex(
+                                  "#5a7b8a",
+                                ).withAlpha(30),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-
-                              plusBtn: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: HexColor.fromHex(
-                                    "#5a7b8a",
-                                  ).withAlpha(30),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.add_box_rounded,
-                                  color: HexColor.fromHex("#7c97a6"),
-                                  size: 20,
-                                ),
+                              child: Center(
+                                child: Text("$target", style: TextStyle( fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
+                              )
+                            ),
+                          SizedBox(width: 15),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                target++;
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex(
+                                  "#5a7b8a",
+                                ).withAlpha(30),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              btnColor: Colors.transparent,
-                              isBordered: false,
-                              borderShape: BorderShapeBtn.circle,
-                              width: 12,
+                              child: Icon(
+                                Icons.add_box_rounded,
+                                color: HexColor.fromHex("#7c97a6"),
+                                size: 20,
+                              ),
                             ),
                           ),
                         ],
@@ -442,21 +451,27 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
                       Positioned(
                         bottom: 40,
-                        left: 0,
-                        right: 0,
-                        child: Center(
+                        left: 130,
+                        right: 130,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Container(
                             height: 40,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            width: 60,
                             decoration: BoxDecoration(
                               color: HexColor.fromHex("#1a3a4a"),
                               borderRadius: BorderRadius.circular(12),
                             ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
-                                  Icons.cached_rounded,
+                                  Icons.replay_circle_filled_outlined,
                                   color: HexColor.fromHex("#7c97a6"),
                                   size: 18,
                                 ),
