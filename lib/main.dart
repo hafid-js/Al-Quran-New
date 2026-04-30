@@ -1,11 +1,16 @@
 
 
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/home.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+    Get.put(NetworkController());
   WidgetsFlutterBinding.ensureInitialized();
+
+      await initializeDateFormatting('id', null);
 
   runApp(MyApp(), );
 }

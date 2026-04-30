@@ -1,4 +1,6 @@
+import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/alquran/data/surats.dart';
+import 'package:alquran_new/features/alquran/models/surah_model.dart';
 import 'package:alquran_new/features/surat/detail_surat.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
@@ -38,18 +40,8 @@ class AlQuranScreen extends StatefulWidget {
 }
 
 class _AlQuranScreenState extends State<AlQuranScreen> {
-  final List<String> categories = ["Surat", "Makkiyah", "Madaniyah"];
-
-  String activeCategory = "Surat";
-
-  List<Map<String, String>> get filteredSurats {
-    if (activeCategory == "Surat") {
-      return surats;
-    }
-    return surats
-        .where((surat) => surat["tempat_turun"] == activeCategory)
-        .toList();
-  }
+  final SurahController controller = Get.put(SurahController());
+  final List<String> categories = ["Surah", "Mekah", "Madinah"];
 
   @override
   Widget build(BuildContext context) {
@@ -146,167 +138,197 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
             ),
             SizedBox(height: 10),
 
-            CategoryFilter(
-              categories: categories,
-              activeCategory: activeCategory,
-              onCategorySelected: (category) {
-                setState(() {
-                  activeCategory = category;
-                });
-              },
-            ),
+            Obx(() {
+              return CategoryFilter(
+                categories: categories,
+                activeCategory: controller.activeCategory.value,
+                onCategorySelected: (category) {
+                  controller.filter(category);
+                },
+              );
+            }),
 
             SizedBox(height: 15),
 
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredSurats.length,
-                itemBuilder: (context, index) {
-                  final surat = filteredSurats[index];
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: HexColor.fromHex("#2dc8b9"),
+                      strokeWidth: 3,
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: controller.filteredSurah.length,
+                  itemBuilder: (context, index) {
+                    final surah = controller.filteredSurah[index];
 
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () => Get.to(() => DetailSuratScreen()),
-                        child: Container(
-                          height: 90,
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex("#132e3a"),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () => Get.to(() => DetailSuratScreen(), arguments: surah.nomor),
+                          child: Container(
+                            height: 90,
+                            decoration: BoxDecoration(
+                              color: HexColor.fromHex("#132e3a"),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Text(
-                                          surat['nomor']!,
-                                          style: TextStyle(
-                                            color: HexColor.fromHex("#28ab9e"),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.brightness_5_sharp,
-                                          color: HexColor.fromHex(
-                                            "#28ab9e",
-                                          ).withAlpha(90),
-                                          size: 40,
-                                        ),
-                                      ],
-                                    ),
-
-                                    SizedBox(width: 12),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          surat['nama_surat']!,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              height: 20,
-                                              width:
-                                                  surat['tempat_turun'] ==
-                                                      "Makkiyah"
-                                                  ? 70
-                                                  : 80,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    surat['tempat_turun'] ==
-                                                        "Makkiyah"
-                                                    ? HexColor.fromHex(
-                                                        "#19393b",
-                                                      )
-                                                    : HexColor.fromHex(
-                                                        "#133550",
-                                                      ),
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            surah.nomor.toString(),
+                                            style: TextStyle(
+                                              color: HexColor.fromHex(
+                                                "#28ab9e",
                                               ),
-                                              child: Center(
-                                                child: Text(
-                                                  surat['tempat_turun']!,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color:
-                                                        surat['tempat_turun'] ==
-                                                            "Madaniyah"
-                                                        ? HexColor.fromHex(
-                                                            "#4d9ee1",
-                                                          )
-                                                        : HexColor.fromHex(
-                                                            "#57aa5e",
-                                                          ),
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.brightness_5_sharp,
+                                            color: HexColor.fromHex(
+                                              "#28ab9e",
+                                            ).withAlpha(90),
+                                            size: 45,
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(width: 12),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            surah.namaLatin,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                height: 20,
+                                                width:
+                                                    surah.tempatTurun.toApi() == "Mekah"
+                                                    ? 70
+                                                    : 80,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      surah.tempatTurun
+                                                              .toApi() ==
+                                                          "Mekah"
+                                                      ? HexColor.fromHex(
+                                                          "#19393b",
+                                                        )
+                                                      : HexColor.fromHex(
+                                                          "#133550",
+                                                        ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    surah.tempatTurun.toApi(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          surah.tempatTurun
+                                                                  .toApi() ==
+                                                              "Madinah"
+                                                          ? HexColor.fromHex(
+                                                              "#4d9ee1",
+                                                            )
+                                                          : HexColor.fromHex(
+                                                              "#57aa5e",
+                                                            ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              "${surat['jumlah_ayat']!} Ayat",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: HexColor.fromHex(
-                                                  "#5a7b8a",
+                                              SizedBox(width: 10),
+                                              Text(
+                                                "${surah.jumlahAyat} Ayat",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: HexColor.fromHex(
+                                                    "#5a7b8a",
+                                                  ),
                                                 ),
                                               ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            softWrap: false,
+                                            textDirection: TextDirection.rtl,
+                                            surah.nama,
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w500,
+                                              color: HexColor.fromHex(
+                                                "#28ab9e",
+                                              ),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      surat['nama_surat_arab']!,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500,
-                                        color: HexColor.fromHex("#28ab9e"),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            surah.arti,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: HexColor.fromHex(
+                                                "#5a7b8a",
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      surat['arti']!,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: HexColor.fromHex("#5a7b8a"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  );
-                },
-              ),
+                        SizedBox(height: 10),
+                      ],
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),

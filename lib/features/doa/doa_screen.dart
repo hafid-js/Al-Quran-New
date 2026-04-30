@@ -292,6 +292,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                       Container(
                                                         width: double.infinity,
                                                         decoration: BoxDecoration(
+                                                          border: Border(left: BorderSide(width: 3, color: Colors.amber)),
                                                           color: Colors.amber
                                                               .withAlpha(10),
                                                           borderRadius:
@@ -323,6 +324,7 @@ Sumber: Hisnul Muslim. """,
                                                         ),
                                                       ),
                                                       SizedBox(height: 20),
+                                                      ActionChip(label: Text("tidur", style: TextStyle(color: HexColor.fromHex("#2dc8b9")),), backgroundColor: HexColor.fromHex("#17404a"),)
                                                     ],
                                                   ),
                                                 ),
