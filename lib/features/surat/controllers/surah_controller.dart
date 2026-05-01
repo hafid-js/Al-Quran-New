@@ -110,6 +110,11 @@ class DetailSurahController extends GetxController {
       title: "Terjadi Kesalahan",
       middleText: e.toString(),
     );
+  }  finally {
+
+          ayat.kondisiAudio.value = "stop";
+                        await player.stop();
+
   }
 }
 
