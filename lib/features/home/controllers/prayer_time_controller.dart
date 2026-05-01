@@ -53,11 +53,11 @@ class PrayerTimeController extends GetxController {
 
     for (final item in schedules) {
       final prayers = {
-        "Subuh": item.fajr,
-        "Dzuhur": item.dhuhr,
-        "Ashar": item.asr,
+        "Subuh": item.subuh,
+        "Dzuhur": item.dzuhur,
+        "Ashar": item.ashar,
         "Maghrib": item.maghrib,
-        "Isya": item.isha,
+        "Isya": item.isya,
       };
 
       for (final entry in prayers.entries) {
@@ -77,13 +77,13 @@ class PrayerTimeController extends GetxController {
 
     // Jika semua jadwal hari ini sudah lewat, ambil Subuh besok
     final tomorrow = schedules[0];
-    final fajr = tomorrow.fajr.split(":");
+    final subuh = tomorrow.subuh.split(":");
     nextPrayerTime.value = DateTime(
       now.year,
       now.month,
       now.day + 1,
-      int.parse(fajr[0]),
-      int.parse(fajr[1]),
+      int.parse(subuh[0]),
+      int.parse(subuh[1]),
     );
     nextPrayerName.value = "Subuh";
     totalDuration.value = nextPrayerTime.value!.difference(now);
@@ -96,11 +96,11 @@ class PrayerTimeController extends GetxController {
       final now = DateTime.now();
 
       final prayers = {
-        "Subuh": schedules[0].fajr,
-        "Dzuhur": schedules[0].dhuhr,
-        "Ashar": schedules[0].asr,
+        "Subuh": schedules[0].subuh,
+        "Dzuhur": schedules[0].dzuhur,
+        "Ashar": schedules[0].ashar,
         "Maghrib": schedules[0].maghrib,
-        "Isya": schedules[0].isha,
+        "Isya": schedules[0].isya,
       };
 
       DateTime? nextPrayerDT;
@@ -121,25 +121,26 @@ class PrayerTimeController extends GetxController {
       }
 
       if (nextPrayerDT == null) {
-        final fajr = schedules[0].fajr.split(":");
+        final subuh = schedules[0].subuh.split(":");
         nextPrayerDT = DateTime(
           now.year,
           now.month,
           now.day + 1,
-          int.parse(fajr[0]),
-          int.parse(fajr[1]),
+          int.parse(subuh[0]),
+          int.parse(subuh[1]),
         );
         nextPrayerName.value = "Subuh";
         currentPrayerDT = DateTime(
           now.year,
           now.month,
           now.day,
-          int.parse(schedules[0].isha.split(":")[0]),
-          int.parse(schedules[0].isha.split(":")[1]),
+          int.parse(schedules[0].isya.split(":")[0]),
+          int.parse(schedules[0].isya.split(":")[1]),
         );
       }
 
-      totalDuration.value = nextPrayerDT.difference(currentPrayerDT!);
+      final safeCurrent = currentPrayerDT ?? now;
+      totalDuration.value = nextPrayerDT.difference(safeCurrent);
       remaining.value = nextPrayerDT.difference(now);
     });
   }

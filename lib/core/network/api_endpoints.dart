@@ -1,11 +1,14 @@
 class ApiEndpoints {
-  static const baseUrl = "https://equran.id/api/v2";
+  static const baseUrlV1 = "https://equran.id/api";
+  static const baseUrlV2 = "https://equran.id/api/v2";
 
   static const surah = "/surat";
 
   static const tafsir = "/tafsir";
 
-  static String detailSurah(int nomor) => "$baseUrl$surah/$nomor";
+  static const doa = "/doa";
 
-  static String tafsirAyat(int nomor) => "$baseUrl$tafsir/$nomor";
+  static String detailSurah(int nomor) => "$baseUrlV2$surah/$nomor";
+
+  static String tafsirAyat(int nomor) => "$baseUrlV2$tafsir/$nomor";
 }

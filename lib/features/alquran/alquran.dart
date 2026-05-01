@@ -85,7 +85,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                   ),
                 ),
                 Text(
-                  "114 Surat",
+                  "${controller.surahList.length} Surat",
                   style: TextStyle(
                     color: HexColor.fromHex("#7c97a6"),
                     fontSize: 14,

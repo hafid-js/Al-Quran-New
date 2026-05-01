@@ -84,101 +84,97 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                         ],
                       ),
                     ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            data.nama,
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.white,
-                            ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 40),
+                        Text(
+                          data.nama,
+                          style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            data.namaLatin,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          data.namaLatin,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            data.arti,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 25,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withAlpha(40),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.mosque,
-                                        size: 14,
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          data.arti,
+                          style: TextStyle(fontSize: 16, color: Colors.white70),
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 25,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(40),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.mosque,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      data.tempatTurun,
+                                      style: TextStyle(
+                                        fontSize: 14,
                                         color: Colors.white,
                                       ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        data.tempatTurun,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(width: 15),
-                              Container(
-                                height: 25,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withAlpha(40),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.feed_outlined,
-                                        size: 14,
+                            ),
+                            SizedBox(width: 15),
+                            Container(
+                              height: 25,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(40),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.feed_outlined,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "${data.jumlahAyat.toString()} Ayat",
+                                      style: TextStyle(
+                                        fontSize: 14,
                                         color: Colors.white,
                                       ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        "${data.jumlahAyat.toString()} Ayat",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
 
@@ -309,35 +305,112 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                   ),
                                                   child: Icon(
                                                     Icons.menu_book_rounded,
-                                                    color: isOpen ? Colors.amber : HexColor.fromHex(
-                                                      "#7c97a6",
-                                                    ),
+                                                    color: isOpen
+                                                        ? Colors.amber
+                                                        : HexColor.fromHex(
+                                                            "#7c97a6",
+                                                          ),
                                                   ),
                                                 ),
                                               ),
                                               SizedBox(width: 8),
-                                              Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: HexColor.fromHex(
-                                                    "#1a3a4a",
-                                                  ),
-                                                ),
-                                                child: Icon(
-                                                  Icons
-                                                      .play_circle_filled_rounded,
-                                                  color: HexColor.fromHex(
-                                                    "#2dc8b9",
-                                                  ),
-                                                ),
-                                              ),
+                                              Obx(() {
+                                                final kondisi =
+                                                    ayat.kondisiAudio.value;
+
+                                                return kondisi == "stop"
+                                                    ? Container(
+                                                        height: 40,
+                                                        width: 40,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                12,
+                                                              ),
+                                                          color:
+                                                              HexColor.fromHex(
+                                                                "#1a3a4a",
+                                                              ),
+                                                        ),
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            controller
+                                                                .playAudio(
+                                                                  ayat,
+                                                                );
+                                                          },
+                                                          icon: Icon(
+                                                            Icons
+                                                                .play_circle_filled_rounded,
+                                                            color:
+                                                                HexColor.fromHex(
+                                                                  "#2dc8b9",
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            kondisi == "playing"
+                                                                ? IconButton(
+                                                                    onPressed: () {
+                                                                      controller
+                                                                          .pauseAudio(
+                                                                            ayat,
+                                                                          );
+                                                                    },
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .pause,
+                                                                      color: HexColor.fromHex(
+                                                                        "#2dc8b9",
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : IconButton(
+                                                                    onPressed: () {
+                                                                      controller
+                                                                          .resumeAudio(
+                                                                            ayat,
+                                                                          );
+                                                                    },
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .play_arrow,
+                                                                      color: HexColor.fromHex(
+                                                                        "#2dc8b9",
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                controller
+                                                                    .stopAudio(
+                                                                      ayat,
+                                                                    );
+                                                              },
+                                                              icon: Icon(
+                                                                Icons.stop,
+                                                                color:
+                                                                    HexColor.fromHex(
+                                                                      "#2dc8b9",
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                              }),
                                             ],
                                           ),
                                         ],
                                       ),
+
                                       SizedBox(height: 15),
                                       Column(
                                         children: [

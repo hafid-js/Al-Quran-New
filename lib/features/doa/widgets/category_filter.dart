@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class CategoryFilter extends StatelessWidget {
   final List<String> categories;
-  final String activeCategory;
-  final Function(String) onCategorySelected;
+  final String? activeCategory;
+  final Function(String?) onCategorySelected;
 
   const CategoryFilter({
     super.key,
     required this.categories,
-    required this.activeCategory,
+    this.activeCategory,
     required this.onCategorySelected,
   });
 
@@ -22,11 +22,18 @@ class CategoryFilter extends StatelessWidget {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final category = categories[index];
-          final isActive = category == activeCategory;
+          final isActive = activeCategory != null && category == activeCategory;
           return Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: ElevatedButton(
-              onPressed: () => onCategorySelected(category),
+              onPressed: () {
+                final isSelected = activeCategory == category;
+                if(isSelected) {
+                  onCategorySelected(null);
+                }else {
+                  onCategorySelected(category);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: isActive
                     ? HexColor.fromHex("#2cc4b6")

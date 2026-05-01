@@ -11,6 +11,7 @@ class SurahController extends GetxController {
   var filteredSurah = <Surah>[].obs;
 
   var activeCategory = "Surah".obs;
+  
 
   @override
   void onInit() {
@@ -23,8 +24,6 @@ class SurahController extends GetxController {
       isLoading.value = true;
 
       final result = await _service.getAllSurah();
-
-      print(result);
 
       surahList.value = result;
       filteredSurah.value = result;

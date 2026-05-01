@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       PrayerTimeController(repo: PrayerTimeRepository()),
     );
       return Obx(() {
-        if (controller.isLoading.value) {
+        if (controller.isLoading.value || controller.todayPrayer.value == null) {
           return SizedBox(
             child: const Center(child: CircularProgressIndicator()),
           );
@@ -35,10 +35,10 @@ class HomeScreen extends StatelessWidget {
         }
 
         final item = controller.todayPrayer.value!;
-        final province = "Jawa Tengah";
+        // final province = "Jawa Tengah";
         final city = "Kab. Purworejo";
 
-         DateTime formattingDate = DateTime.parse(item.fullDate);
+         DateTime formattingDate = DateTime.parse(item.tanggalLengkap);
       String dateNow = DateFormat('dd MMM yyy', 'id').format(formattingDate);
       String formattingHijri = HijriCalendar.fromDate(
         formattingDate,
@@ -356,7 +356,7 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                      item.fajr,
+                                      item.subuh,
                                     style: TextStyle(
                                       color: HexColor.fromHex("#5a7b8a"),
                                       fontSize: 16,
@@ -380,7 +380,7 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    item.dhuhr,
+                                    item.dzuhur,
                                     style: TextStyle(
                                       color: HexColor.fromHex("#5a7b8a"),
                                       fontSize: 16,
@@ -415,7 +415,7 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    item.asr,
+                                    item.ashar,
                                     style: TextStyle(
                                       color: HexColor.fromHex("#5a7b8a"),
                                       fontSize: 16,
@@ -463,7 +463,7 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    item.isha,
+                                    item.isya,
                                     style: TextStyle(
                                       color: HexColor.fromHex("#5a7b8a"),
                                       fontSize: 16,

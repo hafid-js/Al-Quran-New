@@ -1,43 +1,43 @@
 class PrayerTime {
   final int day;
-  final String fullDate;
-  final String weekday;
+  final String tanggalLengkap;
+  final String hari;
   final String imsak;
-  final String fajr;
-  final String sunrise;
+  final String subuh;
+  final String terbit;
   final String dhuha;
-  final String dhuhr;
-  final String asr;
+  final String dzuhur;
+  final String ashar;
   final String maghrib;
-  final String isha;
+  final String isya;
 
   PrayerTime({
     required this.day,
-    required this.fullDate,
-    required this.weekday,
+    required this.tanggalLengkap,
+    required this.hari,
     required this.imsak,
-    required this.fajr,
-    required this.sunrise,
+    required this.subuh,
+    required this.terbit,
     required this.dhuha,
-    required this.dhuhr,
-    required this.asr,
+    required this.dzuhur,
+    required this.ashar,
     required this.maghrib,
-    required this.isha,
+    required this.isya,
   });
 
   factory PrayerTime.fromJson(Map<String, dynamic> json) {
     return PrayerTime(
       day: json['tanggal'],
-      fullDate: json['tanggal_lengkap'],
-      weekday: json['hari'],
+      tanggalLengkap: json['tanggal_lengkap'],
+      hari: json['hari'],
       imsak: json['imsak'],
-      fajr: json['subuh'],
-      sunrise: json['terbit'],
+      subuh: json['subuh'],
+      terbit: json['terbit'],
       dhuha: json['dhuha'],
-      dhuhr: json['dzuhur'],
-      asr: json['ashar'],
+      dzuhur: json['dzuhur'],
+      ashar: json['ashar'],
       maghrib: json['maghrib'],
-      isha: json['isya'],
+      isya: json['isya'],
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class SurahService {
   Future<List<Surah>> getAllSurah() async {
-    final url = Uri.parse("${ApiEndpoints.baseUrl}${ApiEndpoints.surah}");
+    final url = Uri.parse("${ApiEndpoints.baseUrlV2}${ApiEndpoints.surah}");
 
     final res = await http.get(url);
 

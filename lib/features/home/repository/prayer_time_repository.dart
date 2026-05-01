@@ -40,8 +40,9 @@ class PrayerTimeRepository {
     // filter hanya jadwal hari ini
     final String todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
    final List<PrayerTime> todaySchedule = schedules
-    .where((p) => p.fullDate == todayStr)
+    .where((p) => p.tanggalLengkap == todayStr)
     .toList();
+    
 
     return {
       'province': data['provinsi'],

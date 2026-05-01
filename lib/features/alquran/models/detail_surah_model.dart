@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class DetailSurah {
   final int nomor;
   final String nama;
@@ -8,8 +10,6 @@ class DetailSurah {
   final String deskripsi;
   final Map<String, String> audioFull;
   final List<Ayat> ayat;
-  final SurahNav? suratSelanjutnya;
-  final SurahNav? suratSebelumnya;
 
   const DetailSurah({
     required this.nomor,
@@ -21,8 +21,6 @@ class DetailSurah {
     required this.deskripsi,
     required this.audioFull,
     required this.ayat,
-    this.suratSelanjutnya,
-    this.suratSebelumnya,
   });
 
   factory DetailSurah.fromJson(Map<String, dynamic> json) {
@@ -36,12 +34,6 @@ class DetailSurah {
       deskripsi: json['deskripsi'] ?? '',
       audioFull: _mapString(json['audioFull']),
       ayat: _parseAyat(json['ayat']),
-      suratSelanjutnya: json['suratSelanjutnya'] is Map<String, dynamic>
-          ? SurahNav.fromJson(json['suratSelanjutnya'])
-          : null,
-      suratSebelumnya: json['suratSebelumnya'] is Map<String, dynamic>
-          ? SurahNav.fromJson(json['suratSebelumnya'])
-          : null,
     );
   }
 
@@ -66,14 +58,16 @@ class Ayat {
   final String teksLatin;
   final String teksIndonesia;
   final Map<String, String> audio;
+  RxString kondisiAudio;
 
-  const Ayat({
+  Ayat({
     required this.nomorAyat,
     required this.teksArab,
     required this.teksLatin,
     required this.teksIndonesia,
     required this.audio,
-  });
+    RxString? kondisiAudio,
+  }) : kondisiAudio = kondisiAudio ?? "stop".obs;
 
   factory Ayat.fromJson(Map<String, dynamic> json) {
     return Ayat(
@@ -82,6 +76,7 @@ class Ayat {
       teksLatin: json['teksLatin'] ?? '',
       teksIndonesia: json['teksIndonesia'] ?? '',
       audio: _mapAudio(json['audio']),
+      kondisiAudio: "stop".obs,
     );
   }
 

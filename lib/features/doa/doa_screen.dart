@@ -1,4 +1,4 @@
-import 'package:alquran_new/features/doa/data/doas.dart';
+import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -13,20 +13,9 @@ class DoaScreen extends StatefulWidget {
 }
 
 class _DoaScreenState extends State<DoaScreen> {
-  final List<String> categories = [
-    "Semua",
-    "Bacaan Bila Kagum Terhadap Sesuatu",
-    "Bacaan",
-  ];
+  final DoaController controller = Get.put(DoaController());
 
-  String activeCategory = "Semua";
-
-  List<Map<String, String>> get filteredDoas {
-    if (activeCategory == "Semua") {
-      return doas;
-    }
-    return doas.where((doa) => doa["nama_doa"] == activeCategory).toList();
-  }
+  String? activeCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +58,23 @@ class _DoaScreenState extends State<DoaScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  "227 Doa",
-                  style: TextStyle(
-                    color: HexColor.fromHex("#7c97a6"),
-                    fontSize: 14,
-                  ),
-                ),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: HexColor.fromHex("#2dc8b9"),
+                        strokeWidth: 3,
+                      ),
+                    );
+                  }
+                  return Text(
+                    "${controller.doaList.length} Doa",
+                    style: TextStyle(
+                      color: HexColor.fromHex("#7c97a6"),
+                      fontSize: 14,
+                    ),
+                  );
+                }),
               ],
             ),
           ],
@@ -88,33 +87,30 @@ class _DoaScreenState extends State<DoaScreen> {
             Row(
               children: [
                 Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      height: 55,
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: HexColor.fromHex("#132e3a"),
-                      ),
-
-                      child: Row(
-                        children: [
-                          Icon(
+                  child: Container(
+                    height: 55,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: HexColor.fromHex("#132e3a"),
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextField(
+                        onChanged: controller.search,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          icon: Icon(
                             Icons.search,
                             color: HexColor.fromHex("#7c97a6"),
                           ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: Text(
-                              "Cari Doa...",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: HexColor.fromHex("#7c97a6"),
-                              ),
-                            ),
+                          hintText: "Cari Doa...",
+                          hintStyle: TextStyle(
+                            color: HexColor.fromHex("#7c97a6"),
+                            fontSize: 14,
                           ),
-                        ],
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
@@ -123,234 +119,242 @@ class _DoaScreenState extends State<DoaScreen> {
             ),
             SizedBox(height: 10),
 
-            CategoryFilter(
-              categories: categories,
-              activeCategory: activeCategory,
-              onCategorySelected: (category) {
-                setState(() {
-                  activeCategory = category;
-                });
-              },
-            ),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: HexColor.fromHex("#2dc8b9"),
+                    strokeWidth: 3,
+                  ),
+                );
+              }
 
-            SizedBox(height: 15),
+              final categories =
+                  controller.doaList.map((e) => e.grup).toSet().toList()
+                    ..sort();
+
+              return CategoryFilter(
+                categories: categories,
+                activeCategory: controller.activeCategory.value,
+                onCategorySelected: (category) {
+                  controller.filter(category, null);
+                },
+              );
+            }),
+
+            SizedBox(height: 10),
 
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredDoas.length,
-                itemBuilder: (context, index) {
-                  final doa = filteredDoas[index];
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: HexColor.fromHex("#2dc8b9"),
+                      strokeWidth: 3,
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: controller.filteredDoa.length,
+                  itemBuilder: (context, index) {
+                    final doa = controller.filteredDoa[index];
 
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex("#132e3a"),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.only(left: 16),
-                                  leading: Container(
-                                    height: 45,
-                                    width: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: HexColor.fromHex("#17404a"),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        doa['nomor']!,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: HexColor.fromHex("#2dc8b9"),
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            WoltModalSheet.show(
+                              context: context,
+                              pageListBuilder: (bottomSheetContext) => [
+                                SliverWoltModalSheetPage(
+                                  backgroundColor: HexColor.fromHex("#132e3a"),
+                                  hasTopBarLayer: false,
+                                  mainContentSliversBuilder: (context) => [
+                                    SliverToBoxAdapter(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                          left: 20,
+                                          top: 25,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    doa['nama_doa']!,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                  ),
-                                  subtitle: Text(
-                                    doa['subtitle']!,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: HexColor.fromHex("#7c97a6"),
-                                    ),
-                                  ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      WoltModalSheet.show(
-                                        context: context,
-                                        pageListBuilder: (bottomSheetContext) => [
-                                          SliverWoltModalSheetPage(
-                                            backgroundColor: HexColor.fromHex(
-                                              "#132e3a",
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              doa.nama,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                            hasTopBarLayer: false,
-                                            mainContentSliversBuilder: (context) => [
-                                              SliverToBoxAdapter(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                    right: 20,
-                                                    left: 20,
-                                                    top: 25,
+                                            SizedBox(height: 5),
+                                            Text(
+                                              doa.grup,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: HexColor.fromHex(
+                                                  "#7c97a6",
+                                                ),
+                                              ),
+                                            ),
+
+                                            SizedBox(height: 20),
+                                            Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: HexColor.fromHex(
+                                                  "#0c1d27",
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(16),
+                                                child: Text(
+                                                  doa.ar,
+                                                  style: TextStyle(
+                                                    fontSize: 27,
+                                                    color: Colors.white,
+                                                    height: 2,
                                                   ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Doa Sebelum Tidur 1",
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 5),
-                                                      Text(
-                                                        "Doa Sebelum Tidur dan Sesudah Tidur",
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#7c97a6",
-                                                              ),
-                                                        ),
-                                                      ),
-
-                                                      SizedBox(height: 20),
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#0c1d27",
-                                                              ),
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                12,
-                                                              ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                16,
-                                                              ),
-                                                          child: Text(
-                                                            "بِاسْمِكَ رَبِّيْ وَضَعْتُ جَنْبِيْ، وَبِكَ أَرْفَعُهُ، إِنْ أَمْسَكْتَ نَفْسِيْ فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِيْنَ",
-                                                            style: TextStyle(
-                                                              fontSize: 27,
-                                                              color:
-                                                                  Colors.white,
-                                                              height: 2,
-                                                            ),
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      Text(
-                                                        "Bismika robbii wa dho'tu janbii, wa bika arfa'uhu, in amsakta nafsii farhamhaa, wa in arsaltahaa fahfazhhaa bimaa tahfazhu bihi 'ibaadakash-sholihiin.",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#2dc8b9",
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      Text(
-                                                        "Dengan nama Engkau, wahai Tuhanku, aku meletakkan lambungku. Dan dengan namaMu pula aku bangun daripadanya. Apabila Engkau menahan rohku (mati), maka berilah rahmat padanya. Tapi apabila Engkau melepaskannya, maka peliharalah, sebagaimana Engkau memelihara hamba-hambaMu yang shalih.",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#7c97a6",
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                          border: Border(left: BorderSide(width: 3, color: Colors.amber)),
-                                                          color: Colors.amber
-                                                              .withAlpha(10),
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                12,
-                                                              ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                16,
-                                                              ),
-                                                          child: Text(
-                                                            """ HR. Al-Bukhari 11/126, Muslim 4/2084.
-"Apabila seseorang di antara kalian bangkit dari tempat tidurnya kemudian ingin kembali lagi, hendaknya ia mengibaskan ujung kainnya 3x, dan menyebut nama Allah, karena ia tidak tahu apa yang ditinggalkannya di atas tempat tidur setelah ia bangkit. Apabila ia ingin berbaring, maka hendaknya ia membaca: (doa di atas)."
-
-
-Sumber: Hisnul Muslim. """,
-                                                            style: TextStyle(
-                                                              color:
-                                                                  HexColor.fromHex(
-                                                                    "#7c97a6",
-                                                                  ),
-                                                              height: 2,
-                                                            ),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      ActionChip(label: Text("tidur", style: TextStyle(color: HexColor.fromHex("#2dc8b9")),), backgroundColor: HexColor.fromHex("#17404a"),)
-                                                    ],
+                                                  textAlign: TextAlign.end,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              doa.tr,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: HexColor.fromHex(
+                                                  "#2dc8b9",
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              doa.idn,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: HexColor.fromHex(
+                                                  "#7c97a6",
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  left: BorderSide(
+                                                    width: 3,
+                                                    color: Colors.amber,
+                                                  ),
+                                                ),
+                                                color: Colors.amber.withAlpha(
+                                                  10,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(16),
+                                                child: Text(
+                                                  doa.tentang,
+                                                  style: TextStyle(
+                                                    color: HexColor.fromHex(
+                                                      "#7c97a6",
+                                                    ),
+                                                    height: 2,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            ActionChip(
+                                              label: Text(
+                                                "tidur",
+                                                style: TextStyle(
+                                                  color: HexColor.fromHex(
+                                                    "#2dc8b9",
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_circle_right_rounded,
+                                              backgroundColor: HexColor.fromHex(
+                                                "#17404a",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    color: HexColor.fromHex("#7c97a6"),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                          child: Container(
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: HexColor.fromHex("#132e3a"),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.only(left: 16),
+                                    leading: Container(
+                                      height: 45,
+                                      width: 45,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: HexColor.fromHex("#17404a"),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          doa.id.toString(),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: HexColor.fromHex("#2dc8b9"),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      doa.nama,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    subtitle: Text(
+                                      doa.grup,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: HexColor.fromHex("#7c97a6"),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
 
-                      SizedBox(height: 10),
-                    ],
-                  );
-                },
-              ),
+                        SizedBox(height: 10),
+                      ],
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
