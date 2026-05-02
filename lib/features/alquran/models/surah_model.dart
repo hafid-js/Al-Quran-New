@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class SurahResponse {
   final int code;
   final String message;
@@ -35,8 +37,9 @@ class Surah {
   final String arti;
   final String deskripsi;
   final Map<String, String> audioFull;
+    RxString kondisiAudio;
 
-  const Surah({
+  Surah({
     required this.nomor,
     required this.nama,
     required this.namaLatin,
@@ -45,7 +48,8 @@ class Surah {
     required this.arti,
     required this.deskripsi,
     required this.audioFull,
-  });
+      RxString? kondisiAudio,
+  }) : kondisiAudio = kondisiAudio ?? "stop".obs;
 
   factory Surah.fromJson(Map<String, dynamic> json) {
     return Surah(

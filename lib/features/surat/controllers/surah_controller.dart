@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:alquran_new/core/network/api_endpoints.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
+import 'package:alquran_new/features/alquran/models/surah_model.dart';
 import 'package:alquran_new/features/alquran/models/tafsir_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -15,14 +16,17 @@ class DetailSurahController extends GetxController {
   var tafsirLoading = <int, bool>{}.obs;
   final player = AudioPlayer();
   Ayat? lastAyat;
+  Surah? lastSurah;
 
   final net = Get.find<NetworkController>();
+
 
   Future<void> fetchDetailSurah(int nomor) async {
     isLoading.value = true;
 
     const maxRetry = 10;
     int retry = 0;
+
 
     try {
       while (!net.isConnected.value) {
@@ -90,73 +94,58 @@ class DetailSurahController extends GetxController {
   }
 
   void playAudio(Ayat ayat) async {
-  if (ayat.audio.values.isEmpty || ayat.audio.values.first.isEmpty) return;
+    if (ayat.audio.values.isEmpty || ayat.audio.values.first.isEmpty) return;
 
-  try {
-    if (lastAyat != null) {
-      lastAyat!.kondisiAudio.value = "stop";
+    try {
+      if (lastAyat != null) {
+        lastAyat!.kondisiAudio.value = "stop";
+      }
+
+      lastAyat = ayat;
+
+      await player.stop();
+      await player.setUrl(ayat.audio.values.first);
+
+      ayat.kondisiAudio.value = "playing";
+
+      await player.play();
+    } catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
     }
-
-    lastAyat = ayat;
-
-    await player.stop();
-    await player.setUrl(ayat.audio.values.first);
-
-    ayat.kondisiAudio.value = "playing";
-
-    await player.play();
-  } catch (e) {
-    Get.defaultDialog(
-      title: "Terjadi Kesalahan",
-      middleText: e.toString(),
-    );
-  }  finally {
-
-          ayat.kondisiAudio.value = "stop";
-                        await player.stop();
-
   }
-}
+  
 
   void pauseAudio(Ayat ayat) async {
-  try {
-    if (player.playing) {
-      await player.pause();
-      ayat.kondisiAudio.value = "pause";
+    try {
+      if (player.playing) {
+        await player.pause();
+        ayat.kondisiAudio.value = "pause";
+      }
+    } catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
     }
-  } catch (e) {
-    Get.defaultDialog(
-      title: "Terjadi Kesalahan",
-      middleText: e.toString(),
-    );
   }
-}
 
   void stopAudio(Ayat ayat) async {
-  try {
-    await player.stop();
-    ayat.kondisiAudio.value = "stop";
-  } catch (e) {
-    Get.defaultDialog(
-      title: "Terjadi Kesalahan",
-      middleText: e.toString(),
-    );
+    try {
+      await player.stop();
+      ayat.kondisiAudio.value = "stop";
+    } catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
+    }
   }
-}
+
 
   void resumeAudio(Ayat ayat) async {
-  try {
-    if (!player.playing) {
-      ayat.kondisiAudio.value = "playing";
-      await player.play();
+    try {
+      if (!player.playing) {
+        ayat.kondisiAudio.value = "playing";
+        await player.play();
+      }
+    } catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
     }
-  } catch (e) {
-    Get.defaultDialog(
-      title: "Terjadi Kesalahan",
-      middleText: e.toString(),
-    );
   }
-}
 
   @override
   void onClose() {

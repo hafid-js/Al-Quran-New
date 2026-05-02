@@ -305,7 +305,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 20),
 
                 Container(
-                  height: 260,
+                  height: 257,
                   width: double.infinity,
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
@@ -318,7 +318,7 @@ class HomeScreen extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 2,
                     mainAxisSpacing: 7,
-                    padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                    padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                     childAspectRatio: 1,
 
                     children: [
