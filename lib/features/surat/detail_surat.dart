@@ -3,9 +3,6 @@ import 'package:alquran_new/features/surat/controllers/surah_controller.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
 
 class DetailSuratScreen extends StatefulWidget {
   const DetailSuratScreen({super.key});

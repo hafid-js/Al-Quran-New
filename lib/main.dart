@@ -1,18 +1,18 @@
-
-
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
-    Get.put(NetworkController());
+  Get.put(NetworkController());
   WidgetsFlutterBinding.ensureInitialized();
 
-      await initializeDateFormatting('id', null);
+  await initializeDateFormatting('id', null);
+  await GetStorage.init();
 
-  runApp(MyApp(), );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen()
+      home: HomeScreen(),
     );
   }
 }

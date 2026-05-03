@@ -1,5 +1,4 @@
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/features/alquran/data/surats.dart';
 import 'package:alquran_new/features/alquran/models/surah_model.dart';
 import 'package:alquran_new/features/surat/detail_surat.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
@@ -84,13 +83,23 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  "${controller.surahList.length} Surat",
-                  style: TextStyle(
-                    color: HexColor.fromHex("#7c97a6"),
-                    fontSize: 14,
-                  ),
-                ),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: HexColor.fromHex("#2dc8b9"),
+                        strokeWidth: 3,
+                      ),
+                    );
+                  }
+                  return Text(
+                    "${controller.surahList.length} Doa",
+                    style: TextStyle(
+                      color: HexColor.fromHex("#7c97a6"),
+                      fontSize: 14,
+                    ),
+                  );
+                }),
               ],
             ),
           ],
