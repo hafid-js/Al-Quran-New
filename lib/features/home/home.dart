@@ -60,10 +60,10 @@ class HomeScreen extends StatelessWidget {
       final jam = DateFormat('HH:mm').format(date!);
 
       return Scaffold(
-        backgroundColor: HexColor.fromHex("#0c1d27"),
+   
         appBar: AppBar(
           toolbarHeight: 0,
-          backgroundColor: HexColor.fromHex("#0c1d27"),
+     
         ),
         body: SingleChildScrollView(
           child: Padding(

@@ -45,9 +45,9 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#0c1d27"),
+ 
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#0c1d27"),
+   
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_circle_left_rounded),

@@ -1,5 +1,7 @@
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/home.dart';
+import 'package:alquran_new/features/kalender/kalender.dart';
+import 'package:alquran_new/features/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -22,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: TestScreen(),
+      darkTheme: ThemeData.dark(),
     );
   }
 }

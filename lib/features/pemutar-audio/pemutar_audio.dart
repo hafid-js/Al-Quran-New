@@ -19,7 +19,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
     final SurahController controller = Get.put(SurahController());
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: HexColor.fromHex("#0c1d27"),
+ 
       body: Stack(
         children: [
           Column(

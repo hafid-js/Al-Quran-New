@@ -47,6 +47,8 @@ dependencies:
   hijri: ^3.0.0
   just_audio: ^0.10.5
   flutter_launcher_icons: ^0.14.4
+  table_calendar: ^3.2.0
+  islamic_hijri_calendar: ^0.0.5
 
 dev_dependencies:
   flutter_test:
