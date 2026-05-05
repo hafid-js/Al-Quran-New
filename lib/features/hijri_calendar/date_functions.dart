@@ -32,4 +32,8 @@ abstract class DateFunctions {
     });
     return hijriNumber;
   }
+
+  int getHijriDay(String hijri) {
+  return int.parse(hijri.split(' ')[0]);
+}
 }

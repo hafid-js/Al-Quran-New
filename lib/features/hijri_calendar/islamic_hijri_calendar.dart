@@ -20,6 +20,8 @@ class IslamicHijriCalendar extends StatefulWidget {
   ///set today date text color
   final Color highlightTextColor;
 
+  final DateTime? day;
+
   ///set others dates text color
   final Color defaultTextColor;
 
@@ -52,6 +54,7 @@ class IslamicHijriCalendar extends StatefulWidget {
     this.highlightTextColor = Colors.white,
     this.defaultTextColor = Colors.white,
     this.defaultBackColor = Colors.black,
+    this.day,
     this.adjustmentValue = 0,
     this.getSelectedHijriDate,
     this.getSelectedEnglishDate,
@@ -67,6 +70,7 @@ class IslamicHijriCalendar extends StatefulWidget {
 class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
   HijriViewModel viewmodel = HijriViewModel();
   List<DateTime> days = [];
+
 
   ///update calendar view when directly value change form user side without set state
   @override
@@ -160,6 +164,8 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 7,
           mainAxisExtent: rowHeight,
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 3
         ),
         itemCount: days.length,
         itemBuilder: (BuildContext context, int index) {
@@ -198,9 +204,11 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    
     ///get total days in current month with previous(first week) & next months(last week) dates
     days = _getDaysInMonth(viewmodel.currentDisplayMonthYear);
     viewmodel.adjustmentValue = widget.adjustmentValue;
+    final events = viewmodel.getMonthlyEvents(viewmodel.currentDisplayMonthYear);
 
     TextStyle textStyle = widget.isGoogleFont!
         ? GoogleFonts.getFont(widget.fontFamilyName!)
@@ -214,7 +222,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         double parentHeight = constraints.maxHeight;
 
         ///minimum height of particular day box
-        double minRowHeight = 80;
+        double minRowHeight = 70;
         double fontSize = 16;
 
         if (parentWidth > 600) {
@@ -228,167 +236,288 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
           fontSize = 16;
         }
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Column(
-                  children: [
-                    // previous month button, month name & year, next month button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+        return Column(
+          children: [
+            // previous month button, month name & year, next month button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ///navigate to previous month button
+                GestureDetector(
+                  onTap: () => funcGetMonth(isPrevious: true),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: HexColor.fromHex("#132e3a"),
+                    ),
+                    child: Icon(
+                      Icons.arrow_circle_left_rounded,
+                      size: 20,
+                      color: HexColor.fromHex("#2dc8b9"),
+                    ),
+                  ),
+                ),
+
+                ///rest of the space set english month name & year
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
                       children: [
-                        ///navigate to previous month button
-                        GestureDetector(
-                          onTap: () => funcGetMonth(isPrevious: true),
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: HexColor.fromHex("#132e3a"),
-                            ),
-                            child: Icon(
-                              Icons.arrow_circle_left_rounded,
-                              size: 20,
-                              color: HexColor.fromHex("#2dc8b9"),
-                            ),
+                        Text(
+                          "${viewmodel.getHijriMonthYear()} - ${HijriCalendarConfig.fromDate(viewmodel.currentDisplayMonthYear).hYear} H",
+                          textAlign: TextAlign.center,
+                          style: textStyle.copyWith(
+                            fontSize: fontSize,
+                            color: widget.highlightTextColor,
                           ),
                         ),
+                        SizedBox(height: 5),
 
-                        ///rest of the space set english month name & year
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                                children: [
-                                  Text(
-                              "${viewmodel.getHijriMonthYear()} - ${HijriCalendarConfig.fromDate(viewmodel.currentDisplayMonthYear).hYear} H",
-                              textAlign: TextAlign.center,
-                              style: textStyle.copyWith(
-                                fontSize: fontSize,
-                                color: widget.highlightTextColor,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            
-                            SizedBox(height: 5),
-                            Text(
-                                  DateFormat(
-                                    'MMM yyyy',
-                                  ).format(viewmodel.currentDisplayMonthYear),
-                                  style: textStyle.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: HexColor.fromHex("#7c97a6"),
-                                  ),
-                                ),
-                                ],
-                              )
-
-                              
-                            ),
-                          ),
-                        
-
-                        ///navigate to next month button
-                        GestureDetector(
-                          onTap: () => funcGetMonth(isPrevious: false),
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: HexColor.fromHex("#132e3a"),
-                            ),
-                            child: Icon(
-                              Icons.arrow_circle_right_rounded,
-                              size: 20,
-                              color: HexColor.fromHex("#2dc8b9"),
-                            ),
+                        SizedBox(height: 5),
+                        Text(
+                          // DateFormat(
+                          //   'MMM yyyy',
+                          // ).format(viewmodel.currentDisplayMonthYear),
+                          viewmodel.getMonthYearRange(),
+                          style: textStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: HexColor.fromHex("#7c97a6"),
                           ),
                         ),
                       ],
                     ),
+                  ),
+                ),
 
-                    SizedBox(height: 30,),
+                ///navigate to next month button
+                GestureDetector(
+                  onTap: () => funcGetMonth(isPrevious: false),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: HexColor.fromHex("#132e3a"),
+                    ),
+                    child: Icon(
+                      Icons.arrow_circle_right_rounded,
+                      size: 20,
+                      color: HexColor.fromHex("#2dc8b9"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
 
-                    ///show hijri calendar current month name & year
-                    !widget.isHijriView!
-                        ? const SizedBox()
-                        : 
+            SizedBox(height: 30),
 
-                    ///show week name Mon to Sun in a row
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: HexColor.fromHex("#132e3a"),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                             decoration: BoxDecoration(
-                        color: HexColor.fromHex("#132e3a"),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                     
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: List.generate(
-                            viewmodel.headerOfDay.length,
-                            (index) {
-                              return Expanded(
-                                child: Center(
-                                  child: Text(
-                                    viewmodel.headerOfDay[index],
-                                    style: textStyle.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: fontSize - 2,
-                                      color: HexColor.fromHex("#7c97a6"),
+            ///show hijri calendar current month name & year
+            !widget.isHijriView!
+                ? const SizedBox()
+                :
+                  ///show week name Mon to Sun in a row
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: HexColor.fromHex("#132e3a"),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: HexColor.fromHex("#132e3a"),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Row(
+                              children: List.generate(
+                                viewmodel.headerOfDay.length,
+                                (index) {
+                                  return Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        viewmodel.headerOfDay[index],
+                                        style: textStyle.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: fontSize - 2,
+                                          color: (DateTime.now().weekday - 1 == index) ? HexColor.fromHex("#2dc8b9") : HexColor.fromHex("#7c97a6"),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
+
+                        ///in a rest of the space show calendar
+                        parentHeight == double.infinity
+                            ? funcCalendarDaysView(
+                                textStyle: textStyle,
+                                rowHeight: minRowHeight,
+                                fontSize: fontSize,
+                              )
+                            : Expanded(
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    double screenHeight = constraints.maxHeight;
+                                    double calculatedRowHeight =
+                                        screenHeight / (days.length / 7);
+                                    double rowHeight =
+                                        calculatedRowHeight < minRowHeight
+                                        ? minRowHeight
+                                        : calculatedRowHeight;
+
+                                    return funcCalendarDaysView(
+                                      textStyle: textStyle,
+                                      rowHeight: rowHeight,
+                                      fontSize: fontSize,
+                                    );
+                                  },
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  viewmodel.getMonthlyEvents(viewmodel.currentDisplayMonthYear).isNotEmpty ?
+                  Column(
+                    children: [
+                      Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: HexColor.fromHex("#132e3a"),
+                        ),
+                        child: Icon(
+                          Icons.star_rate_rounded,
+                          size: 30,
+                          color: HexColor.fromHex("#2dc8b9"),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Hari Besar Bulan Ini",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: HexColor.fromHex("#1a3a4a"),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text(
+                      "Lihat Semua",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: HexColor.fromHex("#2dc8b9"),
                       ),
                     ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final event = events[index];
 
-                    ///in a rest of the space show calendar
-                    parentHeight == double.infinity
-                        ? funcCalendarDaysView(
-                            textStyle: textStyle,
-                            rowHeight: minRowHeight,
-                            fontSize: fontSize,
-                          )
-                        : Expanded(
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                double screenHeight = constraints.maxHeight;
-                                double calculatedRowHeight =
-                                    screenHeight / (days.length / 7);
-                                double rowHeight =
-                                    calculatedRowHeight < minRowHeight
-                                    ? minRowHeight
-                                    : calculatedRowHeight;
-
-                                return funcCalendarDaysView(
-                                  textStyle: textStyle,
-                                  rowHeight: rowHeight,
-                                  fontSize: fontSize,
-                                );
-                              },
+                  return Column(
+                    children: [
+                      Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: HexColor.fromHex("#132e3a"),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: ListTile(
+                  leading: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: HexColor.fromHex("#2dc8b9").withAlpha(40),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "8",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: HexColor.fromHex("#2dc8b9"),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            "25",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: HexColor.fromHex("#2dc8b9").withAlpha(170),
                             ),
                           ),
                         ],
                       ),
-                    )
-                  ],
+                    ),
+                  ),
+                  title: Text(
+                    event['title'],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Row(
+                    children: [
+                      Text(
+                        event['hijri'],
+                        style: TextStyle(fontSize: 12,color: HexColor.fromHex("#7c97a6")),
+                      ),
+                      SizedBox(width: 6),
+                      CircleAvatar(
+                        radius: 2,
+                        backgroundColor: HexColor.fromHex("#7c97a6"),
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        event['date'],
+                        style: TextStyle(fontSize: 12,color: HexColor.fromHex("#7c97a6")),
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+              SizedBox(height: 10)
+                    ],
+                  );
+
+              })
+                    ],
+                  )
+                  : SizedBox.shrink()
+          ],
         );
       },
     );

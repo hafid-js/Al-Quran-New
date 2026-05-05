@@ -1,5 +1,7 @@
+import 'package:alquran_new/features/kalender/data/events_data.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'date_functions.dart';
 import 'hijri_calendar_config.dart';
@@ -39,7 +41,7 @@ class HijriViewModel {
     required bool isDisablePreviousNextMonthDates,
   }) {
     bool isCurrentMonthDays = day.month == currentDisplayMonthYear.month;
-
+final isEventDay = hasEvent(day);
     var hijridate = !adjustmentValue.isNegative
         ? HijriCalendarConfig.fromDate(
             DateTime(
@@ -56,62 +58,18 @@ class HijriViewModel {
             ).subtract(Duration(days: adjustmentValue.abs())),
           );
 
-    return GestureDetector(
-      onTap: () {
-        if (!isCurrentMonthDays) {
-          currentDisplayMonthYear = day;
-        }
-        selectedDate = day;
-        onSelectedEnglishDate!(DateTime(day.year, day.month, day.day));
-        onSelectedHijriDate!(
-          HijriDate(
-            year: DateFunctions.convertEnglishToHijriNumber(hijridate.hYear),
-            month: DateFunctions.convertEnglishToHijriNumber(hijridate.hMonth),
-            day: DateFunctions.convertEnglishToHijriNumber(hijridate.hDay),
-          ),
-        );
-      },
-      child: Container(
+    return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color:
-              day.year == todayDate.year &&
-                  day.month == todayDate.month &&
-                  day.day == DateTime.now().day
-              ? HexColor.fromHex("#2dc8b9").withAlpha(40)
-              : backgroundColor,
-        ),
+          isEventDay && isCurrentMonthDays
+        ? HexColor.fromHex("#2dc8b9").withAlpha(40)
+        : backgroundColor,),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              day.day.toString(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style:
-                  day.year == todayDate.year &&
-                      day.month == todayDate.month &&
-                      day.day == todayDate.day
-                  ? style?.copyWith(
-                          fontSize: fontSize,
-                          color: highlightTextColor,
-                        ) ??
-                        TextStyle(fontSize: fontSize, color: highlightTextColor)
-                  : style?.copyWith(
-                      fontSize: fontSize,
-                      color: !isCurrentMonthDays
-                          ? (isDisablePreviousNextMonthDates
-                                ? defaultTextColor.withValues(alpha: 0.1)
-                                : defaultTextColor)
-                          : defaultTextColor,
-                    ),
-            ),
-            !isHijriView
-                ? const SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
                       DateFunctions.convertEnglishToHijriNumber(
                         hijridate.hDay,
                       ).toString(),
@@ -122,7 +80,7 @@ class HijriViewModel {
                               day.month == todayDate.month &&
                               day.day == todayDate.day
                           ? style?.copyWith(
-                                  fontSize: 10,
+                                  fontSize: fontSize,
                                   color: highlightTextColor,
                                 ) ??
                                 TextStyle(
@@ -130,18 +88,43 @@ class HijriViewModel {
                                   color: highlightTextColor,
                                 )
                           : style?.copyWith(
-                                  fontSize: dateHijriTextSize,
+                                  fontSize: fontSize,
                                   color: !isCurrentMonthDays
                                       ? (isDisablePreviousNextMonthDates
                                             ? defaultTextColor.withValues(
                                                 alpha: 0.1,
                                               )
                                             : defaultTextColor)
-                                      : hijriDefaultTextColor,
+                                      : defaultTextColor,
                                 ) ??
                                 TextStyle(fontSize: fontSize),
                     ),
-                  ),
+            !isHijriView
+                ? const SizedBox()
+                :
+                Text(
+              day.day.toString(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style:
+                  day.year == todayDate.year &&
+                      day.month == todayDate.month &&
+                      day.day == todayDate.day
+                  ? style?.copyWith(
+                          fontSize: fontSize - 6,
+                          color: hijriDefaultTextColor,
+                        ) ??
+                        TextStyle(fontSize: fontSize, color: highlightTextColor)
+                  : style?.copyWith(
+                      fontSize: fontSize - 6,
+                      color: !isCurrentMonthDays
+                          ? (isDisablePreviousNextMonthDates
+                                ? defaultTextColor.withValues(alpha: 0.1)
+                                : defaultTextColor)
+                          : hijriDefaultTextColor,
+                    ),
+            ),
+                 
                    day.year == todayDate.year &&
                       day.month == todayDate.month &&
                       day.day == todayDate.day
@@ -149,16 +132,19 @@ class HijriViewModel {
                   Column(
                     children: [
                       SizedBox(height: 4),
-                  CircleAvatar(
-                          radius: 2,
-                          backgroundColor: HexColor.fromHex("#2dc8b9"),
-                        )
+                  if (isEventDay)
+        Positioned(
+          bottom: 6,
+          child: CircleAvatar(
+            radius: 2,
+            backgroundColor: HexColor.fromHex("#2dc8b9"),
+          ),
+        ),
                     ],
                   ) : SizedBox.shrink()
           ],
         ),
-      ),
-    );
+      );
   }
 
   ///get hijri month year values by passing current displayed month & year
@@ -180,6 +166,22 @@ class HijriViewModel {
         ? firstDateMonthName
         : "$firstDateMonthName / $lastDateMonthName";
   }
+
+String getMonthYearRange() {
+  // Ambil awal bulan Hijriah (tanggal 1)
+  DateTime firstDate = currentDisplayMonthYear;
+
+  // Ambil akhir bulan Hijriah (misalnya 30 hari)
+  DateTime lastDate = currentDisplayMonthYear.add(const Duration(days: 29));
+
+  String firstMonth = DateFormat('MMMM yyyy', 'id_ID').format(firstDate);
+  String lastMonth = DateFormat('MMMM yyyy', 'id_ID').format(lastDate);
+
+  return firstMonth == lastMonth
+      ? firstMonth
+      : "$firstMonth - $lastMonth";
+}
+  
 
   ///show previous month
   void getPreviousMonth() {
@@ -217,4 +219,19 @@ class HijriViewModel {
     }
     currentDisplayMonthYear = DateTime(year, month, day);
   }
+
+List<Map<String, dynamic>> getMonthlyEvents(DateTime month) {
+  return eventsData.entries
+      .where((e) =>
+          e.key.year == month.year &&
+          e.key.month == month.month)
+      .expand((e) => e.value)
+      .toList();
+}
+
+bool hasEvent(DateTime day) {
+  final key = DateTime.utc(day.year, day.month, day.day);
+  return eventsData.containsKey(key);
+}
+
 }

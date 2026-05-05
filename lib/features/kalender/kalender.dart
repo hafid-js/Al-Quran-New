@@ -1,5 +1,4 @@
 import 'package:alquran_new/features/kalender/data/events_data.dart';
-import 'package:alquran_new/features/kalender/widgets/event_card.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -254,7 +253,7 @@ backgroundColor: Theme.of(context).colorScheme.surface,
                
                       
               Container(
-                                    padding: EdgeInsets.all(4),
+               padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: HexColor.fromHex("#132e3a"),
                   borderRadius: BorderRadius.circular(16)

@@ -15,8 +15,8 @@ class TestScreen extends StatelessWidget {
         leading: IconButton(
           icon: AnimatedRotation(
             turns: 1.5,
-            child: Icon(Icons.not_started_rounded, color: Colors.white),
             duration: Duration(milliseconds: 300),
+            child: Icon(Icons.not_started_rounded, color: Colors.white),
           ),
           onPressed: () => Get.back(),
         ),
@@ -31,7 +31,7 @@ class TestScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             children: [
               Container(
@@ -70,127 +70,9 @@ class TestScreen extends StatelessWidget {
 
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.white,
-                      ),
-                      child: IslamicHijriCalendar(
+                child: IslamicHijriCalendar(
                         defaultBorder: HexColor.fromHex("#132e3a"),
                         defaultBackColor: HexColor.fromHex("#132e3a"),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: HexColor.fromHex("#132e3a"),
-                        ),
-                        child: Icon(
-                          Icons.star_rate_rounded,
-                          size: 30,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Hari Besar Bulan Ini",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: HexColor.fromHex("#1a3a4a"),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: Text(
-                      "Lihat Semua",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor.fromHex("#2dc8b9"),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: HexColor.fromHex("#132e3a"),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: HexColor.fromHex("#2dc8b9").withAlpha(40),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "8",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: HexColor.fromHex("#2dc8b9"),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            "25",
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: HexColor.fromHex("#2dc8b9").withAlpha(170),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    "Hari Tarwiyah",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        "8 Zulhijah 1447 H",
-                        style: TextStyle(color: HexColor.fromHex("#7c97a6")),
-                      ),
-                      SizedBox(width: 6),
-                      CircleAvatar(
-                        radius: 2,
-                        backgroundColor: HexColor.fromHex("#7c97a6"),
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        "25 Mei 2026",
-                        style: TextStyle(color: HexColor.fromHex("#7c97a6")),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ],
