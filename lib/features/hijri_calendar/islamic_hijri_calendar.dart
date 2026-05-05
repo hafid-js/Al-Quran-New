@@ -1,7 +1,6 @@
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import 'hijri_calendar_config.dart';
 import 'hijri_date.dart';
@@ -71,6 +70,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
   HijriViewModel viewmodel = HijriViewModel();
   List<DateTime> days = [];
 
+  bool showAllEvents = false;
 
   ///update calendar view when directly value change form user side without set state
   @override
@@ -165,7 +165,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
           crossAxisCount: 7,
           mainAxisExtent: rowHeight,
           crossAxisSpacing: 3,
-          mainAxisSpacing: 3
+          mainAxisSpacing: 3,
         ),
         itemCount: days.length,
         itemBuilder: (BuildContext context, int index) {
@@ -204,11 +204,12 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    
     ///get total days in current month with previous(first week) & next months(last week) dates
     days = _getDaysInMonth(viewmodel.currentDisplayMonthYear);
     viewmodel.adjustmentValue = widget.adjustmentValue;
-    final events = viewmodel.getMonthlyEvents(viewmodel.currentDisplayMonthYear);
+    final events = viewmodel.getMonthlyEvents(
+      viewmodel.currentDisplayMonthYear,
+    );
 
     TextStyle textStyle = widget.isGoogleFont!
         ? GoogleFonts.getFont(widget.fontFamilyName!)
@@ -348,7 +349,11 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                         style: textStyle.copyWith(
                                           fontWeight: FontWeight.w500,
                                           fontSize: fontSize - 2,
-                                          color: (DateTime.now().weekday - 1 == index) ? HexColor.fromHex("#2dc8b9") : HexColor.fromHex("#7c97a6"),
+                                          color:
+                                              (DateTime.now().weekday - 1 ==
+                                                  index)
+                                              ? HexColor.fromHex("#2dc8b9")
+                                              : HexColor.fromHex("#7c97a6"),
                                         ),
                                       ),
                                     ),
@@ -388,135 +393,165 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 30),
-                  viewmodel.getMonthlyEvents(viewmodel.currentDisplayMonthYear).isNotEmpty ?
-                  Column(
+            SizedBox(height: 30),
+            viewmodel
+                    .getMonthlyEvents(viewmodel.currentDisplayMonthYear)
+                    .isNotEmpty
+                ? Column(
                     children: [
                       Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: HexColor.fromHex("#132e3a"),
-                        ),
-                        child: Icon(
-                          Icons.star_rate_rounded,
-                          size: 30,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Hari Besar Bulan Ini",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: HexColor.fromHex("#1a3a4a"),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: Text(
-                      "Lihat Semua",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor.fromHex("#2dc8b9"),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: events.length,
-                itemBuilder: (context, index) {
-                  final event = events[index];
-
-                  return Column(
-                    children: [
-                      Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: HexColor.fromHex("#132e3a"),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: HexColor.fromHex("#2dc8b9").withAlpha(40),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "8",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: HexColor.fromHex("#2dc8b9"),
-                              fontWeight: FontWeight.w600,
-                            ),
+                          Row(
+                            children: [
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: HexColor.fromHex("#132e3a"),
+                                ),
+                                child: Icon(
+                                  Icons.star_rate_rounded,
+                                  size: 30,
+                                  color: HexColor.fromHex("#2dc8b9"),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Hari Besar Bulan Ini",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "25",
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: HexColor.fromHex("#2dc8b9").withAlpha(170),
+
+                          if(events.length > 5)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showAllEvents = !showAllEvents;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex("#1a3a4a"),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              child: Text(
+                                "Lihat Semua",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: HexColor.fromHex("#2dc8b9"),
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  title: Text(
-                    event['title'],
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        event['hijri'],
-                        style: TextStyle(fontSize: 12,color: HexColor.fromHex("#7c97a6")),
-                      ),
-                      SizedBox(width: 6),
-                      CircleAvatar(
-                        radius: 2,
-                        backgroundColor: HexColor.fromHex("#7c97a6"),
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        event['date'],
-                        style: TextStyle(fontSize: 12,color: HexColor.fromHex("#7c97a6")),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 10)
-                    ],
-                  );
+                      SizedBox(height: 20),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: showAllEvents
+                            ? events.length
+                            : (events.length > 5 ? 5 : events.length),
+                        itemBuilder: (context, index) {
+                          final event = events[index];
 
-              })
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: HexColor.fromHex("#132e3a"),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: ListTile(
+                                  leading: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: HexColor.fromHex(
+                                        "#2dc8b9",
+                                      ).withAlpha(40),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "8",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: HexColor.fromHex(
+                                                "#2dc8b9",
+                                              ),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Text(
+                                            "25",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: HexColor.fromHex(
+                                                "#2dc8b9",
+                                              ).withAlpha(170),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    event['title'],
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      Text(
+                                        event['hijri'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: HexColor.fromHex("#7c97a6"),
+                                        ),
+                                      ),
+                                      SizedBox(width: 6),
+                                      CircleAvatar(
+                                        radius: 2,
+                                        backgroundColor: HexColor.fromHex(
+                                          "#7c97a6",
+                                        ),
+                                      ),
+                                      SizedBox(width: 6),
+                                      Text(
+                                        event['date'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: HexColor.fromHex("#7c97a6"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   )
-                  : SizedBox.shrink()
+                : SizedBox.shrink(),
           ],
         );
       },
