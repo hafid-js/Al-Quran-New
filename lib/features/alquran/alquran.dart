@@ -45,9 +45,11 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
+      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+
       appBar: AppBar(
-   
+        backgroundColor: Colors.transparent,
+
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_circle_left_rounded),
@@ -177,7 +179,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                     return Column(
                       children: [
                         InkWell(
-                          onTap: () => Get.to(() => DetailSuratScreen(), arguments: surah.nomor),
+                          onTap: () => Get.to(
+                            () => DetailSuratScreen(),
+                            arguments: surah.nomor,
+                          ),
                           child: Container(
                             height: 90,
                             decoration: BoxDecoration(
@@ -240,7 +245,8 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                               Container(
                                                 height: 20,
                                                 width:
-                                                    surah.tempatTurun.toApi() == "Mekah"
+                                                    surah.tempatTurun.toApi() ==
+                                                        "Mekah"
                                                     ? 70
                                                     : 80,
                                                 decoration: BoxDecoration(

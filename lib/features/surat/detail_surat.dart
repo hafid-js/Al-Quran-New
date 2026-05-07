@@ -40,8 +40,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+
       extendBodyBehindAppBar: true,
- 
+
       body: Obx(() {
         final net = Get.find<NetworkController>();
 

@@ -181,7 +181,18 @@ String getMonthYearRange() {
       ? firstMonth
       : "$firstMonth - $lastMonth";
 }
-  
+
+String getHijriNow() {
+  final hijri = HijriCalendarConfig.fromDate(DateTime.now());
+
+  return "${hijri.hDay} ${hijri.longMonthName} ${hijri.hYear} H";
+}
+
+String getHeadHijriNow() {
+  final hijri = HijriCalendarConfig.fromDate(DateTime.now());
+
+  return "${hijri.hDay} ${hijri.hYear} ${hijri.monthArName}";
+}
 
   ///show previous month
   void getPreviousMonth() {

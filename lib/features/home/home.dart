@@ -4,6 +4,7 @@ import 'package:alquran_new/features/doa/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/dzikir.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
+import 'package:alquran_new/features/kalender/kalender.dart';
 import 'package:alquran_new/features/pemutar-audio/pemutar_audio.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +61,9 @@ class HomeScreen extends StatelessWidget {
       final jam = DateFormat('HH:mm').format(date!);
 
       return Scaffold(
-   
-        appBar: AppBar(
-          toolbarHeight: 0,
-     
-        ),
+        backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+
+        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 0),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(right: 16, left: 16, bottom: 20),
@@ -598,25 +597,32 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                height: 55,
-                                width: 55,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: HexColor.fromHex("#17404a"),
-                                ),
-                                child: Icon(
-                                  Icons.route_rounded,
-                                  size: 30,
-                                  color: HexColor.fromHex("#2dc8b9"),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Masjid Terdekat",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: HexColor.fromHex("#5a7b8a"),
+                              InkWell(
+                                onTap: () => Get.to(() => KalenderScreen()),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 55,
+                                      width: 55,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: HexColor.fromHex("#17404a"),
+                                      ),
+                                      child: Icon(
+                                        Icons.calendar_month_rounded,
+                                        size: 30,
+                                        color: HexColor.fromHex("#2dc8b9"),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      "Kalender Islam",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

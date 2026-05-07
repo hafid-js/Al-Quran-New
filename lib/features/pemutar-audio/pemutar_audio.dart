@@ -17,9 +17,12 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
   @override
   Widget build(BuildContext context) {
     final SurahController controller = Get.put(SurahController());
+
     return Scaffold(
       extendBodyBehindAppBar: true,
- 
+
+      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+
       body: Stack(
         children: [
           Column(

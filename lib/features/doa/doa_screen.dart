@@ -20,9 +20,11 @@ class _DoaScreenState extends State<DoaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
+      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+
       appBar: AppBar(
-   
+        backgroundColor: Colors.transparent,
+
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_circle_left_rounded),

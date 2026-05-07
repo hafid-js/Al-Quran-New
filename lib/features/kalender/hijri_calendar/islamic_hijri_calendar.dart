@@ -1,6 +1,7 @@
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import 'hijri_calendar_config.dart';
 import 'hijri_date.dart';
@@ -211,6 +212,8 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
       viewmodel.currentDisplayMonthYear,
     );
 
+String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
+
     TextStyle textStyle = widget.isGoogleFont!
         ? GoogleFonts.getFont(widget.fontFamilyName!)
         : widget.fontFamilyName!.isEmpty
@@ -240,6 +243,41 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         return Column(
           children: [
             // previous month button, month name & year, next month button
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  gradient: LinearGradient(
+                    colors: [
+                      HexColor.fromHex("#23867c"),
+                      HexColor.fromHex("#37b0a5"),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Text("Hari ini", style: TextStyle(color: Colors.white)),
+                    SizedBox(height: 8),
+                    Text(
+                      "16 1447 ذو القعدة",
+                      style: TextStyle(
+                        fontSize: 27,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                         "${viewmodel.getHijriNow()}",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Text(dateNow, style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

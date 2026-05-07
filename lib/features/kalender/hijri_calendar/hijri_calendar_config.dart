@@ -12,6 +12,7 @@ class HijriCalendarConfig {
   late String longMonthName;
   late String shortMonthName;
   late String dayWeName;
+  late String monthArName;
   Map<int, int>? adjustments;
 
   static const Map<String, Map<String, Map<int, String>>> _local = {
@@ -200,6 +201,7 @@ class HijriCalendarConfig {
     hMonth = month;
     longMonthName = _local[language]!['long']![month]!;
     dayWeName = _local[language]!['days']![wkDay]!;
+    monthArName = _local[language]!['long']![month]!;
     shortMonthName = _local[language]!['short']![month]!;
     hDay = day;
     return format(hYear, hMonth, hDay, "dd/mm/yyyy");
