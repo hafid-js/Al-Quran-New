@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
-class PengaturanScreen extends StatelessWidget {
-  const PengaturanScreen({super.key});
+class PengaturanNotifikasiScreen extends StatelessWidget {
+  const PengaturanNotifikasiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+      backgroundColor: HexColor.fromHex("#132D3B").withAlpha(120),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -68,7 +68,7 @@ class PengaturanScreen extends StatelessWidget {
                           color: HexColor.fromHex("#17404a"),
                         ),
                         child: Icon(
-                          Icons.menu_book_rounded,
+                          Icons.notification_important_rounded,
                           size: 20,
                           color: HexColor.fromHex("#2dc8b9"),
                         ),
@@ -87,19 +87,19 @@ class PengaturanScreen extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#1A3A4A"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.notifications_active_rounded,
                                 size: 20,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
                               title: Text(
                                 "Bunyi + Getar",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.white,
                                 ),
                               ),
@@ -108,7 +108,7 @@ class PengaturanScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#1A3A4A"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
@@ -120,7 +120,7 @@ class PengaturanScreen extends StatelessWidget {
                               title: Text(
                                 "Bunyi Saja",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.white,
                                 ),
                               ),
@@ -129,19 +129,19 @@ class PengaturanScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#1A3A4A"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.notification_important_rounded,
                                 size: 20,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
                               title: Text(
                                 "Getar Saja",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.white,
                                 ),
                               ),
@@ -159,14 +159,14 @@ class PengaturanScreen extends StatelessWidget {
               ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.sensors_off_rounded,
                                 size: 20,
                                 color: HexColor.fromHex("#2dc8b9"),
                               ),
                               title: Text(
                                 "Senyap",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.white,
                                 ),
                               ),
@@ -184,7 +184,7 @@ class PengaturanScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                 decoration: BoxDecoration(
-                  color: HexColor.fromHex("#132e3a"),
+                  color: HexColor.fromHex("#132D3B"),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -217,20 +217,20 @@ class PengaturanScreen extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#163241"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
+                                Icons.notifications,
+                                size: 24,
+                               color: HexColor.fromHex("#2F4C5B"),
                               ),
                               title: Text(
                                 "Suara Default",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
+                                 fontSize: 16,
+                                  color: HexColor.fromHex("#61737C"),
                                 ),
                               ),
                             ),
@@ -238,20 +238,20 @@ class PengaturanScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#163241"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
+                                Icons.mosque_rounded ,
                                 size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
+                                color: HexColor.fromHex("#2F4C5B"),
                               ),
                               title: Text(
                                 "Suara Adzan",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
+                                  fontSize: 16,
+                                  color: HexColor.fromHex("#61737C"),
                                 ),
                               ),
                             ),
@@ -282,7 +282,7 @@ class PengaturanScreen extends StatelessWidget {
                           color: HexColor.fromHex("#17404a"),
                         ),
                         child: Icon(
-                          Icons.menu_book_rounded,
+                          Icons.access_time_filled_outlined,
                           size: 20,
                           color: HexColor.fromHex("#2dc8b9"),
                         ),
@@ -301,213 +301,70 @@ class PengaturanScreen extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: HexColor.fromHex("#1A3A4A"),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
-                              ),
-                              title: Text(
-                                "Imsak",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              subtitle: Text("04:26"),
-                              trailing: Container(
-                        height: 36,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
-                              ),
-                              title: Text(
-                                "Subuh",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              subtitle: Text("04:26"),
-                              trailing: Container(
-                        height: 36,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
-                              ),
-                              title: Text(
-                                "Dzuhur",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              subtitle: Text("04:26"),
-                              trailing: Container(
-                        height: 36,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
+                                Icons.wb_twilight_rounded,
+                                size: 24,
+                                color: HexColor.fromHex("#48626E"),
                               ),
                               title: Text(
                                 "Ashar",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Colors.white,
+                                  fontWeight: FontWeight.w500
                                 ),
                               ),
-                              subtitle: Text("04:26"),
-                              trailing: Container(
-                        height: 36,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
-                        ),
-                        child: Icon(
+                              subtitle: Text("04:26", style: TextStyle(color: HexColor.fromHex("#5A7A8A")),),
+                              trailing: Icon(
                           Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          size: 24,
+                          color: HexColor.fromHex("#48626E"),
                         ),
-                      ),
                             ),
                           ),
                           SizedBox(height: 10),
                           Container(
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              // color: HexColor.fromHex("1A3A4A"),
+                              color: HexColor.fromHex("#153945"),
                               borderRadius: BorderRadius.circular(16),
+                              border: BoxBorder.all(color: HexColor.fromHex("#1C6367"))
                             ),
                             child: ListTile(
                               leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
+                                Icons.bedtime_rounded,
+                                size: 24,
+                                color: HexColor.fromHex("#2EC4B6"),
                               ),
                               title: Text(
                                 "Maghrib",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
+                                  fontSize: 16,
+                                  color: HexColor.fromHex("#2EC4B6"),
+                                  fontWeight: FontWeight.w500
                                 ),
                               ),
-                              subtitle: Text("04:26"),
+                              subtitle: Text("04:26", style: TextStyle(color: HexColor.fromHex("#5A7A8A")),),
                               trailing: Container(
-                        height: 36,
-                        width: 35,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
+                          color: HexColor.fromHex("#2EC4B6"),
                         ),
                         child: Icon(
                           Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          size: 24,
+                          color: Colors.white,
                         ),
                       ),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.menu_book_rounded,
-                                size: 20,
-                                color: HexColor.fromHex("#2dc8b9"),
-                              ),
-                              title: Text(
-                                "Isya",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              subtitle: Text("04:26"),
-                              trailing: Container(
-                        height: 36,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
-                        ),
-                      ),
-                            ),
-                          ),
+                          
                           SizedBox(height: 10),
                           
                         ],

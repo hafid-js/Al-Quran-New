@@ -49,6 +49,8 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   table_calendar: ^3.2.0
   islamic_hijri_calendar: ^0.0.5
+  flutter_local_notifications: ^21.0.0
+  flutter_timezone: ^5.0.2
 
 dev_dependencies:
   flutter_test:
