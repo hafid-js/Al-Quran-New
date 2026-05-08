@@ -13,6 +13,10 @@ class NotificationService {
           requestAlertPermission: true,
           requestBadgePermission: true,
           requestSoundPermission: true,
+
+          //        defaultPresentAlert: true,
+          // defaultPresentBadge: true,
+          // defaultPresentSound: true,
         );
 
     const InitializationSettings initializationSettings =
@@ -25,24 +29,36 @@ class NotificationService {
     int id = 0,
     String title = "Notification",
     String body = "This is a notification message",
+    String? soundSource,
   }) async {
-    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          "default_channel",
+          "default_channel_$soundSource",
           "Default_channel",
           channelDescription: "This is a default notification channel",
           priority: Priority.high,
           showWhen: true,
+
+          playSound: true,
+
+          sound: soundSource != null
+              ? RawResourceAndroidNotificationSound(soundSource)
+              : null,
         );
 
-    const DarwinNotificationDetails iosNotificationDetails =
+    DarwinNotificationDetails iosNotificationDetails =
         DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
+          presentBanner: true,
+
+          sound: soundSource != null && soundSource.isNotEmpty
+              ? soundSource
+              : null,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );

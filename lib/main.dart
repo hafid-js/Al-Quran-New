@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/features/pengaturan/pengaturan_aplikasi.dart';
 import 'package:alquran_new/features/pengaturan/pengaturan_notifikasi.dart';
 import 'package:alquran_new/notification_service.dart';
 import 'package:alquran_new/test.dart';
@@ -9,18 +10,16 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   Get.put(NetworkController());
+
   WidgetsFlutterBinding.ensureInitialized();
+
+  await NotificationService().initialize();
 
   await initializeDateFormatting('id', null);
   await GetStorage.init();
 
-  await NotificationService().initialize();
-
-
-
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TestScreen(),
+      home: PengaturanNotifikasiScreen(),
       darkTheme: ThemeData.dark(),
     );
   }

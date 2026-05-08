@@ -11,7 +11,8 @@ class TestScreen extends StatelessWidget {
         child: ElevatedButton(onPressed: () {
           NotificationService().showNotification(
             title: "Hello",
-            body: "This is your notification message"
+            body: "This is your notification message",
+            soundSource: ""
           );
         }, child: Text("Show Notification")),
       ),
