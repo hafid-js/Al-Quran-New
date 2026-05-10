@@ -6,6 +6,8 @@ import 'package:alquran_new/features/home/controllers/prayer_time_controller.dar
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/kalender/kalender.dart';
 import 'package:alquran_new/features/pemutar-audio/pemutar_audio.dart';
+import 'package:alquran_new/features/pengaturan/pengaturan_aplikasi.dart';
+import 'package:alquran_new/features/pengaturan/pengaturan_notifikasi.dart';
 import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,11 +28,50 @@ class PrayerItem {
   });
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, dynamic>> menus = [
+    {
+      "title": "Quran",
+      "icon": Icons.menu_book_rounded,
+      "page": AlQuranScreen(),
+    },
+    {"title": "Doa", "icon": Icons.feed_outlined, "page": () => DoaScreen()},
+    {"title": "Kiblat", "icon": Icons.my_location_rounded, "page": null},
+    {
+      "title": "Dzikir",
+      "icon": Icons.repeat_rounded,
+      "page": () => const DzikirScreen(),
+    },
+    {
+      "title": "Kalender Islam",
+      "icon": Icons.calendar_month_rounded,
+      "page": () => const KalenderScreen(),
+    },
+    {
+      "title": "Pemutar Audio",
+      "icon": Icons.headset_rounded,
+      "page": () => const PemutarAudioScreen(),
+    },
+  ];
+  final List<Map<String, dynamic>> nextMenus = [
+
+    {"title": "Pengaturan", "icon": Icons.settings, "page" : () => const PengaturanAplikasiScreen()},
+    {"title": "Kajian", "icon": Icons.mic_rounded, "page": null},
+    {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
+  ];
+
+  bool showAllMenus = false;
+
+  @override
   Widget build(BuildContext context) {
+    final visibleMenus = showAllMenus ? menus : menus.take(6).toList();
     final controller = Get.put(
       PrayerTimeController(repo: PrayerTimeRepository()),
     );
@@ -114,7 +155,6 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Container(
-                  height: 250,
                   width: double.infinity,
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
@@ -286,16 +326,19 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: HexColor.fromHex("#132e3a"),
-                      ),
-                      child: Icon(
-                        Icons.notifications,
-                        color: HexColor.fromHex("#2dc8b9"),
+                    GestureDetector(
+                      onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: HexColor.fromHex("#132e3a"),
+                        ),
+                        child: Icon(
+                          Icons.notifications,
+                          color: HexColor.fromHex("#2dc8b9"),
+                        ),
                       ),
                     ),
                   ],
@@ -362,312 +405,241 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: HexColor.fromHex("#132e3a"),
-                          ),
-                          child: Icon(
-                            Icons.grid_view_rounded,
-                            color: HexColor.fromHex("#2dc8b9"),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Menu",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 40,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: HexColor.fromHex("#132e3a"),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Lihat Semua",
-                            style: TextStyle(
-                              color: HexColor.fromHex("#2f9993"),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(
-                            Icons.arrow_circle_down_rounded,
-                            size: 20,
-                            color: HexColor.fromHex("#2dc8b9"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 20),
                 Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () => Get.to(() => AlQuranScreen()),
-                          child: Container(
-                            width: 115,
-                            height: 120,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#132e3a"),
-                              borderRadius: BorderRadius.circular(16),
+                        Row(
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: HexColor.fromHex("#132e3a"),
+                              ),
+                              child: Icon(
+                                Icons.grid_view_rounded,
+                                color: HexColor.fromHex("#2dc8b9"),
+                              ),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: HexColor.fromHex("#17404a"),
-                                  ),
-                                  child: Icon(
-                                    Icons.menu_book_rounded,
-                                    size: 30,
-                                    color: HexColor.fromHex("#2dc8b9"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Quran",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: HexColor.fromHex("#5a7b8a"),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+
+                            SizedBox(width: 12),
+
+                            Text(
+                              "Menu",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
 
                         InkWell(
-                          onTap: () => Get.to(() => DoaScreen()),
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            setState(() {
+                              showAllMenus = !showAllMenus;
+                            });
+                          },
+
                           child: Container(
-                            width: 115,
-                            height: 120,
-                            padding: EdgeInsets.symmetric(vertical: 12),
+                            height: 40,
+                            width: 140,
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
                               color: HexColor.fromHex("#132e3a"),
-                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Column(
+
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: HexColor.fromHex("#17404a"),
-                                  ),
-                                  child: Icon(
-                                    Icons.feed_outlined,
-                                    size: 30,
-                                    color: HexColor.fromHex("#2dc8b9"),
+                                Text(
+                                  showAllMenus ? "Sembunyikan" : "Lihat Semua",
+
+                                  style: TextStyle(
+                                    color: HexColor.fromHex("#2f9993"),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Doa",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: HexColor.fromHex("#5a7b8a"),
+
+                                SizedBox(width: 5),
+
+                                AnimatedRotation(
+                                  turns: showAllMenus ? 0.5 : 0,
+                                  duration: Duration(milliseconds: 250),
+
+                                  child: Icon(
+                                    Icons.arrow_circle_down_rounded,
+                                    size: 20,
+                                    color: HexColor.fromHex("#2dc8b9"),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        Container(
-                          width: 115,
-                          height: 120,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex("#132e3a"),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 55,
-                                width: 55,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: HexColor.fromHex("#17404a"),
-                                ),
-                                child: Icon(
-                                  Icons.my_location_rounded,
-                                  size: 30,
-                                  color: HexColor.fromHex("#2dc8b9"),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Kiblat",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: HexColor.fromHex("#5a7b8a"),
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ],
                     ),
 
-                    SizedBox(height: 12),
+                           SizedBox(height: 20),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () => Get.to(() => DzikirScreen()),
-                          child: Container(
-                            width: 115,
-                            height: 120,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#132e3a"),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: HexColor.fromHex("#17404a"),
-                                  ),
-                                  child: Icon(
-                                    Icons.repeat_rounded,
-                                    size: 30,
-                                    color: HexColor.fromHex("#2dc8b9"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Dzikir",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: HexColor.fromHex("#5a7b8a"),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
 
-                        Container(
-                          width: 115,
-                          height: 120,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex("#132e3a"),
+                    AnimatedSize(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+
+                        children: visibleMenus.map((nextMenu) {
+                          return InkWell(
                             borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () => Get.to(() => KalenderScreen()),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 55,
-                                      width: 55,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: HexColor.fromHex("#17404a"),
-                                      ),
-                                      child: Icon(
-                                        Icons.calendar_month_rounded,
-                                        size: 30,
-                                        color: HexColor.fromHex("#2dc8b9"),
-                                      ),
+
+                            onTap: ()  {
+                              if (nextMenu["page"] != null) {
+                                Get.to(nextMenu["page"]);
+                              }
+                            },
+
+                            child: Container(
+                              width: 115,
+                              height: 120,
+                              padding: EdgeInsets.symmetric(vertical: 12),
+
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex("#132e3a"),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+
+                                children: [
+                                  Container(
+                                    height: 55,
+                                    width: 55,
+
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: HexColor.fromHex("#17404a"),
                                     ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      "Kalender Islam",
+
+                                    child: Icon(
+                                      nextMenu["icon"],
+                                      size: 30,
+                                      color: HexColor.fromHex("#2dc8b9"),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 10),
+
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                    ),
+
+                                    child: Text(
+                                      nextMenu["title"],
+                                      textAlign: TextAlign.center,
+
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: HexColor.fromHex("#5a7b8a"),
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-
-                        InkWell(
-                          onTap: () => Get.to(() => PemutarAudioScreen()),
-                          child: Container(
-                            width: 115,
-                            height: 120,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: HexColor.fromHex("#132e3a"),
-                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: HexColor.fromHex("#17404a"),
-                                  ),
-                                  child: Icon(
-                                    Icons.headset_rounded,
-                                    size: 30,
-                                    color: HexColor.fromHex("#2dc8b9"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Pemutar Audio",
-                                  style: TextStyle(
-                                    color: HexColor.fromHex("#5a7b8a"),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                          );
+                        }).toList(),
+                      ),
                     ),
+
+                                               SizedBox(height: 12),
+
+                    showAllMenus ? AnimatedSize(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+
+                        children: nextMenus.map((menu) {
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(16),
+
+                            onTap: () {
+                              if (menu["page"] != null) {
+                                Get.to(menu["page"]);
+                              }
+                            },
+
+                            child: Container(
+                              width: 115,
+                              height: 120,
+                              padding: EdgeInsets.symmetric(vertical: 12),
+
+                              decoration: BoxDecoration(
+                                color: HexColor.fromHex("#132e3a"),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+
+                                children: [
+                                  Container(
+                                    height: 55,
+                                    width: 55,
+
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: HexColor.fromHex("#17404a"),
+                                    ),
+
+                                    child: Icon(
+                                      menu["icon"],
+                                      size: 30,
+                                      color: HexColor.fromHex("#2dc8b9"),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 10),
+
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                    ),
+
+                                    child: Text(
+                                      menu["title"],
+                                      textAlign: TextAlign.center,
+
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: HexColor.fromHex("#5a7b8a"),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ) : SizedBox.shrink()
+
+                    
                   ],
                 ),
               ],

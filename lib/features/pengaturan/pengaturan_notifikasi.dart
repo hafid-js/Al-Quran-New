@@ -201,7 +201,7 @@ class _PengaturanNotifikasiScreenState
                           color: HexColor.fromHex("#17404a"),
                         ),
                         child: Icon(
-                          Icons.menu_book_rounded,
+                          Icons.volume_up_rounded,
                           size: 20,
                           color: HexColor.fromHex("#2dc8b9"),
                         ),

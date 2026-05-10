@@ -1,6 +1,8 @@
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/features/home/home.dart';
 import 'package:alquran_new/features/pengaturan/pengaturan_aplikasi.dart';
 import 'package:alquran_new/features/pengaturan/pengaturan_notifikasi.dart';
+import 'package:alquran_new/main_screen.dart';
 import 'package:alquran_new/notification_service.dart';
 import 'package:alquran_new/test.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PengaturanNotifikasiScreen(),
+      home: HomeScreen(),
       darkTheme: ThemeData.dark(),
     );
   }
