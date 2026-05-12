@@ -1,14 +1,15 @@
-import 'package:alquran_new/features/alquran/alquran.dart';
+import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/home/widgets/prayer_item.dart';
-import 'package:alquran_new/features/doa/doa_screen.dart';
-import 'package:alquran_new/features/dzikir/dzikir.dart';
+import 'package:alquran_new/features/doa/screens/doa_screen.dart';
+import 'package:alquran_new/features/dzikir/screens/dzikir_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
-import 'package:alquran_new/features/kalender/kalender.dart';
-import 'package:alquran_new/features/pemutar-audio/pemutar_audio.dart';
-import 'package:alquran_new/features/pengaturan/pengaturan_aplikasi.dart';
-import 'package:alquran_new/features/pengaturan/pengaturan_notifikasi.dart';
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
+import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
+import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
+import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
+import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hijri/hijri_calendar.dart';
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "page": AlQuranScreen(),
     },
     {"title": "Doa", "icon": Icons.feed_outlined, "page": () => DoaScreen()},
-    {"title": "Kiblat", "icon": Icons.my_location_rounded, "page": null},
+    {"title": "Kiblat", "icon": Icons.my_location_rounded, "page": () => const KiblatScreen()},
     {
       "title": "Dzikir",
       "icon": Icons.repeat_rounded,

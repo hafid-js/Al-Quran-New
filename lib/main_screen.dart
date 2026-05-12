@@ -1,4 +1,4 @@
-import 'package:alquran_new/features/home/home.dart';
+import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {

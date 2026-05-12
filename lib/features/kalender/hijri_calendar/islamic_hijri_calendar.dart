@@ -1,4 +1,4 @@
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';

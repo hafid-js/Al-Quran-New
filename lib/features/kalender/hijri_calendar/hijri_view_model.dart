@@ -1,5 +1,5 @@
 import 'package:alquran_new/features/kalender/data/events_data.dart';
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

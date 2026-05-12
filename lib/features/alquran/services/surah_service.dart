@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:alquran_new/core/network/api_endpoints.dart';
+import 'package:alquran_new/core/constants/api_endpoints.dart';
 import 'package:alquran_new/features/alquran/models/surah_model.dart';
 import 'package:http/http.dart' as http;
 

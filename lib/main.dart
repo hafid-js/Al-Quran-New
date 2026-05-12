@@ -1,19 +1,17 @@
 import 'package:alquran_new/core/network/network_controller.dart';
-import 'package:alquran_new/features/home/home.dart';
-import 'package:alquran_new/features/pengaturan/pengaturan_aplikasi.dart';
-import 'package:alquran_new/features/pengaturan/pengaturan_notifikasi.dart';
+import 'package:alquran_new/features/home/screens/home_screen.dart';
+import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
+import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 import 'package:alquran_new/main_screen.dart';
-import 'package:alquran_new/notification_service.dart';
-import 'package:alquran_new/test.dart';
+import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
   Get.put(NetworkController());
-
-  WidgetsFlutterBinding.ensureInitialized();
 
   await NotificationService().initialize();
 

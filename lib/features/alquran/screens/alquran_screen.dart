@@ -1,8 +1,8 @@
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/alquran/models/surah_model.dart';
-import 'package:alquran_new/features/surat/detail_surat.dart';
+import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

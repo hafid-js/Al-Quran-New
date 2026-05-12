@@ -1,4 +1,4 @@
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
@@ -10,6 +10,9 @@ class PengaturanAplikasiScreen extends StatefulWidget {
   State<PengaturanAplikasiScreen> createState() =>
       _PengaturanAplikasiScreenState();
 }
+
+Color pickerColor = Color(0xff443a49);
+Color currentColor = Color(0xff443a49);
 
 class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
   int qariSelected = 4;
@@ -24,7 +27,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
   int colorSelected = 1;
   String name = "Hijau";
 
-  final List<Map<String, dynamic>> notificationModes = [
+  final List<Map<String, dynamic>> qoris = [
     {"title": "Abdullah Al-Juhany"},
     {"title": "Abdul Musim Al-Qasim"},
     {"title": "Abdurrahman as-Sudais"},
@@ -49,17 +52,15 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
     {"name": "Ungu", "color": HexColor.fromHex("#BB86FC")},
     {"name": "Biru", "color": HexColor.fromHex("#42A5F5")},
     {"name": "Emas", "color": HexColor.fromHex("#D4A574")},
-    {"name": "Kustom", "color": "kustom"},
+    {"name": "Kustom", "color": "custom"},
   ];
 
-  Color pickerColor = Color(0xff443a49);
-Color currentColor = Color(0xff443a49);
-
-void changeColor(Color color) {
-  setState(() => pickerColor = color);
-}
-
-
+  void changeColor(Color color) {
+    setState(() {
+      pickerColor = color;
+      currentColor = color;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,7 @@ void changeColor(Color color) {
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
           child: Column(
             children: [
               Column(
@@ -126,8 +127,8 @@ void changeColor(Color color) {
                     ),
                   ),
                   Column(
-                    children: List.generate(notificationModes.length, (index) {
-                      final item = notificationModes[index];
+                    children: List.generate(qoris.length, (index) {
+                      final item = qoris[index];
                       final bool isSelected = qariSelected == index;
 
                       return Padding(
@@ -453,115 +454,166 @@ void changeColor(Color color) {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  item["color"] == "kustom" ?
-                                  GestureDetector(
-                                    onTap: () {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Pick a color!'),
-
-        content: SingleChildScrollView(
-          child: ColorPicker(
-            pickerColor: pickerColor,
-               onColorChanged: changeColor,
-          ),
-        ),
-
-        actions: [
-          ElevatedButton(
-            child: const Text('Got it'),
-
-            onPressed: () {
-              setState(() {
-                currentColor = pickerColor;
-              });
-
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
-  },
-                                    child: AnimatedContainer(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 12,
-                                    ),
-                                    duration: const Duration(milliseconds: 250),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? HexColor.fromHex("#0F3137")
-                                          : HexColor.fromHex("#132D3B"),
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? HexColor.fromHex("#2cc4b6")
-                                            : Colors.transparent,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                    colors: [
-                                                      Colors.red,
-                                                      Colors.green,
-                                                      Colors.blue,
-                                                    ],
+                                  (item["color"] == "custom")
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                backgroundColor:
+                                                    HexColor.fromHex("#132D3B"),
+                                                title: Text(
+                                                  'Tentukan Warna',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
                                                 ),
-                                                child: Icon(
-                                                  Icons.edit_rounded,
-                                                  size: 20,
+
+                                                content: SingleChildScrollView(
+                                                  child: ColorPicker(
+                                                    pickerColor: pickerColor,
+                                                    onColorChanged: changeColor,
+                                                  ),
                                                 ),
+
+                                                actions: [
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      elevation:
+                                                          WidgetStatePropertyAll(
+                                                            0,
+                                                          ),
+                                                      foregroundColor:
+                                                          WidgetStatePropertyAll(
+                                                            HexColor.fromHex(
+                                                              "#2EC4B6",
+                                                            ),
+                                                          ),
+                                                      backgroundColor:
+                                                          WidgetStatePropertyAll(
+                                                            HexColor.fromHex(
+                                                              "#153945",
+                                                            ),
+                                                          ),
+                                                    ),
+
+                                                    child: const Text('Got it'),
+
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        currentColor =
+                                                            pickerColor;
+                                                        colorSelected = index;
+                                                      });
+
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                  ),
+                                                ],
                                               ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          item["name"],
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                            color: isSelected
-                                                ? HexColor.fromHex("#2EC4B6")
-                                                : Colors.white,
+                                            );
+                                          },
+                                          child: AnimatedContainer(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 12,
+                                            ),
+                                            duration: const Duration(
+                                              milliseconds: 250,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: isSelected
+                                                  ? HexColor.fromHex("#0F3137")
+                                                  : HexColor.fromHex("#132D3B"),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              border: Border.all(
+                                                color:
+                                                    (isSelected &&
+                                                        item["color"] ==
+                                                            "custom")
+                                                    ? HexColor.fromHex(
+                                                        "#2cc4b6",
+                                                      )
+                                                    : Colors.transparent,
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(
+                                                    // gradient: LinearGradient(
+                                                    //   colors: [
+                                                    //     Colors.red,
+                                                    //     Colors.green,
+                                                    //     Colors.blue,
+                                                    //   ],
+                                                    // ),
+                                                    color: currentColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          30,
+                                                        ),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.edit_rounded,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10),
+                                                Text(
+                                                  item["name"],
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: isSelected
+                                                        ? HexColor.fromHex(
+                                                            "#2EC4B6",
+                                                          )
+                                                        : Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  ) : AnimatedContainer(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 12,
-                                    ),
-                                    duration: const Duration(milliseconds: 250),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? HexColor.fromHex("#0F3137")
-                                          : HexColor.fromHex("#132D3B"),
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? HexColor.fromHex("#2cc4b6")
-                                            : Colors.transparent,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircleAvatar(
+                                        )
+                                      : AnimatedContainer(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 12,
+                                          ),
+                                          duration: const Duration(
+                                            milliseconds: 250,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? HexColor.fromHex("#0F3137")
+                                                : HexColor.fromHex("#132D3B"),
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                            border: Border.all(
+                                              color:
+                                                  (isSelected &&
+                                                      item["color"] != "custom")
+                                                  ? HexColor.fromHex("#2cc4b6")
+                                                  : Colors.transparent,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              CircleAvatar(
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     color: item["color"],
@@ -572,20 +624,22 @@ void changeColor(Color color) {
                                                   ),
                                                 ),
                                               ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          item["name"],
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                            color: isSelected
-                                                ? HexColor.fromHex("#2EC4B6")
-                                                : Colors.white,
+                                              SizedBox(height: 10),
+                                              Text(
+                                                item["name"],
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isSelected
+                                                      ? HexColor.fromHex(
+                                                          "#2EC4B6",
+                                                        )
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -603,16 +657,150 @@ void changeColor(Color color) {
                     minTileHeight: 0,
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(
-                      Icons.cloud_download_rounded,
+                      Icons.error_rounded,
                       size: 24,
                       color: HexColor.fromHex("#2dc8b9"),
                     ),
                     title: Text(
-                      "Download Data",
+                      "Tentang",
                       style: TextStyle(
                         color: HexColor.fromHex("#8BA4B4"),
                         fontWeight: FontWeight.w600,
                       ),
+                    ),
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: HexColor.fromHex("#132D3B"),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Container(
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: HexColor.fromHex("#154E50"),
+                            ),
+                            child: Icon(
+                              Icons.menu_book_rounded,
+                              size: 25,
+                              color: HexColor.fromHex("#2EC4B6"),
+                            ),
+                          ),
+                          title: Text(
+                            "Al-Barokah Mobile",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Versi 1.0.0",
+                            style: TextStyle(
+                              color: HexColor.fromHex("#5A7A8A"),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ''' Al-Barokah ID Official Mobile App
+
+Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan tafsir, audio murottal dari berbagai qari , doa harian, jadwal sholat, arah kiblat, dan fitur islami lainnya.  ''',
+                          style: TextStyle(color: HexColor.fromHex("#5A7A8A")),
+                        ),
+
+                        SizedBox(height: 15),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.email_rounded,
+                              size: 20,
+                              color: HexColor.fromHex("#2EC4B6"),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Kontak: admin@hafidtech.com",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: HexColor.fromHex("#5A7A8A"),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: HexColor.fromHex("#153945"),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.email_rounded,
+                                      size: 18,
+                                      color: HexColor.fromHex("#2EC4B6"),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Syarat & Ketentuan",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: HexColor.fromHex("#2EC4B6"),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: HexColor.fromHex("#153945"),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.email_rounded,
+                                      size: 18,
+                                      color: HexColor.fromHex("#2EC4B6"),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Kebijakan Privasi",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: HexColor.fromHex("#2EC4B6"),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -1,6 +1,6 @@
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';

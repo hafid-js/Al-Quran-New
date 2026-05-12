@@ -1,6 +1,6 @@
 import 'package:alquran_new/features/dzikir/widgets/category_filter.dart';
 import 'package:alquran_new/features/dzikir/widgets/tab_item.dart';
-import 'package:alquran_new/utils/constants/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
