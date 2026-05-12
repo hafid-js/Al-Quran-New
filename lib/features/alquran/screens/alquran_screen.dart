@@ -1,5 +1,5 @@
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/features/alquran/models/surah_model.dart';
+import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -245,14 +245,14 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                               Container(
                                                 height: 20,
                                                 width:
-                                                    surah.tempatTurun.toApi() ==
+                                                    surah.tempatTurun.name ==
                                                         "Mekah"
                                                     ? 70
                                                     : 80,
                                                 decoration: BoxDecoration(
                                                   color:
                                                       surah.tempatTurun
-                                                              .toApi() ==
+                                                              .name ==
                                                           "Mekah"
                                                       ? HexColor.fromHex(
                                                           "#19393b",
@@ -265,12 +265,12 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    surah.tempatTurun.toApi(),
+                                                    surah.tempatTurun.name,
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                       color:
                                                           surah.tempatTurun
-                                                                  .toApi() ==
+                                                                  .name ==
                                                               "Madinah"
                                                           ? HexColor.fromHex(
                                                               "#4d9ee1",

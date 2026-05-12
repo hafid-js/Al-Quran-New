@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'package:alquran_new/features/home/models/prayer_time.dart';
-import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
+import 'package:alquran_new/core/utils/result.dart';
+import 'package:alquran_new/features/home/domain/entities/prayer_time.dart';
+import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
+import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:get/get.dart';
 
 class PrayerTimeController extends GetxController {
-  final PrayerTimeRepository repo;
+  final GetPrayerTimes _getPrayerTimes = Get.find();
 
-  PrayerTimeController({required this.repo});
-
-  // reactive variables
   var todayPrayer = Rxn<PrayerTime>();
   var nextPrayerName = "".obs;
   var nextPrayerTime = Rxn<DateTime>();
@@ -29,19 +28,23 @@ class PrayerTimeController extends GetxController {
   void fetchPrayerTimes() async {
     try {
       isLoading.value = true;
-      final data = await repo.fetchPrayerTimes(
+      final result = await _getPrayerTimes.call(
         province: "Jawa Tengah",
         city: "Kab. Purworejo",
       );
 
-      final schedules = data['schedules'] as List<PrayerTime>;
-      if (schedules.isNotEmpty) {
-        todayPrayer.value = schedules[0];
-        getNextPrayer(schedules);
-        _startTimer(schedules);
+      if (result is Success<PrayerTimeResponse>) {
+        final data = result.data;
+        if (data.schedules.isNotEmpty) {
+          todayPrayer.value = data.schedules[0];
+          getNextPrayer(data.schedules);
+          _startTimer(data.schedules);
+        }
+        isLoading.value = false;
+      } else if (result is Failure<PrayerTimeResponse>) {
+        errorMessage.value = result.message;
+        isLoading.value = false;
       }
-
-      isLoading.value = false;
     } catch (e) {
       errorMessage.value = e.toString();
       isLoading.value = false;
@@ -75,7 +78,6 @@ class PrayerTimeController extends GetxController {
       }
     }
 
-    // Jika semua jadwal hari ini sudah lewat, ambil Subuh besok
     final tomorrow = schedules[0];
     final subuh = tomorrow.subuh.split(":");
     nextPrayerTime.value = DateTime(

@@ -3,7 +3,6 @@ import 'package:alquran_new/features/home/widgets/prayer_item.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/screens/dzikir_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
-import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
@@ -74,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final visibleMenus = showAllMenus ? menus : menus.take(6).toList();
     final controller = Get.put(
-      PrayerTimeController(repo: PrayerTimeRepository()),
+      PrayerTimeController(),
     );
     return Obx(() {
       if (controller.isLoading.value || controller.todayPrayer.value == null) {

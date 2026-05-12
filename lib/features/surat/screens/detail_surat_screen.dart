@@ -315,7 +315,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                               SizedBox(width: 8),
                                               Obx(() {
                                                 final kondisi =
-                                                    ayat.kondisiAudio.value;
+                                                    controller.getAyatAudioState(ayat.nomorAyat);
 
                                                 return kondisi == "stop"
                                                     ? Container(

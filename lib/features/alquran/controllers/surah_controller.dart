@@ -1,10 +1,11 @@
-import 'package:alquran_new/features/alquran/models/surah_model.dart';
-import 'package:alquran_new/features/alquran/services/surah_service.dart';
+import 'package:alquran_new/core/utils/result.dart';
+import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
+import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
 class SurahController extends GetxController {
-  final SurahService _service = SurahService();
+  final GetAllSurah _getAllSurah = Get.find();
 
   var isLoading = false.obs;
   var surahList = <Surah>[].obs;
@@ -12,8 +13,8 @@ class SurahController extends GetxController {
   var activeCategory = "Surah".obs;
   final player = AudioPlayer();
 
-  var activeSurah = Rxn<Surah>();
-  var playerState = "stopped".obs; // playing | pause | stopped
+  final surahAudioStates = <int, RxString>{};
+  var activeSurahNomor = Rxn<int>();
 
   @override
   void onInit() {
@@ -21,14 +22,24 @@ class SurahController extends GetxController {
     fetchSurah();
   }
 
+  String getSurahAudioState(int nomor) {
+    return surahAudioStates.putIfAbsent(nomor, () => "stop".obs).value;
+  }
+
+  void _setSurahAudioState(int nomor, String state) {
+    surahAudioStates.putIfAbsent(nomor, () => "stop".obs).value = state;
+  }
+
   Future<void> fetchSurah() async {
     try {
       isLoading.value = true;
-
-      final result = await _service.getAllSurah();
-
-      surahList.value = result;
-      filteredSurah.value = result;
+      final result = await _getAllSurah.call();
+      if (result is Success<List<Surah>>) {
+        surahList.value = result.data;
+        filteredSurah.value = result.data;
+      } else if (result is Failure<List<Surah>>) {
+        Get.snackbar('Error', result.message);
+      }
     } catch (e) {
       print("Error: $e");
     } finally {
@@ -38,33 +49,29 @@ class SurahController extends GetxController {
 
   void filter(String category) {
     activeCategory.value = category;
-
     if (category == "Surah") {
       filteredSurah.value = surahList;
     } else {
       filteredSurah.value = surahList
-          .where(
-            (e) => e.tempatTurun.name.toLowerCase() == category.toLowerCase(),
-          )
+          .where((e) => e.tempatTurun.name.toLowerCase() == category.toLowerCase())
           .toList();
     }
   }
 
   void playAudio(Surah surah) async {
-    if (surah.audioFull.values.isEmpty || surah.audioFull.values.first.isEmpty)
-      return;
+    if (surah.audioFull.values.isEmpty || surah.audioFull.values.first.isEmpty) return;
 
     try {
-      if (activeSurah.value != surah) {
-        await player.stop();
+      if (activeSurahNomor.value != null && activeSurahNomor.value != surah.nomor) {
+        _setSurahAudioState(activeSurahNomor.value!, "stop");
       }
-      activeSurah.value = surah;
+
+      activeSurahNomor.value = surah.nomor;
 
       await player.stop();
       await player.setUrl(surah.audioFull.values.first);
 
-      surah.kondisiAudio.value = "playing";
-
+      _setSurahAudioState(surah.nomor, "playing");
       await player.play();
     } catch (e) {
       Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
@@ -75,7 +82,7 @@ class SurahController extends GetxController {
     try {
       if (player.playing) {
         await player.pause();
-        surah.kondisiAudio.value = "pause";
+        _setSurahAudioState(surah.nomor, "pause");
       }
     } catch (e) {
       Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
@@ -85,7 +92,7 @@ class SurahController extends GetxController {
   void stopAudio(Surah surah) async {
     try {
       await player.stop();
-      surah.kondisiAudio.value = "stop";
+      _setSurahAudioState(surah.nomor, "stop");
     } catch (e) {
       Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
     }
@@ -94,7 +101,7 @@ class SurahController extends GetxController {
   void resumeAudio(Surah surah) async {
     try {
       if (!player.playing) {
-        surah.kondisiAudio.value = "playing";
+        _setSurahAudioState(surah.nomor, "playing");
         await player.play();
       }
     } catch (e) {

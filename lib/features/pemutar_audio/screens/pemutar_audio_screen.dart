@@ -317,10 +317,10 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                         itemBuilder: (context, index) {
                           final surah = controller.surahList[index];
 
-                          return Obx(() {
-                            final kondisi = surah.kondisiAudio.value;
-                            final activeSurah = controller.activeSurah.value;
-                            return kondisi == "playing" && activeSurah == surah
+                            return Obx(() {
+                                final kondisi = controller.getSurahAudioState(surah.nomor);
+                                final activeSurahNomor = controller.activeSurahNomor.value;
+                                return kondisi == "playing" && activeSurahNomor == surah.nomor
                                 ? Padding(
                                     padding: EdgeInsets.only(
                                       top: 10,
@@ -353,9 +353,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               onTap: () {
-                                                controller.activeSurah.value =
-                                                    surah;
-                                                controller.playAudio(surah);
+                                                  controller.playAudio(surah);
                                               },
                                               child: Container(
                                                 height: 45,
@@ -585,9 +583,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                       );
                     }),
                     Obx(() {
-                      final surah = controller.activeSurah.value;
-
-                      if (surah == null) return const SizedBox.shrink();
+                      final nomor = controller.activeSurahNomor.value;
+                      if (nomor == null) return const SizedBox.shrink();
+                      final surah = controller.surahList.firstWhere((s) => s.nomor == nomor);
 
                       return Positioned(
                         bottom: 0,
@@ -663,7 +661,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                     ),
                                     SizedBox(width: 5),
                                     Obx(() {
-                                      final kondisi = surah.kondisiAudio.value;
+                                      final kondisi = controller.getSurahAudioState(surah.nomor);
                                       return kondisi == "playing"
                                           ? InkWell(
                                               onTap: () {
@@ -739,7 +737,6 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                     SizedBox(width: 5),
                                     InkWell(
                                       onTap: () {
-                                        controller.activeSurah.value = null;
                                         controller.stopAudio(surah);
                                       },
                                       child: Container(
