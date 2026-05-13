@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -304,14 +305,6 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                 child: Stack(
                   children: [
                     Obx(() {
-                      if (controller.isLoading.value) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: HexColor.fromHex("#2dc8b9"),
-                            strokeWidth: 3,
-                          ),
-                        );
-                      }
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         itemCount: controller.surahList.length,
@@ -773,6 +766,16 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
               ),
             ],
           ),
+
+          Obx(() {
+            if (!controller.isLoading.value) {
+              return const SizedBox.shrink();
+            }
+
+            return const Positioned.fill(
+              child: Loading(),
+            );
+          }),
         ],
       ),
     );

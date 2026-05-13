@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -45,19 +46,19 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
       extendBodyBehindAppBar: true,
 
       body: Obx(() {
-        final net = Get.find<NetworkController>();
+        // final net = Get.find<NetworkController>();
 
-        if (!net.isConnected.value) {
-          return Center(
-            child: Text(
-              "Tidak ada koneksi internet",
-              style: TextStyle(color: Colors.white),
-            ),
-          );
-        }
+        // if (!net.isConnected.value) {
+        //   return Center(
+        //     child: Text(
+        //       "Tidak ada koneksi internet",
+        //       style: TextStyle(color: Colors.white),
+        //     ),
+        //   );
+        // }
 
-        if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+        if (controller.isLoading.value ) {
+          return Loading();
         }
 
         final data = controller.detailSurah.value;
@@ -454,46 +455,6 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                           ),
                           if (expandedIndexes.contains(index))
                             Obx(() {
-                              final net = Get.find<NetworkController>();
-                              final loading =
-                                  controller.tafsirLoading[ayat.nomorAyat] ??
-                                  false;
-
-                              if (!net.isConnected.value) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.all(16),
-                                    child: Column(
-                                      children: [
-                                        CircularProgressIndicator(),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          "Menunggu koneksi internet...",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                              if (loading) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.all(16),
-                                    child: Column(
-                                      children: [CircularProgressIndicator()],
-                                    ),
-                                  ),
-                                );
-                              }
 
                               return Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16),

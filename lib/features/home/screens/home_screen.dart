@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/screens/dzikir_screen.dart';
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final err = controller.errorMessage.value;
 
       if (controller.isLoading.value) {
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        return Loading();
       }
 
       if (err != null) {
