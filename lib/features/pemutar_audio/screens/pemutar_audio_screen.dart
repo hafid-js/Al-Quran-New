@@ -1,5 +1,6 @@
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -197,8 +198,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                             BorderRadius.circular(
                                                               8,
                                                             ),
-                                                        child: Image.network(
-                                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                                        child: CachedNetworkImage(
+                                                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
                                                           width: 35,
                                                           height: 35,
                                                           fit: BoxFit.cover,
@@ -245,8 +246,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                             BorderRadius.circular(
                                                               8,
                                                             ),
-                                                        child: Image.network(
-                                                          "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
+                                                        child: CachedNetworkImage(
+                                                          imageUrl: "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
                                                           width: 35,
                                                           height: 35,
                                                           fit: BoxFit.cover,
@@ -617,8 +618,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                               ListTile(
                                 leading: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                  child: CachedNetworkImage(
+                                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
                                     width: 45,
                                     height: 45,
                                     fit: BoxFit.cover,

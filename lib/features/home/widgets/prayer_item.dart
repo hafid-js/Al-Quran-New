@@ -22,8 +22,8 @@ class PrayerItemWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 110,
-            height: 110,
+            width: 90,
+            height: 103,
             decoration: BoxDecoration(
               border: BoxBorder.all(
                 width: 0.5,

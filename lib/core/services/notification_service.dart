@@ -1,10 +1,16 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
+  static final NotificationService _instance = NotificationService._();
+  factory NotificationService() => _instance;
+  NotificationService._();
+
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
+    await _requestAndroidPermissions();
+
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings("@mipmap/ic_launcher");
 
@@ -13,16 +19,19 @@ class NotificationService {
           requestAlertPermission: true,
           requestBadgePermission: true,
           requestSoundPermission: true,
-
-          //        defaultPresentAlert: true,
-          // defaultPresentBadge: true,
-          // defaultPresentSound: true,
         );
 
     const InitializationSettings initializationSettings =
         InitializationSettings(android: androidSettings, iOS: iosSettings);
 
     await _notificationsPlugin.initialize(settings: initializationSettings);
+  }
+
+  Future<void> _requestAndroidPermissions() async {
+    final androidPlugin =
+        _notificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.requestNotificationsPermission();
   }
 
   Future<void> showNotification({

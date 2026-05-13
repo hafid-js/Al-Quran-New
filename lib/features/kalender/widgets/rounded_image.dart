@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 class URoundedImage extends StatelessWidget {
   const URoundedImage({
@@ -58,10 +59,10 @@ class URoundedImage extends StatelessWidget {
     }
 
     if (isNetworkImage) {
-      return Image.network(
-        imageUrl,
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
         fit: fit,
-        errorBuilder: (_, __, ___) => const Icon(
+        errorWidget: (_, __, ___) => const Icon(
           Icons.broken_image,
           color: Colors.grey,
         ),

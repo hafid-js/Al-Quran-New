@@ -68,11 +68,11 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
 
         return Stack(
           children: [
-            SingleChildScrollView(
+            CustomScrollView(
               controller: _scrollController,
-              child: Column(
-                children: [
-                  Container(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Container(
                     height: 280,
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -176,9 +176,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 10),
-                  Padding(
+                ),
+                SliverToBoxAdapter(child: SizedBox(height: 10)),
+                SliverToBoxAdapter(
+                  child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
                       height: 80,
@@ -207,385 +208,371 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Obx(() {
-                    if (controller.isLoading.value) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: HexColor.fromHex("#2dc8b9"),
-                          strokeWidth: 3,
-                        ),
+                ),
+                SliverToBoxAdapter(child: SizedBox(height: 10)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final ayat = data.ayat[index];
+                      final isOpen = expandedIndexes.contains(index);
+                      final tafsir = controller.tafsirList.firstWhereOrNull(
+                        (t) => t.ayat == ayat.nomorAyat,
                       );
-                    }
 
-                    final tafsirList = controller.tafsirList;
-
-                    return ListView.builder(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: data.ayat.length,
-                      itemBuilder: (context, index) {
-                        final ayat = data.ayat[index];
-                        final isOpen = expandedIndexes.contains(index);
-                        final tafsir = tafsirList.firstWhereOrNull(
-                          (t) => t.ayat == ayat.nomorAyat,
-                        );
-
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: HexColor.fromHex("#132e3a"),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: HexColor.fromHex("#132e3a"),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsGeometry.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsetsGeometry.symmetric(
-                                    horizontal: 16,
-                                    vertical: 16,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Text(
-                                                ayat.nomorAyat.toString(),
-                                                style: TextStyle(
-                                                  color: HexColor.fromHex(
-                                                    "#28ab9e",
-                                                  ),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.brightness_5_sharp,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Text(
+                                              ayat.nomorAyat.toString(),
+                                              style: TextStyle(
                                                 color: HexColor.fromHex(
                                                   "#28ab9e",
-                                                ).withAlpha(90),
-                                                size: 40,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (expandedIndexes
-                                                        .contains(index)) {
-                                                      expandedIndexes.remove(
-                                                        index,
-                                                      );
-                                                    } else {
-                                                      expandedIndexes.add(
-                                                        index,
-                                                      );
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          12,
-                                                        ),
-                                                    color: HexColor.fromHex(
-                                                      "#1a3a4a",
-                                                    ),
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.menu_book_rounded,
-                                                    color: isOpen
-                                                        ? Colors.amber
-                                                        : HexColor.fromHex(
-                                                            "#7c97a6",
-                                                          ),
-                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              Obx(() {
-                                                final kondisi =
-                                                    controller.getAyatAudioState(ayat.nomorAyat);
-
-                                                return kondisi == "stop"
-                                                    ? Container(
-                                                        height: 40,
-                                                        width: 40,
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                12,
-                                                              ),
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#1a3a4a",
-                                                              ),
-                                                        ),
-                                                        child: IconButton(
-                                                          onPressed: () {
-                                                            controller
-                                                                .playAudio(
-                                                                  ayat,
-                                                                );
-                                                          },
-                                                          icon: Icon(
-                                                            Icons
-                                                                .play_circle_filled_rounded,
-                                                            color:
-                                                                HexColor.fromHex(
-                                                                  "#2dc8b9",
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            kondisi == "playing"
-                                                                ? IconButton(
-                                                                    onPressed: () {
-                                                                      controller
-                                                                          .pauseAudio(
-                                                                            ayat,
-                                                                          );
-                                                                    },
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .pause,
-                                                                      color: HexColor.fromHex(
-                                                                        "#2dc8b9",
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                : IconButton(
-                                                                    onPressed: () {
-                                                                      controller
-                                                                          .resumeAudio(
-                                                                            ayat,
-                                                                          );
-                                                                    },
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .play_arrow,
-                                                                      color: HexColor.fromHex(
-                                                                        "#2dc8b9",
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                            IconButton(
-                                                              onPressed: () {
-                                                                controller
-                                                                    .stopAudio(
-                                                                      ayat,
-                                                                    );
-                                                              },
-                                                              icon: Icon(
-                                                                Icons.stop,
-                                                                color:
-                                                                    HexColor.fromHex(
-                                                                      "#2dc8b9",
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                              }),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      SizedBox(height: 15),
-                                      Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              ayat.teksArab,
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 25,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(height: 20),
-                                          Divider(
-                                            color: HexColor.fromHex(
-                                              "#5a7b8a",
-                                            ).withAlpha(90),
-                                            thickness: 0.1,
-                                          ),
-                                          SizedBox(height: 10),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  ayat.teksLatin,
-                                                  style: TextStyle(
-                                                    color: HexColor.fromHex(
-                                                      "#228276",
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  ayat.teksIndonesia,
-                                                  style: TextStyle(
-                                                    color: HexColor.fromHex(
-                                                      "#7c97a6",
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            if (expandedIndexes.contains(index))
-                              Obx(() {
-                                final net = Get.find<NetworkController>();
-                                final loading =
-                                    controller.tafsirLoading[ayat.nomorAyat] ??
-                                    false;
-
-                                if (!net.isConnected.value) {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(16),
-                                      child: Column(
-                                        children: [
-                                          CircularProgressIndicator(),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            "Menunggu koneksi internet...",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                                if (loading) {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(16),
-                                      child: Column(
-                                        children: [CircularProgressIndicator()],
-                                      ),
-                                    ),
-                                  );
-                                }
-
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: ExpansionTile(
-                                    initiallyExpanded: isOpen,
-                                    onExpansionChanged: (val) {
-                                      setState(() {
-                                        if (val) {
-                                          expandedIndexes.add(index);
-                                        } else {
-                                          expandedIndexes.remove(index);
-                                        }
-                                      });
-                                    },
-                                    tilePadding: EdgeInsets.zero,
-                                    childrenPadding: EdgeInsets.zero,
-                                    minTileHeight: 0,
-                                    visualDensity: VisualDensity.compact,
-                                    shape: Border(),
-                                    collapsedShape: Border(),
-                                    showTrailingIcon: false,
-                                    title: SizedBox.shrink(),
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.amber.withAlpha(10),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(16),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 16,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.menu_book_rounded,
-                                                  color: Colors.amber,
-                                                ),
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Tafsir",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.amber,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 15),
-                                            Text(
-                                              tafsir?.teks ??
-                                                  "Tafsir tidak tersedia.",
-                                              style: TextStyle(
-                                                color: HexColor.fromHex(
-                                                  "#7c97a6",
-                                                ),
-                                              ),
+                                            Icon(
+                                              Icons.brightness_5_sharp,
+                                              color: HexColor.fromHex(
+                                                "#28ab9e",
+                                              ).withAlpha(90),
+                                              size: 40,
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (expandedIndexes
+                                                      .contains(index)) {
+                                                    expandedIndexes.remove(
+                                                      index,
+                                                    );
+                                                  } else {
+                                                    expandedIndexes.add(
+                                                      index,
+                                                    );
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        12,
+                                                      ),
+                                                  color: HexColor.fromHex(
+                                                    "#1a3a4a",
+                                                  ),
+                                                ),
+                                                child: Icon(
+                                                  Icons.menu_book_rounded,
+                                                  color: isOpen
+                                                      ? Colors.amber
+                                                      : HexColor.fromHex(
+                                                          "#7c97a6",
+                                                        ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Obx(() {
+                                              final kondisi =
+                                                  controller.getAyatAudioState(ayat.nomorAyat);
+
+                                              return kondisi == "stop"
+                                                  ? Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              12,
+                                                            ),
+                                                        color:
+                                                            HexColor.fromHex(
+                                                              "#1a3a4a",
+                                                            ),
+                                                      ),
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          controller
+                                                              .playAudio(
+                                                                ayat,
+                                                              );
+                                                        },
+                                                        icon: Icon(
+                                                          Icons
+                                                              .play_circle_filled_rounded,
+                                                          color:
+                                                              HexColor.fromHex(
+                                                                "#2dc8b9",
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          kondisi == "playing"
+                                                              ? IconButton(
+                                                                  onPressed: () {
+                                                                    controller
+                                                                        .pauseAudio(
+                                                                          ayat,
+                                                                        );
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .pause,
+                                                                    color: HexColor.fromHex(
+                                                                      "#2dc8b9",
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : IconButton(
+                                                                  onPressed: () {
+                                                                    controller
+                                                                        .resumeAudio(
+                                                                          ayat,
+                                                                        );
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .play_arrow,
+                                                                    color: HexColor.fromHex(
+                                                                      "#2dc8b9",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                          IconButton(
+                                                            onPressed: () {
+                                                              controller
+                                                                  .stopAudio(
+                                                                    ayat,
+                                                                  );
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.stop,
+                                                              color:
+                                                                  HexColor.fromHex(
+                                                                    "#2dc8b9",
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                            }),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 15),
+                                    Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(
+                                            ayat.teksArab,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Divider(
+                                          color: HexColor.fromHex(
+                                            "#5a7b8a",
+                                          ).withAlpha(90),
+                                          thickness: 0.1,
+                                        ),
+                                        SizedBox(height: 10),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                ayat.teksLatin,
+                                                style: TextStyle(
+                                                  color: HexColor.fromHex(
+                                                    "#228276",
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                ayat.teksIndonesia,
+                                                style: TextStyle(
+                                                  color: HexColor.fromHex(
+                                                    "#7c97a6",
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (expandedIndexes.contains(index))
+                            Obx(() {
+                              final net = Get.find<NetworkController>();
+                              final loading =
+                                  controller.tafsirLoading[ayat.nomorAyat] ??
+                                  false;
+
+                              if (!net.isConnected.value) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          "Menunggu koneksi internet...",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
-                              }),
+                              }
+                              if (loading) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [CircularProgressIndicator()],
+                                    ),
+                                  ),
+                                );
+                              }
 
-                            SizedBox(height: 20),
-                          ],
-                        );
-                      },
-                    );
-                  }),
-                ],
-              ),
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: ExpansionTile(
+                                  initiallyExpanded: isOpen,
+                                  onExpansionChanged: (val) {
+                                    setState(() {
+                                      if (val) {
+                                        expandedIndexes.add(index);
+                                      } else {
+                                        expandedIndexes.remove(index);
+                                      }
+                                    });
+                                  },
+                                  tilePadding: EdgeInsets.zero,
+                                  childrenPadding: EdgeInsets.zero,
+                                  minTileHeight: 0,
+                                  visualDensity: VisualDensity.compact,
+                                  shape: Border(),
+                                  collapsedShape: Border(),
+                                  showTrailingIcon: false,
+                                  title: SizedBox.shrink(),
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.amber.withAlpha(10),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(16),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 16,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.menu_book_rounded,
+                                                color: Colors.amber,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                "Tafsir",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.amber,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 15),
+                                          Text(
+                                            tafsir?.teks ??
+                                                "Tafsir tidak tersedia.",
+                                            style: TextStyle(
+                                              color: HexColor.fromHex(
+                                                "#7c97a6",
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+
+                          SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                    childCount: data.ayat.length,
+                  ),
+                ),
+              ],
             ),
             Positioned(
               top: 0,

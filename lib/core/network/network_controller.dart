@@ -7,9 +7,17 @@ class NetworkController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _initConnectivity();
+  }
 
-    Connectivity().onConnectivityChanged.listen((result) {
-      isConnected.value = result != ConnectivityResult.none;
-    });
+  void _initConnectivity() {
+    try {
+      Connectivity().onConnectivityChanged.listen((results) {
+        isConnected.value = results.isNotEmpty &&
+            !results.contains(ConnectivityResult.none);
+      });
+    } catch (_) {
+      isConnected.value = true;
+    }
   }
 }
