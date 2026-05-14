@@ -566,8 +566,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                     ),
                                   ),
                                   if (expandedIndexes.contains(index))
-                                    Obx(() {
-                                      return Padding(
+                                    Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 16,
                                         ),
@@ -639,8 +638,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                             ),
                                           ],
                                         ),
-                                      );
-                                    }),
+                                      ),
 
                                   SizedBox(height: 20),
                                 ],
