@@ -84,7 +84,6 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                   ),
                 ),
 
-                /// ❗ FIX: kecil + tidak blocking UI
                 Obx(() {
                   if (controller.isLoading.value) {
                     return const SizedBox(height: 10);
@@ -162,11 +161,6 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
 
                 Expanded(
                   child: Obx(() {
-                    /// ❗ JANGAN return Scaffold di sini
-                    if (controller.isLoading.value) {
-                      return const SizedBox(); // ditangani Stack overlay
-                    }
-
                     return ListView.builder(
                       itemCount: controller.filteredSurah.length,
                       itemBuilder: (context, index) {
@@ -176,10 +170,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () => Get.to(
-                                () => DetailSuratScreen(),
-                                arguments: surah.nomor,
-                              ),
+                              onTap: () => Get.to(() => DetailSuratScreen(), arguments: {
+  "surah": surah.nomor,
+  "ayat": null,
+}),
                               child: Container(
                                 height: 90,
                                 decoration: BoxDecoration(

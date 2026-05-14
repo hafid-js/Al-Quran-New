@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/db/isar_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
@@ -8,6 +9,7 @@ import 'package:alquran_new/features/alquran/domain/repositories/surah_repositor
 import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
+import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 
 import 'package:alquran_new/features/doa/data/datasources/doa_remote_data_source.dart';
 import 'package:alquran_new/features/doa/data/repositories/doa_repository_impl.dart';
@@ -20,6 +22,7 @@ import 'package:alquran_new/features/home/data/repositories/prayer_time_reposito
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
+import 'package:alquran_new/test.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +33,8 @@ import 'package:intl/intl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await IsarService.init();
 
   // init storage dulu
   await GetStorage.init();
@@ -90,7 +95,9 @@ void _registerDependencies() {
 
   Get.put<PrayerTimeRemoteDataSource>(
     prayerTimeRemoteDataSource,
+    
   );
+  
 
   final prayerTimeRepository =
       PrayerTimeRepositoryImpl(
@@ -107,6 +114,8 @@ void _registerDependencies() {
   //   PrayerTimeController(repo: PrayerTimeRepository),
   //   permanent: true,
   // );
+
+  Get.put(BookmarkController(), permanent: true);
 }
 
 class MyApp extends StatelessWidget {
@@ -117,7 +126,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
-      home: HomeScreen(),
+      home: HomeScreen()
     );
   }
 }

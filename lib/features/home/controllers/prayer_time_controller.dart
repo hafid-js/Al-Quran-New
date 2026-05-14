@@ -32,7 +32,7 @@ class PrayerTimeController extends GetxController {
   void fetchPrayerTimes() async {
     try {
       isLoading.value = true;
-      final data = await repo.fetchPrayerTimes(
+      final data = await repo.fetchPrayerTimes( 
         province: "Jawa Tengah",
         city: "Kab. Purworejo",
       );

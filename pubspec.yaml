@@ -53,10 +53,16 @@ dependencies:
   flutter_timezone: ^5.0.2
   flutter_colorpicker: ^1.1.0
   cached_network_image: ^3.4.1
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
+  build_runner: ^2.4.13
   flutter_test:
     sdk: flutter
+  isar_generator: ^3.1.0+1
   
 flutter_launcher_icons:
   android: true

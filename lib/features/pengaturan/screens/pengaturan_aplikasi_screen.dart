@@ -151,7 +151,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             duration: const Duration(milliseconds: 250),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? HexColor.fromHex("#0F3137")
+                                  ? HexColor.fromHex("#17404a")
                                   : HexColor.fromHex("#132D3B"),
 
                               borderRadius: BorderRadius.circular(16),
@@ -263,7 +263,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             duration: const Duration(milliseconds: 250),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? HexColor.fromHex("#0F3137")
+                                  ? HexColor.fromHex("#17404a")
                                   : HexColor.fromHex("#132D3B"),
 
                               borderRadius: BorderRadius.circular(16),
@@ -385,7 +385,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                     duration: const Duration(milliseconds: 250),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? HexColor.fromHex("#0F3137")
+                                          ? HexColor.fromHex("#17404a")
                                           : HexColor.fromHex("#132D3B"),
 
                                       borderRadius: BorderRadius.circular(16),
@@ -526,7 +526,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                             ),
                                             decoration: BoxDecoration(
                                               color: isSelected
-                                                  ? HexColor.fromHex("#0F3137")
+                                                  ? HexColor.fromHex("#17404a")
                                                   : HexColor.fromHex("#132D3B"),
                                               borderRadius:
                                                   BorderRadius.circular(16),
@@ -595,7 +595,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: isSelected
-                                                ? HexColor.fromHex("#0F3137")
+                                                ? HexColor.fromHex("#17404a")
                                                 : HexColor.fromHex("#132D3B"),
                                             borderRadius: BorderRadius.circular(
                                               16,

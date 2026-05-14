@@ -1,6 +1,7 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
+import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/screens/dzikir_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "icon": Icons.settings,
       "page": () => const PengaturanAplikasiScreen(),
     },
-    {"title": "Kajian", "icon": Icons.mic_rounded, "page": null},
+    {"title": "Bookmark", "icon": Icons.bookmarks_rounded, "page": const BookmarkScreen()},
     {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
   ];
 
