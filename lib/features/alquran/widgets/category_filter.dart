@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CategoryFilter extends StatelessWidget {
@@ -28,10 +29,14 @@ class CategoryFilter extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => onCategorySelected(category),
               style: ElevatedButton.styleFrom(
+                 side: BorderSide(
+      color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+      width: 0.15,
+    ),
                 backgroundColor: isActive
-                    ? HexColor.fromHex("#2cc4b6")
-                    : HexColor.fromHex("#132e3a"),
-                foregroundColor: isActive ? Colors.white : HexColor.fromHex("#7c97a6"),
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).cardColor,
+                foregroundColor: isActive ? AppColors.light : AppColors.textSecondaryDark,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
@@ -43,8 +48,10 @@ class CategoryFilter extends StatelessWidget {
               ),
               child: Text(
                 category,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+                  fontWeight: isActive ? Theme.of(context).textTheme.titleSmall?.fontWeight : FontWeight.w500 
+                
                 ),
               ),
             ),

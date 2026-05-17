@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class PrayerItemWidget extends StatelessWidget {
@@ -29,32 +30,22 @@ class PrayerItemWidget extends StatelessWidget {
                 width: 0.5,
                 color: HexColor.fromHex("#2dc8b9"),
               ),
-              color: HexColor.fromHex("#17404a").withAlpha(140),
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: HexColor.fromHex("#2dc8b9")),
+                Icon(icon, color: AppColors.primary),
                 SizedBox(height: 5),
-                Text(
-                  label,
-                  style: TextStyle(color: HexColor.fromHex("#2dc8b9")),
-                ),
+                Text(label, style: TextStyle(color: AppColors.primary, fontSize: 16)),
                 SizedBox(height: 5),
-                Text(
-                  time,
-                  style: TextStyle(
-                    color: HexColor.fromHex("#2dc8b9"),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(time, style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 5),
                 Icon(
                   Icons.brightness_1_rounded,
                   size: 8,
-                  color: HexColor.fromHex("#2dc8b9"),
+                  color: AppColors.primary,
                 ),
               ],
             ),
@@ -65,18 +56,14 @@ class PrayerItemWidget extends StatelessWidget {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: HexColor.fromHex("#5a7b8a")),
-          SizedBox(height: 5),
-          Text(label, style: TextStyle(color: HexColor.fromHex("#5a7b8a"))),
+          Icon(icon, color: Theme.of(context).textTheme.labelLarge?.color),
           SizedBox(height: 5),
           Text(
-            time,
-            style: TextStyle(
-              color: HexColor.fromHex("#5a7b8a"),
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            label,
+            style: Theme.of(context).textTheme.labelSmall
           ),
+          SizedBox(height: 5),
+          Text(time, style: Theme.of(context).textTheme.labelLarge),
         ],
       );
     }

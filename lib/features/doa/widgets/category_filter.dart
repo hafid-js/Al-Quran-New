@@ -35,9 +35,14 @@ class CategoryFilter extends StatelessWidget {
                 }
               },
               style: ElevatedButton.styleFrom(
+                 side: BorderSide(
+      color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+      width: 0.15,
+    ),
+
                 backgroundColor: isActive
-                    ? HexColor.fromHex("#2cc4b6")
-                    : HexColor.fromHex("#132e3a"),
+                             ? Theme.of(context).primaryColor
+                    : Theme.of(context).cardColor,
                 foregroundColor: isActive ? Colors.white : HexColor.fromHex("#7c97a6"),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -46,12 +51,14 @@ class CategoryFilter extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(22),
                 ),
-                elevation: 0,
+                elevation: 0
               ),
               child: Text(
                 category,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+                  fontWeight: isActive ? Theme.of(context).textTheme.titleSmall?.fontWeight : FontWeight.w500 
+                
                 ),
               ),
             ),

@@ -42,7 +42,7 @@ class _PengaturanNotifikasiScreenState
           children: [
             Container(
               height: 36,
-              width: 35,
+              width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: HexColor.fromHex("#17404a"),

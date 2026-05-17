@@ -1,5 +1,7 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +22,9 @@ class _DoaScreenState extends State<DoaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -29,7 +32,7 @@ class _DoaScreenState extends State<DoaScreen> {
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_circle_left_rounded),
-          color: Colors.white,
+          color: Theme.of(context).iconTheme.color,
         ),
 
         titleSpacing: 5,
@@ -38,15 +41,15 @@ class _DoaScreenState extends State<DoaScreen> {
           children: [
             Container(
               height: 36,
-              width: 35,
+              width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: HexColor.fromHex("#17404a"),
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: HexColor.fromHex("#2dc8b9"),
+                color: AppColors.primary,
               ),
             ),
 
@@ -56,24 +59,18 @@ class _DoaScreenState extends State<DoaScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Doa",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text("Doa", style: Theme.of(context).textTheme.titleLarge),
 
-                Obx(
-                  () => Text(
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const SizedBox(height: 10);
+                  }
+
+                  return Text(
                     "${controller.doaList.length} Doa",
-                    style: TextStyle(
-                      color: HexColor.fromHex("#7c97a6"),
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+                    style: Theme.of(context).textTheme.labelSmall,
+                  );
+                }),
               ],
             ),
           ],
@@ -83,10 +80,7 @@ class _DoaScreenState extends State<DoaScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 15,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
 
             child: Column(
               children: [
@@ -99,7 +93,8 @@ class _DoaScreenState extends State<DoaScreen> {
 
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: HexColor.fromHex("#132e3a"),
+                          color: Theme.of(context).cardColor,
+                          boxShadow: context.shadow.small,
                         ),
 
                         child: Align(
@@ -135,10 +130,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                 Obx(() {
                   final categories =
-                      controller.doaList
-                          .map((e) => e.grup)
-                          .toSet()
-                          .toList()
+                      controller.doaList.map((e) => e.grup).toSet().toList()
                         ..sort();
 
                   return CategoryFilter(
@@ -167,224 +159,178 @@ class _DoaScreenState extends State<DoaScreen> {
                                 WoltModalSheet.show(
                                   context: context,
 
-                                  pageListBuilder:
-                                      (bottomSheetContext) => [
-                                        SliverWoltModalSheetPage(
-                                          backgroundColor:
-                                              HexColor.fromHex("#132e3a"),
+                                  pageListBuilder: (bottomSheetContext) => [
+                                    SliverWoltModalSheetPage(
+                                      backgroundColor: Theme.of(
+                                        context,
+                                      ).cardColor,
 
-                                          hasTopBarLayer: false,
+                                      hasTopBarLayer: false,
 
-                                          mainContentSliversBuilder:
-                                              (context) => [
-                                                SliverToBoxAdapter(
+                                      mainContentSliversBuilder: (context) => [
+                                        SliverToBoxAdapter(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 25,
+                                            ),
+
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+
+                                              children: [
+                                                Text(
+                                                  doa.nama,
+
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.titleMedium,
+                                                ),
+
+                                                const SizedBox(height: 5),
+
+                                                Text(
+                                                  doa.grup,
+
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelSmall,
+                                                ),
+
+                                                const SizedBox(height: 20),
+
+                                                Container(
+                                                  width: double.infinity,
+
+                                                  decoration: BoxDecoration(
+                                                    color: isDark
+                                                        ? HexColor.fromHex(
+                                                            "#0b1d26",
+                                                          )
+                                                        : Theme.of(
+                                                            context,
+                                                          ).colorScheme.surface,
+                                                    boxShadow:
+                                                        context.shadow.small,
+
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                  ),
+
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                          right: 20,
-                                                          left: 20,
-                                                          top: 25,
+                                                        const EdgeInsets.all(
+                                                          16,
                                                         ),
 
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                    child: Text(
+                                                      doa.ar,
 
-                                                      children: [
-                                                        Text(
-                                                          doa.nama,
+                                                      style: TextStyle(
+                                                        fontSize: 27,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .titleLarge
+                                                            ?.color,
+                                                        height: 2,
+                                                      ),
 
-                                                          style:
-                                                              const TextStyle(
-                                                                fontSize: 18,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color:
-                                                                    Colors
-                                                                        .white,
-                                                              ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 5,
-                                                        ),
-
-                                                        Text(
-                                                          doa.grup,
-
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                HexColor.fromHex(
-                                                                  "#7c97a6",
-                                                                ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                color:
-                                                                    HexColor.fromHex(
-                                                                      "#0c1d27",
-                                                                    ),
-
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      12,
-                                                                    ),
-                                                              ),
-
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets.all(
-                                                                  16,
-                                                                ),
-
-                                                            child: Text(
-                                                              doa.ar,
-
-                                                              style:
-                                                                  const TextStyle(
-                                                                    fontSize:
-                                                                        27,
-                                                                    color:
-                                                                        Colors
-                                                                            .white,
-                                                                    height: 2,
-                                                                  ),
-
-                                                              textAlign:
-                                                                  TextAlign.end,
-                                                            ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-
-                                                        Text(
-                                                          doa.tr,
-
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                HexColor.fromHex(
-                                                                  "#2dc8b9",
-                                                                ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-
-                                                        Text(
-                                                          doa.idn,
-
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                HexColor.fromHex(
-                                                                  "#7c97a6",
-                                                                ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                border:
-                                                                    const Border(
-                                                                      left: BorderSide(
-                                                                        width:
-                                                                            3,
-                                                                        color:
-                                                                            Colors.amber,
-                                                                      ),
-                                                                    ),
-
-                                                                color: Colors
-                                                                    .amber
-                                                                    .withAlpha(
-                                                                      10,
-                                                                    ),
-
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      12,
-                                                                    ),
-                                                              ),
-
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets.all(
-                                                                  16,
-                                                                ),
-
-                                                            child: Text(
-                                                              doa.tentang,
-
-                                                              style: TextStyle(
-                                                                color:
-                                                                    HexColor.fromHex(
-                                                                      "#7c97a6",
-                                                                    ),
-                                                                height: 2,
-                                                              ),
-
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                            ),
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-
-                                                        ActionChip(
-                                                          label: Text(
-                                                            "tidur",
-
-                                                            style: TextStyle(
-                                                              color:
-                                                                  HexColor.fromHex(
-                                                                    "#2dc8b9",
-                                                                  ),
-                                                            ),
-                                                          ),
-
-                                                          backgroundColor:
-                                                              HexColor.fromHex(
-                                                                "#17404a",
-                                                              ),
-                                                        ),
-                                                      ],
+                                                      textAlign: TextAlign.end,
                                                     ),
                                                   ),
                                                 ),
+
+                                                const SizedBox(height: 20),
+
+                                                Text(
+                                                  doa.tr,
+
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: AppColors.primary,
+                                                  ),
+                                                ),
+
+                                                const SizedBox(height: 20),
+
+                                                Text(
+                                                  doa.idn,
+
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelMedium,
+                                                ),
+
+                                                const SizedBox(height: 20),
+
+                                                Container(
+                                                  width: double.infinity,
+
+                                                  decoration: BoxDecoration(
+                                                    border: const Border(
+                                                      left: BorderSide(
+                                                        width: 3,
+                                                        color: Colors.amber,
+                                                      ),
+                                                    ),
+
+                                                    color: Colors.amber
+                                                        .withAlpha(10),
+
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                  ),
+
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          16,
+                                                        ),
+
+                                                    child: Text(
+                                                      doa.tentang,
+
+                                                      style: Theme.of(
+                                                        context,
+                                                      ).textTheme.labelMedium,
+
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                const SizedBox(height: 20),
+
+                                                ActionChip(
+                                                  label: Text(
+                                                    "tidur",
+
+                                                    style: TextStyle(
+                                                      color: HexColor.fromHex(
+                                                        "#2dc8b9",
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  backgroundColor:
+                                                      HexColor.fromHex(
+                                                        "#17404a",
+                                                      ),
+                                                ),
                                               ],
+                                            ),
+                                          ),
                                         ),
                                       ],
+                                    ),
+                                  ],
                                 );
                               },
 
@@ -392,7 +338,8 @@ class _DoaScreenState extends State<DoaScreen> {
                                 height: 80,
 
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#132e3a"),
+                                  color: Theme.of(context).cardColor,
+                                  boxShadow: context.shadow.small,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
 
@@ -400,18 +347,23 @@ class _DoaScreenState extends State<DoaScreen> {
                                   children: [
                                     Expanded(
                                       child: ListTile(
-                                        contentPadding:
-                                            const EdgeInsets.only(left: 16),
+                                        contentPadding: const EdgeInsets.only(
+                                          left: 16,
+                                        ),
 
                                         leading: Container(
                                           height: 45,
                                           width: 45,
 
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
 
-                                            color: HexColor.fromHex("#17404a"),
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.surface,
+                                            boxShadow: context.shadow.small,
                                           ),
 
                                           child: Center(
@@ -419,11 +371,12 @@ class _DoaScreenState extends State<DoaScreen> {
                                               doa.id.toString(),
 
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium
+                                                    ?.fontSize,
                                                 fontWeight: FontWeight.w600,
-                                                color: HexColor.fromHex(
-                                                  "#2dc8b9",
-                                                ),
+                                                color: AppColors.primary,
                                               ),
                                             ),
                                           ),
@@ -432,10 +385,14 @@ class _DoaScreenState extends State<DoaScreen> {
                                         title: Text(
                                           doa.nama,
 
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                          style: TextStyle(
+                                            fontSize: Theme.of(
+                                              context,
+                                            ).textTheme.labelMedium?.fontSize,
                                             fontWeight: FontWeight.w600,
-                                            color: Colors.white,
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.titleLarge?.color,
                                           ),
 
                                           overflow: TextOverflow.ellipsis,
@@ -446,8 +403,13 @@ class _DoaScreenState extends State<DoaScreen> {
                                           doa.grup,
 
                                           style: TextStyle(
-                                            fontSize: 12,
-                                            color: HexColor.fromHex("#7c97a6"),
+                                            fontSize: Theme.of(
+                                              context,
+                                            ).textTheme.labelSmall?.fontSize,
+
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.labelSmall?.color,
                                           ),
                                         ),
                                       ),
@@ -473,9 +435,7 @@ class _DoaScreenState extends State<DoaScreen> {
               return const SizedBox.shrink();
             }
 
-            return const Positioned.fill(
-              child: Loading(),
-            );
+            return const Positioned.fill(child: Loading());
           }),
         ],
       ),

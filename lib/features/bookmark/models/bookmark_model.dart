@@ -7,6 +7,7 @@ class BookmarkModel {
   Id id = Isar.autoIncrement;
 
   late int surahNumber;
+  late String arabName;
   late String surahName;
 
   late int ayatNumber;

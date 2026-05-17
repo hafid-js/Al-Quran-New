@@ -1,4 +1,6 @@
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
@@ -46,42 +48,38 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_circle_left_rounded),
-          color: Colors.white,
+          color: Theme.of(context).iconTheme.color,
         ),
         titleSpacing: 5,
         title: Row(
           children: [
             Container(
               height: 36,
-              width: 35,
+              width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: HexColor.fromHex("#17404a"),
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: HexColor.fromHex("#2dc8b9"),
+                color: AppColors.primary
               ),
             ),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Al-Quran",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
 
                 Obx(() {
@@ -90,10 +88,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                   }
                   return Text(
                     "${controller.surahList.length} Surah",
-                    style: TextStyle(
-                      color: HexColor.fromHex("#7c97a6"),
-                      fontSize: 14,
-                    ),
+                    style: Theme.of(context).textTheme.labelSmall
                   );
                 }),
               ],
@@ -120,7 +115,8 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: HexColor.fromHex("#132e3a"),
+                          color: Theme.of(context).cardColor,
+                          boxShadow: context.shadow.small
                         ),
                         child: Row(
                           children: [
@@ -177,10 +173,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                               child: Container(
                                 height: 90,
                                 decoration: BoxDecoration(
-                                  color:
-                                      HexColor.fromHex("#132e3a"),
+                                  color: Theme.of(context).cardColor,
                                   borderRadius:
                                       BorderRadius.circular(16),
+                                        boxShadow: context.shadow.small
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -202,17 +198,14 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                                 surah.nomor
                                                     .toString(),
                                                 style: TextStyle(
-                                                  color: HexColor.fromHex(
-                                                      "#28ab9e"),
-                                                  fontSize: 11,
+                                                  color: AppColors.primary,
+                                                  fontSize: TextTheme.of(context).labelSmall?.fontSize,
                                                 ),
                                               ),
                                               Icon(
                                                 Icons.brightness_5_sharp,
                                                 size: 45,
-                                                color: HexColor.fromHex(
-                                                        "#28ab9e")
-                                                    .withAlpha(90),
+                                                color: Theme.of(context).colorScheme.surface
                                               ),
                                             ],
                                           ),
@@ -227,21 +220,12 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                             children: [
                                               Text(
                                                 surah.namaLatin,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight:
-                                                      FontWeight.w600,
-                                                ),
+                                                style: Theme.of(context).textTheme.titleSmall
                                               ),
                                               const SizedBox(height: 3),
                                               Text(
                                                 "${surah.jumlahAyat} Ayat",
-                                                style: TextStyle(
-                                                  color: HexColor.fromHex(
-                                                      "#5a7b8a"),
-                                                  fontSize: 12,
-                                                ),
+                                                style:Theme.of(context).textTheme.labelSmall
                                               ),
                                             ],
                                           ),
@@ -255,20 +239,14 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                           Text(
                                             surah.nama,
                                             style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
                                               color:
-                                                  HexColor.fromHex(
-                                                      "#28ab9e"),
+                                                  AppColors.primary
                                             ),
                                           ),
                                           Text(
                                             surah.arti,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  HexColor.fromHex(
-                                                      "#5a7b8a"),
-                                            ),
+                                              style:Theme.of(context).textTheme.labelSmall
                                           ),
                                         ],
                                       ),

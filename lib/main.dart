@@ -1,7 +1,9 @@
 import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
+import 'package:alquran_new/core/utils/constants/app_theme.dart';
 
 import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_source.dart';
 import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
@@ -16,25 +18,28 @@ import 'package:alquran_new/features/doa/data/repositories/doa_repository_impl.d
 import 'package:alquran_new/features/doa/domain/repositories/doa_repository.dart';
 import 'package:alquran_new/features/doa/domain/usecases/get_all_doa.dart';
 
-import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
-import 'package:alquran_new/test.dart';
-
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
+import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await IsarService.init();
+
 
   // init storage dulu
   await GetStorage.init();
@@ -66,6 +71,7 @@ void _registerDependencies() {
   // SURAH
   final surahRemoteDataSource = SurahRemoteDataSourceImpl(dioClient);
   Get.put<SurahRemoteDataSource>(surahRemoteDataSource);
+
 
   final surahRepository =
       SurahRepositoryImpl(surahRemoteDataSource);
@@ -102,6 +108,7 @@ void _registerDependencies() {
   final prayerTimeRepository =
       PrayerTimeRepositoryImpl(
     prayerTimeRemoteDataSource,
+
   );
 
   Get.put<PrayerTimeRepository>(
@@ -116,6 +123,13 @@ void _registerDependencies() {
   // );
 
   Get.put(BookmarkController(), permanent: true);
+
+  Get.put(
+  SettingsController(
+    SettingsService(IsarService.isar),
+  ),
+  permanent: true,
+);
 }
 
 class MyApp extends StatelessWidget {
@@ -123,10 +137,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData.dark(),
-      home: HomeScreen()
-    );
+    final setting = Get.find<SettingsController>();
+
+    return Obx(() {
+  return GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+
+    theme: AppTheme.lightTheme,
+    darkTheme: AppTheme.darkTheme,
+
+    themeMode: setting.modeSelected.value == 0
+        ? ThemeMode.dark
+        : ThemeMode.light,
+
+    home: HomeScreen(),
+  );
+});
   }
 }

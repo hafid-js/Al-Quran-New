@@ -27,7 +27,7 @@ class BookmarkScreen extends StatelessWidget {
           children: [
             Container(
               height: 36,
-              width: 35,
+              width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: HexColor.fromHex("#17404a"),
@@ -59,7 +59,40 @@ class BookmarkScreen extends StatelessWidget {
         ),
       ),
 
-      body: Padding(
+      body: Obx(() {
+
+        if (controller.bookmarks.isEmpty) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Bookmark Kosong",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Text(
+            "Ayat yang kamu simpan akan muncul di sini.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: HexColor.fromHex("#8BA4B4"),
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+        return Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: Column(
           children: [
@@ -125,7 +158,7 @@ class BookmarkScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      bm.surahName,
+                      bm.arabName,
                       style: TextStyle(
                         fontSize: 20,
                         color: HexColor.fromHex("#28ab9e"),
@@ -140,7 +173,8 @@ class BookmarkScreen extends StatelessWidget {
               ),
           ],
         ),
-      ),
+      );
+      })
     );
   }
 }

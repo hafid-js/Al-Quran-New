@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -83,7 +84,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       extendBodyBehindAppBar: true,
 
@@ -206,36 +207,6 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                     ],
                   ),
                 ),
-
-                // Padding(
-                //     padding: EdgeInsets.symmetric(horizontal: 16),
-                //     child: Container(
-                //       height: 80,
-                //       width: double.infinity,
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(16),
-                //         color: HexColor.fromHex("#132e3a"),
-                //       ),
-                //       child: Padding(
-                //         padding: EdgeInsetsGeometry.symmetric(
-                //           horizontal: 16,
-                //           vertical: 16,
-                //         ),
-                //         child: Column(
-                //           children: [
-                //             Text(
-                //               "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
-                //               textAlign: TextAlign.right,
-                //               style: TextStyle(
-                //                 color: HexColor.fromHex("#2dc8b9"),
-                //                 fontSize: 25,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
                 Expanded(
                   child: OrientationBuilder(
                     builder: (context, orientation) => Column(
@@ -249,24 +220,30 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                             itemCount: data.ayat.length,
                             itemBuilder: (context, index) {
                               if (index == 0) {
-                                return Padding(
+                                if(data.namaLatin == "Al-Fatihah"){
+                                  return SizedBox(height: 16,);
+                                  
+                                } else {
+                                  return Padding(
                                   padding: EdgeInsets.all(16),
                                   child: Container(
                                     padding: EdgeInsets.all(16),
                                     decoration: BoxDecoration(
-                                      color: HexColor.fromHex("#132e3a"),
+                                      color: Theme.of(context).cardColor,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Text(
                                       "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#2dc8b9"),
+                                        color: Theme.of(context).textTheme.titleLarge?.color,
                                         fontSize: 25,
                                       ),
                                     ),
                                   ),
                                 );
+                                }
+
                               }
 
                               final ayat = data.ayat[index - 1];
@@ -286,7 +263,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
-                                        color: HexColor.fromHex("#132e3a"),
+                                        color: Theme.of(context).cardColor,
                                       ),
                                       child: Padding(
                                         padding: EdgeInsetsGeometry.symmetric(
@@ -306,66 +283,21 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                     Text(
                                                       ayat.nomorAyat.toString(),
                                                       style: TextStyle(
-                                                        color: HexColor.fromHex(
-                                                          "#28ab9e",
-                                                        ),
+                                                        color: AppColors.primary,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
                                                     ),
                                                     Icon(
                                                       Icons.brightness_5_sharp,
-                                                      color: HexColor.fromHex(
-                                                        "#28ab9e",
-                                                      ).withAlpha(90),
+                                                      color: Theme.of(context).colorScheme.surface,
                                                       size: 40,
                                                     ),
                                                   ],
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Obx(() {
-                                                      final isSaved =
-                                                          bookmarkController
-                                                              .isBookmarked(
-                                                                nomor,
-                                                                ayat.nomorAyat,
-                                                              );
-                                                      return InkWell(
-                                                        onTap: () {
-                                                          bookmarkController
-                                                              .toggle(
-                                                                nomor,
-                                                                surah.nama,
-                                                                ayat.nomorAyat,
-                                                              );
-                                                        },
-                                                        child: Container(
-                                                          height: 40,
-                                                          width: 40,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  12,
-                                                                ),
-                                                            color:
-                                                                HexColor.fromHex(
-                                                                  "#1a3a4a",
-                                                                ),
-                                                          ),
-                                                          child: Icon(
-                                                            isSaved
-                                                                ? Icons.bookmark
-                                                                : Icons
-                                                                      .bookmark_border,
-                                                            color: isSaved
-                                                                ? Colors.amber
-                                                                : Colors.white,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                                    SizedBox(width: 8),
+                                                    
 
                                                     InkWell(
                                                       onTap: () {
@@ -392,21 +324,58 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                 12,
                                                               ),
                                                           color:
-                                                              HexColor.fromHex(
-                                                                "#1a3a4a",
-                                                              ),
+                                                              Theme.of(context).colorScheme.surface
                                                         ),
                                                         child: Icon(
                                                           Icons
                                                               .menu_book_rounded,
                                                           color: isOpen
                                                               ? Colors.amber
-                                                              : HexColor.fromHex(
-                                                                  "#7c97a6",
-                                                                ),
+                                                              : Theme.of(context).textTheme.labelLarge?.color
                                                         ),
                                                       ),
                                                     ),
+                                                    SizedBox(width: 8),
+                                                    Obx(() {
+                                                      final isSaved =
+                                                          bookmarkController
+                                                              .isBookmarked(
+                                                                nomor,
+                                                                ayat.nomorAyat,
+                                                              );
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          bookmarkController
+                                                              .toggle(
+                                                                nomor,
+                                                                surah.nama,
+                                                                surah.namaLatin,
+                                                                ayat.nomorAyat,
+                                                              );
+                                                        },
+                                                        child: Container(
+                                                          height: 40,
+                                                          width: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  12,
+                                                                ),
+                                                            color:
+                                                                Theme.of(context).colorScheme.surface,
+                                                          ),
+                                                          child: Icon(
+                                                            isSaved
+                                                                ? Icons.bookmark
+                                                                : Icons
+                                                                      .bookmark_border,
+                                                            color: isSaved
+                                                                ? Colors.amber
+                                                                : Theme.of(context).textTheme.labelLarge?.color,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
                                                     SizedBox(width: 8),
                                                     Obx(() {
                                                       final kondisi = controller
@@ -424,9 +393,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                       12,
                                                                     ),
                                                                 color:
-                                                                    HexColor.fromHex(
-                                                                      "#1a3a4a",
-                                                                    ),
+                                                                    Theme.of(context).colorScheme.surface
                                                               ),
                                                               child: IconButton(
                                                                 onPressed: () {
@@ -439,9 +406,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                   Icons
                                                                       .play_circle_filled_rounded,
                                                                   color:
-                                                                      HexColor.fromHex(
-                                                                        "#2dc8b9",
-                                                                      ),
+                                                                      AppColors.primary
                                                                 ),
                                                               ),
                                                             )
@@ -463,9 +428,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.pause,
-                                                                            color: HexColor.fromHex(
-                                                                              "#2dc8b9",
-                                                                            ),
+                                                                            color: AppColors.primary
                                                                           ),
                                                                         )
                                                                       : IconButton(
@@ -476,9 +439,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.play_arrow,
-                                                                            color: HexColor.fromHex(
-                                                                              "#2dc8b9",
-                                                                            ),
+                                                                            color: AppColors.primary
                                                                           ),
                                                                         ),
                                                                   IconButton(
@@ -491,9 +452,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                     icon: Icon(
                                                                       Icons
                                                                           .stop,
-                                                                      color: HexColor.fromHex(
-                                                                        "#2dc8b9",
-                                                                      ),
+                                                                      color: AppColors.primary
                                                                     ),
                                                                   ),
                                                                 ],
@@ -515,7 +474,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                     ayat.teksArab,
                                                     textAlign: TextAlign.right,
                                                     style: TextStyle(
-                                                      color: Colors.white,
+                                                      color: Theme.of(context).textTheme.titleLarge?.color,
                                                       fontSize: 25,
                                                     ),
                                                   ),
@@ -540,20 +499,13 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                         ayat.teksLatin,
                                                         style: TextStyle(
                                                           color:
-                                                              HexColor.fromHex(
-                                                                "#228276",
-                                                              ),
+                                                              AppColors.primary
                                                         ),
                                                       ),
                                                       SizedBox(height: 10),
                                                       Text(
                                                         ayat.teksIndonesia,
-                                                        style: TextStyle(
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#7c97a6",
-                                                              ),
-                                                        ),
+                                                        style: Theme.of(context).textTheme.labelMedium
                                                       ),
                                                     ],
                                                   ),

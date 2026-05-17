@@ -1,10 +1,12 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 
 class PengaturanAplikasiScreen extends StatefulWidget {
-  const PengaturanAplikasiScreen({super.key});
+ const PengaturanAplikasiScreen({super.key});
 
   @override
   State<PengaturanAplikasiScreen> createState() =>
@@ -62,49 +64,49 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
     });
   }
 
+    final controller = Get.find<SettingsController>();
+
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132D3B").withAlpha(120),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leadingWidth: 65,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_circle_left_rounded),
-          color: Colors.white,
+         color: Theme.of(context).iconTheme.color,
         ),
         titleSpacing: 5,
         title: Row(
           children: [
             Container(
               height: 36,
-              width: 35,
+              width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: HexColor.fromHex("#17404a"),
+                color: Theme.of(context).colorScheme.surface
               ),
               child: Icon(
                 Icons.settings,
-                size: 20,
-                color: HexColor.fromHex("#2dc8b9"),
+            size: 20,
+                color: AppColors.primary
               ),
             ),
             SizedBox(width: 10),
             Text(
               "Pengaturan",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ],
         ),
       ),
 
       body: SingleChildScrollView(
-        child: Padding(
+        child: Obx(() {
+          return Padding(
           padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
           child: Column(
             children: [
@@ -116,34 +118,24 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.headphones_rounded,
                       size: 24,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: AppColors.primary
                     ),
                     title: Text(
                       "Qari Default",
-                      style: TextStyle(
-                        color: HexColor.fromHex("#8BA4B4"),
-                        fontWeight: FontWeight.w600,
-                      ),
+                     style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                   Column(
                     children: List.generate(qoris.length, (index) {
                       final item = qoris[index];
-                      final bool isSelected = qariSelected == index;
+                      final bool isSelected = controller.qariSelected.value == index;
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(16),
                           onTap: () {
-                            setState(() {
-                              qariSelected = index;
-                              title = item["title"];
-                            });
-
-                            if (index == 0) {
-                              {}
-                            }
+                            controller.changeQari(index);
                           },
 
                           child: AnimatedContainer(
@@ -151,14 +143,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             duration: const Duration(milliseconds: 250),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? HexColor.fromHex("#17404a")
-                                  : HexColor.fromHex("#132D3B"),
+                                  ? Theme.of(context).colorScheme.surface
+                                  : Theme.of(context).cardColor,
 
                               borderRadius: BorderRadius.circular(16),
 
                               border: Border.all(
                                 color: isSelected
-                                    ? HexColor.fromHex("#2cc4b6")
+                                    ? AppColors.primary
                                     : Colors.transparent,
                                 width: 1,
                               ),
@@ -175,12 +167,12 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: HexColor.fromHex("#154E50"),
+                                        color: isDark ? Theme.of(context).colorScheme.surface : HexColor.fromHex("#B4E0DB"),
                                       ),
                                       child: Icon(
                                         Icons.check_circle_rounded,
                                         size: 20,
-                                        color: HexColor.fromHex("#2EC4B6"),
+                                        color: AppColors.primary,
                                       ),
                                     )
                                   : Container(
@@ -188,7 +180,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: HexColor.fromHex("#1A3A4A"),
+                                        color: isDark ? HexColor.fromHex("#1A3A4A") : HexColor.fromHex("#E8F0EE"),
                                       ),
                                       child: Icon(
                                         Icons.mic_none_rounded,
@@ -199,16 +191,16 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                               title: Text(
                                 item["title"],
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
+                                  color: isDark ? AppColors.light : (isSelected ? AppColors.primary : Theme.of(context).textTheme.titleLarge?.color),
                                 ),
                               ),
 
                               trailing: isSelected
                                   ? Icon(
                                       Icons.check_circle_rounded,
-                                      color: HexColor.fromHex("#2dc8b9"),
+                                      color: AppColors.primary,
                                     )
                                   : null,
                             ),
@@ -228,14 +220,11 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.text_fields_rounded,
                       size: 24,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: AppColors.primary,
                     ),
                     title: Text(
                       "Font Arab",
-                      style: TextStyle(
-                        color: HexColor.fromHex("#8BA4B4"),
-                        fontWeight: FontWeight.w600,
-                      ),
+                        style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                   Column(
@@ -263,8 +252,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             duration: const Duration(milliseconds: 250),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? HexColor.fromHex("#17404a")
-                                  : HexColor.fromHex("#132D3B"),
+                                ? Theme.of(context).colorScheme.surface
+                                  : Theme.of(context).cardColor,
 
                               borderRadius: BorderRadius.circular(16),
 
@@ -287,12 +276,12 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: HexColor.fromHex("#154E50"),
+                                    color: isDark ? HexColor.fromHex("#154E50") : HexColor.fromHex("#B4E0DB"),
                                       ),
                                       child: Icon(
                                         Icons.check_circle_rounded,
                                         size: 20,
-                                        color: HexColor.fromHex("#2EC4B6"),
+                                        color: AppColors.primary
                                       ),
                                     )
                                   : Container(
@@ -300,7 +289,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: HexColor.fromHex("#1A3A4A"),
+                                                 color: isDark ? HexColor.fromHex("#1A3A4A") : HexColor.fromHex("#E8F0EE"),
                                       ),
                                       child: Icon(
                                         Icons.text_fields_rounded,
@@ -311,16 +300,16 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                               title: Text(
                                 item["title"],
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
+                                  color: isDark ? AppColors.light : (isSelected ? AppColors.primary : Theme.of(context).textTheme.titleLarge?.color),
                                 ),
                               ),
 
                               trailing: isSelected
                                   ? Icon(
                                       Icons.check_circle_rounded,
-                                      color: HexColor.fromHex("#2dc8b9"),
+                                      color: AppColors.primary,
                                     )
                                   : null,
                             ),
@@ -340,14 +329,11 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.headphones_rounded,
                       size: 24,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: AppColors.primary,
                     ),
                     title: Text(
                       "Tampilan",
-                      style: TextStyle(
-                        color: HexColor.fromHex("#8BA4B4"),
-                        fontWeight: FontWeight.w600,
-                      ),
+                        style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                   Column(
@@ -357,21 +343,15 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                         children: List.generate(themeModes.length, (index) {
                           final item = themeModes[index];
-                          final bool isSelected = modeSelected == index;
+                          final bool isSelected = controller.modeSelected.value == index;
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(16),
                               onTap: () {
-                                setState(() {
-                                  modeSelected = index;
-                                  title = item["title"];
-                                });
-
-                                if (index == 0) {
-                                  {}
-                                }
+                               controller.changeMode(index);
+                                 
                               },
 
                               child: Row(
@@ -385,8 +365,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                     duration: const Duration(milliseconds: 250),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? HexColor.fromHex("#17404a")
-                                          : HexColor.fromHex("#132D3B"),
+                                          ? Theme.of(context).colorScheme.surface
+                                  : Theme.of(context).cardColor,
 
                                       borderRadius: BorderRadius.circular(16),
 
@@ -416,8 +396,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: isSelected
-                                                ? HexColor.fromHex("#2EC4B6")
-                                                : Colors.white,
+                                                ? AppColors.primary
+                                                : Theme.of(context).textTheme.titleLarge?.color,
                                           ),
                                         ),
                                       ],
@@ -434,21 +414,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                         children: List.generate(colorPicker.length, (index) {
                           final item = colorPicker[index];
-                          final bool isSelected = colorSelected == index;
+                          final bool isSelected = controller.colorSelected.value == index;
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(16),
                               onTap: () {
-                                setState(() {
-                                  colorSelected = index;
-                                  name = item["name"];
-                                });
-
-                                if (index == 0) {
-                                  {}
-                                }
+                                controller.changeColor(index, item['color'] as Color);
                               },
 
                               child: Row(
@@ -498,14 +471,10 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                           ),
                                                     ),
 
-                                                    child: const Text('Got it'),
+                                                    child: const Text('Simpan'),
 
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        currentColor =
-                                                            pickerColor;
-                                                        colorSelected = index;
-                                                      });
+                                                    onPressed: () async {
+                                                      await controller.changeColor(index, pickerColor);
 
                                                       Navigator.of(
                                                         context,
@@ -526,8 +495,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                             ),
                                             decoration: BoxDecoration(
                                               color: isSelected
-                                                  ? HexColor.fromHex("#17404a")
-                                                  : HexColor.fromHex("#132D3B"),
+                                                  ? Theme.of(context).colorScheme.surface
+                                  : Theme.of(context).cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               border: Border.all(
@@ -575,10 +544,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     fontSize: 11,
                                                     fontWeight: FontWeight.w500,
                                                     color: isSelected
-                                                        ? HexColor.fromHex(
-                                                            "#2EC4B6",
-                                                          )
-                                                        : Colors.white,
+                                                        ? AppColors.primary
+                                                      : Theme.of(context).textTheme.titleLarge?.color,
                                                   ),
                                                 ),
                                               ],
@@ -595,8 +562,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: isSelected
-                                                ? HexColor.fromHex("#17404a")
-                                                : HexColor.fromHex("#132D3B"),
+                                                ? Theme.of(context).colorScheme.surface
+                                  : Theme.of(context).cardColor,
                                             borderRadius: BorderRadius.circular(
                                               16,
                                             ),
@@ -631,10 +598,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w500,
                                                   color: isSelected
-                                                      ? HexColor.fromHex(
-                                                          "#2EC4B6",
-                                                        )
-                                                      : Colors.white,
+                                                      ? AppColors.primary
+                                                      : Theme.of(context).textTheme.titleLarge?.color,
                                                 ),
                                               ),
                                             ],
@@ -659,21 +624,18 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.error_rounded,
                       size: 24,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: AppColors.primary,
                     ),
                     title: Text(
                       "Tentang",
-                      style: TextStyle(
-                        color: HexColor.fromHex("#8BA4B4"),
-                        fontWeight: FontWeight.w600,
-                      ),
+                        style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
 
                   Container(
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: HexColor.fromHex("#132D3B"),
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -685,27 +647,21 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             width: 45,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: HexColor.fromHex("#154E50"),
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                             child: Icon(
                               Icons.menu_book_rounded,
                               size: 25,
-                              color: HexColor.fromHex("#2EC4B6"),
+                              color: AppColors.primary,
                             ),
                           ),
                           title: Text(
                             "Al-Barokah Mobile",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium
                           ),
                           subtitle: Text(
                             "Versi 1.0.0",
-                            style: TextStyle(
-                              color: HexColor.fromHex("#5A7A8A"),
-                            ),
+                            style: Theme.of(context).textTheme.labelMedium
                           ),
                         ),
                         Text(
@@ -722,15 +678,12 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                             Icon(
                               Icons.email_rounded,
                               size: 20,
-                              color: HexColor.fromHex("#2EC4B6"),
+                              color: AppColors.primary,
                             ),
                             SizedBox(width: 10),
                             Text(
                               "Kontak: admin@hafidtech.com",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: HexColor.fromHex("#5A7A8A"),
-                              ),
+                              style: Theme.of(context).textTheme.labelMedium
                             ),
                           ],
                         ),
@@ -746,7 +699,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#153945"),
+                                  color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
@@ -755,14 +708,14 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                     Icon(
                                       Icons.email_rounded,
                                       size: 18,
-                                      color: HexColor.fromHex("#2EC4B6"),
+                                      color: AppColors.primary,
                                     ),
                                     SizedBox(width: 10),
                                     Text(
                                       "Syarat & Ketentuan",
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: HexColor.fromHex("#2EC4B6"),
+                                        color: AppColors.primary,
                                       ),
                                     ),
                                   ],
@@ -775,23 +728,23 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#153945"),
+                                  color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(
-                                      Icons.email_rounded,
+                                      Icons.security_rounded,
                                       size: 18,
-                                      color: HexColor.fromHex("#2EC4B6"),
+                                      color: AppColors.primary,
                                     ),
                                     SizedBox(width: 10),
                                     Text(
                                       "Kebijakan Privasi",
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: HexColor.fromHex("#2EC4B6"),
+                                        color: AppColors.primary,
                                       ),
                                     ),
                                   ],
@@ -807,7 +760,8 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
               ),
             ],
           ),
-        ),
+        );
+        })
       ),
     );
   }

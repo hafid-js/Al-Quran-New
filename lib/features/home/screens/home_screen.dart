@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final city = "Kab. Purworejo";
 
       return Scaffold(
-        backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
         appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 0),
 
@@ -142,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: HexColor.fromHex("#132e3a"),
+                              color: Theme.of(context).colorScheme.surface,
                           ),
 
                           child: Icon(
@@ -155,11 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         Text(
                           city,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
+                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -170,7 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        color: HexColor.fromHex("#132e3a"),
+                        color: Theme.of(context).cardColor,
+                        boxShadow: context.shadow.small
                       ),
 
                       child: Icon(
@@ -346,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: HexColor.fromHex("#132e3a"),
+                              color: Theme.of(context).colorScheme.surface,
                           ),
                           child: Icon(
                             Icons.access_time_filled_outlined,
@@ -354,14 +352,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(width: 12),
-                        Text(
-                          "Jadwal Sholat",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+
+Text(
+  "Jadwal Sholat",
+  style: Theme.of(context).textTheme.titleLarge,
+)
                       ],
                     ),
                     GestureDetector(
@@ -371,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: HexColor.fromHex("#132e3a"),
+                        color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Icon(
                           Icons.notifications,
@@ -389,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#132e3a"),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: GridView.count(
@@ -457,7 +452,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 40,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color: HexColor.fromHex("#132e3a"),
+                                color: Theme.of(context).colorScheme.surface,
                               ),
                               child: Icon(
                                 Icons.grid_view_rounded,
@@ -469,11 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             Text(
                               "Menu",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
+                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ],
                         ),
@@ -491,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: HexColor.fromHex("#132e3a"),
+                           color: Theme.of(context).colorScheme.surface,
                             ),
 
                             child: Row(
@@ -552,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: EdgeInsets.symmetric(vertical: 12),
 
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex("#132e3a"),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(16),
                               ),
 
@@ -566,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(16),
-                                      color: HexColor.fromHex("#17404a"),
+                                  color: Theme.of(context).colorScheme.surface,
                                     ),
 
                                     child: Icon(
@@ -629,7 +620,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: EdgeInsets.symmetric(vertical: 12),
 
                                     decoration: BoxDecoration(
-                                      color: HexColor.fromHex("#132e3a"),
+                                      color: Theme.of(context).cardColor,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
 
@@ -646,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             borderRadius: BorderRadius.circular(
                                               16,
                                             ),
-                                            color: HexColor.fromHex("#17404a"),
+                                             color: Theme.of(context).colorScheme.surface,
                                           ),
 
                                           child: Icon(

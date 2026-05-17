@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
@@ -45,9 +46,9 @@ class _LoadingState extends State<Loading>
             width: 10,
             height: 10,
             margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: AppColors.primary,
             ),
           ),
         );
@@ -132,9 +133,9 @@ class _DotsState extends State<_Dots>
             width: 10,
             height: 10,
             margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: AppColors.primary,
             ),
           ),
         );

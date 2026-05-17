@@ -17,23 +17,28 @@ const BookmarkModelSchema = CollectionSchema(
   name: r'BookmarkModel',
   id: -2869850630043177974,
   properties: {
-    r'ayatNumber': PropertySchema(
+    r'arabName': PropertySchema(
       id: 0,
+      name: r'arabName',
+      type: IsarType.string,
+    ),
+    r'ayatNumber': PropertySchema(
+      id: 1,
       name: r'ayatNumber',
       type: IsarType.long,
     ),
     r'createdAt': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'surahName': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'surahName',
       type: IsarType.string,
     ),
     r'surahNumber': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'surahNumber',
       type: IsarType.long,
     )
@@ -58,6 +63,7 @@ int _bookmarkModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.arabName.length * 3;
   bytesCount += 3 + object.surahName.length * 3;
   return bytesCount;
 }
@@ -68,10 +74,11 @@ void _bookmarkModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.ayatNumber);
-  writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeString(offsets[2], object.surahName);
-  writer.writeLong(offsets[3], object.surahNumber);
+  writer.writeString(offsets[0], object.arabName);
+  writer.writeLong(offsets[1], object.ayatNumber);
+  writer.writeDateTime(offsets[2], object.createdAt);
+  writer.writeString(offsets[3], object.surahName);
+  writer.writeLong(offsets[4], object.surahNumber);
 }
 
 BookmarkModel _bookmarkModelDeserialize(
@@ -81,11 +88,12 @@ BookmarkModel _bookmarkModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = BookmarkModel();
-  object.ayatNumber = reader.readLong(offsets[0]);
-  object.createdAt = reader.readDateTime(offsets[1]);
+  object.arabName = reader.readString(offsets[0]);
+  object.ayatNumber = reader.readLong(offsets[1]);
+  object.createdAt = reader.readDateTime(offsets[2]);
   object.id = id;
-  object.surahName = reader.readString(offsets[2]);
-  object.surahNumber = reader.readLong(offsets[3]);
+  object.surahName = reader.readString(offsets[3]);
+  object.surahNumber = reader.readLong(offsets[4]);
   return object;
 }
 
@@ -97,12 +105,14 @@ P _bookmarkModelDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
-    case 1:
-      return (reader.readDateTime(offset)) as P;
-    case 2:
       return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readLong(offset)) as P;
+    case 2:
+      return (reader.readDateTime(offset)) as P;
     case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -205,6 +215,142 @@ extension BookmarkModelQueryWhere
 
 extension BookmarkModelQueryFilter
     on QueryBuilder<BookmarkModel, BookmarkModel, QFilterCondition> {
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'arabName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'arabName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'arabName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'arabName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
+      arabNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'arabName',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<BookmarkModel, BookmarkModel, QAfterFilterCondition>
       ayatNumberEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
@@ -572,6 +718,19 @@ extension BookmarkModelQueryLinks
 
 extension BookmarkModelQuerySortBy
     on QueryBuilder<BookmarkModel, BookmarkModel, QSortBy> {
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy> sortByArabName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'arabName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy>
+      sortByArabNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'arabName', Sort.desc);
+    });
+  }
+
   QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy> sortByAyatNumber() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ayatNumber', Sort.asc);
@@ -627,6 +786,19 @@ extension BookmarkModelQuerySortBy
 
 extension BookmarkModelQuerySortThenBy
     on QueryBuilder<BookmarkModel, BookmarkModel, QSortThenBy> {
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy> thenByArabName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'arabName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy>
+      thenByArabNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'arabName', Sort.desc);
+    });
+  }
+
   QueryBuilder<BookmarkModel, BookmarkModel, QAfterSortBy> thenByAyatNumber() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ayatNumber', Sort.asc);
@@ -694,6 +866,13 @@ extension BookmarkModelQuerySortThenBy
 
 extension BookmarkModelQueryWhereDistinct
     on QueryBuilder<BookmarkModel, BookmarkModel, QDistinct> {
+  QueryBuilder<BookmarkModel, BookmarkModel, QDistinct> distinctByArabName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'arabName', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<BookmarkModel, BookmarkModel, QDistinct> distinctByAyatNumber() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'ayatNumber');
@@ -726,6 +905,12 @@ extension BookmarkModelQueryProperty
   QueryBuilder<BookmarkModel, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<BookmarkModel, String, QQueryOperations> arabNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'arabName');
     });
   }
 
