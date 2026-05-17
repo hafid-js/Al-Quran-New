@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
@@ -119,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       final city = "Kab. Purworejo";
 
-      return Scaffold(
+      return Obx(() {
+        return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
         appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 0),
@@ -148,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           child: Icon(
                             Icons.location_on,
-                            color: HexColor.fromHex("#2dc8b9"),
+                            color: AppColors.primary,
                           ),
                         ),
 
@@ -174,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(
                         Icons.location_on,
                         size: 30,
-                        color: HexColor.fromHex("#2dc8b9"),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -348,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Icon(
                             Icons.access_time_filled_outlined,
-                            color: HexColor.fromHex("#2dc8b9"),
+                            color: AppColors.primary,
                           ),
                         ),
                         SizedBox(width: 12),
@@ -370,7 +372,7 @@ Text(
                         ),
                         child: Icon(
                           Icons.notifications,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          color: AppColors.primary,
                         ),
                       ),
                     ),
@@ -456,7 +458,7 @@ Text(
                               ),
                               child: Icon(
                                 Icons.grid_view_rounded,
-                                color: HexColor.fromHex("#2dc8b9"),
+                                color: AppColors.primary,
                               ),
                             ),
 
@@ -492,7 +494,7 @@ Text(
                                   showAllMenus ? "Sembunyikan" : "Lihat Semua",
 
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#2f9993"),
+                                    color: AppColors.primary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -507,7 +509,7 @@ Text(
                                   child: Icon(
                                     Icons.arrow_circle_down_rounded,
                                     size: 20,
-                                    color: HexColor.fromHex("#2dc8b9"),
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ],
@@ -563,7 +565,7 @@ Text(
                                     child: Icon(
                                       nextMenu["icon"],
                                       size: 30,
-                                      color: HexColor.fromHex("#2dc8b9"),
+                                      color: AppColors.primary,
                                     ),
                                   ),
 
@@ -643,7 +645,7 @@ Text(
                                           child: Icon(
                                             menu["icon"],
                                             size: 30,
-                                            color: HexColor.fromHex("#2dc8b9"),
+                                            color: AppColors.primary,
                                           ),
                                         ),
 
@@ -682,6 +684,7 @@ Text(
           ),
         ),
       );
+      });
     });
   }
 }

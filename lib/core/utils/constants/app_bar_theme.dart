@@ -4,7 +4,7 @@ import 'app_colors.dart';
 class AppBarThemes {
   AppBarThemes._();
 
-  static const lightAppBarTheme = AppBarTheme(
+  static final lightAppBarTheme = AppBarTheme(
     elevation: 0,
     centerTitle: false,
     backgroundColor: Colors.transparent,

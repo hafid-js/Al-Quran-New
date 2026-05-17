@@ -143,8 +143,8 @@ class MyApp extends StatelessWidget {
   return GetMaterialApp(
     debugShowCheckedModeBanner: false,
 
-    theme: AppTheme.lightTheme,
-    darkTheme: AppTheme.darkTheme,
+   theme: AppTheme.lightTheme(),
+darkTheme: AppTheme.darkTheme(),
 
     themeMode: setting.modeSelected.value == 0
         ? ThemeMode.dark

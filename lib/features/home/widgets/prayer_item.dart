@@ -28,7 +28,7 @@ class PrayerItemWidget extends StatelessWidget {
             decoration: BoxDecoration(
               border: BoxBorder.all(
                 width: 0.5,
-                color: HexColor.fromHex("#2dc8b9"),
+                color: AppColors.primary,
               ),
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),

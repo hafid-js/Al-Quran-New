@@ -69,7 +69,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
+    return Obx(() {
+      return  Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -98,15 +99,16 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
             SizedBox(width: 10),
             Text(
               "Pengaturan",
-              style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context)
+    .textTheme
+    .titleLarge
             ),
           ],
         ),
       ),
 
       body: SingleChildScrollView(
-        child: Obx(() {
-          return Padding(
+        child: Padding(
           padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
           child: Column(
             children: [
@@ -167,7 +169,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: isDark ? Theme.of(context).colorScheme.surface : HexColor.fromHex("#B4E0DB"),
+                                        color: Theme.of(context).colorScheme.surface,
                                       ),
                                       child: Icon(
                                         Icons.check_circle_rounded,
@@ -259,7 +261,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                               border: Border.all(
                                 color: isSelected
-                                    ? HexColor.fromHex("#2cc4b6")
+                                    ? AppColors.primary
                                     : Colors.transparent,
                                 width: 1,
                               ),
@@ -276,7 +278,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                    color: isDark ? HexColor.fromHex("#154E50") : HexColor.fromHex("#B4E0DB"),
+                                    color: AppColors.primary.withAlpha(80),
                                       ),
                                       child: Icon(
                                         Icons.check_circle_rounded,
@@ -372,7 +374,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                                       border: Border.all(
                                         color: isSelected
-                                            ? HexColor.fromHex("#2cc4b6")
+                                            ? AppColors.primary
                                             : Colors.transparent,
                                         width: 1.5,
                                       ),
@@ -386,7 +388,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                           item["icon"],
                                           size: 30,
                                           color: isSelected
-                                              ? HexColor.fromHex("#2EC4B6")
+                                              ? AppColors.primary
                                               : HexColor.fromHex("#5A7A8A"),
                                         ),
                                         SizedBox(height: 10),
@@ -504,9 +506,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     (isSelected &&
                                                         item["color"] ==
                                                             "custom")
-                                                    ? HexColor.fromHex(
-                                                        "#2cc4b6",
-                                                      )
+                                                    ? AppColors.primary
                                                     : Colors.transparent,
                                                 width: 1.5,
                                               ),
@@ -571,7 +571,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                               color:
                                                   (isSelected &&
                                                       item["color"] != "custom")
-                                                  ? HexColor.fromHex("#2cc4b6")
+                                                  ? AppColors.primary
                                                   : Colors.transparent,
                                               width: 1.5,
                                             ),
@@ -760,9 +760,10 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
               ),
             ],
           ),
-        );
-        })
-      ),
-    );
+        
+        
+      )
+    ));
+    });
   }
 }

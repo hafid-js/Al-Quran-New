@@ -8,7 +8,8 @@ import 'text_theme.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData lightTheme = ThemeData(
+  static ThemeData lightTheme() {
+    return ThemeData(
   useMaterial3: true,
   fontFamily: 'Poppins',
   brightness: Brightness.light,
@@ -53,9 +54,10 @@ class AppTheme {
       ],
     ),
   ],
-);
+);}
 
- static ThemeData darkTheme = ThemeData(
+ static ThemeData darkTheme() {
+    return ThemeData(
   useMaterial3: true,
   fontFamily: 'Poppins',
   brightness: Brightness.dark,
@@ -101,4 +103,4 @@ class AppTheme {
     ),
   ],
 );
-}
+ }}

@@ -83,6 +83,11 @@ class AppTextTheme {
       fontWeight: FontWeight.w600,
       color: AppColors.textPrimaryDark,
     ),
+    titleSmall: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: AppColors.textPrimaryLight,
+    ),
 
     /// BODY
     bodyLarge: TextStyle(
