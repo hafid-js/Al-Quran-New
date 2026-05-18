@@ -283,7 +283,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                     Text(
                                                       ayat.nomorAyat.toString(),
                                                       style: TextStyle(
-                                                        color: AppColors.primary,
+                                                        color: Theme.of(context).colorScheme.primary,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
@@ -406,7 +406,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                   Icons
                                                                       .play_circle_filled_rounded,
                                                                   color:
-                                                                      AppColors.primary
+                                                                      Theme.of(context).colorScheme.primary
                                                                 ),
                                                               ),
                                                             )
@@ -428,7 +428,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.pause,
-                                                                            color: AppColors.primary
+                                                                            color: Theme.of(context).colorScheme.primary
                                                                           ),
                                                                         )
                                                                       : IconButton(
@@ -439,7 +439,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.play_arrow,
-                                                                            color: AppColors.primary
+                                                                            color: Theme.of(context).colorScheme.primary
                                                                           ),
                                                                         ),
                                                                   IconButton(
@@ -452,7 +452,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                     icon: Icon(
                                                                       Icons
                                                                           .stop,
-                                                                      color: AppColors.primary
+                                                                      color: Theme.of(context).colorScheme.primary
                                                                     ),
                                                                   ),
                                                                 ],
@@ -499,7 +499,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                         ayat.teksLatin,
                                                         style: TextStyle(
                                                           color:
-                                                              AppColors.primary
+                                                              Theme.of(context).colorScheme.primary
                                                         ),
                                                       ),
                                                       SizedBox(height: 10),

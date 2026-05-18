@@ -45,6 +45,7 @@ class AppTextTheme {
 
      labelSmall: TextStyle(
       fontSize: 12,
+         fontWeight: FontWeight.w300,
       color: AppColors.textSecondaryLight,
     ),
 
@@ -57,7 +58,7 @@ class AppTextTheme {
     /// LABEL
     labelLarge: TextStyle(
       fontSize: 16,
-      fontWeight: FontWeight.bold,
+      // fontWeight: FontWeight.bold,
       color: AppColors.textSecondaryLight,
     ),
   );
@@ -116,7 +117,7 @@ class AppTextTheme {
     /// LABEL
     labelLarge: TextStyle(
       fontSize: 16,
-      fontWeight: FontWeight.bold,
+      // fontWeight: FontWeight.bold,
       color: AppColors.textSecondaryLight,
     ),
   );

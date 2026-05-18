@@ -18,7 +18,6 @@ class TabItem extends StatelessWidget {
             title,
             overflow: TextOverflow.ellipsis,
           ),
-         
         ],
       ),
     );

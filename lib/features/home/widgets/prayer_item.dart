@@ -28,7 +28,7 @@ class PrayerItemWidget extends StatelessWidget {
             decoration: BoxDecoration(
               border: BoxBorder.all(
                 width: 0.5,
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
@@ -36,16 +36,16 @@ class PrayerItemWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: AppColors.primary),
+                Icon(icon, color: Theme.of(context).colorScheme.primary),
                 SizedBox(height: 5),
-                Text(label, style: TextStyle(color: AppColors.primary, fontSize: 16)),
+                Text(label, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16)),
                 SizedBox(height: 5),
-                Text(time, style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(time, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 5),
                 Icon(
                   Icons.brightness_1_rounded,
                   size: 8,
-                  color: AppColors.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),

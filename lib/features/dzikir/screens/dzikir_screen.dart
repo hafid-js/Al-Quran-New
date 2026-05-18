@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/dzikir/widgets/category_filter.dart';
 import 'package:alquran_new/features/dzikir/widgets/tab_item.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -124,6 +125,27 @@ class _DzikirScreenState extends State<DzikirScreen> {
     });
   }
 
+  void resetAllCounter() {
+    setState(() {
+      subhanallah = 0;
+      alhamdulillah = 0;
+      allahuakbar = 0;
+      laillahailallah = 0;
+      astaghfirullah = 0;
+      allahumasholialamuhammad = 0;
+      freeTasbih = 0;
+      endTasbih = 0;
+      box.write('subhanallah', 0);
+      box.write('alhamdulillah', 0);
+      box.write('allahuakbar', 0);
+      box.write('laillahailallah', 0);
+      box.write('astaghfirullah', 0);
+      box.write('allahumasholialamuhammad', 0);
+      box.write('freeTasbih', 0);
+      box.write('endTasbih', 0);
+    });
+  }
+
   void tasbihCounter() {
     setState(() {
       freeTasbih++;
@@ -158,23 +180,25 @@ class _DzikirScreenState extends State<DzikirScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         toolbarHeight: 40,
         leadingWidth: 65,
-   
+
         leading: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
           child: GestureDetector(
             onTap: () => Get.back(),
             child: Container(
               decoration: BoxDecoration(
-                color: HexColor.fromHex("#132e3a"),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 Icons.arrow_circle_left_rounded,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
                 size: 20,
               ),
             ),
@@ -191,34 +215,35 @@ class _DzikirScreenState extends State<DzikirScreen> {
                 Text(
                   "Dzikir",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   "Total Dzikir: 197",
-                  style: TextStyle(
-                    color: HexColor.fromHex("#7c97a6"),
-                    fontSize: 14,
-                  ),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: GestureDetector(
-                onTap: () => Get.back(),
+                onTap: () {
+                  setState(() {
+                    resetAllCounter();
+                  });
+                },
                 child: Container(
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.rotate_left_outlined,
-                    color: HexColor.fromHex("#7c97a6"),
+                    color: Theme.of(context).textTheme.labelLarge?.color,
                     size: 20,
                   ),
                 ),
@@ -232,11 +257,11 @@ class _DzikirScreenState extends State<DzikirScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: HexColor.fromHex("#132e3a"),
+                  color: Theme.of(context).cardColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -247,11 +272,14 @@ class _DzikirScreenState extends State<DzikirScreen> {
                     indicatorSize: TabBarIndicatorSize.tab,
                     dividerColor: Colors.transparent,
                     indicator: BoxDecoration(
-                      color: HexColor.fromHex("#2cc4b6"),
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: HexColor.fromHex("#7c97a6"),
+                    labelColor: AppColors.light,
+                    labelStyle: Theme.of(context).textTheme.titleSmall,
+                    unselectedLabelStyle: Theme.of(
+                      context,
+                    ).textTheme.labelMedium,
                     tabs: const [
                       TabItem(title: "Dzikir Ba'da Sholat"),
                       TabItem(title: 'Tasbih Bebas'),
@@ -312,10 +340,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                         children: [
                           Text(
                             "Target:",
-                            style: TextStyle(
-                              color: HexColor.fromHex("#7c97a6"),
-                              fontSize: 16,
-                            ),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           SizedBox(width: 15),
                           GestureDetector(
@@ -330,9 +355,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex(
-                                  "#5a7b8a",
-                                ).withAlpha(30),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -347,17 +370,13 @@ class _DzikirScreenState extends State<DzikirScreen> {
                             height: 45,
                             width: 70,
                             decoration: BoxDecoration(
-                              color: HexColor.fromHex("#5a7b8a").withAlpha(30),
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(
                                 "$endTasbih",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
                           ),
@@ -372,9 +391,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex(
-                                  "#5a7b8a",
-                                ).withAlpha(30),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -388,9 +405,9 @@ class _DzikirScreenState extends State<DzikirScreen> {
                       ),
                       Center(
                         child: CircularPercentIndicator(
-                          backgroundColor: HexColor.fromHex(
-                            "#132e3a",
-                          ).withAlpha(100),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary.withAlpha(30),
                           backgroundWidth: 9,
                           radius: 130.0,
                           lineWidth: 8.0,
@@ -398,7 +415,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                               ? 0
                               : (freeTasbih / endTasbih).clamp(0.0, 1.0),
                           circularStrokeCap: CircularStrokeCap.round,
-                          progressColor: HexColor.fromHex("#2cc4b6"),
+                          progressColor: Theme.of(context).colorScheme.primary,
                           center: Material(
                             color: Colors.transparent,
                             shape: const CircleBorder(),
@@ -411,39 +428,43 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                         tasbihCounter();
                                       });
                                     },
-                              splashColor: Colors.white.withAlpha(30),
-                              highlightColor: Colors.white.withAlpha(80),
+                              splashColor: Theme.of(
+                                context,
+                              ).colorScheme.primary.withAlpha(30),
+                              highlightColor: Theme.of(
+                                context,
+                              ).colorScheme.primary.withAlpha(80),
                               child: Ink(
                                 width: 230,
                                 height: 230,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: HexColor.fromHex("#132e3a"),
+                                  color: Theme.of(context).cardColor,
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "$freeTasbih",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 60,
-                                        color: Colors.white,
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge?.color,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       "/ $endTasbih",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: HexColor.fromHex("#7c97a6"),
-                                      ),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.labelMedium,
                                     ),
                                     Text(
                                       "Tap untuk menghitung",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: HexColor.fromHex("#7c97a6"),
-                                      ),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.labelSmall,
                                     ),
                                   ],
                                 ),
@@ -465,7 +486,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex("#1a3a4a"),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.symmetric(
@@ -477,14 +498,18 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                 children: [
                                   Icon(
                                     Icons.cached_rounded,
-                                    color: HexColor.fromHex("#7c97a6"),
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge?.color,
                                     size: 18,
                                   ),
                                   SizedBox(width: 6),
                                   Text(
                                     "Reset",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#7c97a6"),
+                                      color: Theme.of(
+                                        context,
+                                      ).textTheme.labelLarge?.color,
                                     ),
                                   ),
                                 ],
@@ -522,17 +547,17 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
         decoration: count >= 33
             ? BoxDecoration(
-                color: HexColor.fromHex("#2cc4b6").withAlpha(40),
+                color: Theme.of(context).colorScheme.primary.withAlpha(40),
                 borderRadius: BorderRadius.circular(10),
                 border: BoxBorder.all(
-                  color: HexColor.fromHex("#2cc4b6"),
+                  color: Theme.of(context).colorScheme.primary,
                   width: 0.5,
                 ),
               )
             : BoxDecoration(
                 color: isActive
-                    ? HexColor.fromHex("#2cc4b6")
-                    : HexColor.fromHex("#132e3a"),
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(10),
               ),
         child: Row(
@@ -544,7 +569,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                     ? Icon(
                         Icons.check_circle_rounded,
                         size: 16,
-                        color: HexColor.fromHex("#2cc4b6"),
+                        color: Theme.of(context).colorScheme.primary,
                       )
                     : SizedBox.shrink(),
                 count >= 33 ? SizedBox(width: 5) : SizedBox.shrink(),
@@ -553,14 +578,14 @@ class _DzikirScreenState extends State<DzikirScreen> {
                   style: count >= 33
                       ? TextStyle(
                           fontSize: 12,
-                          color: HexColor.fromHex("#2cc4b6"),
+                          color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w500,
                         )
                       : TextStyle(
                           fontSize: 12,
                           color: isActive
-                              ? Colors.white
-                              : HexColor.fromHex("#7c97a6"),
+                              ? AppColors.light
+                              : Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.w500,
                         ),
                 ),
@@ -570,13 +595,11 @@ class _DzikirScreenState extends State<DzikirScreen> {
             Text(
               "${counter.toString()}/33",
               style: TextStyle(
-                fontSize: 11,
-                color: count >= 33
-                    ? HexColor.fromHex("#7c97a6")
-                    : isActive
-                    ? Colors.white
-                    : HexColor.fromHex("#7c97a6"),
-                fontWeight: FontWeight.w300,
+                fontSize: 12,
+                color: isActive
+                    ? AppColors.light
+                    : Theme.of(context).textTheme.labelLarge?.color,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -644,7 +667,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: HexColor.fromHex("#132e3a"),
+            color: Theme.of(context).cardColor,
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -653,10 +676,13 @@ class _DzikirScreenState extends State<DzikirScreen> {
               Text(
                 arabic,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white, fontSize: 30),
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                  fontSize: 30,
+                ),
               ),
               const SizedBox(height: 10),
-              Text(arti, style: TextStyle(color: HexColor.fromHex("#7c97a6"))),
+              Text(arti, style: Theme.of(context).textTheme.labelMedium),
             ],
           ),
         ),
@@ -664,13 +690,13 @@ class _DzikirScreenState extends State<DzikirScreen> {
           bottom: 180,
           right: 60,
           child: CircularPercentIndicator(
-            backgroundColor: HexColor.fromHex("#132e3a").withAlpha(100),
+            backgroundColor: Theme.of(context).cardColor.withAlpha(100),
             backgroundWidth: 9,
             radius: 130.0,
             lineWidth: 8.0,
             percent: (count / 33).clamp(0.0, 1.0),
             circularStrokeCap: CircularStrokeCap.round,
-            progressColor: HexColor.fromHex("#2cc4b6"),
+            progressColor: Theme.of(context).colorScheme.primary,
             center: Material(
               color: Colors.transparent,
               shape: const CircleBorder(),
@@ -683,39 +709,37 @@ class _DzikirScreenState extends State<DzikirScreen> {
                           increment();
                         });
                       },
-                splashColor: Colors.white.withAlpha(30),
-                highlightColor: Colors.white.withAlpha(80),
+                splashColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withAlpha(30),
+                highlightColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withAlpha(80),
                 child: Ink(
                   width: 230,
                   height: 230,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: HexColor.fromHex("#132e3a"),
+                    color: Theme.of(context).cardColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "$count",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 60,
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "/ 33",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: HexColor.fromHex("#7c97a6"),
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       Text(
                         "Tap untuk menghitung",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: HexColor.fromHex("#7c97a6"),
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],
                   ),
@@ -732,7 +756,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
           child: Container(
             height: 80,
             decoration: BoxDecoration(
-              color: HexColor.fromHex("#132e3a"),
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
@@ -748,23 +772,20 @@ class _DzikirScreenState extends State<DzikirScreen> {
                           children: [
                             Text(
                               "Progress Dzikir",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: HexColor.fromHex("#7c97a6"),
-                              ),
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
 
                             Text(
                               "${dzikirSelesai()}/6",
                               style: TextStyle(
-                                color: HexColor.fromHex("#2cc4b6"),
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ],
                         ),
                         SizedBox(height: 8),
                         LinearPercentIndicator(
-                          backgroundColor: HexColor.fromHex("#1a3a4a"),
+                          backgroundColor: Theme.of(context).disabledColor,
                           padding: EdgeInsets.zero,
                           barRadius: Radius.circular(16),
                           width: MediaQuery.of(context).size.width - 175,
@@ -773,7 +794,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                           animationDuration: 2000,
                           percent: (dzikirSelesai() / 6).clamp(0.0, 1.0),
                           linearStrokeCap: LinearStrokeCap.roundAll,
-                          progressColor: HexColor.fromHex("#2cc4b6"),
+                          progressColor: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -788,7 +809,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: HexColor.fromHex("#1a3a4a"),
+                        color: Theme.of(context).disabledColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: EdgeInsets.symmetric(
@@ -800,14 +821,18 @@ class _DzikirScreenState extends State<DzikirScreen> {
                         children: [
                           Icon(
                             Icons.cached_rounded,
-                            color: HexColor.fromHex("#7c97a6"),
+                            color: Theme.of(
+                              context,
+                            ).textTheme.labelMedium?.color,
                             size: 18,
                           ),
                           SizedBox(width: 6),
                           Text(
                             "Reset",
                             style: TextStyle(
-                              color: HexColor.fromHex("#7c97a6"),
+                              color: Theme.of(
+                                context,
+                              ).textTheme.labelMedium?.color,
                             ),
                           ),
                         ],

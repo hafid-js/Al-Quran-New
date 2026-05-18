@@ -70,7 +70,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: AppColors.primary
+                color: Theme.of(context).colorScheme.primary
               ),
             ),
             const SizedBox(width: 10),
@@ -198,7 +198,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                                 surah.nomor
                                                     .toString(),
                                                 style: TextStyle(
-                                                  color: AppColors.primary,
+                                                  color: Theme.of(context).colorScheme.primary,
                                                   fontSize: TextTheme.of(context).labelSmall?.fontSize,
                                                 ),
                                               ),
@@ -241,7 +241,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                             style: TextStyle(
                                               fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
                                               color:
-                                                  AppColors.primary
+                                                  Theme.of(context).colorScheme.primary
                                             ),
                                           ),
                                           Text(

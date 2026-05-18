@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
@@ -150,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           child: Icon(
                             Icons.location_on,
-                            color: AppColors.primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
 
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(
                         Icons.location_on,
                         size: 30,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
@@ -350,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Icon(
                             Icons.access_time_filled_outlined,
-                            color: AppColors.primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         SizedBox(width: 12),
@@ -372,7 +373,7 @@ Text(
                         ),
                         child: Icon(
                           Icons.notifications,
-                          color: AppColors.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -458,7 +459,7 @@ Text(
                               ),
                               child: Icon(
                                 Icons.grid_view_rounded,
-                                color: AppColors.primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
 
@@ -494,7 +495,7 @@ Text(
                                   showAllMenus ? "Sembunyikan" : "Lihat Semua",
 
                                   style: TextStyle(
-                                    color: AppColors.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -509,7 +510,7 @@ Text(
                                   child: Icon(
                                     Icons.arrow_circle_down_rounded,
                                     size: 20,
-                                    color: AppColors.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ],
@@ -565,7 +566,7 @@ Text(
                                     child: Icon(
                                       nextMenu["icon"],
                                       size: 30,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
 
@@ -645,7 +646,7 @@ Text(
                                           child: Icon(
                                             menu["icon"],
                                             size: 30,
-                                            color: AppColors.primary,
+                                            color: Theme.of(context).colorScheme.primary,
                                           ),
                                         ),
 

@@ -49,7 +49,7 @@ class _DoaScreenState extends State<DoaScreen> {
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
 
@@ -251,7 +251,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                   style: TextStyle(
                                                     fontSize: 16,
-                                                    color: AppColors.primary,
+                                                    color: Theme.of(context).colorScheme.primary,
                                                   ),
                                                 ),
 
@@ -376,7 +376,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                     .labelMedium
                                                     ?.fontSize,
                                                 fontWeight: FontWeight.w600,
-                                                color: AppColors.primary,
+                                                color: Theme.of(context).colorScheme.primary,
                                               ),
                                             ),
                                           ),

@@ -15,6 +15,8 @@ final class AppColors {
   /// DARK
   static const Color dark = Color(0xFF0F202B);
   static const Color darkCard = Color(0xFF132E3A);
+  static Color secondary = HexColor.fromHex("#94AEB6");
+  static Color darkDisableColor = HexColor.fromHex("#193341");
   // static const Color darkSurface = Color(0xFF17404A);
   static Color get darkSurface =>
       setting.currentColor.value.withAlpha(50);
@@ -22,9 +24,11 @@ final class AppColors {
       setting.currentColor.value.withAlpha(50);
 
   /// LIGHT
+  
   static Color light = HexColor.fromHex("#F2F7F6");
   static Color lightCard = Colors.white;
   static Color textSection = HexColor.fromHex("#2D4A52");
+    static Color lightDisableColor = HexColor.fromHex("#F6F8F9");
   // static const Color lightContainer = Color(0xFFEAF4F3);
 // static const Color lightSurface = Color(0xFFD8EEEB);
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:alquran_new/core/utils/result.dart';
@@ -10,6 +11,7 @@ class PrayerTimeController extends GetxController {
   final PrayerTimeRepository repo;
 
   PrayerTimeController({required this.repo});
+  final network = Get.find<NetworkController>();
 
   // reactive variables
   var todayPrayer = Rxn<PrayerTime>();
@@ -30,6 +32,11 @@ class PrayerTimeController extends GetxController {
   }
 
   void fetchPrayerTimes() async {
+    if (!network.isConnected.value) {
+  errorMessage.value = "Tidak ada koneksi internet";
+  isLoading.value = false;
+  return;
+}
     try {
       isLoading.value = true;
       final data = await repo.fetchPrayerTimes( 

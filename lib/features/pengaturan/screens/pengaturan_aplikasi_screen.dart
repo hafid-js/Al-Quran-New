@@ -93,7 +93,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
               child: Icon(
                 Icons.settings,
             size: 20,
-                color: AppColors.primary
+                color: Theme.of(context).colorScheme.primary
               ),
             ),
             SizedBox(width: 10),
@@ -120,7 +120,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.headphones_rounded,
                       size: 24,
-                      color: AppColors.primary
+                      color: Theme.of(context).colorScheme.primary
                     ),
                     title: Text(
                       "Qari Default",
@@ -152,7 +152,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                               border: Border.all(
                                 color: isSelected
-                                    ? AppColors.primary
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.transparent,
                                 width: 1,
                               ),
@@ -174,7 +174,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       child: Icon(
                                         Icons.check_circle_rounded,
                                         size: 20,
-                                        color: AppColors.primary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     )
                                   : Container(
@@ -195,14 +195,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                 item["title"],
                                 style: TextStyle(
                                   fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
-                                  color: isDark ? AppColors.light : (isSelected ? AppColors.primary : Theme.of(context).textTheme.titleLarge?.color),
+                                  color: isDark ? AppColors.light : (isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.titleLarge?.color),
                                 ),
                               ),
 
                               trailing: isSelected
                                   ? Icon(
                                       Icons.check_circle_rounded,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     )
                                   : null,
                             ),
@@ -222,7 +222,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.text_fields_rounded,
                       size: 24,
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     title: Text(
                       "Font Arab",
@@ -261,7 +261,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                               border: Border.all(
                                 color: isSelected
-                                    ? AppColors.primary
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.transparent,
                                 width: 1,
                               ),
@@ -278,12 +278,12 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.primary.withAlpha(80),
+                                    color: Theme.of(context).colorScheme.primary.withAlpha(80),
                                       ),
                                       child: Icon(
                                         Icons.check_circle_rounded,
                                         size: 20,
-                                        color: AppColors.primary
+                                        color: Theme.of(context).colorScheme.primary
                                       ),
                                     )
                                   : Container(
@@ -304,14 +304,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                 item["title"],
                                 style: TextStyle(
                                   fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
-                                  color: isDark ? AppColors.light : (isSelected ? AppColors.primary : Theme.of(context).textTheme.titleLarge?.color),
+                                  color: isDark ? AppColors.light : (isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.titleLarge?.color),
                                 ),
                               ),
 
                               trailing: isSelected
                                   ? Icon(
                                       Icons.check_circle_rounded,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     )
                                   : null,
                             ),
@@ -331,7 +331,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.headphones_rounded,
                       size: 24,
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     title: Text(
                       "Tampilan",
@@ -374,7 +374,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
                                       border: Border.all(
                                         color: isSelected
-                                            ? AppColors.primary
+                                            ? Theme.of(context).colorScheme.primary
                                             : Colors.transparent,
                                         width: 1.5,
                                       ),
@@ -388,7 +388,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                           item["icon"],
                                           size: 30,
                                           color: isSelected
-                                              ? AppColors.primary
+                                              ? Theme.of(context).colorScheme.primary
                                               : HexColor.fromHex("#5A7A8A"),
                                         ),
                                         SizedBox(height: 10),
@@ -398,7 +398,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: isSelected
-                                                ? AppColors.primary
+                                                ? Theme.of(context).colorScheme.primary
                                                 : Theme.of(context).textTheme.titleLarge?.color,
                                           ),
                                         ),
@@ -506,7 +506,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     (isSelected &&
                                                         item["color"] ==
                                                             "custom")
-                                                    ? AppColors.primary
+                                                    ? Theme.of(context).colorScheme.primary
                                                     : Colors.transparent,
                                                 width: 1.5,
                                               ),
@@ -544,7 +544,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     fontSize: 11,
                                                     fontWeight: FontWeight.w500,
                                                     color: isSelected
-                                                        ? AppColors.primary
+                                                        ? Theme.of(context).colorScheme.primary
                                                       : Theme.of(context).textTheme.titleLarge?.color,
                                                   ),
                                                 ),
@@ -571,7 +571,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                               color:
                                                   (isSelected &&
                                                       item["color"] != "custom")
-                                                  ? AppColors.primary
+                                                  ? Theme.of(context).colorScheme.primary
                                                   : Colors.transparent,
                                               width: 1.5,
                                             ),
@@ -598,7 +598,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w500,
                                                   color: isSelected
-                                                      ? AppColors.primary
+                                                      ? Theme.of(context).colorScheme.primary
                                                       : Theme.of(context).textTheme.titleLarge?.color,
                                                 ),
                                               ),
@@ -624,7 +624,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     leading: Icon(
                       Icons.error_rounded,
                       size: 24,
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     title: Text(
                       "Tentang",
@@ -652,7 +652,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             child: Icon(
                               Icons.menu_book_rounded,
                               size: 25,
-                              color: AppColors.primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           title: Text(
@@ -678,7 +678,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                             Icon(
                               Icons.email_rounded,
                               size: 20,
-                              color: AppColors.primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             SizedBox(width: 10),
                             Text(
@@ -708,14 +708,14 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                     Icon(
                                       Icons.email_rounded,
                                       size: 18,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                     SizedBox(width: 10),
                                     Text(
                                       "Syarat & Ketentuan",
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: AppColors.primary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
                                   ],
@@ -737,14 +737,14 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                     Icon(
                                       Icons.security_rounded,
                                       size: 18,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                     SizedBox(width: 10),
                                     Text(
                                       "Kebijakan Privasi",
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: AppColors.primary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
                                   ],

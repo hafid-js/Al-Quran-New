@@ -14,9 +14,11 @@ class AppTheme {
   fontFamily: 'Poppins',
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
+  disabledColor: AppColors.lightDisableColor,
 
   colorScheme: ColorScheme.light(
     primary: AppColors.primary,
+        secondary: AppColors.secondary,
     surface: AppColors.lightSurface,
   ),
 
@@ -62,11 +64,13 @@ class AppTheme {
   fontFamily: 'Poppins',
   brightness: Brightness.dark,
     primaryColor: AppColors.primary,
+    disabledColor: AppColors.darkDisableColor,
 
   textTheme: AppTextTheme.darkTextTheme,
 
   colorScheme: ColorScheme.dark(
     primary: AppColors.primary,
+    secondary: AppColors.secondary,
     surface: AppColors.darkSurface,
   ),
 
