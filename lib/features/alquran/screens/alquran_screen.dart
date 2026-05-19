@@ -48,7 +48,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -70,17 +70,14 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: Theme.of(context).colorScheme.primary
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Al-Quran",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                Text("Al-Quran", style: Theme.of(context).textTheme.titleLarge),
 
                 Obx(() {
                   if (controller.isLoading.value) {
@@ -88,7 +85,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                   }
                   return Text(
                     "${controller.surahList.length} Surah",
-                    style: Theme.of(context).textTheme.labelSmall
+                    style: Theme.of(context).textTheme.labelSmall,
                   );
                 }),
               ],
@@ -101,10 +98,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
         children: [
           /// ================= MAIN CONTENT =================
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 15,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             child: Column(
               children: [
                 Row(
@@ -116,7 +110,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: Theme.of(context).cardColor,
-                          boxShadow: context.shadow.small
+                          boxShadow: context.shadow.small,
                         ),
                         child: Row(
                           children: [
@@ -160,23 +154,21 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                     return ListView.builder(
                       itemCount: controller.filteredSurah.length,
                       itemBuilder: (context, index) {
-                        final surah =
-                            controller.filteredSurah[index];
+                        final surah = controller.filteredSurah[index];
 
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () => Get.to(() => DetailSuratScreen(), arguments: {
-  "surah": surah.nomor,
-  "ayat": null,
-}),
+                              onTap: () => Get.to(
+                                () => DetailSuratScreen(),
+                                arguments: {"surah": surah.nomor, "ayat": null},
+                              ),
                               child: Container(
                                 height: 90,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).cardColor,
-                                  borderRadius:
-                                      BorderRadius.circular(16),
-                                        boxShadow: context.shadow.small
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: context.shadow.small,
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -185,47 +177,52 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
                                           Stack(
-                                            alignment:
-                                                Alignment.center,
+                                            alignment: Alignment.center,
                                             children: [
                                               Text(
-                                                surah.nomor
-                                                    .toString(),
+                                                surah.nomor.toString(),
                                                 style: TextStyle(
-                                                  color: Theme.of(context).colorScheme.primary,
-                                                  fontSize: TextTheme.of(context).labelSmall?.fontSize,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                                  fontSize: TextTheme.of(
+                                                    context,
+                                                  ).labelSmall?.fontSize,
                                                 ),
                                               ),
                                               Icon(
                                                 Icons.brightness_5_sharp,
                                                 size: 45,
-                                                color: Theme.of(context).colorScheme.surface
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.surface,
                                               ),
                                             ],
                                           ),
                                           const SizedBox(width: 12),
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start,
+                                                CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(
                                                 surah.namaLatin,
-                                                style: Theme.of(context).textTheme.titleSmall
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.titleSmall,
                                               ),
                                               const SizedBox(height: 3),
                                               Text(
                                                 "${surah.jumlahAyat} Ayat",
-                                                style:Theme.of(context).textTheme.labelSmall
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall,
                                               ),
                                             ],
                                           ),
@@ -239,14 +236,19 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                           Text(
                                             surah.nama,
                                             style: TextStyle(
-                                              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-                                              color:
-                                                  Theme.of(context).colorScheme.primary
+                                              fontSize: Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge?.fontSize,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
                                             ),
                                           ),
                                           Text(
                                             surah.arti,
-                                              style:Theme.of(context).textTheme.labelSmall
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.labelSmall,
                                           ),
                                         ],
                                       ),
@@ -272,15 +274,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
               return const SizedBox();
             }
 
-            return const Positioned.fill(
-  child: Loading(),
-);
+            return const Positioned.fill(child: Loading());
           }),
         ],
       ),
     );
   }
 }
-
-
-

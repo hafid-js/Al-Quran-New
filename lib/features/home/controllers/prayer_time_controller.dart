@@ -32,11 +32,7 @@ class PrayerTimeController extends GetxController {
   }
 
   void fetchPrayerTimes() async {
-    if (!network.isConnected.value) {
-  errorMessage.value = "Tidak ada koneksi internet";
-  isLoading.value = false;
-  return;
-}
+    
     try {
       isLoading.value = true;
       final data = await repo.fetchPrayerTimes( 
@@ -149,8 +145,14 @@ class PrayerTimeController extends GetxController {
         );
       }
 
-      totalDuration.value = nextPrayerDT.difference(currentPrayerDT!);
-      remaining.value = nextPrayerDT.difference(now);
+      // totalDuration.value = nextPrayerDT.difference(currentPrayerDT!);
+      // remaining.value = nextPrayerDT.difference(now);
+      if (currentPrayerDT != null) {
+  totalDuration.value = nextPrayerDT.difference(currentPrayerDT);
+} else {
+  totalDuration.value = nextPrayerDT.difference(now);
+}
+remaining.value = nextPrayerDT.difference(now);
     });
   }
 

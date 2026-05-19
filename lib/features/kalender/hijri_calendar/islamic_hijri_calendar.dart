@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class IslamicHijriCalendar extends StatefulWidget {
   final Color defaultBorder;
 
   ///set today date text color
-  final Color highlightTextColor;
+  final Color? highlightTextColor;
 
   final DateTime? day;
 
@@ -51,7 +52,7 @@ class IslamicHijriCalendar extends StatefulWidget {
     this.isHijriView = true,
     this.highlightBorder = Colors.blue,
     this.defaultBorder = const Color(0xfff2f2f2),
-    this.highlightTextColor = Colors.white,
+    this.highlightTextColor,
     this.defaultTextColor = Colors.white,
     this.defaultBackColor = Colors.black,
     this.day,
@@ -172,17 +173,18 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         itemBuilder: (BuildContext context, int index) {
           ///single day block
           return viewmodel.getDate(
-            hijriDefaultTextColor: HexColor.fromHex("#7c97a6"),
+            hijriDefaultTextColor: Theme.of(context).textTheme.labelSmall?.color,
             isHijriView: widget.isHijriView!,
             fontSize: fontSize,
             dateHijriTextSize: 11,
-            defaultTextColor: widget.defaultTextColor,
-            highlightTextColor: widget.highlightTextColor,
+            defaultTextColor: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+            highlightTextColor: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
             day: days[index],
             highlightBorder: widget.highlightBorder,
             defaultBorder: widget.defaultBorder,
-            backgroundColor: widget.defaultBackColor,
+            backgroundColor: Theme.of(context).cardColor,
             deActiveDateBorderColor: widget.defaultBorder,
+            eventBackgroundColor: Theme.of(context).colorScheme.primary.withAlpha(40),
             style: textStyle,
             onSelectedEnglishDate: (selectedDate) {
               if (widget.getSelectedEnglishDate != null) {
@@ -257,22 +259,22 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                 ),
                 child: Column(
                   children: [
-                    Text("Hari ini", style: TextStyle(color: Colors.white)),
+                    Text("Hari ini", style: TextStyle(color: AppColors.light)),
                     SizedBox(height: 8),
                     Text(
-                      "16 1447 ذو القعدة",
+                      viewmodel.getHeadHijriNow(),
                       style: TextStyle(
                         fontSize: 27,
-                        color: Colors.white,
+                        color: AppColors.light,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 8),
                     Text(
-                         "${viewmodel.getHijriNow()}",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                         viewmodel.getHijriNow(),
+                      style: TextStyle(fontSize: 16, color: AppColors.light),
                     ),
-                    Text(dateNow, style: TextStyle(color: Colors.white)),
+                    Text(dateNow, style: TextStyle(color: AppColors.light)),
                   ],
                 ),
               ),
@@ -290,12 +292,12 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: HexColor.fromHex("#132e3a"),
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: Icon(
                       Icons.arrow_circle_left_rounded,
                       size: 20,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -325,7 +327,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                           style: textStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
-                            color: HexColor.fromHex("#7c97a6"),
+                            color: Theme.of(context).textTheme.labelLarge?.color,
                           ),
                         ),
                       ],
@@ -341,12 +343,12 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: HexColor.fromHex("#132e3a"),
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: Icon(
                       Icons.arrow_circle_right_rounded,
                       size: 20,
-                      color: HexColor.fromHex("#2dc8b9"),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -363,14 +365,14 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: HexColor.fromHex("#132e3a"),
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     child: Column(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: HexColor.fromHex("#132e3a"),
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
 
@@ -390,8 +392,8 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                           color:
                                               (DateTime.now().weekday - 1 ==
                                                   index)
-                                              ? HexColor.fromHex("#2dc8b9")
-                                              : HexColor.fromHex("#7c97a6"),
+                                              ? Theme.of(context).colorScheme.primary
+                                              : Theme.of(context).textTheme.titleLarge?.color
                                         ),
                                       ),
                                     ),
@@ -447,22 +449,18 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                 width: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: HexColor.fromHex("#132e3a"),
+                                  color: Theme.of(context).colorScheme.surface
                                 ),
                                 child: Icon(
                                   Icons.star_rate_rounded,
                                   size: 30,
-                                  color: HexColor.fromHex("#2dc8b9"),
+                                  color: Theme.of(context).colorScheme.primary
                                 ),
                               ),
                               SizedBox(width: 10),
                               Text(
                                 "Hari Besar Bulan Ini",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context).textTheme.titleMedium
                               ),
                             ],
                           ),
@@ -476,7 +474,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex("#1a3a4a"),
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.symmetric(
@@ -487,7 +485,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                 "Lihat Semua",
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: HexColor.fromHex("#2dc8b9"),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -509,7 +507,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                               Container(
                                 padding: EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#132e3a"),
+                                  color: Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: ListTile(
@@ -518,9 +516,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                     width: 50,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(16),
-                                      color: HexColor.fromHex(
-                                        "#2dc8b9",
-                                      ).withAlpha(40),
+                                      color: Theme.of(context).colorScheme.surface
                                     ),
                                     child: Center(
                                       child: Column(
@@ -528,22 +524,18 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "8",
+                                            event['hijriDay'].toString(),
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: HexColor.fromHex(
-                                                "#2dc8b9",
-                                              ),
+                                              color: Theme.of(context).colorScheme.primary,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                           Text(
-                                            "25",
+                                          event['gregorianDay'].toString(),
                                             style: TextStyle(
                                               fontSize: 10,
-                                              color: HexColor.fromHex(
-                                                "#2dc8b9",
-                                              ).withAlpha(170),
+                                              color: Theme.of(context).colorScheme.primary,
                                             ),
                                           ),
                                         ],
@@ -552,16 +544,13 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                   ),
                                   title: Text(
                                     event['title'],
-                                    style: TextStyle(color: Colors.white),
+                                    style: Theme.of(context).textTheme.titleSmall,
                                   ),
                                   subtitle: Row(
                                     children: [
                                       Text(
                                         event['hijri'],
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: HexColor.fromHex("#7c97a6"),
-                                        ),
+                                         style: Theme.of(context).textTheme.labelSmall
                                       ),
                                       SizedBox(width: 6),
                                       CircleAvatar(
@@ -573,10 +562,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                       SizedBox(width: 6),
                                       Text(
                                         event['date'],
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: HexColor.fromHex("#7c97a6"),
-                                        ),
+                                        style: Theme.of(context).textTheme.labelSmall
                                       ),
                                     ],
                                   ),

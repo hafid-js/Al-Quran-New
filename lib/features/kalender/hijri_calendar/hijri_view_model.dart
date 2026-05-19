@@ -33,12 +33,13 @@ class HijriViewModel {
     double? borderRadius,
     double? dateHijriTextSize,
     required Color defaultTextColor,
-    required Color hijriDefaultTextColor,
+    Color? hijriDefaultTextColor,
     required Color defaultBorder,
     required Color highlightTextColor,
     Function(DateTime selectedDate)? onSelectedEnglishDate,
     Function(HijriDate selectedDate)? onSelectedHijriDate,
     required bool isDisablePreviousNextMonthDates,
+    Color? eventBackgroundColor,
   }) {
     bool isCurrentMonthDays = day.month == currentDisplayMonthYear.month;
 final isEventDay = hasEvent(day);
@@ -63,7 +64,7 @@ final isEventDay = hasEvent(day);
           borderRadius: BorderRadius.circular(16),
           color:
           isEventDay && isCurrentMonthDays
-        ? HexColor.fromHex("#2dc8b9").withAlpha(40)
+        ? eventBackgroundColor
         : backgroundColor,),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

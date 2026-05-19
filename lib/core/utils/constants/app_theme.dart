@@ -1,8 +1,6 @@
 import 'package:alquran_new/core/utils/constants/shadow_theme.dart';
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
-import 'app_bar_theme.dart';
-import 'card_theme.dart';
 import 'text_theme.dart';
 
 class AppTheme {

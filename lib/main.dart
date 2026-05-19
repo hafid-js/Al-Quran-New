@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/db/isar_service.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
@@ -24,7 +23,6 @@ import 'package:alquran_new/features/home/domain/repositories/prayer_time_reposi
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
-import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
 import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,14 +30,11 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await IsarService.init();
-
 
   // init storage dulu
   await GetStorage.init();
@@ -72,9 +67,7 @@ void _registerDependencies() {
   final surahRemoteDataSource = SurahRemoteDataSourceImpl(dioClient);
   Get.put<SurahRemoteDataSource>(surahRemoteDataSource);
 
-
-  final surahRepository =
-      SurahRepositoryImpl(surahRemoteDataSource);
+  final surahRepository = SurahRepositoryImpl(surahRemoteDataSource);
 
   Get.put<SurahRepository>(surahRepository);
 
@@ -83,37 +76,26 @@ void _registerDependencies() {
   Get.put(GetTafsir(surahRepository));
 
   // DOA
-  final doaRemoteDataSource =
-      DoaRemoteDataSourceImpl(dioClient);
+  final doaRemoteDataSource = DoaRemoteDataSourceImpl(dioClient);
 
   Get.put<DoaRemoteDataSource>(doaRemoteDataSource);
 
-  final doaRepository =
-      DoaRepositoryImpl(doaRemoteDataSource);
+  final doaRepository = DoaRepositoryImpl(doaRemoteDataSource);
 
   Get.put<DoaRepository>(doaRepository);
 
   Get.put(GetAllDoa(doaRepository));
 
   // PRAYER TIME
-  final prayerTimeRemoteDataSource =
-      PrayerTimeRemoteDataSourceImpl(dioClient);
+  final prayerTimeRemoteDataSource = PrayerTimeRemoteDataSourceImpl(dioClient);
 
-  Get.put<PrayerTimeRemoteDataSource>(
+  Get.put<PrayerTimeRemoteDataSource>(prayerTimeRemoteDataSource);
+
+  final prayerTimeRepository = PrayerTimeRepositoryImpl(
     prayerTimeRemoteDataSource,
-    
-  );
-  
-
-  final prayerTimeRepository =
-      PrayerTimeRepositoryImpl(
-    prayerTimeRemoteDataSource,
-
   );
 
-  Get.put<PrayerTimeRepository>(
-    prayerTimeRepository,
-  );
+  Get.put<PrayerTimeRepository>(prayerTimeRepository);
 
   Get.put(GetPrayerTimes(prayerTimeRepository));
 
@@ -125,11 +107,9 @@ void _registerDependencies() {
   Get.put(BookmarkController(), permanent: true);
 
   Get.put(
-  SettingsController(
-    SettingsService(IsarService.isar),
-  ),
-  permanent: true,
-);
+    SettingsController(SettingsService(IsarService.isar)),
+    permanent: true,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -140,18 +120,18 @@ class MyApp extends StatelessWidget {
     final setting = Get.find<SettingsController>();
 
     return Obx(() {
-  return GetMaterialApp(
-    debugShowCheckedModeBanner: false,
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
 
-    theme: AppTheme.lightTheme(),
-    darkTheme: AppTheme.darkTheme(),
+        theme: AppTheme.lightTheme(),
+        darkTheme: AppTheme.darkTheme(),
 
-    themeMode: setting.modeSelected.value == 0
-        ? ThemeMode.dark
-        : ThemeMode.light,
+        themeMode: setting.modeSelected.value == 0
+            ? ThemeMode.dark
+            : ThemeMode.light,
 
-    home: HomeScreen(),
-  );
-});
+        home: HomeScreen(),
+      );
+    });
   }
 }

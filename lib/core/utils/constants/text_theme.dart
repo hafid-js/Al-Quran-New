@@ -87,7 +87,7 @@ class AppTextTheme {
     titleSmall: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      color: AppColors.textPrimaryLight,
+      color: AppColors.textPrimaryDark,
     ),
 
     /// BODY
@@ -104,21 +104,21 @@ class AppTextTheme {
     /// LABEL
      labelSmall:  TextStyle(
       fontSize: 12,
-      color: AppColors.textSecondaryLight,
+      color: AppColors.textSecondaryDark,
     ),
 
 
      labelMedium: TextStyle(
       fontSize: 14,
             fontWeight: FontWeight.w300,
-      color: AppColors.textSecondaryLight,
+      color: AppColors.textSecondaryDark,
     ),
 
     /// LABEL
     labelLarge: TextStyle(
       fontSize: 16,
       // fontWeight: FontWeight.bold,
-      color: AppColors.textSecondaryLight,
+      color: AppColors.textSecondaryDark,
     ),
   );
 }

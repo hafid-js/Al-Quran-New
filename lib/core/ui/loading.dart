@@ -1,4 +1,4 @@
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
+
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
@@ -39,7 +39,7 @@ class _LoadingState extends State<Loading>
   Widget _dot(Animation<double> anim) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (_, __) {
+      builder: (_, _) {
         return Transform.translate(
           offset: Offset(0, anim.value),
           child: Container(
@@ -126,7 +126,7 @@ class _DotsState extends State<_Dots>
   Widget dot(Animation<double> a) {
     return AnimatedBuilder(
       animation: _c,
-      builder: (_, __) {
+      builder: (_, _) {
         return Transform.translate(
           offset: Offset(0, a.value),
           child: Container(

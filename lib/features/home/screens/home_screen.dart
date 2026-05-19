@@ -1,7 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
@@ -11,6 +9,7 @@ import 'package:alquran_new/features/home/controllers/prayer_time_controller.dar
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/widgets/prayer_item.dart';
 import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
+import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
@@ -54,11 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "title": "Kiblat",
       "icon": Icons.my_location_rounded,
-      "page": () => null,
+      "page": () => const KiblatScreen(),
     },
     {
       "title": "Dzikir",
-      "icon": Icons.repeat_rounded,
+      "icon": Icons.touch_app_rounded,
       "page": () => const DzikirScreen(),
     },
     {
@@ -80,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "page": () => const PengaturanAplikasiScreen(),
     },
     {"title": "Bookmark", "icon": Icons.bookmarks_rounded, "page": const BookmarkScreen()},
-    {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
+    // {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
   ];
 
   bool showAllMenus = false;
@@ -603,12 +602,9 @@ Text(
                             duration: Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
 
-                            child: Wrap(
-                              spacing: 12,
-                              runSpacing: 12,
-
-                              children: nextMenus.map((menu) {
-                                return InkWell(
+                            child: Row(
+                              children : nextMenus.map((menu) {
+                                return Padding(padding: EdgeInsets.only(right: 12), child: InkWell(
                                   borderRadius: BorderRadius.circular(16),
 
                                   onTap: () {
@@ -673,9 +669,9 @@ Text(
                                       ],
                                     ),
                                   ),
-                                );
+                                ),);
                               }).toList(),
-                            ),
+                            )
                           )
                         : SizedBox.shrink(),
                   ],

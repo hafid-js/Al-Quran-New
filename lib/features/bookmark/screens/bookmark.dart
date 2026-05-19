@@ -10,7 +10,7 @@ class BookmarkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     BookmarkController controller = Get.put(BookmarkController());
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132e3a").withAlpha(120),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -18,7 +18,7 @@ class BookmarkScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_circle_left_rounded),
-          color: Colors.white,
+          color: Theme.of(context).iconTheme.color,
         ),
 
         titleSpacing: 5,
@@ -30,12 +30,12 @@ class BookmarkScreen extends StatelessWidget {
               width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: HexColor.fromHex("#17404a"),
+                color:Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.bookmarks_rounded,
                 size: 20,
-                color: HexColor.fromHex("#2dc8b9"),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
 
@@ -45,13 +45,9 @@ class BookmarkScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   "Bookmark",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
+                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
@@ -68,11 +64,7 @@ class BookmarkScreen extends StatelessWidget {
       children: [
         Text(
           "Bookmark Kosong",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+         style: Theme.of(context).textTheme.titleMedium
         ),
 
         const SizedBox(height: 10),
@@ -104,7 +96,7 @@ class BookmarkScreen extends StatelessWidget {
 
                 return Padding(padding: EdgeInsets.only(bottom: 10), child: Container(
               decoration: BoxDecoration(
-                color: HexColor.fromHex("#132D3B"),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: ListTile(
@@ -119,7 +111,7 @@ class BookmarkScreen extends StatelessWidget {
                     height: 45,
                     width: 45,
                     decoration: BoxDecoration(
-                      color: HexColor.fromHex("#163F4A"),
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(
@@ -127,7 +119,7 @@ class BookmarkScreen extends StatelessWidget {
                         bm.surahNumber.toString(),
                         style: TextStyle(
                           fontSize: 16,
-                          color: HexColor.fromHex("#2cc4b6"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -135,11 +127,7 @@ class BookmarkScreen extends StatelessWidget {
                 ),
                 title: Text(
                   bm.surahName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall
                 ),
                 subtitle: Wrap(
                   spacing: 5,
@@ -147,10 +135,7 @@ class BookmarkScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Ayat ${bm.ayatNumber}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: HexColor.fromHex("#5a7b8a"),
-                      ),
+                      style: Theme.of(context).textTheme.labelMedium
                     ),
                   ],
                 ),
@@ -161,7 +146,7 @@ class BookmarkScreen extends StatelessWidget {
                       bm.arabName,
                       style: TextStyle(
                         fontSize: 20,
-                        color: HexColor.fromHex("#28ab9e"),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
