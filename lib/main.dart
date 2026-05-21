@@ -3,19 +3,7 @@ import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
-
-import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_source.dart';
-import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
-import 'package:alquran_new/features/alquran/domain/repositories/surah_repository.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
-
-import 'package:alquran_new/features/doa/data/datasources/doa_remote_data_source.dart';
-import 'package:alquran_new/features/doa/data/repositories/doa_repository_impl.dart';
-import 'package:alquran_new/features/doa/domain/repositories/doa_repository.dart';
-import 'package:alquran_new/features/doa/domain/usecases/get_all_doa.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
@@ -63,30 +51,6 @@ void _registerDependencies() {
   final dioClient = DioClient();
   Get.put(dioClient);
 
-  // SURAH
-  final surahRemoteDataSource = SurahRemoteDataSourceImpl(dioClient);
-  Get.put<SurahRemoteDataSource>(surahRemoteDataSource);
-
-  final surahRepository = SurahRepositoryImpl(surahRemoteDataSource);
-
-  Get.put<SurahRepository>(surahRepository);
-
-  Get.put(GetAllSurah(surahRepository));
-  Get.put(GetDetailSurah(surahRepository));
-  Get.put(GetTafsir(surahRepository));
-
-  // DOA
-  final doaRemoteDataSource = DoaRemoteDataSourceImpl(dioClient);
-
-  Get.put<DoaRemoteDataSource>(doaRemoteDataSource);
-
-  final doaRepository = DoaRepositoryImpl(doaRemoteDataSource);
-
-  Get.put<DoaRepository>(doaRepository);
-
-  Get.put(GetAllDoa(doaRepository));
-
-  // PRAYER TIME
   final prayerTimeRemoteDataSource = PrayerTimeRemoteDataSourceImpl(dioClient);
 
   Get.put<PrayerTimeRemoteDataSource>(prayerTimeRemoteDataSource);
@@ -98,13 +62,6 @@ void _registerDependencies() {
   Get.put<PrayerTimeRepository>(prayerTimeRepository);
 
   Get.put(GetPrayerTimes(prayerTimeRepository));
-
-  // Get.put(
-  //   PrayerTimeController(repo: PrayerTimeRepository),
-  //   permanent: true,
-  // );
-
-  Get.put(BookmarkController(), permanent: true);
 
   Get.put(
     SettingsController(SettingsService(IsarService.isar)),

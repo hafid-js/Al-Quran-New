@@ -1,3 +1,4 @@
+import 'package:alquran_new/binding/bookmark_binding.dart';
 import 'package:alquran_new/core/db/isar_service.dart';
 import 'package:alquran_new/features/bookmark/models/bookmark_model.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
@@ -72,6 +73,7 @@ Get.snackbar("Bookmark Dihapus", "$nama ayat $ayat dihapus", snackPosition: Snac
       "surah": bm.surahNumber,
       "ayat": bm.ayatNumber,
     },
+    binding: BookmarkBinding()
   );
 }
 }
