@@ -1,3 +1,5 @@
+import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
+
 enum TempatTurun { madinah, mekah }
 
 extension TempatTurunX on TempatTurun {
@@ -31,6 +33,7 @@ class Surah {
   final String arti;
   final String deskripsi;
   final Map<String, String> audioFull;
+  final List<Ayat> ayat;
 
   const Surah({
     required this.nomor,
@@ -41,5 +44,6 @@ class Surah {
     required this.arti,
     required this.deskripsi,
     required this.audioFull,
+    this.ayat = const [],
   });
 }

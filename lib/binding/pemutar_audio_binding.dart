@@ -4,8 +4,6 @@ import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_
 import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
 import 'package:alquran_new/features/alquran/domain/repositories/surah_repository.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
 import 'package:get/get.dart';
 
 class PemutarAudioBinding extends Bindings {

@@ -1,17 +1,29 @@
+import 'dart:convert';
+
+import 'package:alquran_new/core/db/isar_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
+import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
+import 'package:alquran_new/features/alquran/data/local/datasource/surah_local_datasource.dart';
+import 'package:alquran_new/features/alquran/data/local/datasource/tafsir_local_datasource.dart';
+import 'package:alquran_new/features/alquran/data/local/tafsir_cache.dart';
 import 'package:alquran_new/features/alquran/domain/entities/ayat.dart';
 import 'package:alquran_new/features/alquran/domain/entities/detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/entities/tafsir.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
 import 'package:get/get.dart';
+import 'package:isar/isar.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
 
 class DetailSurahController extends GetxController {
   final GetDetailSurah _getDetailSurah = Get.find();
   final GetTafsir _getTafsir = Get.find();
   final net = Get.find<NetworkController>();
+    final SurahLocalDatasource local = SurahLocalDatasource();
+    final TafsirLocalDataSource tafsirLocal = TafsirLocalDataSource();
+      final isar = IsarService.isar;
 
   var isLoading = false.obs;
   var detailSurah = Rxn<DetailSurah>();
@@ -30,49 +42,217 @@ class DetailSurahController extends GetxController {
     ayatAudioStates.putIfAbsent(nomorAyat, () => "stop".obs).value = state;
   }
 
-  Future<void> fetchDetailSurah(int nomor) async {
-    isLoading.value = true;
-    const maxRetry = 10;
-    int retry = 0;
 
-    try {
-      while (!net.isConnected.value) {
-        await Future.delayed(const Duration(seconds: 1));
+Future<void> fetchDetailSurah(int nomor) async {
+  await debugPrintSurahByNomor(nomor);
+  try {
+    isLoading.value = true;
+
+    final cache = await local.getByNomor(nomor);
+
+    if (cache != null) {
+      await cache.ayat.load();
+      if (cache.ayat.isNotEmpty) {
+        _displayFromCache(cache);
+        return;
       }
 
-      while (retry < maxRetry) {
-        final result = await _getDetailSurah.call(nomor);
-        if (result is Success<DetailSurah>) {
-          detailSurah.value = result.data;
+      if (!net.isConnected.value) {
+        detailSurah.value = DetailSurah(
+          nomor: cache.nomor,
+          nama: cache.nama,
+          namaLatin: cache.namaLatin,
+          jumlahAyat: cache.jumlahAyat,
+          tempatTurun: cache.tempatTurun,
+          arti: cache.arti,
+          deskripsi: cache.deskripsi,
+          audioFull: {"01": cache.audioUrl},
+          ayat: [],
+        );
+        return;
+      }
+    }
+
+    if (cache == null) {
+      if (!net.isConnected.value) {
+        detailSurah.value = null;
+        Get.snackbar("Data tidak ada", "Surah ini belum ada di cache");
+        return;
+      }
+    }
+
+    final result = await _getDetailSurah.call(nomor);
+
+    if (result is Success<DetailSurah>) {
+      final data = result.data;
+
+      await _saveDetailSurahToCache(data);
+
+      final updatedCache = await local.getByNomor(nomor);
+      if (updatedCache != null) {
+        await updatedCache.ayat.load();
+        if (updatedCache.ayat.isNotEmpty) {
+          _displayFromCache(updatedCache);
           return;
         }
-        retry++;
-        await Future.delayed(const Duration(seconds: 2));
       }
-    } finally {
-      isLoading.value = false;
+
+      detailSurah.value = data;
+    } else if (result is Failure && cache == null) {
+      Get.snackbar("Gagal memuat", (result as Failure).message);
     }
+  } catch (e, s) {
+    Get.snackbar("Terjadi Kesalahan", e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+Future<void> _saveDetailSurahToCache(DetailSurah data) async {
+  await isar.writeTxn(() async {
+    final existing = await isar.surahCaches
+        .filter()
+        .nomorEqualTo(data.nomor)
+        .findFirst();
+
+    late final SurahCache surah;
+    if (existing != null) {
+      await existing.ayat.load();
+      if (existing.ayat.isNotEmpty) {
+        await isar.ayatCaches.deleteAll(
+          existing.ayat.map((a) => a.id).toList(),
+        );
+      }
+      existing
+        ..nomor = data.nomor
+        ..namaLatin = data.namaLatin
+        ..nama = data.nama
+        ..deskripsi = data.deskripsi
+        ..jumlahAyat = data.jumlahAyat
+        ..tempatTurun = data.tempatTurun
+        ..arti = data.arti
+        ..audioUrl = data.audioFull.values.isNotEmpty
+            ? data.audioFull.values.first
+            : '';
+      surah = existing;
+      await isar.surahCaches.put(surah);
+    } else {
+      surah = SurahCache()
+        ..nomor = data.nomor
+        ..namaLatin = data.namaLatin
+        ..nama = data.nama
+        ..deskripsi = data.deskripsi
+        ..jumlahAyat = data.jumlahAyat
+        ..tempatTurun = data.tempatTurun
+        ..arti = data.arti
+        ..audioUrl = data.audioFull.values.isNotEmpty
+            ? data.audioFull.values.first
+            : '';
+      await isar.surahCaches.put(surah);
+    }
+
+    for (final a in data.ayat) {
+      final ayat = AyatCache()
+        ..nomorAyat = a.nomorAyat
+        ..teksArab = a.teksArab
+        ..teksLatin = a.teksLatin
+        ..teksIndonesia = a.teksIndonesia
+        ..audioJson = jsonEncode(a.audio)
+        ..surah.value = surah;
+
+      await isar.ayatCaches.put(ayat);
+    }
+  });
+}
+
+void _displayFromCache(SurahCache cache) {
+  final sortedAyat = cache.ayat.toList()
+    ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
+
+  final ayatList = sortedAyat.map((e) {
+    Map<String, String> audioMap = {};
+
+    if (e.audioJson.isNotEmpty) {
+      try {
+        audioMap = Map<String, String>.from(jsonDecode(e.audioJson));
+      } catch (_) {
+        audioMap = {};
+      }
+    }
+
+    return Ayat(
+      nomorAyat: e.nomorAyat,
+      teksArab: e.teksArab,
+      teksLatin: e.teksLatin,
+      teksIndonesia: e.teksIndonesia,
+      audio: audioMap,
+    );
+  }).toList();
+
+  detailSurah.value = DetailSurah(
+    nomor: cache.nomor,
+    nama: cache.nama,
+    namaLatin: cache.namaLatin,
+    jumlahAyat: cache.jumlahAyat,
+    tempatTurun: cache.tempatTurun,
+    arti: cache.arti,
+    deskripsi: cache.deskripsi,
+    audioFull: {"01": cache.audioUrl},
+    ayat: ayatList,
+  );
+
+}
+
+Future<void> debugPrintSurahByNomor(int nomor) async {
+
+  // await clearAllCache();
+
+  final data = await isar.surahCaches
+      .filter()
+      .nomorEqualTo(nomor)
+      .findFirst();
+
+  if (data == null) {
+    return;
   }
 
+  await data.ayat.load();
+}
+
+Future<void> clearAllCache() async {
+  final isar = Isar.getInstance()!;
+await isar.writeTxn(() async {
+  await isar.surahCaches.clear();
+  await isar.ayatCaches.clear();
+});
+}
+
   Future<void> fetchTafsirAyat(int nomor) async {
-    tafsirLoading[nomor] = true;
-    const maxRetry = 10;
-    int retry = 0;
-
     try {
-      while (!net.isConnected.value) {
-        await Future.delayed(const Duration(seconds: 1));
+      tafsirLoading[nomor] = true;
+
+      final cache = await tafsirLocal.getBySurah(nomor);
+      if(cache.isNotEmpty) {
+        tafsirList.assignAll(
+          cache.map((e) => TafsirAyat(ayat: e.nomorAyat, teks: e.tafsir)).toList()
+        );
       }
 
-      while (retry < maxRetry) {
-        final result = await _getTafsir.call(nomor);
-        if (result is Success<List<TafsirAyat>>) {
-          tafsirList.assignAll(result.data);
-          return;
-        }
-        retry++;
-        await Future.delayed(const Duration(seconds: 2));
+      if(!net.isConnected.value) return;
+
+      final result = await _getTafsir.call(nomor);
+      if(result is Success<List<TafsirAyat>>) {
+        tafsirList.assignAll(result.data);
+
+        final cacheData = result.data.map((e) {
+          return TafsirCache()
+          ..nomorSurah = nomor
+          ..nomorAyat = e.ayat
+          ..tafsir = e.teks;
+        }).toList();
+              await tafsirLocal.saveTafsir(cacheData);
       }
+
     } finally {
       tafsirLoading[nomor] = false;
     }

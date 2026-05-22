@@ -16,7 +16,7 @@ class DetailSuratScreen extends StatefulWidget {
 }
 
 class _DetailSuratScreenState extends State<DetailSuratScreen> {
-  final controller = Get.put(DetailSurahController());
+final controller = Get.find<DetailSurahController>();
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =

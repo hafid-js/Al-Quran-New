@@ -35,6 +35,7 @@ class PrayerTimeDTO {
   final String ashar;
   final String maghrib;
   final String isya;
+  
 
   const PrayerTimeDTO({
     required this.day,

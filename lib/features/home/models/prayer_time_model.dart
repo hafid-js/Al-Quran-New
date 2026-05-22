@@ -1,4 +1,4 @@
-class PrayerTime {
+class PrayerTimeModel {
   final int day;
   final String tanggalLengkap;
   final String hari;
@@ -11,7 +11,7 @@ class PrayerTime {
   final String maghrib;
   final String isya;
 
-  PrayerTime({
+  PrayerTimeModel({
     required this.day,
     required this.tanggalLengkap,
     required this.hari,
@@ -25,8 +25,8 @@ class PrayerTime {
     required this.isya,
   });
 
-  factory PrayerTime.fromJson(Map<String, dynamic> json) {
-    return PrayerTime(
+  factory PrayerTimeModel.fromJson(Map<String, dynamic> json) {
+    return PrayerTimeModel(
       day: json['tanggal'],
       tanggalLengkap: json['tanggal_lengkap'],
       hari: json['hari'],

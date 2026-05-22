@@ -1,4 +1,6 @@
+import 'package:alquran_new/features/alquran/data/models/detail_surah_response_dto.dart';
 import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
+import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
 
 class SurahDTO {
   final int nomor;
@@ -9,6 +11,7 @@ class SurahDTO {
   final String arti;
   final String deskripsi;
   final Map<String, String> audioFull;
+  final List<AyatDTO> ayat;
 
   const SurahDTO({
     required this.nomor,
@@ -19,6 +22,7 @@ class SurahDTO {
     required this.arti,
     required this.deskripsi,
     required this.audioFull,
+    required this.ayat
   });
 
   factory SurahDTO.fromJson(Map<String, dynamic> json) {
@@ -31,6 +35,9 @@ class SurahDTO {
       arti: json['arti'] ?? '',
       deskripsi: json['deskripsi'] ?? '',
       audioFull: _parseMap(json['audioFull']),
+        ayat: (json['ayat'] as List? ?? [])
+        .map((e) => AyatDTO.fromJson(e))
+        .toList(),
     );
   }
 
@@ -51,6 +58,13 @@ class SurahDTO {
       arti: arti,
       deskripsi: deskripsi,
       audioFull: audioFull,
+      ayat: ayat.map((a) => Ayat(
+        nomorAyat: a.nomorAyat,
+        teksArab: a.teksArab,
+        teksLatin: a.teksLatin,
+        teksIndonesia: a.teksIndonesia,
+        audio: a.audio,
+      )).toList(),
     );
   }
 }

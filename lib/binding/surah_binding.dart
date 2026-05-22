@@ -6,6 +6,7 @@ import 'package:alquran_new/features/alquran/domain/repositories/surah_repositor
 import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
+import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:get/get.dart';
 
 class SurahBinding extends Bindings {
@@ -46,5 +47,6 @@ class SurahBinding extends Bindings {
     // CONTROLLER
     // ======================
     Get.lazyPut(() => SurahController());
+    Get.lazyPut(() => DetailSurahController());
   }
 }

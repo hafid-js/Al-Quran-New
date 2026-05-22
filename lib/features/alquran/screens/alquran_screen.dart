@@ -1,3 +1,4 @@
+import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
@@ -161,6 +162,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                             InkWell(
                               onTap: () => Get.to(
                                 () => DetailSuratScreen(),
+                                binding: SurahBinding(),
                                 arguments: {"surah": surah.nomor, "ayat": null},
                               ),
                               child: Container(

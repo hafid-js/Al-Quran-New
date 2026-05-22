@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:alquran_new/core/utils/result.dart';
+import 'package:alquran_new/features/doa/data/local/datasource/doa_local_datasource.dart';
 import 'package:alquran_new/features/doa/domain/entities/doa.dart';
 import 'package:alquran_new/features/doa/domain/usecases/get_all_doa.dart';
 import 'package:get/get.dart';
 
 class DoaController extends GetxController {
   final GetAllDoa _getAllDoa = Get.find();
+  final DoaLocalDataSource _local = DoaLocalDataSource();
 
   var isLoading = false.obs;
   var doaList = <Doa>[].obs;
@@ -23,8 +25,17 @@ class DoaController extends GetxController {
   Future<void> fetchDoa() async {
     try {
       isLoading.value = true;
+
+      final cache = await _local.getAllDoa();
+      if (cache.isNotEmpty) {
+        doaList.value = cache;
+        filteredDoa.value = cache;
+        return;
+      }
+
       final result = await _getAllDoa.call();
       if (result is Success<List<Doa>>) {
+        await _local.saveAllDoa(result.data);
         doaList.value = result.data;
         filteredDoa.value = result.data;
       } else if (result is Failure<List<Doa>>) {

@@ -3,7 +3,7 @@ import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:alquran_new/core/utils/result.dart';
-import 'package:alquran_new/features/home/models/prayer_time.dart';
+import 'package:alquran_new/features/home/models/prayer_time_model.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +14,7 @@ class PrayerTimeController extends GetxController {
   final network = Get.find<NetworkController>();
 
   // reactive variables
-  var todayPrayer = Rxn<PrayerTime>();
+  var todayPrayer = Rxn<PrayerTimeModel>();
   var nextPrayerName = "".obs;
   var nextPrayerTime = Rxn<DateTime>();
   var remaining = Duration.zero.obs;
@@ -40,7 +40,7 @@ class PrayerTimeController extends GetxController {
         city: "Kab. Purworejo",
       );
 
-      final schedules = data['schedules'] as List<PrayerTime>;
+      final schedules = data['schedules'] as List<PrayerTimeModel>;
       if (schedules.isNotEmpty) {
         todayPrayer.value = schedules[0];
         getNextPrayer(schedules);
@@ -54,7 +54,7 @@ class PrayerTimeController extends GetxController {
     }
   }
 
-  void getNextPrayer(List<PrayerTime> schedules) {
+  void getNextPrayer(List<PrayerTimeModel> schedules) {
     final now = DateTime.now();
 
     for (final item in schedules) {
@@ -96,7 +96,7 @@ class PrayerTimeController extends GetxController {
     remaining.value = totalDuration.value;
   }
 
-  void _startTimer(List<PrayerTime> schedules) {
+  void _startTimer(List<PrayerTimeModel> schedules) {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       final now = DateTime.now();
