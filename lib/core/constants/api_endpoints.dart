@@ -8,6 +8,11 @@ class ApiEndpoints {
 
   static const doa = "/doa";
 
+  static const provinsi = "/shalat/provinsi";
+  static const kabkota = "/shalat/kabkota";
+    static String get provinsiUrl => "$baseUrlV2$provinsi";
+        static String get kabkotaUrl => "$baseUrlV2$kabkota";
+
   static String detailSurah(int nomor) => "$baseUrlV2$surah/$nomor";
 
   static String tafsirAyat(int nomor) => "$baseUrlV2$tafsir/$nomor";

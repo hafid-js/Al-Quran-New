@@ -15,9 +15,6 @@ class PemutarAudioBinding extends Bindings {
       ),
     );
 
-    // ======================
-    // REPOSITORY
-    // ======================
     Get.lazyPut<SurahRepository>(
       () => SurahRepositoryImpl(
         Get.find<SurahRemoteDataSource>(),

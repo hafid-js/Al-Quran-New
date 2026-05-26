@@ -13,39 +13,24 @@ class SurahBinding extends Bindings {
   @override
   void dependencies() {
 
-    // ======================
-    // CORE DEPENDENCY
-    // ======================
     Get.lazyPut<DioClient>(() => DioClient());
 
-    // ======================
-    // DATA SOURCE
-    // ======================
     Get.lazyPut<SurahRemoteDataSource>(
       () => SurahRemoteDataSourceImpl(
         Get.find<DioClient>(),
       ),
     );
 
-    // ======================
-    // REPOSITORY
-    // ======================
     Get.lazyPut<SurahRepository>(
       () => SurahRepositoryImpl(
         Get.find<SurahRemoteDataSource>(),
       ),
     );
 
-    // ======================
-    // USE CASES
-    // ======================
     Get.lazyPut(() => GetAllSurah(Get.find()));
     Get.lazyPut(() => GetDetailSurah(Get.find()));
     Get.lazyPut(() => GetTafsir(Get.find()));
 
-    // ======================
-    // CONTROLLER
-    // ======================
     Get.lazyPut(() => SurahController());
     Get.lazyPut(() => DetailSurahController());
   }

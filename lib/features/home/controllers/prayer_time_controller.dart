@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
+import 'package:alquran_new/features/lokasi/services/location_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/home/models/prayer_time_model.dart';
@@ -11,17 +12,19 @@ class PrayerTimeController extends GetxController {
   final PrayerTimeRepository repo;
 
   PrayerTimeController({required this.repo});
-  final network = Get.find<NetworkController>();
 
-  // reactive variables
   var todayPrayer = Rxn<PrayerTimeModel>();
+
   var nextPrayerName = "".obs;
   var nextPrayerTime = Rxn<DateTime>();
+
   var remaining = Duration.zero.obs;
   var totalDuration = Duration.zero.obs;
 
   var isLoading = true.obs;
   var errorMessage = RxnString();
+
+  var currentCity = "Kab. Purworejo".obs;
 
   Timer? _timer;
 
@@ -31,129 +34,113 @@ class PrayerTimeController extends GetxController {
     fetchPrayerTimes();
   }
 
-  void fetchPrayerTimes() async {
-    
+  // ================= FETCH =================
+  Future<void> fetchPrayerTimes() async {
+    final location = await LocationService.getLocation();
     try {
       isLoading.value = true;
-      final data = await repo.fetchPrayerTimes( 
-        province: "Jawa Tengah",
-        city: "Kab. Purworejo",
+
+    String targetProvince;
+      String targetCity;
+
+      if (location == null) {
+        targetProvince = "Jawa Tengah";
+        targetCity = "Kab. Purworejo";
+      } else {
+        targetProvince = location.province ?? "Jawa Tengah";
+        targetCity = location.city ?? "Kab. Purworejo";
+      }
+
+     currentCity.value = targetCity; 
+
+      final data = await repo.fetchPrayerTimes(
+        province: targetProvince,
+        city: targetCity,
       );
 
       final schedules = data['schedules'] as List<PrayerTimeModel>;
+
       if (schedules.isNotEmpty) {
-        todayPrayer.value = schedules[0];
-        getNextPrayer(schedules);
-        _startTimer(schedules);
+        todayPrayer.value = schedules.first;
+
+        _calculateNextPrayer(schedules.first);
+        _startTimer(schedules.first);
       }
 
       isLoading.value = false;
     } catch (e) {
-      errorMessage.value = e.toString();
       isLoading.value = false;
+      errorMessage.value = e.toString();
     }
   }
 
-  void getNextPrayer(List<PrayerTimeModel> schedules) {
+  DateTime _parseTime(String time, DateTime base) {
+    final parts = time.split(":");
+    return DateTime(
+      base.year,
+      base.month,
+      base.day,
+      int.parse(parts[0]),
+      int.parse(parts[1]),
+    );
+  }
+
+  void _calculateNextPrayer(PrayerTimeModel item) {
     final now = DateTime.now();
 
-    for (final item in schedules) {
-      final prayers = {
-        "Subuh": item.subuh,
-        "Dzuhur": item.dzuhur,
-        "Ashar": item.ashar,
-        "Maghrib": item.maghrib,
-        "Isya": item.isya,
-      };
+    final prayers = {
+      "Subuh": item.subuh,
+      "Dzuhur": item.dzuhur,
+      "Ashar": item.ashar,
+      "Maghrib": item.maghrib,
+      "Isya": item.isya,
+    };
 
-      for (final entry in prayers.entries) {
-        final hour = int.parse(entry.value.split(":")[0]);
-        final minute = int.parse(entry.value.split(":")[1]);
-        final dt = DateTime(now.year, now.month, now.day, hour, minute);
+    for (final entry in prayers.entries) {
+      final dt = _parseTime(entry.value, now);
 
-        if (dt.isAfter(now)) {
-          nextPrayerName.value = entry.key;
-          nextPrayerTime.value = dt;
-          totalDuration.value = dt.difference(now);
-          remaining.value = totalDuration.value;
-          return;
-        }
+      if (dt.isAfter(now)) {
+        nextPrayerName.value = entry.key;
+        nextPrayerTime.value = dt;
+        return;
       }
     }
 
-    // Jika semua jadwal hari ini sudah lewat, ambil Subuh besok
-    final tomorrow = schedules[0];
-    final subuh = tomorrow.subuh.split(":");
-    nextPrayerTime.value = DateTime(
-      now.year,
-      now.month,
-      now.day + 1,
-      int.parse(subuh[0]),
-      int.parse(subuh[1]),
-    );
+
+    final subuhTomorrow = _parseTime(item.subuh, now.add(const Duration(days: 1)));
+
     nextPrayerName.value = "Subuh";
-    totalDuration.value = nextPrayerTime.value!.difference(now);
-    remaining.value = totalDuration.value;
+    nextPrayerTime.value = subuhTomorrow;
   }
 
-  void _startTimer(List<PrayerTimeModel> schedules) {
+
+  void _startTimer(PrayerTimeModel item) {
     _timer?.cancel();
+
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       final now = DateTime.now();
 
-      final prayers = {
-        "Subuh": schedules[0].subuh,
-        "Dzuhur": schedules[0].dzuhur,
-        "Ashar": schedules[0].ashar,
-        "Maghrib": schedules[0].maghrib,
-        "Isya": schedules[0].isya,
-      };
+      final next = nextPrayerTime.value;
+      if (next == null) return;
 
-      DateTime? nextPrayerDT;
-      DateTime? currentPrayerDT;
+      remaining.value = next.difference(now);
 
-      for (final entry in prayers.entries.toList()) {
-        final hour = int.parse(entry.value.split(":")[0]);
-        final minute = int.parse(entry.value.split(":")[1]);
-        final dt = DateTime(now.year, now.month, now.day, hour, minute);
-
-        if (dt.isAfter(now) && nextPrayerDT == null) {
-          nextPrayerDT = dt;
-          nextPrayerName.value = entry.key;
-        }
-        if (dt.isBefore(now) || dt.isAtSameMomentAs(now)) {
-          currentPrayerDT = dt;
-        }
+      if (remaining.value.isNegative) {
+        fetchPrayerTimes();
       }
 
-      if (nextPrayerDT == null) {
-        final subuh = schedules[0].subuh.split(":");
-        nextPrayerDT = DateTime(
-          now.year,
-          now.month,
-          now.day + 1,
-          int.parse(subuh[0]),
-          int.parse(subuh[1]),
-        );
-        nextPrayerName.value = "Subuh";
-        currentPrayerDT = DateTime(
-          now.year,
-          now.month,
-          now.day,
-          int.parse(schedules[0].isya.split(":")[0]),
-          int.parse(schedules[0].isya.split(":")[1]),
-        );
-      }
-
-      // totalDuration.value = nextPrayerDT.difference(currentPrayerDT!);
-      // remaining.value = nextPrayerDT.difference(now);
-      if (currentPrayerDT != null) {
-  totalDuration.value = nextPrayerDT.difference(currentPrayerDT);
-} else {
-  totalDuration.value = nextPrayerDT.difference(now);
-}
-remaining.value = nextPrayerDT.difference(now);
+      totalDuration.value = remaining.value; 
     });
+  }
+
+
+  double get percent {
+    final total = totalDuration.value.inSeconds;
+    final remain = remaining.value.inSeconds;
+
+    if (total <= 0) return 0.0;
+
+    return ((total - remain) / total).clamp(0.0, 1.0);
   }
 
   @override
@@ -161,13 +148,169 @@ remaining.value = nextPrayerDT.difference(now);
     _timer?.cancel();
     super.onClose();
   }
-
-  double get percent {
-    if (totalDuration.value.inSeconds > 0) {
-      double p = (totalDuration.value.inSeconds - remaining.value.inSeconds) /
-          totalDuration.value.inSeconds;
-      return p.clamp(0.0, 1.0);
-    }
-    return 0.0;
-  }
 }
+
+// class PrayerTimeController extends GetxController {
+//   final PrayerTimeRepository repo;
+
+//   PrayerTimeController({required this.repo});
+//   final network = Get.find<NetworkController>();
+
+//   // reactive variables
+//   var todayPrayer = Rxn<PrayerTimeModel>();
+//   var nextPrayerName = "".obs;
+//   var nextPrayerTime = Rxn<DateTime>();
+//   var remaining = Duration.zero.obs;
+//   var totalDuration = Duration.zero.obs;
+
+//   var isLoading = true.obs;
+//   var errorMessage = RxnString();
+
+//   Timer? _timer;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     fetchPrayerTimes();
+//   }
+
+//   void fetchPrayerTimes() async {
+    
+//     try {
+//       isLoading.value = true;
+//       final data = await repo.fetchPrayerTimes( 
+//         province: "Jawa Tengah",
+//         city: "Kab. Purworejo",
+//       );
+
+//       final schedules = data['schedules'] as List<PrayerTimeModel>;
+//       if (schedules.isNotEmpty) {
+//         todayPrayer.value = schedules[0];
+//         getNextPrayer(schedules);
+//         _startTimer(schedules);
+//       }
+
+//       isLoading.value = false;
+//     } catch (e) {
+//       errorMessage.value = e.toString();
+//       isLoading.value = false;
+//     }
+//   }
+
+//   void getNextPrayer(List<PrayerTimeModel> schedules) {
+//     final now = DateTime.now();
+
+//     for (final item in schedules) {
+//       final prayers = {
+//         "Subuh": item.subuh,
+//         "Dzuhur": item.dzuhur,
+//         "Ashar": item.ashar,
+//         "Maghrib": item.maghrib,
+//         "Isya": item.isya,
+//       };
+
+//       for (final entry in prayers.entries) {
+//         final hour = int.parse(entry.value.split(":")[0]);
+//         final minute = int.parse(entry.value.split(":")[1]);
+//         final dt = DateTime(now.year, now.month, now.day, hour, minute);
+
+//         if (dt.isAfter(now)) {
+//           nextPrayerName.value = entry.key;
+//           nextPrayerTime.value = dt;
+//           totalDuration.value = dt.difference(now);
+//           remaining.value = totalDuration.value;
+//           return;
+//         }
+//       }
+//     }
+
+//     // Jika semua jadwal hari ini sudah lewat, ambil Subuh besok
+//     final tomorrow = schedules[0];
+//     final subuh = tomorrow.subuh.split(":");
+//     nextPrayerTime.value = DateTime(
+//       now.year,
+//       now.month,
+//       now.day + 1,
+//       int.parse(subuh[0]),
+//       int.parse(subuh[1]),
+//     );
+//     nextPrayerName.value = "Subuh";
+//     totalDuration.value = nextPrayerTime.value!.difference(now);
+//     remaining.value = totalDuration.value;
+//   }
+
+//   void _startTimer(List<PrayerTimeModel> schedules) {
+//     _timer?.cancel();
+//     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+//       final now = DateTime.now();
+
+//       final prayers = {
+//         "Subuh": schedules[0].subuh,
+//         "Dzuhur": schedules[0].dzuhur,
+//         "Ashar": schedules[0].ashar,
+//         "Maghrib": schedules[0].maghrib,
+//         "Isya": schedules[0].isya,
+//       };
+
+//       DateTime? nextPrayerDT;
+//       DateTime? currentPrayerDT;
+
+//       for (final entry in prayers.entries.toList()) {
+//         final hour = int.parse(entry.value.split(":")[0]);
+//         final minute = int.parse(entry.value.split(":")[1]);
+//         final dt = DateTime(now.year, now.month, now.day, hour, minute);
+
+//         if (dt.isAfter(now) && nextPrayerDT == null) {
+//           nextPrayerDT = dt;
+//           nextPrayerName.value = entry.key;
+//         }
+//         if (dt.isBefore(now) || dt.isAtSameMomentAs(now)) {
+//           currentPrayerDT = dt;
+//         }
+//       }
+
+//       if (nextPrayerDT == null) {
+//         final subuh = schedules[0].subuh.split(":");
+//         nextPrayerDT = DateTime(
+//           now.year,
+//           now.month,
+//           now.day + 1,
+//           int.parse(subuh[0]),
+//           int.parse(subuh[1]),
+//         );
+//         nextPrayerName.value = "Subuh";
+//         currentPrayerDT = DateTime(
+//           now.year,
+//           now.month,
+//           now.day,
+//           int.parse(schedules[0].isya.split(":")[0]),
+//           int.parse(schedules[0].isya.split(":")[1]),
+//         );
+//       }
+
+//       // totalDuration.value = nextPrayerDT.difference(currentPrayerDT!);
+//       // remaining.value = nextPrayerDT.difference(now);
+//       if (currentPrayerDT != null) {
+//   totalDuration.value = nextPrayerDT.difference(currentPrayerDT);
+// } else {
+//   totalDuration.value = nextPrayerDT.difference(now);
+// }
+// remaining.value = nextPrayerDT.difference(now);
+//     });
+//   }
+
+//   @override
+//   void onClose() {
+//     _timer?.cancel();
+//     super.onClose();
+//   }
+
+//   double get percent {
+//     if (totalDuration.value.inSeconds > 0) {
+//       double p = (totalDuration.value.inSeconds - remaining.value.inSeconds) /
+//           totalDuration.value.inSeconds;
+//       return p.clamp(0.0, 1.0);
+//     }
+//     return 0.0;
+//   }
+// }

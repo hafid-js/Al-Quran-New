@@ -13,6 +13,7 @@ import 'package:alquran_new/features/home/repository/prayer_time_repository.dart
 import 'package:alquran_new/features/home/widgets/prayer_item.dart';
 import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
+import 'package:alquran_new/features/lokasi/lokasi_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "title": "Quran",
       "icon": Icons.menu_book_rounded,
-      "page": AlQuranScreen(),
+      "page": () => const AlQuranScreen(),
       "binding": SurahBinding(),
     },
     {
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "title": "Bookmark",
       "icon": Icons.bookmarks_rounded,
-      "page": const BookmarkScreen(),
+      "page": () => const BookmarkScreen(),
     },
     // {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
   ];
@@ -134,7 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
         formattingDate,
       ).toFormat("dd MMMM yyyy H");
 
-      final city = "Kab. Purworejo";
+
+
+final city = controller.currentCity.value;
 
       return Obx(() {
         return Scaffold(
@@ -176,6 +179,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             city,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
+                                     const SizedBox(width: 6),
+
+                          GestureDetector(
+                            onTap: () => Get.to(() => LokasiScreen()),
+                            child: AnimatedRotation(
+                                                    turns: 1.75,
+                                                    duration: Duration(
+                                                      milliseconds: 300,
+                                                    ),
+                                                    child: Icon(
+                                                      Icons
+                                                          .arrow_circle_left_rounded,
+                                                      color: Theme.of(context).textTheme.labelLarge?.color,
+                                                      size: 22,
+                                                    ),
+                                                  ),
+                          )
                         ],
                       ),
 

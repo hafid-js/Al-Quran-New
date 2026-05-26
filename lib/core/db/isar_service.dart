@@ -3,6 +3,7 @@ import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/tafsir_cache.dart';
 import 'package:alquran_new/features/bookmark/models/bookmark_model.dart';
 import 'package:alquran_new/features/doa/data/local/doa_cache.dart';
+import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
 
 import 'package:isar/isar.dart';
@@ -26,7 +27,8 @@ class IsarService {
       SurahCacheSchema,
       TafsirCacheSchema,
       AyatCacheSchema,
-      DoaCacheSchema
+      DoaCacheSchema,
+      LocationCacheSchema
     ],
     directory: dir.path,
   );

@@ -142,7 +142,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                               InkWell(
                                 onTap: () {
                                   showBarModalBottomSheet(
-                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).scaffoldBackgroundColor,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(20),
@@ -163,7 +165,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 Center(
                                                   child: Text(
                                                     "Pilih Qari",
-                                                    style: Theme.of(context).textTheme.titleMedium
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.titleMedium,
                                                   ),
                                                 ),
                                                 SizedBox(height: 12),
@@ -178,7 +182,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                           vertical: 6,
                                                         ),
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).cardColor,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).cardColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                             16,
@@ -191,7 +197,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                               8,
                                                             ),
                                                         child: CachedNetworkImage(
-                                                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                                          imageUrl:
+                                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
                                                           width: 35,
                                                           height: 35,
                                                           fit: BoxFit.cover,
@@ -239,7 +246,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                               8,
                                                             ),
                                                         child: CachedNetworkImage(
-                                                          imageUrl: "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
+                                                          imageUrl:
+                                                              "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
                                                           width: 35,
                                                           height: 35,
                                                           fit: BoxFit.cover,
@@ -302,10 +310,14 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                         itemBuilder: (context, index) {
                           final surah = controller.surahList[index];
 
-                            return Obx(() {
-                                final kondisi = controller.getSurahAudioState(surah.nomor);
-                                final activeSurahNomor = controller.activeSurahNomor.value;
-                                return kondisi == "playing" && activeSurahNomor == surah.nomor
+                          return Obx(() {
+                            final kondisi = controller.getSurahAudioState(
+                              surah.nomor,
+                            );
+                            final activeSurahNomor =
+                                controller.activeSurahNomor.value;
+                            return kondisi == "playing" &&
+                                    activeSurahNomor == surah.nomor
                                 ? Padding(
                                     padding: EdgeInsets.only(
                                       top: 10,
@@ -318,9 +330,13 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                           decoration: BoxDecoration(
                                             border: BoxBorder.all(
                                               width: 0.5,
-                                              color: Theme.of(context).colorScheme.primary
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
                                             ),
-                                            color: Theme.of(context).colorScheme.surface,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.surface,
                                             borderRadius: BorderRadius.circular(
                                               16,
                                             ),
@@ -334,13 +350,16 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               onTap: () {
-                                                  controller.playAudio(surah);
+                                                controller.playAudio(surah);
                                               },
                                               child: Container(
                                                 height: 45,
                                                 width: 45,
                                                 decoration: BoxDecoration(
-                                                  color: Theme.of(context).colorScheme.primary.withAlpha(80),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withAlpha(80),
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                 ),
@@ -348,14 +367,18 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                   child: Icon(
                                                     Icons
                                                         .pause_circle_filled_outlined,
-                                                    color: Theme.of(context).colorScheme.primary
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             title: Text(
                                               surah.namaLatin,
-                                              style: Theme.of(context).textTheme.titleSmall
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleSmall,
                                             ),
                                             subtitle: Wrap(
                                               spacing: 5,
@@ -363,7 +386,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               children: [
                                                 Text(
                                                   surah.arti,
-                                                  style: Theme.of(context).textTheme.labelMedium
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelMedium,
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(
@@ -372,12 +397,17 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                   child: Icon(
                                                     Icons.circle,
                                                     size: 5,
-                                                    color:  Theme.of(context).textTheme.labelMedium?.color
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .labelMedium
+                                                        ?.color,
                                                   ),
                                                 ),
                                                 Text(
                                                   "${surah.jumlahAyat} Ayat",
-                                                  style: Theme.of(context).textTheme.labelMedium
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelMedium,
                                                 ),
                                               ],
                                             ),
@@ -398,7 +428,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 Icon(
                                                   Icons
                                                       .download_for_offline_outlined,
-                                                  color: Theme.of(context).colorScheme.primary,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
                                                   size: 22,
                                                 ),
                                               ],
@@ -425,7 +457,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context).cardColor,
+                                              color: Theme.of(
+                                                context,
+                                              ).cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                             ),
@@ -438,7 +472,10 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 height: 45,
                                                 width: 45,
                                                 decoration: BoxDecoration(
-                                                  color: Theme.of(context).colorScheme.primary.withAlpha(40),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withAlpha(40),
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                 ),
@@ -447,14 +484,18 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                     surah.nomor.toString(),
                                                     style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Theme.of(context).colorScheme.primary
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                               title: Text(
                                                 surah.namaLatin,
-                                                style: Theme.of(context).textTheme.titleSmall
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.titleSmall,
                                               ),
                                               subtitle: Wrap(
                                                 spacing: 5,
@@ -462,7 +503,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 children: [
                                                   Text(
                                                     surah.arti,
-                                                    style: Theme.of(context).textTheme.labelMedium
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.labelMedium,
                                                   ),
                                                   Padding(
                                                     padding: EdgeInsets.only(
@@ -471,12 +514,17 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                     child: Icon(
                                                       Icons.circle,
                                                       size: 5,
-                                                      color: Theme.of(context).textTheme.labelMedium?.color
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .labelMedium
+                                                          ?.color,
                                                     ),
                                                   ),
                                                   Text(
                                                     "${surah.jumlahAyat} Ayat",
-                                                    style: Theme.of(context).textTheme.labelMedium
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.labelMedium,
                                                   ),
                                                 ],
                                               ),
@@ -487,7 +535,10 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                     surah.nama,
                                                     style: TextStyle(
                                                       fontSize: 20,
-                                                      color: Theme.of(context).textTheme.titleMedium?.color
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium
+                                                          ?.color,
                                                     ),
                                                   ),
                                                   SizedBox(width: 15),
@@ -499,7 +550,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                     child: Icon(
                                                       Icons
                                                           .arrow_circle_left_rounded,
-                                                      color: Theme.of(context).colorScheme.primary,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
                                                       size: 22,
                                                     ),
                                                   ),
@@ -518,7 +571,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                     Obx(() {
                       final nomor = controller.activeSurahNomor.value;
                       if (nomor == null) return const SizedBox.shrink();
-                      final surah = controller.surahList.firstWhere((s) => s.nomor == nomor);
+                      final surah = controller.surahList.firstWhere(
+                        (s) => s.nomor == nomor,
+                      );
 
                       return Positioned(
                         bottom: 0,
@@ -537,13 +592,34 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                   left: 16,
                                   right: 16,
                                 ),
-                                child: LinearPercentIndicator(
-                                  backgroundColor: Theme.of(context).disabledColor,
-                                  padding: EdgeInsets.zero,
-                                  barRadius: const Radius.circular(16),
-                                  lineHeight: 4,
-                                  percent: 0.2,
-                                  progressColor: Theme.of(context).colorScheme.primary,
+                                child: StreamBuilder<Duration>(
+                                  stream: controller.player.positionStream,
+                                  builder: (context, snapshot) {
+                                    final position =
+                                        snapshot.data ?? Duration.zero;
+
+                                    final duration =
+                                        controller.player.duration ??
+                                        Duration.zero;
+
+                                    final percent = duration.inMilliseconds == 0
+                                        ? 0.0
+                                        : position.inMilliseconds /
+                                              duration.inMilliseconds;
+
+                                    return LinearPercentIndicator(
+                                      backgroundColor: Theme.of(
+                                        context,
+                                      ).disabledColor,
+                                      padding: EdgeInsets.zero,
+                                      barRadius: const Radius.circular(16),
+                                      lineHeight: 4,
+                                      percent: percent.clamp(0.0, 1.0),
+                                      progressColor: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    );
+                                  },
                                 ),
                               ),
 
@@ -551,7 +627,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                 leading: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: CachedNetworkImage(
-                                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                    imageUrl:
+                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
                                     width: 45,
                                     height: 45,
                                     fit: BoxFit.cover,
@@ -560,11 +637,29 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                 title: Text(
                                   surah.namaLatin,
 
-                                  style: Theme.of(context).textTheme.titleSmall
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                                subtitle: Text(
-                                  "00:03 / 00:51",
-                                  style: Theme.of(context).textTheme.labelSmall
+                                subtitle: StreamBuilder<Duration>(
+                                  stream: controller.player.positionStream,
+                                  builder: (context, snapshot) {
+                                    final position =
+                                        snapshot.data ?? Duration.zero;
+
+                                    final duration =
+                                        controller.player.duration ??
+                                        Duration.zero;
+
+                                    final text =
+                                        "${controller.formatDuration(position)} / "
+                                        "${controller.formatDuration(duration)}";
+
+                                    return Text(
+                                      text,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.labelSmall,
+                                    );
+                                  },
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -588,7 +683,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                     ),
                                     SizedBox(width: 5),
                                     Obx(() {
-                                      final kondisi = controller.getSurahAudioState(surah.nomor);
+                                      final kondisi = controller
+                                          .getSurahAudioState(surah.nomor);
                                       return kondisi == "playing"
                                           ? InkWell(
                                               onTap: () {
@@ -608,7 +704,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                   child: Icon(
                                                     Icons
                                                         .pause_circle_filled_outlined,
-                                                    color: Theme.of(context).colorScheme.primary,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
                                                     size: 30,
                                                   ),
                                                 ),
@@ -632,7 +730,9 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                   child: Icon(
                                                     Icons
                                                         .play_circle_filled_outlined,
-                                                    color: Theme.of(context).colorScheme.primary,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
                                                     size: 30,
                                                   ),
                                                 ),
@@ -701,9 +801,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
               return const SizedBox.shrink();
             }
 
-            return const Positioned.fill(
-              child: Loading(),
-            );
+            return const Positioned.fill(child: Loading());
           }),
         ],
       ),

@@ -93,9 +93,17 @@ final controller = Get.find<DetailSurahController>();
 
         final data = controller.detailSurah.value;
 
-        if (data == null) {
-          return Center(child: Text("Data kosong"));
-        }
+       if (data == null) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.transparent,
+      title: const Text("Detail Surah"),
+    ),
+    body: const Center(
+      child: Text("Data kosong"),
+    ),
+  );
+}
 
         return Stack(
           children: [
