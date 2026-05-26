@@ -12,11 +12,14 @@ class LocationController extends GetxController {
   var isLoadingProvince = false.obs;
   var isLoadingCity = false.obs;
 
+  var isSaving = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     loadSavedLocation();
     fetchProvinces();
+    _restoreLocation();
   }
 
   Future<void> fetchProvinces() async {
@@ -64,4 +67,17 @@ class LocationController extends GetxController {
     selectedCity.value = location.city;
   }
   }
+
+  Future<void> _restoreLocation() async {
+  final loc = await LocationService.getLocation();
+
+  if (loc != null) {
+    selectedProvince.value = loc.province;
+    selectedCity.value = loc.city;
+
+    if (loc.province != null) {
+      await fetchCities(loc.province!);
+    }
+  }
+}
 }

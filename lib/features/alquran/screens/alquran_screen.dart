@@ -1,9 +1,7 @@
 import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';

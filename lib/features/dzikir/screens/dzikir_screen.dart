@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
-import 'package:alquran_new/features/dzikir/widgets/category_filter.dart';
 import 'package:alquran_new/features/dzikir/widgets/tab_item.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +38,16 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
     return total;
   }
+
+
+  int totalSemuaDzikir() {
+  return subhanallah +
+      alhamdulillah +
+      allahuakbar +
+      laillahailallah +
+      astaghfirullah +
+      allahumasholialamuhammad;
+}
 
   @override
   void initState() {
@@ -221,7 +230,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                   ),
                 ),
                 Text(
-                  "Total Dzikir: 197",
+                  "Total Dzikir: ${totalSemuaDzikir()}",
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],

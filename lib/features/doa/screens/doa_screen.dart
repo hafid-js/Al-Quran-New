@@ -1,6 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';

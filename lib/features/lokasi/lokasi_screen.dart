@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/features/lokasi/location_controller.dart';
 import 'package:alquran_new/features/lokasi/services/location_service.dart';
 import 'package:flutter/material.dart';
@@ -85,175 +86,198 @@ class _LokasiScreenState extends State<LokasiScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Provinsi",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              SizedBox(height: 10),
               if (c.isLoadingProvince.value)
                 const Center(child: CircularProgressIndicator())
               else
-                Text(
-                  "Provinsi",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              SizedBox(height: 10),
-              DropdownButtonFormField2<String>(
-                dropdownStyleData: DropdownStyleData(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                ),
-                isExpanded: true,
-                valueListenable: provinceNotifier,
-                items: c.provinces.map((e) {
-                  final selected = c.selectedProvince.value == e;
+                DropdownButtonFormField2<String>(
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                    ),
+                  ),
+                  isExpanded: true,
+                  valueListenable: provinceNotifier,
+                  items: c.provinces.map((e) {
+                    final selected = c.selectedProvince.value == e;
 
-                  return DropdownItem<String>(
-                    value: e,
+                    return DropdownItem<String>(
+                      value: e,
 
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              e,
-                              style: TextStyle(
-                                fontSize: 16,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                e,
+                                style: TextStyle(
+                                  fontSize: 16,
 
-                                fontWeight: FontWeight.w400,
-                                color: selected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
+                                  fontWeight: FontWeight.w400,
+                                  color: selected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      c.selectProvince(value);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(width: 1, color: Colors.white),
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(width: 1, color: Theme.of(context).textTheme.titleSmall?.color ?? Colors.white),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    c.selectProvince(value);
-                  }
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(width: 1, color: Colors.white),
                   ),
-
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(width: 1, color: Colors.white),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      width: 1,
-                      color: Theme.of(context).colorScheme.primary,
+                  hint: const Text(
+                    "Pilih Provinsi",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-                hint: const Text(
-                  "Pilih Provinsi",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
 
               const SizedBox(height: 30),
               Text(
                 "Kabupaten / Kota",
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               SizedBox(height: 10),
-              DropdownButtonFormField2<String>(
-                dropdownStyleData: DropdownStyleData(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                ),
-                isExpanded: true,
-                valueListenable: cityNotifier,
-                items: c.selectedProvince.value == null || c.isLoadingCity.value
-                    ? []
-                    : c.cities.map((e) {
-                        return DropdownItem<String>(
-                          value: e,
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                onChanged:
-                    c.selectedProvince.value == null || c.isLoadingCity.value
-                    ? null
-                    : (value) {
-                        if (value != null) {
-                          c.selectCity(value);
-                        }
-                      },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(width: 1, color: Colors.white),
-                  ),
-
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(width: 1, color: Colors.white),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      width: 1,
-                      color: Theme.of(context).colorScheme.primary,
+              if (c.isLoadingCity.value)
+                const Center(child: CircularProgressIndicator())
+              else
+                DropdownButtonFormField2<String>(
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
                     ),
                   ),
-                ),
-                hint: Text(
-                  c.isLoadingCity.value
-                      ? "Memuat kota..."
-                      : c.selectedProvince.value == null
-                      ? "Pilih provinsi dulu"
-                      : "Pilih kota",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
+                  isExpanded: true,
+                  valueListenable: cityNotifier,
+                  items:
+                      c.selectedProvince.value == null || c.isLoadingCity.value
+                      ? []
+                      : c.cities.map((e) {
+                          return DropdownItem<String>(
+                            value: e,
+                            child: Text(
+                              e,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                  onChanged:
+                      c.selectedProvince.value == null || c.isLoadingCity.value
+                      ? null
+                      : (value) {
+                          if (value != null) {
+                            c.selectCity(value);
+                          }
+                        },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(width: 1, color: Colors.white),
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(width: 1, color: Theme.of(context).textTheme.titleSmall?.color ?? Colors.white),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  hint: Text(
+                    c.isLoadingCity.value
+                        ? "Memuat kota..."
+                        : c.selectedProvince.value == null
+                        ? "Pilih provinsi dulu"
+                        : "Pilih kota",
+                    style: Theme.of(context).textTheme.titleSmall
                   ),
                 ),
-              ),
 
               if (city != null) ...[
                 const SizedBox(height: 32),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                     foregroundColor: Colors.white,
+    backgroundColor: Theme.of(context).colorScheme.primary
+  ),
                     onPressed: () async {
+                      if(c.isSaving.value) return;
                       final province = c.selectedProvince.value;
                       final city = c.selectedCity.value;
 
-                      if(province == null || city == null) return;
+                      if (province == null || city == null) return;
 
-                      await LocationService.saveLocation(province, city);
-                      Get.snackbar(
-                        "Lokasi Disimpan",
-                        "$province, $city",
-                      );
+                      c.isSaving.value = true;
 
-               
+                     try{
+                       await LocationService.saveLocation(province, city);
+
+                      final prayerController = Get.find<PrayerTimeController>();
+
+                      await prayerController.fetchPrayerTimes();
+
+                      Get.back();
+                      Get.snackbar("Lokasi Disimpan", "$province, $city");
+                     } finally {
+                      c.isSaving.value = false;
+                     }
                     },
-                    child: const Text("Simpan"),
-                  ),
+                    child: c.isSaving.value ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ) : const Text("Simpan"),
+                  ) 
                 ),
               ],
             ],
           );
-        })
+        }),
       ),
     );
   }

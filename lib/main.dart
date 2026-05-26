@@ -3,7 +3,6 @@ import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
-import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';

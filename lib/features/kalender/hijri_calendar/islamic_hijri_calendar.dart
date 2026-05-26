@@ -465,7 +465,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                             ],
                           ),
 
-                          if(events.length > 5)
+                          if(events.length > 10)
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -498,7 +498,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: showAllEvents
                             ? events.length
-                            : (events.length > 5 ? 5 : events.length),
+                            : (events.length > 10 ? 10 : events.length),
                         itemBuilder: (context, index) {
                           final event = events[index];
 
