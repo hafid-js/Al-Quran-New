@@ -1,15 +1,19 @@
-import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
+
 part 'ayat_cache.g.dart';
 
-@collection
-class AyatCache {
-    Id id = Isar.autoIncrement;
+@HiveType(typeId: 3)
+class AyatCache extends HiveObject {
+  @HiveField(0)
   late int nomorAyat;
+  @HiveField(1)
   late String teksArab;
+  @HiveField(2)
   late String teksLatin;
+  @HiveField(3)
   late String teksIndonesia;
-
+  @HiveField(4)
   late String audioJson;
-  final surah = IsarLink<SurahCache>();
+  @HiveField(5)
+  int surahNomor = 0;
 }

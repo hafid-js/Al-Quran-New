@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
@@ -13,7 +13,6 @@ import 'package:alquran_new/features/alquran/domain/entities/tafsir.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
 import 'package:get/get.dart';
-import 'package:isar/isar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
 
@@ -23,7 +22,6 @@ class DetailSurahController extends GetxController {
   final net = Get.find<NetworkController>();
     final SurahLocalDatasource local = SurahLocalDatasource();
     final TafsirLocalDataSource tafsirLocal = TafsirLocalDataSource();
-      final isar = IsarService.isar;
 
   var isLoading = false.obs;
   var detailSurah = Rxn<DetailSurah>();
@@ -51,8 +49,10 @@ Future<void> fetchDetailSurah(int nomor) async {
     final cache = await local.getByNomor(nomor);
 
     if (cache != null) {
-      await cache.ayat.load();
-      if (cache.ayat.isNotEmpty) {
+      final ayatList = HiveService.ayatBox.values
+          .where((a) => a.surahNomor == nomor)
+          .toList();
+      if (ayatList.isNotEmpty) {
         _displayFromCache(cache);
         return;
       }
@@ -90,8 +90,10 @@ Future<void> fetchDetailSurah(int nomor) async {
 
       final updatedCache = await local.getByNomor(nomor);
       if (updatedCache != null) {
-        await updatedCache.ayat.load();
-        if (updatedCache.ayat.isNotEmpty) {
+        final ayatList = HiveService.ayatBox.values
+            .where((a) => a.surahNomor == nomor)
+            .toList();
+        if (ayatList.isNotEmpty) {
           _displayFromCache(updatedCache);
           return;
         }
@@ -109,64 +111,65 @@ Future<void> fetchDetailSurah(int nomor) async {
 }
 
 Future<void> _saveDetailSurahToCache(DetailSurah data) async {
-  await isar.writeTxn(() async {
-    final existing = await isar.surahCaches
-        .filter()
-        .nomorEqualTo(data.nomor)
-        .findFirst();
+  final existing = HiveService.surahBox.values
+      .where((s) => s.nomor == data.nomor)
+      .toList();
 
-    late final SurahCache surah;
-    if (existing != null) {
-      await existing.ayat.load();
-      if (existing.ayat.isNotEmpty) {
-        await isar.ayatCaches.deleteAll(
-          existing.ayat.map((a) => a.id).toList(),
-        );
-      }
-      existing
-        ..nomor = data.nomor
-        ..namaLatin = data.namaLatin
-        ..nama = data.nama
-        ..deskripsi = data.deskripsi
-        ..jumlahAyat = data.jumlahAyat
-        ..tempatTurun = data.tempatTurun
-        ..arti = data.arti
-        ..audioUrl = data.audioFull.values.isNotEmpty
-            ? data.audioFull.values.first
-            : '';
-      surah = existing;
-      await isar.surahCaches.put(surah);
-    } else {
-      surah = SurahCache()
-        ..nomor = data.nomor
-        ..namaLatin = data.namaLatin
-        ..nama = data.nama
-        ..deskripsi = data.deskripsi
-        ..jumlahAyat = data.jumlahAyat
-        ..tempatTurun = data.tempatTurun
-        ..arti = data.arti
-        ..audioUrl = data.audioFull.values.isNotEmpty
-            ? data.audioFull.values.first
-            : '';
-      await isar.surahCaches.put(surah);
-    }
+  late final SurahCache surah;
+  if (existing.isNotEmpty) {
+    surah = existing.first;
+    surah
+      ..nomor = data.nomor
+      ..namaLatin = data.namaLatin
+      ..nama = data.nama
+      ..deskripsi = data.deskripsi
+      ..jumlahAyat = data.jumlahAyat
+      ..tempatTurun = data.tempatTurun
+      ..arti = data.arti
+      ..audioUrl = data.audioFull.values.isNotEmpty
+          ? data.audioFull.values.first
+          : '';
+    await surah.save();
+  } else {
+    surah = SurahCache()
+      ..nomor = data.nomor
+      ..namaLatin = data.namaLatin
+      ..nama = data.nama
+      ..deskripsi = data.deskripsi
+      ..jumlahAyat = data.jumlahAyat
+      ..tempatTurun = data.tempatTurun
+      ..arti = data.arti
+      ..audioUrl = data.audioFull.values.isNotEmpty
+          ? data.audioFull.values.first
+          : '';
+    await HiveService.surahBox.add(surah);
+  }
 
-    for (final a in data.ayat) {
-      final ayat = AyatCache()
-        ..nomorAyat = a.nomorAyat
-        ..teksArab = a.teksArab
-        ..teksLatin = a.teksLatin
-        ..teksIndonesia = a.teksIndonesia
-        ..audioJson = jsonEncode(a.audio)
-        ..surah.value = surah;
+  final ayatToDelete = HiveService.ayatBox.values
+      .where((a) => a.surahNomor == data.nomor)
+      .map((a) => a.key as int)
+      .toList();
+  for (final key in ayatToDelete) {
+    await HiveService.ayatBox.delete(key);
+  }
 
-      await isar.ayatCaches.put(ayat);
-    }
-  });
+  for (final a in data.ayat) {
+    final ayat = AyatCache()
+      ..nomorAyat = a.nomorAyat
+      ..teksArab = a.teksArab
+      ..teksLatin = a.teksLatin
+      ..teksIndonesia = a.teksIndonesia
+      ..audioJson = jsonEncode(a.audio)
+      ..surahNomor = data.nomor;
+
+    await HiveService.ayatBox.add(ayat);
+  }
 }
 
 void _displayFromCache(SurahCache cache) {
-  final sortedAyat = cache.ayat.toList()
+  final sortedAyat = HiveService.ayatBox.values
+      .where((a) => a.surahNomor == cache.nomor)
+      .toList()
     ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
 
   final ayatList = sortedAyat.map((e) {
@@ -207,24 +210,18 @@ Future<void> debugPrintSurahByNomor(int nomor) async {
 
   // await clearAllCache();
 
-  final data = await isar.surahCaches
-      .filter()
-      .nomorEqualTo(nomor)
-      .findFirst();
+  final data = HiveService.surahBox.values
+      .where((s) => s.nomor == nomor)
+      .toList();
 
-  if (data == null) {
+  if (data.isEmpty) {
     return;
   }
-
-  await data.ayat.load();
 }
 
 Future<void> clearAllCache() async {
-  final isar = Isar.getInstance()!;
-await isar.writeTxn(() async {
-  await isar.surahCaches.clear();
-  await isar.ayatCaches.clear();
-});
+  await HiveService.surahBox.clear();
+  await HiveService.ayatBox.clear();
 }
 
   Future<void> fetchTafsirAyat(int nomor) async {

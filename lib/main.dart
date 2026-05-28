@@ -1,4 +1,4 @@
-import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
@@ -11,6 +11,7 @@ import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart'
 import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
+import 'package:alquran_new/features/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,7 +22,7 @@ import 'package:intl/intl.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await IsarService.init();
+  await HiveService.init();
 
   // init storage dulu
   await GetStorage.init();
@@ -63,7 +64,7 @@ void _registerDependencies() {
   Get.put(GetPrayerTimes(prayerTimeRepository));
 
   Get.put(
-    SettingsController(SettingsService(IsarService.isar)),
+    SettingsController(SettingsService()),
     permanent: true,
   );
 }

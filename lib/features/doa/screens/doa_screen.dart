@@ -307,22 +307,22 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                 const SizedBox(height: 20),
 
-                                                ActionChip(
-                                                  label: Text(
-                                                    "tidur",
+                                                // ActionChip(
+                                                //   label: Text(
+                                                //     "tidur",
 
-                                                    style: TextStyle(
-                                                      color: HexColor.fromHex(
-                                                        "#2dc8b9",
-                                                      ),
-                                                    ),
-                                                  ),
+                                                //     style: TextStyle(
+                                                //       color: HexColor.fromHex(
+                                                //         "#2dc8b9",
+                                                //       ),
+                                                //     ),
+                                                //   ),
 
-                                                  backgroundColor:
-                                                      HexColor.fromHex(
-                                                        "#17404a",
-                                                      ),
-                                                ),
+                                                //   backgroundColor:
+                                                //       HexColor.fromHex(
+                                                //         "#17404a",
+                                                //       ),
+                                                // ),
                                               ],
                                             ),
                                           ),

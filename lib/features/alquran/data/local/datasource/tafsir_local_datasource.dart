@@ -1,20 +1,25 @@
-import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/features/alquran/data/local/tafsir_cache.dart';
-import 'package:isar/isar.dart';
 
 class TafsirLocalDataSource {
-  final isar = IsarService.isar;
-
   Future<void> saveTafsir(List<TafsirCache> data) async {
-    await isar.writeTxn(() async {
-      await isar.tafsirCaches.putAll(data);
-    });
+    final keysToDelete = HiveService.tafsirBox.values
+        .where((t) => t.nomorSurah == data.first.nomorSurah)
+        .map((t) => t.key as int)
+        .toList();
+    for (final key in keysToDelete) {
+      await HiveService.tafsirBox.delete(key);
+    }
+    for (final item in data) {
+      await HiveService.tafsirBox.add(item);
+    }
   }
 
   Future<List<TafsirCache>> getBySurah(int nomor) {
-    return isar.tafsirCaches
-    .filter()
-    .nomorSurahEqualTo(nomor)
-    .findAll();
+    return Future.value(
+      HiveService.tafsirBox.values
+          .where((t) => t.nomorSurah == nomor)
+          .toList(),
+    );
   }
 }

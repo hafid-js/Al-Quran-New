@@ -22,7 +22,7 @@ class PrayerItemWidget extends StatelessWidget {
         children: [
           Container(
             width: 90,
-            height: 103,
+            height: 95,
             decoration: BoxDecoration(
               border: BoxBorder.all(
                 width: 0.5,
@@ -34,11 +34,11 @@ class PrayerItemWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: Theme.of(context).colorScheme.primary),
+                Icon(icon, color: Theme.of(context).colorScheme.primary, size: 18,),
                 SizedBox(height: 5),
-                Text(label, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16)),
+                Text(label, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14,)),
                 SizedBox(height: 5),
-                Text(time, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(time, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
                 SizedBox(height: 5),
                 Icon(
                   Icons.brightness_1_rounded,
@@ -54,14 +54,16 @@ class PrayerItemWidget extends StatelessWidget {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Theme.of(context).textTheme.labelLarge?.color),
+          Icon(icon, color: Theme.of(context).textTheme.labelLarge?.color, size: 18,),
           SizedBox(height: 5),
           Text(
             label,
-            style: Theme.of(context).textTheme.labelSmall
+            style: TextStyle(
+              fontSize: 12
+            ),
           ),
           SizedBox(height: 5),
-          Text(time, style: Theme.of(context).textTheme.labelLarge),
+          Text(time, style: TextStyle(color: Theme.of(context).textTheme.labelMedium?.color, fontSize: 14, fontWeight: FontWeight.bold)),
         ],
       );
     }

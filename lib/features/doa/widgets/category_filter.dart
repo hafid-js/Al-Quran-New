@@ -35,10 +35,10 @@ class CategoryFilter extends StatelessWidget {
                 }
               },
               style: ElevatedButton.styleFrom(
-                 side: BorderSide(
-      color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
-      width: 0.15,
-    ),
+    //              side: BorderSide(
+    //   color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+    //   width: 0.15,
+    // ),
 
                 backgroundColor: isActive
                              ? Theme.of(context).primaryColor

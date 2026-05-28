@@ -170,6 +170,7 @@ final city = controller.currentCity.value;
                             child: Icon(
                               Icons.location_on,
                               color: Theme.of(context).colorScheme.primary,
+                              size: 20,
                             ),
                           ),
 
@@ -177,7 +178,7 @@ final city = controller.currentCity.value;
 
                           Text(
                             city,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                                      const SizedBox(width: 6),
 
@@ -200,8 +201,8 @@ final city = controller.currentCity.value;
                       ),
 
                       Container(
-                        height: 50,
-                        width: 50,
+                        height: 40,
+                        width: 40,
 
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
@@ -211,7 +212,7 @@ final city = controller.currentCity.value;
 
                         child: Icon(
                           Icons.location_on,
-                          size: 30,
+                          size: 25,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -220,7 +221,6 @@ final city = controller.currentCity.value;
 
                   const SizedBox(height: 20),
 
-                  /// CARD SHOLAT
                   Container(
                     width: double.infinity,
                     clipBehavior: Clip.hardEdge,
@@ -250,12 +250,12 @@ final city = controller.currentCity.value;
                             "Assalamu'alaikum,",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
 
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
 
                           Center(
                             child: Container(
@@ -274,13 +274,13 @@ final city = controller.currentCity.value;
 
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
                           ),
 
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
 
                           Obx(() {
                             final date = controller.nextPrayerTime.value;
@@ -310,15 +310,14 @@ final city = controller.currentCity.value;
                                       jam,
                                       style: TextStyle(
                                         color: HexColor.fromHex("#a5d9d4"),
-                                        fontSize: 22,
+                                        fontSize: 18,
                                       ),
                                     ),
                                   ],
                                 ),
 
                                 Container(
-                                  height: 80,
-                                  width: 150,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                   decoration: BoxDecoration(
                                     color: HexColor.fromHex("#249085"),
                                     borderRadius: BorderRadius.circular(16),
@@ -336,7 +335,7 @@ final city = controller.currentCity.value;
                                           "${(remaining.inSeconds % 60).toString().padLeft(2, '0')}",
                                           style: const TextStyle(
                                             color: Colors.white,
-                                            fontSize: 25,
+                                            fontSize: 22,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -363,8 +362,8 @@ final city = controller.currentCity.value;
                       Row(
                         children: [
                           Container(
-                            height: 40,
-                            width: 40,
+                            height: 35,
+                            width: 35,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               color: Theme.of(context).colorScheme.surface,
@@ -372,21 +371,22 @@ final city = controller.currentCity.value;
                             child: Icon(
                               Icons.access_time_filled_outlined,
                               color: Theme.of(context).colorScheme.primary,
+                              size: 20,
                             ),
                           ),
                           SizedBox(width: 12),
 
                           Text(
                             "Jadwal Sholat",
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
                       ),
                       GestureDetector(
                         onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
                         child: Container(
-                          height: 40,
-                          width: 40,
+                          height: 35,
+                          width: 35,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Theme.of(context).colorScheme.surface,
@@ -394,6 +394,7 @@ final city = controller.currentCity.value;
                           child: Icon(
                             Icons.notifications,
                             color: Theme.of(context).colorScheme.primary,
+                            size: 20,
                           ),
                         ),
                       ),
@@ -403,7 +404,7 @@ final city = controller.currentCity.value;
                   SizedBox(height: 20),
 
                   Container(
-                    height: 257,
+                    padding: EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
@@ -416,7 +417,7 @@ final city = controller.currentCity.value;
                       physics: NeverScrollableScrollPhysics(),
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 7,
-                      padding: EdgeInsets.only(right: 15, left: 15, top: 10),
+                      padding: EdgeInsets.only(right: 18, left: 18, top: 5),
                       childAspectRatio: 1,
 
                       children: [
@@ -471,8 +472,8 @@ final city = controller.currentCity.value;
                           Row(
                             children: [
                               Container(
-                                height: 40,
-                                width: 40,
+                                height: 35,
+                                width: 35,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   color: Theme.of(context).colorScheme.surface,
@@ -480,6 +481,7 @@ final city = controller.currentCity.value;
                                 child: Icon(
                                   Icons.grid_view_rounded,
                                   color: Theme.of(context).colorScheme.primary,
+                                  size: 20,
                                 ),
                               ),
 
@@ -487,7 +489,7 @@ final city = controller.currentCity.value;
 
                               Text(
                                 "Menu",
-                                style: Theme.of(context).textTheme.titleLarge,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],
                           ),
@@ -501,11 +503,10 @@ final city = controller.currentCity.value;
                             },
 
                             child: Container(
-                              height: 40,
-                              width: 140,
+                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color: Theme.of(context).colorScheme.surface,
+                                color: Theme.of(context).colorScheme.surface.withAlpha(20),
                               ),
 
                               child: Row(
@@ -521,7 +522,7 @@ final city = controller.currentCity.value;
                                         context,
                                       ).colorScheme.primary,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                     ),
                                   ),
 
@@ -570,8 +571,8 @@ final city = controller.currentCity.value;
                               },
 
                               child: Container(
-                                width: 115,
-                                height: 115,
+                                width: 100,
+                                height: 108,
                                 padding: EdgeInsets.symmetric(vertical: 12),
 
                                 decoration: BoxDecoration(
@@ -584,8 +585,8 @@ final city = controller.currentCity.value;
 
                                   children: [
                                     Container(
-                                      height: 55,
-                                      width: 55,
+                                      height: 50,
+                                      width: 50,
 
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
@@ -615,7 +616,7 @@ final city = controller.currentCity.value;
                                         textAlign: TextAlign.center,
 
                                         style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           color: HexColor.fromHex("#5a7b8a"),
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -650,8 +651,8 @@ final city = controller.currentCity.value;
                                       },
 
                                       child: Container(
-                                        width: 115,
-                                        height: 115,
+                                    width: 100,
+                                height: 108,
                                         padding: EdgeInsets.symmetric(
                                           vertical: 12,
                                         ),
@@ -701,7 +702,7 @@ final city = controller.currentCity.value;
                                                 textAlign: TextAlign.center,
 
                                                 style: TextStyle(
-                                                  fontSize: 13,
+                                           fontSize: 12,
                                                   color: HexColor.fromHex(
                                                     "#5a7b8a",
                                                   ),

@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:alquran_new/core/constants/api_endpoints.dart';
-import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:http/http.dart' as http;
-import 'package:isar/isar.dart';
 
 class LocationService {
   static Future<List<String>> getProvinces() async {
@@ -51,13 +50,11 @@ class LocationService {
     ..city = city
     ..updatedAt = DateTime.now();
 
-    await IsarService.isar.writeTxn(() async {
-      await IsarService.isar.locationCaches.clear();
-      await IsarService.isar.locationCaches.put(data);
-    });
+    await HiveService.locationBox.clear();
+    await HiveService.locationBox.add(data);
   }
 
   static Future<LocationCache?> getLocation() async {
-    return await IsarService.isar.locationCaches.where().findFirst();
+    return HiveService.locationBox.values.firstOrNull;
   }
 }

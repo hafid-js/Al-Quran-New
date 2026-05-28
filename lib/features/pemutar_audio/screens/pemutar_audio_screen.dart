@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:percent_indicator/flutter_percent_indicator.dart';
 
 class PemutarAudioScreen extends StatefulWidget {
   const PemutarAudioScreen({super.key});
@@ -19,6 +18,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
   @override
   Widget build(BuildContext context) {
     final SurahController controller = Get.put(SurahController());
+
+    // final SettingsController settingsController = Get.find<SettingsController>();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -316,139 +317,34 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                             );
                             final activeSurahNomor =
                                 controller.activeSurahNomor.value;
-                            return kondisi == "playing" &&
-                                    activeSurahNomor == surah.nomor
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 10,
-                                      right: 16,
-                                      left: 16,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            border: BoxBorder.all(
-                                              width: 0.5,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                            ),
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.surface,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                          ),
-                                          child: ListTile(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                  horizontal: 16,
-                                                ),
-                                            leading: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              onTap: () {
-                                                controller.playAudio(surah);
-                                              },
-                                              child: Container(
-                                                height: 45,
-                                                width: 45,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                      .withAlpha(80),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: Center(
-                                                  child: Icon(
-                                                    Icons
-                                                        .pause_circle_filled_outlined,
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            title: Text(
-                                              surah.namaLatin,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.titleSmall,
-                                            ),
-                                            subtitle: Wrap(
-                                              spacing: 5,
-                                              runSpacing: 4,
-                                              children: [
-                                                Text(
-                                                  surah.arti,
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.labelMedium,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                    top: 9,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.circle,
-                                                    size: 5,
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .labelMedium
-                                                        ?.color,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "${surah.jumlahAyat} Ayat",
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.labelMedium,
-                                                ),
-                                              ],
-                                            ),
-                                            trailing: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  surah.nama,
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: HexColor.fromHex(
-                                                      "#8da6b7",
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 15),
 
-                                                Icon(
-                                                  Icons
-                                                      .download_for_offline_outlined,
-                                                  color: Theme.of(
-                                                    context,
-                                                  ).colorScheme.primary,
-                                                  size: 22,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                            Widget buildPlaying() {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  right: 16,
+                                  left: 16,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: BoxBorder.all(
+                                          width: 0.5,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
-                                      ],
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 10,
-                                      right: 16,
-                                      left: 16,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        InkWell(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.surface,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        leading: InkWell(
                                           borderRadius: BorderRadius.circular(
                                             16,
                                           ),
@@ -456,114 +352,402 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                             controller.playAudio(surah);
                                           },
                                           child: Container(
+                                            height: 35,
+                                            width: 35,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(
-                                                context,
-                                              ).cardColor,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withAlpha(80),
                                               borderRadius:
-                                                  BorderRadius.circular(16),
+                                                  BorderRadius.circular(12),
                                             ),
-                                            child: ListTile(
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                    horizontal: 16,
-                                                  ),
-                                              leading: Container(
-                                                height: 45,
-                                                width: 45,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                      .withAlpha(40),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    surah.nomor.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              title: Text(
-                                                surah.namaLatin,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.titleSmall,
-                                              ),
-                                              subtitle: Wrap(
-                                                spacing: 5,
-                                                runSpacing: 4,
-                                                children: [
-                                                  Text(
-                                                    surah.arti,
-                                                    style: Theme.of(
-                                                      context,
-                                                    ).textTheme.labelMedium,
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 9,
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.circle,
-                                                      size: 5,
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .labelMedium
-                                                          ?.color,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "${surah.jumlahAyat} Ayat",
-                                                    style: Theme.of(
-                                                      context,
-                                                    ).textTheme.labelMedium,
-                                                  ),
-                                                ],
-                                              ),
-                                              trailing: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    surah.nama,
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium
-                                                          ?.color,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 15),
-                                                  AnimatedRotation(
-                                                    turns: 1.75,
-                                                    duration: Duration(
-                                                      milliseconds: 300,
-                                                    ),
-                                                    child: Icon(
+                                            child: Center(
+                                              child: kondisi == "pause"
+                                                  ? Icon(
                                                       Icons
-                                                          .arrow_circle_left_rounded,
+                                                          .play_circle_fill_rounded,
                                                       color: Theme.of(
                                                         context,
                                                       ).colorScheme.primary,
-                                                      size: 22,
+                                                    )
+                                                  : Icon(
+                                                      Icons
+                                                          .pause_circle_filled_outlined,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
                                             ),
                                           ),
                                         ),
-                                      ],
+                                        title: Text(
+                                          surah.namaLatin,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.titleSmall,
+                                        ),
+                                        subtitle: Wrap(
+                                          spacing: 3,
+                                          runSpacing: 4,
+                                          children: [
+                                            Text(
+                                              surah.arti,
+                                              style: TextStyle(
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 9),
+                                              child: Icon(
+                                                Icons.circle,
+                                                size: 3,
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${surah.jumlahAyat} Ayat",
+                                              style: TextStyle(
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              surah.nama,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.titleMedium?.color,
+                                              ),
+                                            ),
+                                            SizedBox(width: 15),
+                                            Icon(
+                                              Icons
+                                                  .download_for_offline_outlined,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                              size: 22,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  );
+                                  ],
+                                ),
+                              );
+                            }
+
+                            Widget buildPause() {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  right: 16,
+                                  left: 16,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: BoxBorder.all(
+                                          width: 0.5,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.surface,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        leading: InkWell(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          onTap: () {
+                                            controller.playAudio(surah);
+                                          },
+                                          child: Container(
+                                            height: 35,
+                                            width: 35,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withAlpha(80),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: Center(
+                                              child: kondisi == "pause"
+                                                  ? Icon(
+                                                      Icons
+                                                          .play_circle_fill_rounded,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                    )
+                                                  : Icon(
+                                                      Icons
+                                                          .pause_circle_filled_outlined,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          surah.namaLatin,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.titleSmall,
+                                        ),
+                                        subtitle: Wrap(
+                                          spacing: 3,
+                                          runSpacing: 4,
+                                          children: [
+                                            Text(
+                                              surah.arti,
+                                              style: TextStyle(
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 9),
+                                              child: Icon(
+                                                Icons.circle,
+                                                size: 3,
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${surah.jumlahAyat} Ayat",
+                                              style: TextStyle(
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall?.color,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              surah.nama,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Theme.of(
+                                                  context,
+                                                ).textTheme.titleMedium?.color,
+                                              ),
+                                            ),
+                                            SizedBox(width: 15),
+                                            Icon(
+                                              Icons
+                                                  .download_for_offline_outlined,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                              size: 22,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            Widget buildDefault() {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  right: 16,
+                                  left: 16,
+                                ),
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(16),
+                                      onTap: () {
+                                        controller.playAudio(surah);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).cardColor,
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
+                                        child: ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          leading: Container(
+                                            height: 35,
+                                            width: 35,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withAlpha(40),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: Center(
+                                              child: Obx(() {
+                                                final state = controller
+                                                    .getSurahAudioState(
+                                                      surah.nomor,
+                                                    );
+                                                if (state == "loading") {
+                                                  return SizedBox(
+                                                    width: 18,
+                                                    height: 18,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary,
+                                                        ),
+                                                  );
+                                                }
+                                                return Text(
+                                                  surah.nomor.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                          title: Text(
+                                            surah.namaLatin,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.titleSmall,
+                                          ),
+                                          subtitle: Wrap(
+                                            spacing: 3,
+                                            runSpacing: 4,
+                                            children: [
+                                              Text(
+                                                surah.arti,
+                                                style: TextStyle(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelSmall?.color,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: 9,
+                                                ),
+                                                child: Icon(
+                                                  Icons.circle,
+                                                  size: 3,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelSmall?.color,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${surah.jumlahAyat} Ayat",
+                                                style: TextStyle(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.labelSmall?.color,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                surah.nama,
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.color,
+                                                ),
+                                              ),
+                                              SizedBox(width: 15),
+                                              AnimatedRotation(
+                                                turns: 1.75,
+                                                duration: Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                child: Icon(
+                                                  Icons
+                                                      .arrow_circle_left_rounded,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            if (kondisi == "playing" &&
+                                activeSurahNomor == surah.nomor) {
+                              return buildPlaying();
+                            }
+
+                            if (kondisi == "pause" &&
+                                activeSurahNomor == surah.nomor) {
+                              return buildPause();
+                            }
+
+                            return buildDefault();
                           });
                         },
                       );
@@ -580,7 +764,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                         left: 0,
                         right: 0,
                         child: Container(
-                          height: 120,
+                          padding: EdgeInsets.only(bottom: 0),
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
                           ),
@@ -607,17 +791,135 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                         : position.inMilliseconds /
                                               duration.inMilliseconds;
 
-                                    return LinearPercentIndicator(
-                                      backgroundColor: Theme.of(
-                                        context,
-                                      ).disabledColor,
-                                      padding: EdgeInsets.zero,
-                                      barRadius: const Radius.circular(16),
-                                      lineHeight: 4,
-                                      percent: percent.clamp(0.0, 1.0),
-                                      progressColor: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
+                                    return GestureDetector(
+                                      onHorizontalDragUpdate: (details) {
+                                        final box =
+                                            context.findRenderObject()
+                                                as RenderBox;
+                                        final local = box.globalToLocal(
+                                          details.globalPosition,
+                                        );
+
+                                        final width = box.size.width;
+                                        final dx = local.dx.clamp(0.0, width);
+
+                                        final duration =
+                                            controller.player.duration ??
+                                            Duration.zero;
+                                        final newPosition =
+                                            duration * (dx / width);
+
+                                        controller.player.seek(newPosition);
+                                      },
+                                      onTapDown: (details) {
+                                        final box =
+                                            context.findRenderObject()
+                                                as RenderBox;
+                                        final local = box.globalToLocal(
+                                          details.globalPosition,
+                                        );
+
+                                        final width = box.size.width;
+                                        final dx = local.dx.clamp(0.0, width);
+
+                                        final duration =
+                                            controller.player.duration ??
+                                            Duration.zero;
+                                        final newPosition =
+                                            duration * (dx / width);
+
+                                        controller.player.seek(newPosition);
+                                      },
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          final width = constraints.maxWidth;
+
+                                          return StreamBuilder<Duration>(
+                                            stream: controller
+                                                .player
+                                                .positionStream,
+                                            builder: (context, snapshot) {
+                                              final position =
+                                                  snapshot.data ??
+                                                  Duration.zero;
+                                              final duration =
+                                                  controller.player.duration ??
+                                                  Duration.zero;
+
+                                              final percent =
+                                                  duration.inMilliseconds == 0
+                                                  ? 0.0
+                                                  : position.inMilliseconds /
+                                                        duration.inMilliseconds;
+
+                                              final clamped = percent.clamp(
+                                                0.0,
+                                                1.0,
+                                              );
+                                              final knobX = width * clamped;
+
+                                              return SizedBox(
+                                                height: 20,
+                                                child: Stack(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  children: [
+                                                    Container(
+                                                      height: 4,
+                                                      width: width,
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).disabledColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10,
+                                                            ),
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      height: 4,
+                                                      width: knobX,
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10,
+                                                            ),
+                                                      ),
+                                                    ),
+
+                                                    Positioned(
+                                                      left: knobX - 6,
+                                                      child: Container(
+                                                        width: 12,
+                                                        height: 12,
+                                                        decoration: BoxDecoration(
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              blurRadius: 4,
+                                                              color: Colors
+                                                                  .black26,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                                     );
                                   },
                                 ),
@@ -629,15 +931,21 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                   child: CachedNetworkImage(
                                     imageUrl:
                                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
-                                    width: 45,
-                                    height: 45,
+                                    width: 40,
+                                    height: 40,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                                 title: Text(
                                   surah.namaLatin,
 
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall?.color,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                                 subtitle: StreamBuilder<Duration>(
                                   stream: controller.player.positionStream,
@@ -664,24 +972,29 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        color: HexColor.fromHex(
-                                          "#5a7b8a",
-                                        ).withAlpha(30),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.skip_previous_rounded,
-                                          color: HexColor.fromHex("#8da6b7"),
-                                          size: 30,
+                                    InkWell(
+                                      onTap: () => controller.playPrevious(),
+                                      child: Container(
+                                        height: 35,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          color: HexColor.fromHex(
+                                            "#5a7b8a",
+                                          ).withAlpha(30),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.skip_previous_rounded,
+                                            color: HexColor.fromHex("#8da6b7"),
+                                            size: 30,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: 6),
                                     Obx(() {
                                       final kondisi = controller
                                           .getSurahAudioState(surah.nomor);
@@ -691,8 +1004,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 controller.pauseAudio(surah);
                                               },
                                               child: Container(
-                                                height: 40,
-                                                width: 40,
+                                                height: 35,
+                                                width: 35,
                                                 decoration: BoxDecoration(
                                                   color: HexColor.fromHex(
                                                     "#5a7b8a",
@@ -717,8 +1030,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 controller.resumeAudio(surah);
                                               },
                                               child: Container(
-                                                height: 40,
-                                                width: 40,
+                                                height: 35,
+                                                width: 35,
                                                 decoration: BoxDecoration(
                                                   color: HexColor.fromHex(
                                                     "#5a7b8a",
@@ -739,32 +1052,37 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               ),
                                             );
                                     }),
-                                    SizedBox(width: 5),
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        color: HexColor.fromHex(
-                                          "#5a7b8a",
-                                        ).withAlpha(30),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.skip_next_rounded,
-                                          color: HexColor.fromHex("#8da6b7"),
-                                          size: 30,
+                                    SizedBox(width: 6),
+                                    InkWell(
+                                      onTap: () => controller.playNext(),
+                                      child: Container(
+                                        height: 35,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          color: HexColor.fromHex(
+                                            "#5a7b8a",
+                                          ).withAlpha(30),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.skip_next_rounded,
+                                            color: HexColor.fromHex("#8da6b7"),
+                                            size: 30,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: 6),
                                     InkWell(
                                       onTap: () {
                                         controller.stopAudio(surah);
                                       },
                                       child: Container(
-                                        height: 40,
-                                        width: 40,
+                                        height: 35,
+                                        width: 35,
                                         decoration: BoxDecoration(
                                           color: HexColor.fromHex(
                                             "#5a7b8a",

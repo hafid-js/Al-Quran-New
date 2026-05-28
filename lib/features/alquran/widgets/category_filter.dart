@@ -28,10 +28,10 @@ class CategoryFilter extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => onCategorySelected(category),
               style: ElevatedButton.styleFrom(
-                 side: BorderSide(
-      color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
-      width: 0.15,
-    ),
+    //              side: BorderSide(
+    //   color: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+    //   width: 2,
+    // ),
                 backgroundColor: isActive
                     ? Theme.of(context).primaryColor
                     : Theme.of(context).cardColor,

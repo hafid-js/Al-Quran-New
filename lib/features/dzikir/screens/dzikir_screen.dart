@@ -678,7 +678,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
             borderRadius: BorderRadius.circular(16),
             color: Theme.of(context).cardColor,
           ),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(14),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -696,8 +696,8 @@ class _DzikirScreenState extends State<DzikirScreen> {
           ),
         ),
         Positioned(
-          bottom: 180,
-          right: 60,
+          bottom: 120,
+          right: 30,
           child: CircularPercentIndicator(
             backgroundColor: Theme.of(context).cardColor.withAlpha(100),
             backgroundWidth: 9,
@@ -759,7 +759,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
         ),
 
         Positioned(
-          bottom: 40,
+          bottom: 20,
           left: 0,
           right: 0,
           child: Container(

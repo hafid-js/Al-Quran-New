@@ -1,13 +1,13 @@
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'location_cache.g.dart';
 
-@Collection()
-class LocationCache {
-  Id id = Isar.autoIncrement;
-
+@HiveType(typeId: 6)
+class LocationCache extends HiveObject {
+  @HiveField(0)
   late String province;
+  @HiveField(1)
   late String city;
-
+  @HiveField(2)
   DateTime updatedAt = DateTime.now();
 }

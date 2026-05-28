@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:alquran_new/core/db/isar_service.dart';
+import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/datasource/surah_local_datasource.dart';
@@ -14,9 +14,9 @@ import 'package:just_audio/just_audio.dart';
 class SurahController extends GetxController {
   final GetAllSurah _getAllSurah = Get.find();
   final SurahLocalDatasource local = SurahLocalDatasource();
-   final isar = IsarService.isar;
 
   var isLoading = false.obs;
+    var isAudioLoading = false.obs;
   var surahList = <Surah>[].obs;
   var filteredSurah = <Surah>[].obs;
   var activeCategory = "Surah".obs;
@@ -24,6 +24,11 @@ class SurahController extends GetxController {
 
   final surahAudioStates = <int, RxString>{};
   var activeSurahNomor = Rxn<int>();
+
+ int get _currentIndex {
+  return surahList.indexWhere((e) => e.nomor == activeSurahNomor.value);
+}
+  
 
   @override
   void onInit() {
@@ -47,12 +52,10 @@ Future<void> fetchSurah() async {
     final cache = await local.getSurah();
 
     if (cache.isNotEmpty) {
-      for (final s in cache) {
-        await s.ayat.load();
-      }
-
       surahList.value = cache.map((e) {
-        final ayatList = e.ayat.toList()
+        final ayatList = HiveService.ayatBox.values
+            .where((a) => a.surahNomor == e.nomor)
+            .toList()
           ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
 
         return Surah(
@@ -92,40 +95,38 @@ Future<void> fetchSurah() async {
 
       final hasAyat = result.data.any((e) => e.ayat.isNotEmpty);
 
-      await isar.writeTxn(() async {
+      if (hasAyat) {
+        await HiveService.ayatBox.clear();
+      }
+      await HiveService.surahBox.clear();
+
+      for (final e in result.data) {
+        final surah = SurahCache()
+          ..nomor = e.nomor
+          ..namaLatin = e.namaLatin
+          ..nama = e.nama
+          ..deskripsi = e.deskripsi
+          ..jumlahAyat = e.jumlahAyat
+          ..tempatTurun = e.tempatTurun.name
+          ..arti = e.arti
+          ..audioUrl = e.audioFull.values.first;
+
+        await HiveService.surahBox.add(surah);
+
         if (hasAyat) {
-          await isar.ayatCaches.clear();
-        }
-        await isar.surahCaches.clear();
+          for (final a in e.ayat) {
+            final ayat = AyatCache()
+              ..nomorAyat = a.nomorAyat
+              ..teksArab = a.teksArab
+              ..teksLatin = a.teksLatin
+              ..teksIndonesia = a.teksIndonesia
+              ..audioJson = jsonEncode(a.audio)
+              ..surahNomor = e.nomor;
 
-        for (final e in result.data) {
-          final surah = SurahCache()
-            ..nomor = e.nomor
-            ..namaLatin = e.namaLatin
-            ..nama = e.nama
-            ..deskripsi = e.deskripsi
-            ..jumlahAyat = e.jumlahAyat
-            ..tempatTurun = e.tempatTurun.name
-            ..arti = e.arti
-            ..audioUrl = e.audioFull.values.first;
-
-          await isar.surahCaches.put(surah);
-
-          if (hasAyat) {
-            for (final a in e.ayat) {
-              final ayat = AyatCache()
-                ..nomorAyat = a.nomorAyat
-                ..teksArab = a.teksArab
-                ..teksLatin = a.teksLatin
-                ..teksIndonesia = a.teksIndonesia
-                ..audioJson = jsonEncode(a.audio)
-                ..surah.value = surah;
-
-              await isar.ayatCaches.put(ayat);
-            }
+            await HiveService.ayatBox.add(ayat);
           }
         }
-      });
+      }
 
     }
   } finally {
@@ -134,9 +135,7 @@ Future<void> fetchSurah() async {
 }
 
   Future<void> refreshSurah() async {
-    await local.isar.writeTxn(() async {
-      await local.isar.surahCaches.clear();
-    });
+    await HiveService.surahBox.clear();
 
     await fetchSurah();
   }
@@ -152,25 +151,41 @@ Future<void> fetchSurah() async {
     }
   }
 
-  void playAudio(Surah surah) async {
-    if (surah.audioFull.values.isEmpty || surah.audioFull.values.first.isEmpty) return;
+Future<void> playAudio(Surah surah) async {
+  final url = surah.audioFull.values.firstOrNull ?? "";
+  if (url.isEmpty) return;
 
-    try {
-      if (activeSurahNomor.value != null && activeSurahNomor.value != surah.nomor) {
-        _setSurahAudioState(activeSurahNomor.value!, "stop");
-      }
+  try {
 
-      activeSurahNomor.value = surah.nomor;
+    final previous = activeSurahNomor.value;
 
-      await player.stop();
-      await player.setUrl(surah.audioFull.values.first);
+    activeSurahNomor.value = surah.nomor;
 
-      _setSurahAudioState(surah.nomor, "playing");
-      await player.play();
-    } catch (e) {
-      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
+    _setSurahAudioState(surah.nomor, "loading");
+
+    player.stop();
+
+    await player.setUrl(url);
+
+    _setSurahAudioState(surah.nomor, "playing");
+
+    await player.play();
+
+    if (previous != null && previous != surah.nomor) {
+      _setSurahAudioState(previous, "stop");
     }
+
+  } on PlayerInterruptedException {
+// biarin
+  } catch (e) {
+    _setSurahAudioState(surah.nomor, "stop");
+
+    Get.defaultDialog(
+      title: "Terjadi Kesalahan",
+      middleText: e.toString(),
+    );
   }
+}
 
   void pauseAudio(Surah surah) async {
     try {
@@ -202,6 +217,28 @@ Future<void> fetchSurah() async {
       Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
     }
   }
+
+  Future<void> playNext() async {
+  if (surahList.isEmpty) return;
+
+  final currentIndex = _currentIndex;
+  if (currentIndex == -1 || currentIndex + 1 >= surahList.length) return;
+
+  final nextSurah = surahList[currentIndex + 1];
+  await playAudio(nextSurah);
+}
+
+Future<void> playPrevious() async {
+  if (surahList.isEmpty) return;
+
+  final currentIndex = _currentIndex;
+  if (currentIndex <= 0) return;
+
+  final prevSurah = surahList[currentIndex - 1];
+  await playAudio(prevSurah);
+}
+
+  
 
     String formatDuration(Duration d) {
     final minutes = d.inMinutes.remainder(60).toString().padLeft(2,'0');
