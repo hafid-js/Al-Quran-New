@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/network/dio_client.dart';
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_source.dart';
 import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
@@ -33,5 +34,6 @@ class SurahBinding extends Bindings {
 
     Get.lazyPut(() => SurahController());
     Get.lazyPut(() => DetailSurahController());
+    Get.lazyPut(()=>NetworkController());
   }
 }

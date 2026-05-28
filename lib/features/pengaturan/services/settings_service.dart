@@ -3,12 +3,18 @@ import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
 
 class SettingsService {
   Future<AppSettings> getSettings() async {
-    final data = HiveService.settingsBox.get(0);
+    final box = HiveService.settingsBox;
 
-    if(data != null) return data;
+    if (!box.isOpen) {
+      throw Exception("Settings box belum dibuka");
+    }
+
+    final data = box.get(0);
+
+    if (data is AppSettings) return data;
 
     final settings = AppSettings();
-    await HiveService.settingsBox.put(0, settings);
+    await box.put(0, settings);
 
     return settings;
   }

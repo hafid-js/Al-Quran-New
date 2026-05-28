@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Pemutar Audio",
       "icon": Icons.headset_rounded,
       "page": () => const PemutarAudioScreen(),
-      "binding": PemutarAudioBinding()
+      "binding": PemutarAudioBinding(),
     },
   ];
 
@@ -96,7 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
       "icon": Icons.bookmarks_rounded,
       "page": () => const BookmarkScreen(),
     },
-    // {"title": "Tasbih", "icon": Icons.touch_app_rounded, "page": null},
   ];
 
   bool showAllMenus = false;
@@ -119,8 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return const Scaffold(body: Center(child: Text("Data kosong")));
       }
 
-      final visibleMenus = showAllMenus ? menus : menus.take(6).toList();
-
       late final DateTime formattingDate;
 
       try {
@@ -135,9 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
         formattingDate,
       ).toFormat("dd MMMM yyyy H");
 
-
-
-final city = controller.currentCity.value;
+      final city = controller.currentCity.value;
 
       return Obx(() {
         return Scaffold(
@@ -151,7 +146,6 @@ final city = controller.currentCity.value;
 
               child: Column(
                 children: [
-                  /// HEADER
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
@@ -180,23 +174,22 @@ final city = controller.currentCity.value;
                             city,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                                     const SizedBox(width: 6),
+                          const SizedBox(width: 6),
 
                           GestureDetector(
                             onTap: () => Get.to(() => LokasiScreen()),
                             child: AnimatedRotation(
-                                                    turns: 1.75,
-                                                    duration: Duration(
-                                                      milliseconds: 300,
-                                                    ),
-                                                    child: Icon(
-                                                      Icons
-                                                          .arrow_circle_left_rounded,
-                                                      color: Theme.of(context).textTheme.labelLarge?.color,
-                                                      size: 22,
-                                                    ),
-                                                  ),
-                          )
+                              turns: 1.75,
+                              duration: Duration(milliseconds: 300),
+                              child: Icon(
+                                Icons.arrow_circle_left_rounded,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.labelLarge?.color,
+                                size: 22,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
 
@@ -317,7 +310,10 @@ final city = controller.currentCity.value;
                                 ),
 
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: HexColor.fromHex("#249085"),
                                     borderRadius: BorderRadius.circular(16),
@@ -404,64 +400,84 @@ final city = controller.currentCity.value;
                   SizedBox(height: 20),
 
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
-                    clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: GridView.count(
-                      crossAxisCount: 3,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 7,
-                      padding: EdgeInsets.only(right: 18, left: 18, top: 5),
-                      childAspectRatio: 1,
-
+                    child: Stack(
                       children: [
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Imsak",
-                          time: item.imsak,
-                          icon: Icons.bedtime_rounded,
+                        GridView.count(
+                          crossAxisCount: 3,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisSpacing: 2,
+                          mainAxisSpacing: 7,
+                          padding: const EdgeInsets.only(
+                            right: 18,
+                            left: 18,
+                            top: 5,
+                            bottom: 5,
+                          ),
+                          childAspectRatio: 1,
+                          children: [
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Imsak",
+                              time: item.imsak,
+                              icon: Icons.bedtime_rounded,
+                            ),
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Subuh",
+                              time: item.subuh,
+                              icon: Icons.bedtime_rounded,
+                            ),
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Dzuhur",
+                              time: item.dzuhur,
+                              icon: Icons.sunny,
+                            ),
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Ashar",
+                              time: item.ashar,
+                              icon: Icons.sunny_snowing,
+                            ),
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Maghrib",
+                              time: item.maghrib,
+                              icon: Icons.bedtime_rounded,
+                            ),
+                            PrayerItemWidget(
+                              nextPrayer: controller.nextPrayerName.toString(),
+                              label: "Isya",
+                              time: item.isya,
+                              icon: Icons.bedtime_rounded,
+                            ),
+                          ],
                         ),
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Subuh",
-                          time: item.subuh,
-                          icon: Icons.bedtime_rounded,
-                        ),
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Dzuhur",
-                          time: item.dzuhur,
-                          icon: Icons.sunny,
-                        ),
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Ashar",
-                          time: item.ashar,
-                          icon: Icons.sunny_snowing,
-                        ),
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Maghrib",
-                          time: item.maghrib,
-                          icon: Icons.bedtime_rounded,
-                        ),
-                        PrayerItemWidget(
-                          nextPrayer: controller.nextPrayerName.toString(),
-                          label: "Isya",
-                          time: item.isya,
-                          icon: Icons.bedtime_rounded,
+
+                        Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Container(
+                              height: 1,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              color: Colors.grey.withAlpha(15),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 20),
 
                   SizedBox(height: 20),
                   Column(
@@ -503,10 +519,15 @@ final city = controller.currentCity.value;
                             },
 
                             child: Container(
-                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color: Theme.of(context).colorScheme.surface.withAlpha(20),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.surface.withAlpha(20),
                               ),
 
                               child: Row(
@@ -552,173 +573,39 @@ final city = controller.currentCity.value;
                       AnimatedSize(
                         duration: Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
-
-                        child: Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
-
-                          children: visibleMenus.map((nextMenu) {
-                            return InkWell(
-                              borderRadius: BorderRadius.circular(16),
-
-                              onTap: () {
-                                if (nextMenu["page"] != null) {
-                                  Get.to(
-                                    nextMenu["page"],
-                                    binding: nextMenu["binding"],
-                                  );
-                                }
-                              },
-
-                              child: Container(
-                                width: 100,
-                                height: 108,
-                                padding: EdgeInsets.symmetric(vertical: 12),
-
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.surface,
-                                      ),
-
-                                      child: Icon(
-                                        nextMenu["icon"],
-                                        size: 30,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                      ),
-                                    ),
-
-                                    SizedBox(height: 10),
-
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                      ),
-
-                                      child: Text(
-                                        nextMenu["title"],
-                                        textAlign: TextAlign.center,
-
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: HexColor.fromHex("#5a7b8a"),
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.9,
+                          padding: EdgeInsets.zero,
+                          children: menus.map((menu) {
+                            return _buildMenuItem(context, menu);
                           }).toList(),
                         ),
                       ),
 
                       SizedBox(height: 12),
 
-                      showAllMenus
-                          ? AnimatedSize(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-
-                              child: Row(
-                                children: nextMenus.map((menu) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(right: 12),
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(16),
-
-                                      onTap: () {
-                                        if (menu["page"] != null) {
-                                          Get.to(menu["page"]);
-                                        }
-                                      },
-
-                                      child: Container(
-                                    width: 100,
-                                height: 108,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 12,
-                                        ),
-
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-
-                                          children: [
-                                            Container(
-                                              height: 55,
-                                              width: 55,
-
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.surface,
-                                              ),
-
-                                              child: Icon(
-                                                menu["icon"],
-                                                size: 30,
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.primary,
-                                              ),
-                                            ),
-
-                                            SizedBox(height: 10),
-
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 6,
-                                              ),
-
-                                              child: Text(
-                                                menu["title"],
-                                                textAlign: TextAlign.center,
-
-                                                style: TextStyle(
-                                           fontSize: 12,
-                                                  color: HexColor.fromHex(
-                                                    "#5a7b8a",
-                                                  ),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            )
-                          : SizedBox.shrink(),
+                      if (showAllMenus)
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          child: GridView.count(
+                            crossAxisCount: 3,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.9,
+                            padding: EdgeInsets.zero,
+                            children: nextMenus.map((menu) {
+                              return _buildMenuItem(context, menu);
+                            }).toList(),
+                          ),
+                        ),
                     ],
                   ),
                 ],
@@ -729,4 +616,58 @@ final city = controller.currentCity.value;
       });
     });
   }
+}
+
+Widget _buildMenuItem(BuildContext context, Map menu) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(16),
+    onTap: () {
+      if (menu["page"] != null) {
+        final binding = menu["binding"];
+
+        if (binding != null) {
+          Get.to(menu["page"], binding: binding);
+        } else {
+          Get.to(menu["page"]);
+        }
+      }
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Icon(
+              menu["icon"],
+              size: 30,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              menu["title"],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: HexColor.fromHex("#5a7b8a"),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

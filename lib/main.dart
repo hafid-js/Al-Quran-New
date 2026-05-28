@@ -1,8 +1,12 @@
+import 'package:alquran_new/binding/doa_binding.dart';
+import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
+import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
+import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
@@ -23,26 +27,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await HiveService.init();
-
-  // init storage dulu
   await GetStorage.init();
 
-  // init locale Indonesia SEBELUM runApp
   await initializeDateFormatting('id', null);
-
-  // optional: set default locale
   Intl.defaultLocale = 'id';
 
-  // register dependency
-  Get.put(NetworkController());
-  _registerDependencies();
+  final settingsService = SettingsService();
+  final settingsController = SettingsController(settingsService);
 
-  // init notification (singleton)
-  try {
-    await NotificationService().initialize();
-  } catch (e) {
-    debugPrint('Notification init error: $e');
-  }
+  await settingsController.loadSettings();
+
+  Get.put(settingsController, permanent: true);
+
+  _registerDependencies();
 
   runApp(const MyApp());
 }

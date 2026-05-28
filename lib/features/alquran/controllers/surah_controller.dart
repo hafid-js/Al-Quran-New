@@ -8,6 +8,7 @@ import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
 import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
 import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -58,6 +59,13 @@ Future<void> fetchSurah() async {
             .toList()
           ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
 
+     final settingController = Get.find<SettingsController>();
+
+final qariKey = (settingController.qariSelected.value + 1)
+    .toString()
+    .padLeft(2, '0');
+
+
         return Surah(
           nomor: e.nomor,
           namaLatin: e.namaLatin,
@@ -68,7 +76,7 @@ Future<void> fetchSurah() async {
             (t) => t.name == e.tempatTurun,
           ),
           arti: e.arti,
-          audioFull: {"01": e.audioUrl},
+          audioFull: {qariKey: e.audioUrl},
           ayat: ayatList.map((a) {
             return Ayat(
               nomorAyat: a.nomorAyat,
@@ -152,38 +160,34 @@ Future<void> fetchSurah() async {
   }
 
 Future<void> playAudio(Surah surah) async {
-  final url = surah.audioFull.values.firstOrNull ?? "";
+  final setting = Get.find<SettingsController>();
+
+  final qariKey = (setting.qariSelected.value + 1)
+      .toString()
+      .padLeft(2, '0');
+
+  final url = surah.audioFull[qariKey] ?? "";
+
   if (url.isEmpty) return;
 
   try {
-
     final previous = activeSurahNomor.value;
 
     activeSurahNomor.value = surah.nomor;
 
     _setSurahAudioState(surah.nomor, "loading");
 
-    player.stop();
-
+    await player.stop();
     await player.setUrl(url);
 
     _setSurahAudioState(surah.nomor, "playing");
-
     await player.play();
 
     if (previous != null && previous != surah.nomor) {
       _setSurahAudioState(previous, "stop");
     }
-
-  } on PlayerInterruptedException {
-// biarin
   } catch (e) {
     _setSurahAudioState(surah.nomor, "stop");
-
-    Get.defaultDialog(
-      title: "Terjadi Kesalahan",
-      middleText: e.toString(),
-    );
   }
 }
 

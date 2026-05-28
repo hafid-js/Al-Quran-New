@@ -1,6 +1,8 @@
 import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,13 +15,32 @@ class PemutarAudioScreen extends StatefulWidget {
   State<PemutarAudioScreen> createState() => _PemutarAudioScreenState();
 }
 
+final Map<String, String> qariImages = {
+  "01": "assets/images/qari/Abdullah-Al-Juhany.png",
+  "02": "assets/images/qari/Abdul-Muhsin-Al-Qasim.png",
+  "03": "assets/images/qari/Abdurrahman-as-Sudais.png",
+  "04": "assets/images/qari/Ibrahim-Al-Dossari.png",
+  "05": "assets/images/qari/Misyari-Rasyid-Al-Afasi.png",
+  "06": "assets/images/qari/Yasser-Al-Dosari.png",
+};
+
+final List<Map<String, dynamic>> qoris = [
+  {"title": "Abdullah Al-Juhany"},
+  {"title": "Abdul Muhsin Al Qasim"},
+  {"title": "Abdurrahman as-Sudais"},
+  {"title": "Ibraim Al-Dossari"},
+  {"title": "Misyari Rasyid Al-Afsi"},
+  {"title": "Yaser Al-Dosari"},
+];
+
 class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
   final ExpansibleController controller = ExpansibleController();
   @override
   Widget build(BuildContext context) {
     final SurahController controller = Get.put(SurahController());
+    final settingController = Get.find<SettingsController>();
 
-    // final SettingsController settingsController = Get.find<SettingsController>();
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -120,25 +141,43 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                  "https://way2quran.com/_next/image?url=https%3A%2F%2Fmedia.way2quran.com%2Fimgs%2Fibrahim-al-dosari.png&w=640&q=75",
-                                ),
-                              ),
-                              SizedBox(width: 8),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Obx(() {
+                                    final selectedIndex =
+                                        settingController.qariSelected.value;
+                                    final qariKey = (selectedIndex + 1)
+                                        .toString()
+                                        .padLeft(2, '0');
 
-                              Flexible(
-                                child: Text(
-                                  "Ibrahim Al-Dossari",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                                    return CircleAvatar(
+                                      radius: 12,
+                                      backgroundImage: AssetImage(
+                                        qariImages[qariKey]!,
+                                      ),
+                                    );
+                                  }),
+                                  SizedBox(width: 8),
+
+                                  Flexible(
+                                    child: Obx(() {
+                                      final selectedIndex =
+                                          settingController.qariSelected.value;
+                                      final qariName =
+                                          qoris[selectedIndex]["title"];
+                                      return Text(
+                                        qariName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }),
                                   ),
-                                ),
+                                ],
                               ),
-
                               SizedBox(width: 8),
                               InkWell(
                                 onTap: () {
@@ -173,109 +212,127 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                 ),
                                                 SizedBox(height: 12),
 
-                                                InkWell(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                          vertical: 6,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).cardColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            16,
-                                                          ),
-                                                    ),
-                                                    child: ListTile(
-                                                      leading: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              8,
+                                                Column(
+                                                  children: List.generate(qoris.length, (
+                                                    index,
+                                                  ) {
+                                                    final item = qoris[index];
+                                                    final key = (index + 1)
+                                                        .toString()
+                                                        .padLeft(2, '0');
+
+                                                    return Obx(() {
+                                                      final isSelected =
+                                                          settingController
+                                                              .qariSelected
+                                                              .value ==
+                                                          index;
+
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              bottom: 10,
                                                             ),
-                                                        child: CachedNetworkImage(
-                                                          imageUrl:
-                                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
-                                                          width: 35,
-                                                          height: 35,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      title: Text(
-                                                        "Abdullah Al-Jullany",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 10),
-                                                InkWell(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                          vertical: 6,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: HexColor.fromHex(
-                                                        "#2cc4b6",
-                                                      ).withAlpha(20),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            16,
-                                                          ),
-                                                      border: Border.all(
-                                                        width: 1,
-                                                        color: HexColor.fromHex(
-                                                          "#2cc4b6",
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: ListTile(
-                                                      leading: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              8,
-                                                            ),
-                                                        child: CachedNetworkImage(
-                                                          imageUrl:
-                                                              "https://i1.sndcdn.com/artworks-yRdHunkzvtypsKvH-YmPLEA-t500x500.jpg",
-                                                          width: 35,
-                                                          height: 35,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      title: Text(
-                                                        "Ibrahim Al-Dossari",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#2cc4b6",
+                                                        child: InkWell(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                16,
                                                               ),
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                          onTap: () {
+                                                            settingController
+                                                                .changeQari(
+                                                                  index,
+                                                                );
+                                                          },
+                                                          child: AnimatedContainer(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                  5,
+                                                                ),
+                                                            duration:
+                                                                const Duration(
+                                                                  milliseconds:
+                                                                      250,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color: isSelected
+                                                                  ? Theme.of(
+                                                                          context,
+                                                                        )
+                                                                        .colorScheme
+                                                                        .surface
+                                                                  : Theme.of(
+                                                                      context,
+                                                                    ).cardColor,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    16,
+                                                                  ),
+                                                              border: Border.all(
+                                                                color:
+                                                                    isSelected
+                                                                    ? Theme.of(
+                                                                        context,
+                                                                      ).colorScheme.primary
+                                                                    : Colors
+                                                                          .transparent,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                            child: ListTile(
+                                                              contentPadding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        16,
+                                                                  ),
+                                                              leading: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      8,
+                                                                    ),
+                                                                child: Image.asset(
+                                                                  qariImages[key]!,
+                                                                  width: 40,
+                                                                  height: 40,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                              title: Text(
+                                                                item["title"],
+                                                                style: TextStyle(
+                                                                  fontSize: Theme.of(context)
+                                                                      .textTheme
+                                                                      .titleSmall
+                                                                      ?.fontSize,
+                                                                  color: isDark
+                                                                      ? AppColors
+                                                                            .light
+                                                                      : (isSelected
+                                                                            ? Theme.of(
+                                                                                context,
+                                                                              ).colorScheme.primary
+                                                                            : Theme.of(
+                                                                                context,
+                                                                              ).textTheme.titleLarge?.color),
+                                                                ),
+                                                              ),
+                                                              trailing:
+                                                                  isSelected
+                                                                  ? Icon(
+                                                                      Icons
+                                                                          .check_circle_rounded,
+                                                                      color: Theme.of(
+                                                                        context,
+                                                                      ).colorScheme.primary,
+                                                                    )
+                                                                  : null,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      trailing: Icon(
-                                                        Icons
-                                                            .check_circle_rounded,
-                                                        color: HexColor.fromHex(
-                                                          "#2cc4b6",
-                                                        ),
-                                                        size: 22,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                      );
+                                                    });
+                                                  }),
                                                 ),
                                               ],
                                             ),
@@ -759,6 +816,12 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                         (s) => s.nomor == nomor,
                       );
 
+                      final qariKey =
+                          (Get.find<SettingsController>().qariSelected.value +
+                                  1)
+                              .toString()
+                              .padLeft(2, '0');
+
                       return Positioned(
                         bottom: 0,
                         left: 0,
@@ -858,9 +921,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               );
                                               final knobX = width * clamped;
 
-                                              return SizedBox(
-                                                height: 20,
-                                                child: Stack(
+                                              return Stack(
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   children: [
@@ -914,8 +975,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                       ),
                                                     ),
                                                   ],
-                                                ),
-                                              );
+                                                );
                                             },
                                           );
                                         },
@@ -928,9 +988,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                               ListTile(
                                 leading: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlUZ8nhYPRQDuhjxBpB5LDivq-_YzdFzbtw&s",
+                                  child: Image.asset(
+                                    qariImages[qariKey]!,
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.cover,

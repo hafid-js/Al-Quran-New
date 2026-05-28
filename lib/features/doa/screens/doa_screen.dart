@@ -250,7 +250,9 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                   style: TextStyle(
                                                     fontSize: 16,
-                                                    color: Theme.of(context).colorScheme.primary,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
                                                   ),
                                                 ),
 
@@ -306,23 +308,36 @@ class _DoaScreenState extends State<DoaScreen> {
                                                 ),
 
                                                 const SizedBox(height: 20),
-
-                                                // ActionChip(
-                                                //   label: Text(
-                                                //     "tidur",
-
-                                                //     style: TextStyle(
-                                                //       color: HexColor.fromHex(
-                                                //         "#2dc8b9",
-                                                //       ),
-                                                //     ),
-                                                //   ),
-
-                                                //   backgroundColor:
-                                                //       HexColor.fromHex(
-                                                //         "#17404a",
-                                                //       ),
-                                                // ),
+                                                Wrap(
+                                                  spacing: 6,
+                                                  runSpacing: 6,
+                                                  children: doa.tag.map((tag) {
+                                                    return Container(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 12,
+                                                            vertical: 6,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary
+                                                            .withAlpha(30),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
+                                                      ),
+                                                      child: Text(
+                                                        tag,
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.labelMedium,
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                                  const SizedBox(height: 20),
                                               ],
                                             ),
                                           ),
@@ -375,7 +390,9 @@ class _DoaScreenState extends State<DoaScreen> {
                                                     .labelMedium
                                                     ?.fontSize,
                                                 fontWeight: FontWeight.w600,
-                                                color: Theme.of(context).colorScheme.primary,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
                                               ),
                                             ),
                                           ),

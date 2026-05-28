@@ -95,7 +95,6 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
 
       body: Stack(
         children: [
-          /// ================= MAIN CONTENT =================
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             child: Column(

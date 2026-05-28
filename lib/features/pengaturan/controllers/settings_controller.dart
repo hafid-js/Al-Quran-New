@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
 import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
 import 'package:get/get.dart';
@@ -18,13 +19,11 @@ class SettingsController extends GetxController {
 
   var currentColor = const Color(0xFF2EC4B6).obs;
 
-
   @override
   void onInit() {
     loadSettings();
     super.onInit();
   }
-
 
   Future<void> loadSettings() async {
     settings = await service.getSettings();
@@ -43,6 +42,11 @@ class SettingsController extends GetxController {
     settings.qariSelected = index;
 
     await service.save(settings);
+
+    if (Get.isRegistered<SurahController>()) {
+      Get.find<SurahController>().refreshSurah();
+    }
+    
   }
 
   Future<void> changeFont(int index) async {
@@ -62,12 +66,12 @@ class SettingsController extends GetxController {
   }
 
   Future<void> changeColor(int index, Color color) async {
-  colorSelected.value = index;
-  currentColor.value = color;
+    colorSelected.value = index;
+    currentColor.value = color;
 
-  settings.colorSelected = index;
-  settings.customColor = color.value;
+    settings.colorSelected = index;
+    settings.customColor = color.value;
 
-  await service.save(settings);
-}
+    await service.save(settings);
+  }
 }

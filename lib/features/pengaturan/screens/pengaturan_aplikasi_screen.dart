@@ -6,7 +6,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 
 class PengaturanAplikasiScreen extends StatefulWidget {
- const PengaturanAplikasiScreen({super.key});
+  const PengaturanAplikasiScreen({super.key});
 
   @override
   State<PengaturanAplikasiScreen> createState() =>
@@ -64,430 +64,562 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
     });
   }
 
-    final controller = Get.find<SettingsController>();
+  final controller = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Obx(() {
-      return  Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leadingWidth: 65,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_circle_left_rounded),
-         color: Theme.of(context).iconTheme.color,
-        ),
-        titleSpacing: 5,
-        title: Row(
-          children: [
-            Container(
-              height: 36,
-              width: 36,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).colorScheme.surface
-              ),
-              child: Icon(
-                Icons.settings,
-            size: 20,
-                color: Theme.of(context).colorScheme.primary
-              ),
-            ),
-            SizedBox(width: 10),
-            Text(
-              "Pengaturan",
-            style: Theme.of(context)
-    .textTheme
-    .titleLarge
-            ),
-          ],
-        ),
-      ),
-
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
-          child: Column(
+      return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leadingWidth: 65,
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: Icon(Icons.arrow_circle_left_rounded),
+            color: Theme.of(context).iconTheme.color,
+          ),
+          titleSpacing: 5,
+          title: Row(
             children: [
-              Column(
-                children: [
-                  ListTile(
-                    minTileHeight: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.headphones_rounded,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary
-                    ),
-                    title: Text(
-                      "Qari Default",
-                     style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  Column(
-                    children: List.generate(qoris.length, (index) {
-                      final item = qoris[index];
-                      final bool isSelected = controller.qariSelected.value == index;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(16),
-                          onTap: () {
-                            controller.changeQari(index);
-                          },
-
-                          child: AnimatedContainer(
-                            padding: EdgeInsets.all(5),
-                            duration: const Duration(milliseconds: 250),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Theme.of(context).colorScheme.surface
-                                  : Theme.of(context).cardColor,
-
-                              borderRadius: BorderRadius.circular(16),
-
-                              border: Border.all(
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                                width: 1,
-                              ),
-                            ),
-
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-
-                              leading: isSelected
-                                  ? Container(
-                                      height: 36,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      child: Icon(
-                                        Icons.check_circle_rounded,
-                                        size: 20,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 36,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: isDark ? HexColor.fromHex("#1A3A4A") : HexColor.fromHex("#E8F0EE"),
-                                      ),
-                                      child: Icon(
-                                        Icons.mic_none_rounded,
-                                        size: 20,
-                                        color: HexColor.fromHex("#5A7A8A"),
-                                      ),
-                                    ),
-
-                              title: Text(
-                                item["title"],
-                                style: TextStyle(
-                                  fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
-                                  color: isDark ? AppColors.light : (isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.titleLarge?.color),
-                                ),
-                              ),
-
-                              trailing: isSelected
-                                  ? Icon(
-                                      Icons.check_circle_rounded,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    )
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
+              Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                child: Icon(
+                  Icons.settings,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
+              SizedBox(width: 10),
+              Text("Pengaturan", style: Theme.of(context).textTheme.titleLarge),
+            ],
+          ),
+        ),
 
-              Column(
-                children: [
-                  ListTile(
-                    minTileHeight: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.text_fields_rounded,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      "Font Arab",
-                        style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  Column(
-                    children: List.generate(fontArabs.length, (index) {
-                      final item = fontArabs[index];
-                      final bool isSelected = fontSelected == index;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(16),
-                          onTap: () {
-                            setState(() {
-                              fontSelected = index;
-                              title = item["title"];
-                            });
-
-                            if (index == 0) {
-                              {}
-                            }
-                          },
-
-                          child: AnimatedContainer(
-                            padding: EdgeInsets.all(5),
-                            duration: const Duration(milliseconds: 250),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                ? Theme.of(context).colorScheme.surface
-                                  : Theme.of(context).cardColor,
-
-                              borderRadius: BorderRadius.circular(16),
-
-                              border: Border.all(
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                                width: 1,
-                              ),
-                            ),
-
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-
-                              leading: isSelected
-                                  ? Container(
-                                      height: 36,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                    color: Theme.of(context).colorScheme.primary.withAlpha(80),
-                                      ),
-                                      child: Icon(
-                                        Icons.check_circle_rounded,
-                                        size: 20,
-                                        color: Theme.of(context).colorScheme.primary
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 36,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                                 color: isDark ? HexColor.fromHex("#1A3A4A") : HexColor.fromHex("#E8F0EE"),
-                                      ),
-                                      child: Icon(
-                                        Icons.text_fields_rounded,
-                                        size: 20,
-                                        color: HexColor.fromHex("#5A7A8A"),
-                                      ),
-                                    ),
-
-                              title: Text(
-                                item["title"],
-                                style: TextStyle(
-                                  fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
-                                  color: isDark ? AppColors.light : (isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.titleLarge?.color),
-                                ),
-                              ),
-
-                              trailing: isSelected
-                                  ? Icon(
-                                      Icons.check_circle_rounded,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    )
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
-
-              Column(
-                children: [
-                  ListTile(
-                    minTileHeight: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.headphones_rounded,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      "Tampilan",
-                        style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                        children: List.generate(themeModes.length, (index) {
-                          final item = themeModes[index];
-                          final bool isSelected = controller.modeSelected.value == index;
-
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              onTap: () {
-                               controller.changeMode(index);
-                                 
-                              },
-
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AnimatedContainer(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 43,
-                                      vertical: 15,
-                                    ),
-                                    duration: const Duration(milliseconds: 250),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? Theme.of(context).colorScheme.surface
-                                  : Theme.of(context).cardColor,
-
-                                      borderRadius: BorderRadius.circular(16),
-
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? Theme.of(context).colorScheme.primary
-                                            : Colors.transparent,
-                                        width: 1.5,
-                                      ),
-                                    ),
-
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          item["icon"],
-                                          size: 30,
-                                          color: isSelected
-                                              ? Theme.of(context).colorScheme.primary
-                                              : HexColor.fromHex("#5A7A8A"),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          item["title"],
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: isSelected
-                                                ? Theme.of(context).colorScheme.primary
-                                                : Theme.of(context).textTheme.titleLarge?.color,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    ListTile(
+                      minTileHeight: 0,
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.headphones_rounded,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      title: Text(
+                        "Qari Default",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(qoris.length, (index) {
+                        final item = qoris[index];
+                        final bool isSelected =
+                            controller.qariSelected.value == index;
 
-                        children: List.generate(colorPicker.length, (index) {
-                          final item = colorPicker[index];
-                          final bool isSelected = controller.colorSelected.value == index;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () {
+                              controller.changeQari(index);
+                            },
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              onTap: () {
-                                controller.changeColor(index, item['color'] as Color);
-                              },
+                            child: AnimatedContainer(
+                              padding: EdgeInsets.all(5),
+                              duration: const Duration(milliseconds: 250),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.surface
+                                    : Theme.of(context).cardColor,
 
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  (item["color"] == "custom")
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                backgroundColor:
-                                                    HexColor.fromHex("#132D3B"),
-                                                title: Text(
-                                                  'Tentukan Warna',
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
+                                borderRadius: BorderRadius.circular(16),
+
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+
+                                leading: isSelected
+                                    ? Container(
+                                        height: 36,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.surface,
+                                        ),
+                                        child: Icon(
+                                          Icons.check_circle_rounded,
+                                          size: 20,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 36,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: isDark
+                                              ? HexColor.fromHex("#1A3A4A")
+                                              : HexColor.fromHex("#E8F0EE"),
+                                        ),
+                                        child: Icon(
+                                          Icons.mic_none_rounded,
+                                          size: 20,
+                                          color: HexColor.fromHex("#5A7A8A"),
+                                        ),
+                                      ),
+
+                                title: Text(
+                                  item["title"],
+                                  style: TextStyle(
+                                    fontSize: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall?.fontSize,
+                                    color: isDark
+                                        ? AppColors.light
+                                        : (isSelected
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                              : Theme.of(
+                                                  context,
+                                                ).textTheme.titleLarge?.color),
+                                  ),
+                                ),
+
+                                trailing: isSelected
+                                    ? Icon(
+                                        Icons.check_circle_rounded,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: [
+                    ListTile(
+                      minTileHeight: 0,
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.text_fields_rounded,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(
+                        "Font Arab",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(fontArabs.length, (index) {
+                        final item = fontArabs[index];
+                        final bool isSelected = fontSelected == index;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () {
+                              setState(() {
+                                fontSelected = index;
+                                title = item["title"];
+                              });
+
+                              if (index == 0) {
+                                {}
+                              }
+                            },
+
+                            child: AnimatedContainer(
+                              padding: EdgeInsets.all(5),
+                              duration: const Duration(milliseconds: 250),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.surface
+                                    : Theme.of(context).cardColor,
+
+                                borderRadius: BorderRadius.circular(16),
+
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+
+                                leading: isSelected
+                                    ? Container(
+                                        height: 36,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary.withAlpha(80),
+                                        ),
+                                        child: Icon(
+                                          Icons.check_circle_rounded,
+                                          size: 20,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 36,
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: isDark
+                                              ? HexColor.fromHex("#1A3A4A")
+                                              : HexColor.fromHex("#E8F0EE"),
+                                        ),
+                                        child: Icon(
+                                          Icons.text_fields_rounded,
+                                          size: 20,
+                                          color: HexColor.fromHex("#5A7A8A"),
+                                        ),
+                                      ),
+
+                                title: Text(
+                                  item["title"],
+                                  style: TextStyle(
+                                    fontSize: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall?.fontSize,
+                                    color: isDark
+                                        ? AppColors.light
+                                        : (isSelected
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                              : Theme.of(
+                                                  context,
+                                                ).textTheme.titleLarge?.color),
+                                  ),
+                                ),
+
+                                trailing: isSelected
+                                    ? Icon(
+                                        Icons.check_circle_rounded,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: [
+                    ListTile(
+                      minTileHeight: 0,
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.headphones_rounded,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(
+                        "Tampilan",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                       Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 0),
+  child: Row(
+    children: List.generate(themeModes.length, (index) {
+      final item = themeModes[index];
+      final bool isSelected =
+          controller.modeSelected.value == index;
+
+      return Expanded(
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: index != themeModes.length - 1 ? 10 : 0,
+            left: index == themeModes.length - 1 ? 10 : 0,
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () {
+              controller.changeMode(index);
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 12,
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.transparent,
+                  width: 1.5,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    item["icon"],
+                    size: 30,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : HexColor.fromHex("#5A7A8A"),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    item["title"],
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }),
+  ),
+),
+SizedBox(height: 15),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                          children: List.generate(colorPicker.length, (index) {
+                            final item = colorPicker[index];
+                            final bool isSelected =
+                                controller.colorSelected.value == index;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10, right: 5),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () {
+                                  controller.changeColor(
+                                    index,
+                                    item['color'] as Color,
+                                  );
+                                },
+
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    (item["color"] == "custom")
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => AlertDialog(
+                                                  backgroundColor:
+                                                      HexColor.fromHex(
+                                                        "#132D3B",
+                                                      ),
+                                                  title: Text(
+                                                    'Tentukan Warna',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
 
-                                                content: SingleChildScrollView(
-                                                  child: ColorPicker(
-                                                    pickerColor: pickerColor,
-                                                    onColorChanged: changeColor,
-                                                  ),
-                                                ),
+                                                  content:
+                                                      SingleChildScrollView(
+                                                        child: ColorPicker(
+                                                          pickerColor:
+                                                              pickerColor,
+                                                          onColorChanged:
+                                                              changeColor,
+                                                        ),
+                                                      ),
 
-                                                actions: [
-                                                  ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      elevation:
-                                                          WidgetStatePropertyAll(
-                                                            0,
-                                                          ),
-                                                      foregroundColor:
-                                                          WidgetStatePropertyAll(
-                                                            HexColor.fromHex(
-                                                              "#2EC4B6",
+                                                  actions: [
+                                                    ElevatedButton(
+                                                      style: ButtonStyle(
+                                                        elevation:
+                                                            WidgetStatePropertyAll(
+                                                              0,
                                                             ),
-                                                          ),
-                                                      backgroundColor:
-                                                          WidgetStatePropertyAll(
-                                                            HexColor.fromHex(
-                                                              "#153945",
+                                                        foregroundColor:
+                                                            WidgetStatePropertyAll(
+                                                              HexColor.fromHex(
+                                                                "#2EC4B6",
+                                                              ),
                                                             ),
+                                                        backgroundColor:
+                                                            WidgetStatePropertyAll(
+                                                              HexColor.fromHex(
+                                                                "#153945",
+                                                              ),
+                                                            ),
+                                                      ),
+
+                                                      child: const Text(
+                                                        'Simpan',
+                                                      ),
+
+                                                      onPressed: () async {
+                                                        await controller
+                                                            .changeColor(
+                                                              index,
+                                                              pickerColor,
+                                                            );
+
+                                                        Navigator.of(
+                                                          context,
+                                                        ).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            child: AnimatedContainer(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 12,
+                                              ),
+                                              duration: const Duration(
+                                                milliseconds: 250,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: isSelected
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.surface
+                                                    : Theme.of(
+                                                        context,
+                                                      ).cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                border: Border.all(
+                                                  color:
+                                                      (isSelected &&
+                                                          item["color"] ==
+                                                              "custom")
+                                                      ? Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary
+                                                      : Colors.transparent,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: currentColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            30,
                                                           ),
                                                     ),
-
-                                                    child: const Text('Simpan'),
-
-                                                    onPressed: () async {
-                                                      await controller.changeColor(index, pickerColor);
-
-                                                      Navigator.of(
-                                                        context,
-                                                      ).pop();
-                                                    },
+                                                    child: Icon(
+                                                      Icons.edit_rounded,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    item["name"],
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: isSelected
+                                                          ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                          : Theme.of(context)
+                                                                .textTheme
+                                                                .titleLarge
+                                                                ?.color,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
-                                            );
-                                          },
-                                          child: AnimatedContainer(
+                                            ),
+                                          )
+                                        : AnimatedContainer(
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 12,
                                               vertical: 12,
@@ -497,16 +629,20 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                             ),
                                             decoration: BoxDecoration(
                                               color: isSelected
-                                                  ? Theme.of(context).colorScheme.surface
-                                  : Theme.of(context).cardColor,
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.surface
+                                                  : Theme.of(context).cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               border: Border.all(
                                                 color:
                                                     (isSelected &&
-                                                        item["color"] ==
+                                                        item["color"] !=
                                                             "custom")
-                                                    ? Theme.of(context).colorScheme.primary
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
                                                     : Colors.transparent,
                                                 width: 1.5,
                                               ),
@@ -515,26 +651,15 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(
-                                                    // gradient: LinearGradient(
-                                                    //   colors: [
-                                                    //     Colors.red,
-                                                    //     Colors.green,
-                                                    //     Colors.blue,
-                                                    //   ],
-                                                    // ),
-                                                    color: currentColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.edit_rounded,
-                                                    size: 20,
+                                                CircleAvatar(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: item["color"],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            30,
+                                                          ),
+                                                    ),
                                                   ),
                                                 ),
                                                 SizedBox(height: 10),
@@ -544,226 +669,163 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     fontSize: 11,
                                                     fontWeight: FontWeight.w500,
                                                     color: isSelected
-                                                        ? Theme.of(context).colorScheme.primary
-                                                      : Theme.of(context).textTheme.titleLarge?.color,
+                                                        ? Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary
+                                                        : Theme.of(context)
+                                                              .textTheme
+                                                              .titleLarge
+                                                              ?.color,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                        )
-                                      : AnimatedContainer(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 12,
-                                          ),
-                                          duration: const Duration(
-                                            milliseconds: 250,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? Theme.of(context).colorScheme.surface
-                                  : Theme.of(context).cardColor,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                            border: Border.all(
-                                              color:
-                                                  (isSelected &&
-                                                      item["color"] != "custom")
-                                                  ? Theme.of(context).colorScheme.primary
-                                                  : Colors.transparent,
-                                              width: 1.5,
-                                            ),
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              CircleAvatar(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: item["color"],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                item["name"],
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: isSelected
-                                                      ? Theme.of(context).colorScheme.primary
-                                                      : Theme.of(context).textTheme.titleLarge?.color,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ],
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: [
+                    ListTile(
+                      minTileHeight: 0,
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.error_rounded,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(
+                        "Tentang",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 25,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-              Column(
-                children: [
-                  ListTile(
-                    minTileHeight: 0,
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.error_rounded,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      "Tentang",
-                        style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).colorScheme.surface,
+                            title: Text(
+                              "Al-Barokah Mobile",
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            child: Icon(
-                              Icons.menu_book_rounded,
-                              size: 25,
-                              color: Theme.of(context).colorScheme.primary,
+                            subtitle: Text(
+                              "Versi 1.0.0",
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
                           ),
-                          title: Text(
-                            "Al-Barokah Mobile",
-                            style: Theme.of(context).textTheme.titleMedium
-                          ),
-                          subtitle: Text(
-                            "Versi 1.0.0",
-                            style: Theme.of(context).textTheme.labelMedium
-                          ),
-                        ),
-                        Text(
-                          ''' Al-Barokah ID Official Mobile App
+                          Text(
+                            ''' Al-Barokah ID Official Mobile App
 
 Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan tafsir, audio murottal dari berbagai qari , doa harian, jadwal sholat, arah kiblat, dan fitur islami lainnya.  ''',
-                          style: TextStyle(color: HexColor.fromHex("#5A7A8A")),
-                        ),
+                            style: TextStyle(
+                              color: HexColor.fromHex("#5A7A8A"),
+                            ),
+                          ),
 
-                        SizedBox(height: 15),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.email_rounded,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Kontak: admin@hafidtech.com",
-                              style: Theme.of(context).textTheme.labelMedium
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          SizedBox(height: 15),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.email_rounded,
-                                      size: 18,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      "Syarat & Ketentuan",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              Icon(
+                                Icons.email_rounded,
+                                size: 20,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              SizedBox(width: 5),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.security_rounded,
-                                      size: 18,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      "Kebijakan Privasi",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Kontak: admin@hafidtech.com",
+                                style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 10),
+                          Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 8),
+  child: Row(
+    children: [
+      Expanded(
+        child: _menuButton(
+          context,
+          Icons.email_rounded,
+          "Syarat & Ketentuan",
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: _menuButton(
+          context,
+          Icons.security_rounded,
+          "Kebijakan Privasi",
+        ),
+      ),
+    ],
+  ),
+)
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        
-        
-      )
-    ));
+        ),
+      );
     });
   }
+}
+
+Widget _menuButton(BuildContext context, IconData icon, String text) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

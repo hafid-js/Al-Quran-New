@@ -560,10 +560,11 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                         ),
                                       ),
                                       SizedBox(width: 6),
-                                      Text(
+                                      Flexible(child: Text(
                                         event['date'],
+                                   overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context).textTheme.labelSmall
-                                      ),
+                                      ),)
                                     ],
                                   ),
                                 ),
