@@ -167,24 +167,9 @@ class PrayerTimeController extends GetxController {
     nextPrayerTime.value = subuhTomorrow;
   }
 
- void _startTimer(PrayerTimeModel item) {
-  _timer?.cancel();
-
-  _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final now = DateTime.now();
-
-      final next = nextPrayerTime.value;
-      if (next == null) return;
-
-      remaining.value = next.difference(now);
-
-      if (remaining.value.isNegative) {
-        fetchPrayerTimes();
-      }
-
-      totalDuration.value = remaining.value; 
-    });
-}
+  void _startTimer(PrayerTimeModel item) {
+    _timer?.cancel();
+  }
 
   double get percent {
     final total = totalDuration.value.inSeconds;

@@ -221,8 +221,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          HexColor.fromHex("#228276"),
-                          HexColor.fromHex("#27a399"),
+                          // HexColor.fromHex("#228276"),
+                          // HexColor.fromHex("#27a399"),
+                              Theme.of(context).colorScheme.primary.withAlpha(160),
+                        Theme.of(context).colorScheme.primary.withAlpha(190),
                         ],
                       ),
 
@@ -253,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Center(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex("#45a399"),
+                                color: Theme.of(context).colorScheme.primary.withAlpha(100),
                                 borderRadius: BorderRadius.circular(20),
                               ),
 
@@ -315,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     vertical: 10,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: HexColor.fromHex("#249085"),
+                                    color: Theme.of(context).colorScheme.primary.withAlpha(100),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Center(

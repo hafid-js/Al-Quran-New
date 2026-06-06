@@ -252,8 +252,8 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                   borderRadius: BorderRadius.circular(24),
                   gradient: LinearGradient(
                     colors: [
-                      HexColor.fromHex("#23867c"),
-                      HexColor.fromHex("#37b0a5"),
+          Theme.of(context).colorScheme.primary.withAlpha(160),
+                        Theme.of(context).colorScheme.primary.withAlpha(190),
                     ],
                   ),
                 ),

@@ -3,7 +3,6 @@ import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -57,8 +56,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      HexColor.fromHex("#23867c"),
-                      HexColor.fromHex("#37b0a5"),
+                      Theme.of(context).colorScheme.primary.withAlpha(160),
+                      Theme.of(context).colorScheme.primary.withAlpha(190),
                     ],
                   ),
                 ),
@@ -78,9 +77,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex(
-                                    "#19554d",
-                                  ).withAlpha(140),
+                                  color: Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Icon(
@@ -95,9 +92,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex(
-                                  "#19554d",
-                                ).withAlpha(140),
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -238,11 +233,12 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                               BorderRadius.circular(
                                                                 16,
                                                               ),
-                                                          onTap: () {
-                                                            settingController
+                                                          onTap: () async {
+                                                            await settingController
                                                                 .changeQari(
                                                                   index,
                                                                 );
+                                                            Get.back();
                                                           },
                                                           child: AnimatedContainer(
                                                             padding:
@@ -922,60 +918,58 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               final knobX = width * clamped;
 
                                               return Stack(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  children: [
-                                                    Container(
-                                                      height: 4,
-                                                      width: width,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(
-                                                          context,
-                                                        ).disabledColor,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              10,
-                                                            ),
-                                                      ),
+                                                alignment: Alignment.centerLeft,
+                                                children: [
+                                                  Container(
+                                                    height: 4,
+                                                    width: width,
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).disabledColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            10,
+                                                          ),
                                                     ),
+                                                  ),
 
-                                                    Container(
-                                                      height: 4,
-                                                      width: knobX,
+                                                  Container(
+                                                    height: 4,
+                                                    width: knobX,
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            10,
+                                                          ),
+                                                    ),
+                                                  ),
+
+                                                  Positioned(
+                                                    left: knobX - 6,
+                                                    child: Container(
+                                                      width: 12,
+                                                      height: 12,
                                                       decoration: BoxDecoration(
                                                         color: Theme.of(
                                                           context,
                                                         ).colorScheme.primary,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              10,
-                                                            ),
+                                                        shape: BoxShape.circle,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            blurRadius: 4,
+                                                            color:
+                                                                Colors.black26,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-
-                                                    Positioned(
-                                                      left: knobX - 6,
-                                                      child: Container(
-                                                        width: 12,
-                                                        height: 12,
-                                                        decoration: BoxDecoration(
-                                                          color: Theme.of(
-                                                            context,
-                                                          ).colorScheme.primary,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                              blurRadius: 4,
-                                                              color: Colors
-                                                                  .black26,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
+                                                  ),
+                                                ],
+                                              );
                                             },
                                           );
                                         },

@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._();
@@ -28,9 +29,10 @@ class NotificationService {
   }
 
   Future<void> _requestAndroidPermissions() async {
-    final androidPlugin =
-        _notificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     await androidPlugin?.requestNotificationsPermission();
   }
 
@@ -77,6 +79,48 @@ class NotificationService {
       title: title,
       body: body,
       notificationDetails: notificationDetails,
+    );
+  }
+
+  Future<void> scheduleNotification({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledDate,
+    String? soundSource,
+  }) async {
+    final androidNotificationDetails = AndroidNotificationDetails(
+      "default_channel_$soundSource",
+      "Defailt_channel",
+      channelDescription: "This is a default notification channel",
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      sound: soundSource != null
+          ? RawResourceAndroidNotificationSound(soundSource)
+          : null,
+    );
+
+    final iosNotificationDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      presentBanner: true,
+      sound: soundSource,
+    );
+
+    final notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: iosNotificationDetails,
+    );
+
+    await _notificationsPlugin.zonedSchedule(
+      id: id,
+      body: body,
+      title: title,
+      scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
+      notificationDetails: notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 

@@ -1,27 +1,24 @@
-import 'package:alquran_new/binding/doa_binding.dart';
-import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/db/hive_service.dart';
-import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
-import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
-import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
-import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
+import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/features/pengaturan/services/notification_settings_service.dart';
 import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
-import 'package:alquran_new/features/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +60,14 @@ void _registerDependencies() {
   Get.put(
     SettingsController(SettingsService()),
     permanent: true,
+  );
+
+  Get.put(NotificationSettingsService());
+
+  Get.put(
+    NotificationSettingsController(
+      Get.find<NotificationSettingsService>(),
+    ),
   );
 }
 

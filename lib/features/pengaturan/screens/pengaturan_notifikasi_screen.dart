@@ -1,3 +1,4 @@
+import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
 import 'package:alquran_new/features/pengaturan/widgets/prayer_tile.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,6 @@ class PengaturanNotifikasiScreen extends StatefulWidget {
 
 class _PengaturanNotifikasiScreenState
     extends State<PengaturanNotifikasiScreen> {
-  String jenisNotif = "Bunyi + Getar";
-  String bunyiNotif = "default";
-  List<bool> prayerStates = [true, true, true, true, true, true];
-
-  int selectedIndex = 3;
-
   final List<Map<String, dynamic>> notificationModes = [
     {"title": "Bunyi + Getar", "icon": Icons.notifications_active_rounded},
     {"title": "Bunyi Saja", "icon": Icons.menu_book_rounded},
@@ -26,10 +21,12 @@ class _PengaturanNotifikasiScreenState
     {"title": "Senyap", "icon": Icons.sensors_off_rounded},
   ];
 
+  final notifController = Get.find<NotificationSettingsController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#132D3B").withAlpha(120),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -45,12 +42,12 @@ class _PengaturanNotifikasiScreenState
               width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: HexColor.fromHex("#17404a"),
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: HexColor.fromHex("#2dc8b9"),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             SizedBox(width: 10),
@@ -74,7 +71,7 @@ class _PengaturanNotifikasiScreenState
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                 decoration: BoxDecoration(
-                  color: HexColor.fromHex("#132e3a"),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -86,12 +83,12 @@ class _PengaturanNotifikasiScreenState
                         width: 35,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Icon(
                           Icons.notification_important_rounded,
                           size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       title: Text(
@@ -102,6 +99,7 @@ class _PengaturanNotifikasiScreenState
                         ),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
@@ -109,71 +107,74 @@ class _PengaturanNotifikasiScreenState
                           index,
                         ) {
                           final item = notificationModes[index];
-                          final bool isSelected = selectedIndex == index;
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                  jenisNotif = item["title"];
-                                });
+                          return Obx(() {
+                            final isSelected =
+                                notifController.notificationMode.value == index;
 
-                                if (index == 0) {
-                                  {}
-                                }
-                              },
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () => notifController.changeMode(index),
 
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 250),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? HexColor.fromHex(
-                                          "#2cc4b6",
-                                        ).withAlpha(20)
-                                      : HexColor.fromHex("#1A3A4A"),
-
-                                  borderRadius: BorderRadius.circular(16),
-
-                                  border: Border.all(
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  decoration: BoxDecoration(
                                     color: isSelected
-                                        ? HexColor.fromHex("#2cc4b6")
-                                        : Colors.transparent,
-                                    width: 0.7,
-                                  ),
-                                ),
-
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-
-                                  leading: Icon(
-                                    item["icon"],
-                                    size: 20,
-                                    color: HexColor.fromHex("#2dc8b9"),
-                                  ),
-
-                                  title: Text(
-                                    item["title"],
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
+                                        ? Theme.of(context).colorScheme.surface
+                                        : HexColor.fromHex("#1A3A4A"),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : Colors.transparent,
+                                      width: 0.7,
                                     ),
                                   ),
 
-                                  trailing: isSelected
-                                      ? Icon(
-                                          Icons.check_circle_rounded,
-                                          color: HexColor.fromHex("#2dc8b9"),
-                                        )
-                                      : null,
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+
+                                    leading: Icon(
+                                      item["icon"],
+                                      size: 20,
+                                      color: isSelected
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : HexColor.fromHex("#5A7A8A"),
+                                    ),
+
+                                    title: Text(
+                                      item["title"],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: isSelected
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
+                                            : null,
+                                      ),
+                                    ),
+
+                                    trailing: Icon(
+                                      Icons.check_circle_rounded,
+                                      color: isSelected
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : HexColor.fromHex("#5A7A8A"),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                         }),
                       ),
                     ),
@@ -182,7 +183,7 @@ class _PengaturanNotifikasiScreenState
                 ),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                 decoration: BoxDecoration(
@@ -198,12 +199,12 @@ class _PengaturanNotifikasiScreenState
                         width: 35,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Icon(
                           Icons.volume_up_rounded,
                           size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       title: Text(
@@ -219,103 +220,119 @@ class _PengaturanNotifikasiScreenState
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                bunyiNotif = "default";
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: bunyiNotif == "default"
-                                    ? HexColor.fromHex("#2cc4b6").withAlpha(20)
-                                    : HexColor.fromHex("#163241"),
-                                borderRadius: BorderRadius.circular(16),
-                                border: bunyiNotif == "default"
-                                    ? Border.all(
-                                        color: HexColor.fromHex("#2cc4b6"),
-                                        width: 0.5,
-                                      )
-                                    : null,
-                              ),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
+                          Obx(
+                            () => GestureDetector(
+                              onTap: () =>
+                                  notifController.changeSound('default'),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      notifController.soundType.value ==
+                                          'default'
+                                      ? Theme.of(context).colorScheme.surface
+                                      : HexColor.fromHex("#1A3A4A"),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border:
+                                      notifController.soundType.value ==
+                                          'default'
+                                      ? Border.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 0.5,
+                                        )
+                                      : null,
                                 ),
-                                leading: Icon(
-                                  Icons.notifications,
-                                  color: bunyiNotif == "default"
-                                      ? Colors.tealAccent
-                                      : HexColor.fromHex("#2F4C5B"),
-                                ),
-                                title: Text(
-                                  "Suara Default",
-                                  style: TextStyle(
-                                    color: bunyiNotif == "default"
-                                        ? Colors.white
-                                        : HexColor.fromHex("#61737C"),
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.notifications,
+                                    color:
+                                        notifController.soundType.value ==
+                                            'default'
+                                        ? Theme.of(context).colorScheme.primary
+                                        : HexColor.fromHex("#2F4C5B"),
                                   ),
+                                  title: Text(
+                                    "Suara Default",
+                                    style: TextStyle(
+                                      color:
+                                          notifController.soundType.value ==
+                                              'default'
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : HexColor.fromHex("#61737C"),
+                                    ),
+                                  ),
+                                  trailing:
+                                      notifController.soundType.value ==
+                                          'default'
+                                      ? Icon(
+                                          Icons.check_circle,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        )
+                                      : null,
                                 ),
-                                trailing: bunyiNotif == "default"
-                                    ? Icon(
-                                        Icons.check_circle,
-                                        color: Colors.tealAccent,
-                                      )
-                                    : null,
                               ),
                             ),
                           ),
 
                           SizedBox(height: 10),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                bunyiNotif = "adzan";
-                              });
 
-                              // NotificationService().showNotification(
-                              //   title: "Al-Barokah",
-                              //   body: "Adzan Isya Berkumandang",
-                              //   soundSource: "alarmbeep.wav",
-                              // );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: bunyiNotif == "adzan"
-                                    ? HexColor.fromHex("#1f4d5c")
-                                    : HexColor.fromHex("#163241"),
-                                borderRadius: BorderRadius.circular(16),
-                                border: bunyiNotif == "adzan"
-                                    ? Border.all(
-                                        color: Colors.tealAccent,
-                                        width: 1.5,
-                                      )
-                                    : null,
-                              ),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
+                          Obx(
+                            () => GestureDetector(
+                              onTap: () => notifController.changeSound('adzan'),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      notifController.soundType.value == 'adzan'
+                                      ? Theme.of(context).colorScheme.surface
+                                      : HexColor.fromHex("#163241"),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border:
+                                      notifController.soundType.value == 'adzan'
+                                      ? Border.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 0.5,
+                                        )
+                                      : null,
                                 ),
-                                leading: Icon(
-                                  Icons.mosque_rounded,
-                                  color: bunyiNotif == "adzan"
-                                      ? Colors.tealAccent
-                                      : HexColor.fromHex("#2F4C5B"),
-                                ),
-                                title: Text(
-                                  "Suara Adzan",
-                                  style: TextStyle(
-                                    color: bunyiNotif == "adzan"
-                                        ? Colors.white
-                                        : HexColor.fromHex("#61737C"),
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.mosque_rounded,
+                                    color:
+                                        notifController.soundType.value ==
+                                            'adzan'
+                                        ? Theme.of(context).colorScheme.primary
+                                        : HexColor.fromHex("#5A7A8A"),
                                   ),
+                                  title: Text(
+                                    "Suara Adzan",
+                                    style: TextStyle(
+                                      color:
+                                          notifController.soundType.value ==
+                                              'adzan'
+                                          ? Colors.white
+                                          : HexColor.fromHex("#5A7A8A"),
+                                    ),
+                                  ),
+                                  trailing:
+                                      notifController.soundType.value == 'adzan'
+                                      ? Icon(
+                                          Icons.check_circle,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        )
+                                      : Icon(
+                                          Icons.check_circle,
+                                          color: HexColor.fromHex("#5A7A8A"),
+                                        ),
                                 ),
-                                trailing: bunyiNotif == "adzan"
-                                    ? Icon(
-                                        Icons.check_circle,
-                                        color: Colors.tealAccent,
-                                      )
-                                    : null,
                               ),
                             ),
                           ),
@@ -326,11 +343,11 @@ class _PengaturanNotifikasiScreenState
                 ),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                 decoration: BoxDecoration(
-                  color: HexColor.fromHex("#132e3a"),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -342,12 +359,12 @@ class _PengaturanNotifikasiScreenState
                         width: 35,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: HexColor.fromHex("#17404a"),
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Icon(
                           Icons.access_time_filled_outlined,
                           size: 20,
-                          color: HexColor.fromHex("#2dc8b9"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       title: Text(
@@ -362,85 +379,78 @@ class _PengaturanNotifikasiScreenState
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          PrayerTile(
-                            title: "Imsak",
-                            time: "04:26",
-                            leadingIcon: Icons.dark_mode_rounded,
-                            isActive: prayerStates[0],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[0] = !prayerStates[0];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Imsak",
+                              time: "04:26",
+                              leadingIcon: Icons.dark_mode_rounded,
+                              isActive: notifController.imsak.value,
+                              onTap: () =>
+                                  notifController.togglePrayer('imsak'),
+                            ),
                           ),
                           const SizedBox(height: 12),
 
-                          PrayerTile(
-                            title: "Subuh",
-                            time: "04:36",
-                            leadingIcon: Icons.bedtime_rounded,
-                            isActive: prayerStates[1],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[1] = !prayerStates[1];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Subuh",
+                              time: "04:36",
+                              leadingIcon: Icons.bedtime_rounded,
+                              isActive: notifController.subuh.value,
+                              onTap: () =>
+                                  notifController.togglePrayer('subuh'),
+                            ),
                           ),
                           const SizedBox(height: 12),
 
-                          PrayerTile(
-                            title: "Dzuhur",
-                            time: "11:57",
-                            leadingIcon: Icons.bedtime_rounded,
-                            isActive: prayerStates[2],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[2] = !prayerStates[2];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Dzuhur",
+                              time: "11:57",
+                              leadingIcon: Icons.bedtime_rounded,
+                              isActive: notifController.dzuhur.value,
+                              onTap: () =>
+                                  notifController.togglePrayer('dzuhur'),
+                            ),
                           ),
                           const SizedBox(height: 12),
 
-                          PrayerTile(
-                            title: "Ashar",
-                            time: "15:14",
-                            leadingIcon: Icons.bedtime_rounded,
-                            isActive: prayerStates[3],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[3] = !prayerStates[3];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Ashar",
+                              time: "15:14",
+                              leadingIcon: Icons.bedtime_rounded,
+                              isActive: notifController.ashar.value,
+                              onTap: () =>
+                                  notifController.togglePrayer('ashar'),
+                            ),
                           ),
                           const SizedBox(height: 12),
 
-                          PrayerTile(
-                            title: "Maghrib",
-                            time: "17:47",
-                            leadingIcon: Icons.bedtime_rounded,
-                            isActive: prayerStates[4],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[4] = !prayerStates[4];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Maghrib",
+                              time: "17:47",
+                              leadingIcon: Icons.bedtime_rounded,
+                              isActive: notifController.maghrib.value,
+                              onTap: () =>
+                                  notifController.togglePrayer('maghrib'),
+                            ),
                           ),
 
                           const SizedBox(height: 12),
 
-                          PrayerTile(
-                            title: "Isya",
-                            time: "19:00",
-                            leadingIcon: Icons.bedtime_rounded,
-                            isActive: prayerStates[5],
-                            onTap: () {
-                              setState(() {
-                                prayerStates[5] = !prayerStates[5];
-                              });
-                            },
+                          Obx(
+                            () => PrayerTile(
+                              title: "Isya",
+                              time: "19:00",
+                              leadingIcon: Icons.bedtime_rounded,
+                              isActive: notifController.isya.value,
+                              onTap: () => notifController.togglePrayer('isya'),
+                            ),
                           ),
 
-                          SizedBox(height: 10),
+              
                         ],
                       ),
                     ),

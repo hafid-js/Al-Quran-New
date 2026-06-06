@@ -31,7 +31,7 @@ class PrayerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = activeColor ?? HexColor.fromHex("#2EC4B6");
+    final Color primaryColor = activeColor ?? Theme.of(context).colorScheme.primary;
 
     final Color inactiveColor = HexColor.fromHex("#5A7A8A");
     final Color inactiveTitleColor = Colors.white;
@@ -39,10 +39,10 @@ class PrayerTile extends StatelessWidget {
     final Color transparent = Colors.transparent;
 
     final Color bgColor = isActive
-        ? primaryColor.withAlpha(20)
+        ? Theme.of(context).colorScheme.surface
         : backgroundColor ?? HexColor.fromHex("#1A3A4A");
 
-    final Color boxColor = isActive ? primaryColor.withAlpha(120) : transparent;
+    final Color boxColor = isActive ? primaryColor : transparent;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -50,7 +50,7 @@ class PrayerTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
-        border: BoxBorder.all(color: boxColor),
+        border: BoxBorder.all(color: boxColor, width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,

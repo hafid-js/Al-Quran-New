@@ -5,6 +5,7 @@ import 'package:alquran_new/features/bookmark/models/bookmark_model.dart';
 import 'package:alquran_new/features/doa/data/local/doa_cache.dart';
 import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
+import 'package:alquran_new/features/pengaturan/models/notification_settings.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +18,7 @@ class HiveService {
   static late Box<TafsirCache> tafsirBox;
   static late Box<DoaCache> doaBox;
   static late Box<LocationCache> locationBox;
+  static late Box<NotificationSettings> notificationBox;
 
   static Future<void> init() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -29,6 +31,7 @@ class HiveService {
     Hive.registerAdapter(TafsirCacheAdapter());
     Hive.registerAdapter(DoaCacheAdapter());
     Hive.registerAdapter(LocationCacheAdapter());
+    Hive.registerAdapter(NotificationSettingsAdapter());
 
     bookmarkBox = await Hive.openBox<BookmarkModel>('bookmarks');
     settingsBox = await Hive.openBox<AppSettings>('settings');
@@ -37,5 +40,6 @@ class HiveService {
     tafsirBox = await Hive.openBox<TafsirCache>('tafsirs');
     doaBox = await Hive.openBox<DoaCache>('doas');
     locationBox = await Hive.openBox<LocationCache>('locations');
+    notificationBox = await Hive.openBox<NotificationSettings>('notification_settings');
   }
 }

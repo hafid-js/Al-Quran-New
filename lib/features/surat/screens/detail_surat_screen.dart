@@ -115,8 +115,10 @@ final controller = Get.find<DetailSurahController>();
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        HexColor.fromHex("#23867c"),
-                        HexColor.fromHex("#37b0a5"),
+                        // HexColor.fromHex("#23867c"),
+                        // HexColor.fromHex("#37b0a5"),
+                            Theme.of(context).colorScheme.primary.withAlpha(160),
+                        Theme.of(context).colorScheme.primary.withAlpha(190),
                       ],
                     ),
                   ),
@@ -635,7 +637,7 @@ final controller = Get.find<DetailSurahController>();
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: HexColor.fromHex("#19554d").withAlpha(140),
+                          color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
@@ -649,7 +651,7 @@ final controller = Get.find<DetailSurahController>();
                       height: 40,
                       width: 40,
                       decoration: BoxDecoration(
-                        color: HexColor.fromHex("#19554d").withAlpha(140),
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(

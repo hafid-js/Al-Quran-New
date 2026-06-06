@@ -102,6 +102,7 @@ class BookmarkScreen extends StatelessWidget {
               child: ListTile(
                 onTap: () {
                   controller.openBookmark(bm);
+                  
                 },
                 contentPadding: EdgeInsets.symmetric(horizontal: 16),
                 leading: InkWell(

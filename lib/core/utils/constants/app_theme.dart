@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/utils/constants/shadow_theme.dart';
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
@@ -77,7 +78,7 @@ class AppTheme {
     color: AppColors.textPrimaryDark,
   ),
 
-  scaffoldBackgroundColor: AppColors.dark,
+  scaffoldBackgroundColor: HexColor.fromHex("#132D3B").withAlpha(120),
   cardColor: AppColors.darkCard,
   extensions: [
     AppShadow(
