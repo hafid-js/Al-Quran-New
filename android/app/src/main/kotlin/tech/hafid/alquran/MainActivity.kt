@@ -1,4 +1,4 @@
-package tech.hafid.alquran
+package com.hafidtech.alquran
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -26,8 +26,7 @@ class LocationController extends GetxController {
 
     try {
       provinces.value = await LocationService.getProvinces();
-    } catch (e) {
-      print(e);
+    } catch (_) {
     } finally {
       isLoadingProvince.value = false;
     }
@@ -39,8 +38,7 @@ class LocationController extends GetxController {
     try {
       final data = await LocationService.getCities(province);
       cities.value = data;
-    } catch (e) {
-      print(e);
+    } catch (_) {
       cities.clear();
     } finally {
       isLoadingCity.value = false;

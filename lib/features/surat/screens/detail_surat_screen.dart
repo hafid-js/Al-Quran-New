@@ -225,7 +225,7 @@ final controller = Get.find<DetailSurahController>();
                             itemPositionsListener: itemPositionsListener,
                             scrollOffsetController: scrollOffsetController,
                             scrollDirection: Axis.vertical,
-                            itemCount: data.ayat.length,
+                            itemCount: data.ayat.length + 1,
                             itemBuilder: (context, index) {
                               if (index == 0) {
                                 if(data.namaLatin == "Al-Fatihah"){

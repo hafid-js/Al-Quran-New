@@ -15,12 +15,12 @@ class PemutarAudioScreen extends StatefulWidget {
 }
 
 final Map<String, String> qariImages = {
-  "01": "assets/images/qari/Abdullah-Al-Juhany.png",
-  "02": "assets/images/qari/Abdul-Muhsin-Al-Qasim.png",
-  "03": "assets/images/qari/Abdurrahman-as-Sudais.png",
-  "04": "assets/images/qari/Ibrahim-Al-Dossari.png",
-  "05": "assets/images/qari/Misyari-Rasyid-Al-Afasi.png",
-  "06": "assets/images/qari/Yasser-Al-Dosari.png",
+  "01": "assets/images/qari/Abdullah-Al-Juhany.webp",
+  "02": "assets/images/qari/Abdul-Muhsin-Al-Qasim.webp",
+  "03": "assets/images/qari/Abdurrahman-as-Sudais.webp",
+  "04": "assets/images/qari/Ibrahim-Al-Dossari.webp",
+  "05": "assets/images/qari/Misyari-Rasyid-Al-Afasi.webp",
+  "06": "assets/images/qari/Yasser-Al-Dosari.webp",
 };
 
 final List<Map<String, dynamic>> qoris = [
@@ -935,7 +935,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                                   ),
 
                                                   Container(
-                                                    height: 4,
+                                                    height: 6,
                                                     width: knobX,
                                                     decoration: BoxDecoration(
                                                       color: Theme.of(

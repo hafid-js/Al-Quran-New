@@ -19,7 +19,7 @@ import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_scre
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:hijri/hijri_calendar.dart';
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        exit(0);
+        SystemNavigator.pop();
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -33,6 +33,11 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Keystore / signing
+*.jks
+*.keystore
+key.properties
+
 # Symbolication related
 app.*.symbols
 

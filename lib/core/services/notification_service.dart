@@ -47,7 +47,6 @@ class NotificationService {
           AndroidFlutterLocalNotificationsPlugin
         >();
     await androidPlugin?.requestNotificationsPermission();
-    await androidPlugin?.requestExactAlarmsPermission();
   }
 
   String _resolveSoundResource(String? soundType) {
@@ -157,7 +156,7 @@ class NotificationService {
       body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: notificationDetails,
-     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+     androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 

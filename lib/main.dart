@@ -8,12 +8,13 @@ import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_da
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
-import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/pengaturan/services/notification_settings_service.dart';
 import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
+import 'package:alquran_new/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -23,7 +24,8 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
     await HiveService.init().timeout(const Duration(seconds: 10));
@@ -96,6 +98,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => FlutterNativeSplash.remove());
+
     final setting = Get.find<SettingsController>();
 
     return Obx(() {
@@ -109,7 +113,7 @@ class MyApp extends StatelessWidget {
             ? ThemeMode.dark
             : ThemeMode.light,
 
-        home: HomeScreen(),
+        home: const SplashScreen(),
       );
     });
   }

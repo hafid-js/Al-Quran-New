@@ -52,8 +52,7 @@ class DoaController extends GetxController {
       } else if (result is Failure<List<Doa>>) {
         Get.snackbar('Error', result.message);
       }
-    } catch (e) {
-      print("Error: $e");
+    } catch (_) {
     } finally {
       isLoading.value = false;
     }
