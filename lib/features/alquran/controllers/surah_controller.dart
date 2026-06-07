@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:alquran_new/core/db/hive_service.dart';
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/datasource/surah_local_datasource.dart';
@@ -95,6 +96,16 @@ final qariKey = (settingController.qariSelected.value + 1)
       return;
     }
 
+    final net = Get.find<NetworkController>();
+    if (!net.isConnected.value) {
+      Get.snackbar(
+        "Tidak Ada Koneksi",
+        "Periksa koneksi internet untuk memuat daftar surah.",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
     final result = await _getAllSurah.call();
 
     if (result is Success<List<Surah>>) {
@@ -160,6 +171,16 @@ final qariKey = (settingController.qariSelected.value + 1)
   }
 
 Future<void> playAudio(Surah surah) async {
+  final network = Get.find<NetworkController>();
+  if (!network.isConnected.value) {
+    Get.snackbar(
+      "Tidak Ada Koneksi",
+      "Periksa koneksi internet Anda untuk memutar audio.",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    return;
+  }
+
   final setting = Get.find<SettingsController>();
 
   final qariKey = (setting.qariSelected.value + 1)
@@ -203,13 +224,29 @@ Future<void> playAudio(Surah surah) async {
   }
 
   void stopAudio(Surah surah) async {
-    try {
-      await player.stop();
-      _setSurahAudioState(surah.nomor, "stop");
-    } catch (e) {
-      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
-    }
+  try {
+    await player.stop();
+
+    _setSurahAudioState(surah.nomor, "stop");
+
+    activeSurahNomor.value = null;
+
+  } catch (e) {
+    Get.defaultDialog(
+      title: "Terjadi Kesalahan",
+      middleText: e.toString(),
+    );
   }
+}
+
+  // void stopAudio(Surah surah) async {
+  //   try {
+  //     await player.stop();
+  //     _setSurahAudioState(surah.nomor, "stop");
+  //   } catch (e) {
+  //     Get.defaultDialog(title: "Terjadi Kesalahan", middleText: e.toString());
+  //   }
+  // }
 
   void resumeAudio(Surah surah) async {
     try {

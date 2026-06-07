@@ -9,11 +9,19 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  static const String _channelId = 'prayer_notification';
+  static const String _channelName = 'Notifikasi Sholat';
+
+  static const Map<String, String> _soundResources = {
+    'default': 'alarmbeep',
+    'adzan': 'adzansubuh',
+  };
+
   Future<void> initialize() async {
     await _requestAndroidPermissions();
 
     const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const DarwinInitializationSettings iosSettings =
         DarwinInitializationSettings(
@@ -25,8 +33,13 @@ class NotificationService {
     const InitializationSettings initializationSettings =
         InitializationSettings(android: androidSettings, iOS: iosSettings);
 
-    await _notificationsPlugin.initialize(settings: initializationSettings);
+    await _notificationsPlugin.initialize(
+      settings: initializationSettings,
+      onDidReceiveNotificationResponse: _onNotificationResponse,
+    );
   }
+
+  void _onNotificationResponse(NotificationResponse response) {}
 
   Future<void> _requestAndroidPermissions() async {
     final androidPlugin = _notificationsPlugin
@@ -34,42 +47,54 @@ class NotificationService {
           AndroidFlutterLocalNotificationsPlugin
         >();
     await androidPlugin?.requestNotificationsPermission();
+    await androidPlugin?.requestExactAlarmsPermission();
+  }
+
+  String _resolveSoundResource(String? soundType) {
+    if (soundType == null) return '';
+    return _soundResources[soundType] ?? '';
   }
 
   Future<void> showNotification({
     int id = 0,
-    String title = "Notification",
-    String body = "This is a notification message",
-    String? soundSource,
+    String title = 'Notification',
+    String body = 'This is a notification message',
+    String? soundType,
+    int notificationMode = 0,
   }) async {
-    AndroidNotificationDetails androidNotificationDetails =
+    final soundResource = _resolveSoundResource(soundType);
+    final isSilent = notificationMode == 3;
+    final playSound = notificationMode == 0 || notificationMode == 1;
+    final vibrate = notificationMode == 0 || notificationMode == 2;
+
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          "default_channel_$soundSource",
-          "Default_channel",
-          channelDescription: "This is a default notification channel",
+          _channelId,
+          _channelName,
+          channelDescription: 'Notifikasi waktu sholat',
+          importance: Importance.max,
           priority: Priority.high,
           showWhen: true,
-
-          playSound: true,
-
-          sound: soundSource != null
-              ? RawResourceAndroidNotificationSound(soundSource)
+          playSound: playSound,
+          sound: playSound && soundResource.isNotEmpty
+              ? RawResourceAndroidNotificationSound(soundResource)
               : null,
+          enableVibration: vibrate,
+          silent: isSilent,
         );
 
-    DarwinNotificationDetails iosNotificationDetails =
+    final DarwinNotificationDetails iosNotificationDetails =
         DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          presentBanner: true,
-
-          sound: soundSource != null && soundSource.isNotEmpty
-              ? soundSource
+          presentAlert: !isSilent,
+          presentBadge: !isSilent,
+          presentSound: playSound && soundResource.isNotEmpty,
+          presentBanner: !isSilent,
+          sound: playSound && soundResource.isNotEmpty
+              ? soundResource
               : null,
         );
 
-    NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
@@ -87,40 +112,52 @@ class NotificationService {
     required String title,
     required String body,
     required DateTime scheduledDate,
-    String? soundSource,
+    String? soundType,
+    int notificationMode = 0,
   }) async {
-    final androidNotificationDetails = AndroidNotificationDetails(
-      "default_channel_$soundSource",
-      "Defailt_channel",
-      channelDescription: "This is a default notification channel",
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      sound: soundSource != null
-          ? RawResourceAndroidNotificationSound(soundSource)
-          : null,
-    );
+    final soundResource = _resolveSoundResource(soundType);
+    final isSilent = notificationMode == 3;
+    final playSound = notificationMode == 0 || notificationMode == 1;
+    final vibrate = notificationMode == 0 || notificationMode == 2;
 
-    final iosNotificationDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-      presentBanner: true,
-      sound: soundSource,
-    );
+    final AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          _channelId,
+          _channelName,
+          channelDescription: 'Notifikasi waktu sholat',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: playSound,
+          sound: playSound && soundResource.isNotEmpty
+              ? RawResourceAndroidNotificationSound(soundResource)
+              : null,
+          enableVibration: vibrate,
+          silent: isSilent,
+        );
 
-    final notificationDetails = NotificationDetails(
+    final DarwinNotificationDetails iosNotificationDetails =
+        DarwinNotificationDetails(
+          presentAlert: !isSilent,
+          presentBadge: !isSilent,
+          presentSound: playSound && soundResource.isNotEmpty,
+          presentBanner: !isSilent,
+          sound: playSound && soundResource.isNotEmpty
+              ? soundResource
+              : null,
+        );
+
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
 
     await _notificationsPlugin.zonedSchedule(
       id: id,
-      body: body,
       title: title,
+      body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 

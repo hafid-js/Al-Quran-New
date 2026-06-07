@@ -26,7 +26,7 @@ class PrayerTimeRepository {
       "bulan_nama": DateFormat.MMMM('id').format(DateTime.now()),
       "tahun": DateTime.now().year,
     }),
-  );
+  ).timeout(const Duration(seconds: 15));
 
   if (response.statusCode == 200) {
     final decoded = jsonDecode(response.body);

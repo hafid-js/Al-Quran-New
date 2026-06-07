@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import '../models/notification_settings.dart';
 import '../services/notification_settings_service.dart';
 
@@ -43,12 +44,14 @@ class NotificationSettingsController extends GetxController {
     notificationMode.value = index;
     settings.notificationMode = index;
     await service.save(settings);
+    await Get.find<PrayerTimeController>().rescheduleNotifications();
   }
 
   Future<void> changeSound(String type) async {
     soundType.value = type;
     settings.soundType = type;
     await service.save(settings);
+    await Get.find<PrayerTimeController>().rescheduleNotifications();
   }
 
   Future<void> togglePrayer(String type) async {
@@ -85,5 +88,6 @@ class NotificationSettingsController extends GetxController {
     }
 
     await service.save(settings);
+    await Get.find<PrayerTimeController>().rescheduleNotifications();
   }
 }

@@ -19,7 +19,6 @@ class LocationController extends GetxController {
     super.onInit();
     loadSavedLocation();
     fetchProvinces();
-    _restoreLocation();
   }
 
   Future<void> fetchProvinces() async {
@@ -68,16 +67,4 @@ class LocationController extends GetxController {
   }
   }
 
-  Future<void> _restoreLocation() async {
-  final loc = await LocationService.getLocation();
-
-  if (loc != null) {
-    selectedProvince.value = loc.province;
-    selectedCity.value = loc.city;
-
-    if (loc.province != null) {
-      await fetchCities(loc.province!);
-    }
-  }
-}
 }

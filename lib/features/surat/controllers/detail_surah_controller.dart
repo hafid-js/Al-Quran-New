@@ -58,6 +58,11 @@ Future<void> fetchDetailSurah(int nomor) async {
       }
 
       if (!net.isConnected.value) {
+        Get.snackbar(
+          "Tidak Ada Koneksi",
+          "Ayat surat ini belum tersimpan. Periksa koneksi internet.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
         detailSurah.value = DetailSurah(
           nomor: cache.nomor,
           nama: cache.nama,
@@ -76,7 +81,11 @@ Future<void> fetchDetailSurah(int nomor) async {
     if (cache == null) {
       if (!net.isConnected.value) {
         detailSurah.value = null;
-        Get.snackbar("Data tidak ada", "Surah ini belum ada di cache");
+        Get.snackbar(
+          "Data tidak ada",
+          "Surah ini belum ada di cache",
+          snackPosition: SnackPosition.BOTTOM,
+        );
         return;
       }
     }
@@ -101,10 +110,18 @@ Future<void> fetchDetailSurah(int nomor) async {
 
       detailSurah.value = data;
     } else if (result is Failure && cache == null) {
-      Get.snackbar("Gagal memuat", (result as Failure).message);
+      Get.snackbar(
+        "Gagal memuat",
+        (result as Failure).message,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   } catch (e, s) {
-    Get.snackbar("Terjadi Kesalahan", e.toString());
+    Get.snackbar(
+      "Terjadi Kesalahan",
+      e.toString(),
+      snackPosition: SnackPosition.BOTTOM,
+    );
   } finally {
     isLoading.value = false;
   }

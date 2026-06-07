@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/doa/data/local/datasource/doa_local_datasource.dart';
 import 'package:alquran_new/features/doa/domain/entities/doa.dart';
@@ -30,6 +31,16 @@ class DoaController extends GetxController {
       if (cache.isNotEmpty) {
         doaList.value = cache;
         filteredDoa.value = cache;
+        return;
+      }
+
+      final net = Get.find<NetworkController>();
+      if (!net.isConnected.value) {
+        Get.snackbar(
+          "Tidak Ada Koneksi",
+          "Periksa koneksi internet Anda untuk memuat doa.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
         return;
       }
 

@@ -1,5 +1,7 @@
 import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
+import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
@@ -23,18 +25,34 @@ import 'package:timezone/timezone.dart' as tz;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await HiveService.init();
-  await GetStorage.init();
+  try {
+    await HiveService.init().timeout(const Duration(seconds: 10));
+  } catch (_) {}
 
-  await initializeDateFormatting('id', null);
-  Intl.defaultLocale = 'id';
+  try {
+    await GetStorage.init();
+  } catch (_) {}
 
-  final settingsService = SettingsService();
-  final settingsController = SettingsController(settingsService);
+  try {
+    await initializeDateFormatting('id', null);
+    Intl.defaultLocale = 'id';
+  } catch (_) {}
 
-  await settingsController.loadSettings();
+  try {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
+  } catch (_) {}
 
-  Get.put(settingsController, permanent: true);
+  try {
+    await NotificationService().initialize().timeout(const Duration(seconds: 10));
+  } catch (_) {}
+
+  try {
+    final settingsService = SettingsService();
+    final settingsController = SettingsController(settingsService);
+    await settingsController.loadSettings();
+    Get.put(settingsController, permanent: true);
+  } catch (_) {}
 
   _registerDependencies();
 
@@ -44,6 +62,8 @@ void main() async {
 void _registerDependencies() {
   final dioClient = DioClient();
   Get.put(dioClient);
+
+    Get.put(NetworkController(), permanent: true);
 
   final prayerTimeRemoteDataSource = PrayerTimeRemoteDataSourceImpl(dioClient);
 

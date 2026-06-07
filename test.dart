@@ -91,7 +91,7 @@ class PrayerTimeController extends GetxController {
               title: "Waktu ${prayer.key}",
               body: "Saatnya menunaikan sholat ${prayer.key}",
               scheduledDate: prayerTime,
-              soundSource: "adhan",
+              soundType: "adhan",
             );
           }
         }

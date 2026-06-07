@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
+import 'package:alquran_new/features/home/data/datasources/prayer_time_local_datasource.dart';
+import 'package:alquran_new/features/home/data/local/prayer_time_cache.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/lokasi/services/location_service.dart';
 import 'package:alquran_new/features/home/models/prayer_time_model.dart';
+import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
-import 'package:get/get.dart';
 
 class PrayerTimeController extends GetxController {
   final PrayerTimeRepository repo;
+  final PrayerTimeLocalDatasource local = PrayerTimeLocalDatasource();
 
   PrayerTimeController({required this.repo});
 
@@ -15,96 +21,179 @@ class PrayerTimeController extends GetxController {
       Get.find<NotificationSettingsController>();
 
   var todayPrayer = Rxn<PrayerTimeModel>();
-
   var nextPrayerName = "".obs;
   var nextPrayerTime = Rxn<DateTime>();
 
   var remaining = Duration.zero.obs;
   var totalDuration = Duration.zero.obs;
 
-  var isLoading = true.obs;
+  var isLoading = false.obs;
   var errorMessage = RxnString();
-
   var currentCity = "Kab. Purworejo".obs;
-  bool _alreadyNotified = false;
+  bool _isRefreshing = false;
+  bool _disposed = false;
 
-  Timer? _timer;
+  Timer? _prayerTimer;
+  Timer? _countdownTimer;
+  LocationCache? _cachedLocation;
 
   @override
   void onInit() {
     super.onInit();
-    fetchPrayerTimes();
+    _startCountdown();
+    Future.delayed(Duration.zero, () {
+      if (!_disposed) fetchPrayerTimes();
+    });
+  }
+
+  void _startCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (_disposed) return;
+      final next = nextPrayerTime.value;
+      remaining.value = next != null
+          ? next.difference(DateTime.now())
+          : Duration.zero;
+    });
+  }
+
+  void _schedulePrayerTimer() {
+    _prayerTimer?.cancel();
+    final next = nextPrayerTime.value;
+    if (next == null) return;
+
+    final diff = next.difference(DateTime.now());
+    if (diff.isNegative) return;
+
+    _prayerTimer = Timer(diff, () {
+      if (!_disposed) fetchPrayerTimes();
+    });
   }
 
   Future<void> fetchPrayerTimes() async {
-    final location = await LocationService.getLocation();
+    if (_isRefreshing) return;
+    if (_disposed) return;
+
     try {
+      _isRefreshing = true;
       isLoading.value = true;
 
-      String targetProvince;
-      String targetCity;
+      _cachedLocation ??= await LocationService.getLocation()
+          .timeout(const Duration(seconds: 5), onTimeout: () => null);
 
-      if (location == null) {
-        targetProvince = "Jawa Tengah";
-        targetCity = "Kab. Purworejo";
-      } else {
-        targetProvince = location.province ?? "Jawa Tengah";
-        targetCity = location.city ?? "Kab. Purworejo";
+      final String todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final cached = local.get();
+      if (cached != null && cached.tanggalLengkap == todayStr) {
+        todayPrayer.value = cached.toEntity();
+        final loc = _cachedLocation;
+        if (loc != null) {
+          currentCity.value = loc.city;
+        }
+        _calculateNextPrayer(cached.toEntity());
+        isLoading.value = false;
+        _isRefreshing = false;
+        return;
       }
 
-      currentCity.value = targetCity;
+      final net = Get.find<NetworkController>();
+      if (!net.isConnected.value) {
+        Get.snackbar(
+          "Tidak Ada Koneksi",
+          "Periksa koneksi internet untuk memuat jadwal sholat.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
 
       final data = await repo.fetchPrayerTimes(
-        province: targetProvince,
-        city: targetCity,
+        province: _cachedLocation?.province ?? "Jawa Tengah",
+        city: _cachedLocation?.city ?? "Kab. Purworejo",
       );
 
       final schedules = data['schedules'] as List<PrayerTimeModel>;
+      if (schedules.isEmpty) return;
 
-      if (schedules.isNotEmpty) {
-        todayPrayer.value = schedules.first;
+      final item = schedules.first;
+      todayPrayer.value = item;
 
-        final item = schedules.first;
-        final now = DateTime.now();
-
-        await NotificationService().cancelAllNotification();
-
-        final prayers = {
-          "Imsak": item.imsak,
-          "Subuh": item.subuh,
-          "Dzuhur": item.dzuhur,
-          "Ashar": item.ashar,
-          "Maghrib": item.maghrib,
-          "Isya": item.isya,
-        };
-
-        int id = 1;
-
-        for (final prayer in prayers.entries) {
-          final prayerTime = _parseTime(prayer.value, now);
-
-          final enabled = _isPrayerEnabled(prayer.key);
-
-          if (enabled && prayerTime.isAfter(now)) {
-            await NotificationService().scheduleNotification(
-              id: id++,
-              title: "Waktu ${prayer.key}",
-              body: "Saatnya menunaikan sholat ${prayer.key}",
-              scheduledDate: prayerTime,
-              soundSource: "adhan",
-            );
-          }
-        }
-
-        _calculateNextPrayer(schedules.first);
-        _startTimer(schedules.first);
+      final loc = _cachedLocation;
+      if (loc != null) {
+        currentCity.value = loc.city;
       }
 
-      isLoading.value = false;
+      final cacheData = PrayerTimeCache.fromEntity(item,
+          province: loc?.province, city: loc?.city);
+      await local.save(cacheData);
+
+      final now = DateTime.now();
+
+      final prayers = {
+        "Subuh": item.subuh,
+        "Dzuhur": item.dzuhur,
+        "Ashar": item.ashar,
+        "Maghrib": item.maghrib,
+        "Isya": item.isya,
+      };
+
+      final prayerIds = {
+        "Subuh": 1,
+        "Dzuhur": 2,
+        "Ashar": 3,
+        "Maghrib": 4,
+        "Isya": 5,
+      };
+
+      for (final entry in prayers.entries) {
+        DateTime prayerTime = _parseTime(entry.value, now);
+        if (prayerTime.isBefore(now)) {
+          prayerTime = prayerTime.add(const Duration(days: 1));
+        }
+        if (_isPrayerEnabled(entry.key)) {
+          await NotificationService().scheduleNotification(
+            id: prayerIds[entry.key]!,
+            title: "Waktu ${entry.key}",
+            body: "Saatnya sholat ${entry.key}",
+            scheduledDate: prayerTime,
+            soundType: settingsController.soundType.value,
+            notificationMode: settingsController.notificationMode.value,
+          );
+        }
+      }
+
+      _calculateNextPrayer(item);
     } catch (e) {
-      isLoading.value = false;
       errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+      _isRefreshing = false;
     }
+  }
+
+  void _calculateNextPrayer(PrayerTimeModel item) {
+    final now = DateTime.now();
+    final prayers = {
+      "Subuh": item.subuh,
+      "Dzuhur": item.dzuhur,
+      "Ashar": item.ashar,
+      "Maghrib": item.maghrib,
+      "Isya": item.isya,
+    };
+
+    for (final entry in prayers.entries) {
+      final dt = _parseTime(entry.value, now);
+      if (dt.isAfter(now)) {
+        nextPrayerName.value = entry.key;
+        nextPrayerTime.value = dt;
+        _schedulePrayerTimer();
+        return;
+      }
+    }
+
+    final tomorrow = now.add(const Duration(days: 1));
+    nextPrayerName.value = "Subuh";
+    nextPrayerTime.value = _parseTime(item.subuh, tomorrow);
+    _schedulePrayerTimer();
   }
 
   DateTime _parseTime(String time, DateTime base) {
@@ -120,8 +209,6 @@ class PrayerTimeController extends GetxController {
 
   bool _isPrayerEnabled(String prayer) {
     switch (prayer) {
-      case "Imsak":
-        return settingsController.imsak.value;
       case "Subuh":
         return settingsController.subuh.value;
       case "Dzuhur":
@@ -137,9 +224,31 @@ class PrayerTimeController extends GetxController {
     }
   }
 
-  void _calculateNextPrayer(PrayerTimeModel item) {
-    final now = DateTime.now();
+  void pauseCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = null;
+  }
 
+  void resumeCountdown() {
+    if (_disposed) return;
+    _startCountdown();
+  }
+
+  String get remainingText {
+    final diff = remaining.value;
+    if (diff.isNegative) return "--";
+    return "${diff.inHours.toString().padLeft(2, '0')}:"
+        "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
+        "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
+  }
+
+  Future<void> rescheduleNotifications() async {
+    final item = todayPrayer.value;
+    if (item == null) return;
+
+    await NotificationService().cancelAllNotification();
+
+    final now = DateTime.now();
     final prayers = {
       "Subuh": item.subuh,
       "Dzuhur": item.dzuhur,
@@ -148,56 +257,38 @@ class PrayerTimeController extends GetxController {
       "Isya": item.isya,
     };
 
-    for (final entry in prayers.entries) {
-      final dt = _parseTime(entry.value, now);
+    final prayerIds = {
+      "Subuh": 1,
+      "Dzuhur": 2,
+      "Ashar": 3,
+      "Maghrib": 4,
+      "Isya": 5,
+    };
 
-      if (dt.isAfter(now)) {
-        nextPrayerName.value = entry.key;
-        nextPrayerTime.value = dt;
-        return;
+    for (final entry in prayers.entries) {
+      DateTime prayerTime = _parseTime(entry.value, now);
+      if (prayerTime.isBefore(now)) {
+        prayerTime = prayerTime.add(const Duration(days: 1));
+      }
+      if (_isPrayerEnabled(entry.key)) {
+        await NotificationService().scheduleNotification(
+          id: prayerIds[entry.key]!,
+          title: "Waktu ${entry.key}",
+          body: "Saatnya sholat ${entry.key}",
+          scheduledDate: prayerTime,
+          soundType: settingsController.soundType.value,
+          notificationMode: settingsController.notificationMode.value,
+        );
       }
     }
-
-    final subuhTomorrow = _parseTime(
-      item.subuh,
-      now.add(const Duration(days: 1)),
-    );
-
-    nextPrayerName.value = "Subuh";
-    nextPrayerTime.value = subuhTomorrow;
-  }
-
- void _startTimer(PrayerTimeModel item) {
-  _timer?.cancel();
-
-  _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final now = DateTime.now();
-
-      final next = nextPrayerTime.value;
-      if (next == null) return;
-
-      remaining.value = next.difference(now);
-
-      if (remaining.value.isNegative) {
-        fetchPrayerTimes();
-      }
-
-      totalDuration.value = remaining.value; 
-    });
-}
-
-  double get percent {
-    final total = totalDuration.value.inSeconds;
-    final remain = remaining.value.inSeconds;
-
-    if (total <= 0) return 0.0;
-
-    return ((total - remain) / total).clamp(0.0, 1.0);
   }
 
   @override
   void onClose() {
-    _timer?.cancel();
+    _prayerTimer?.cancel();
+    _countdownTimer?.cancel();
+    _isRefreshing = false;
+    _disposed = true;
     super.onClose();
   }
 }
