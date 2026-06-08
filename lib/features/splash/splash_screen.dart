@@ -47,11 +47,14 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              'assets/images/logo/hafidtechlogo_rounded.png',
-              width: 150,
-              height: 150,
-              fit: BoxFit.contain,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/images/logo/hafidtechlogo_rounded.png',
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
+              ),
             ),
             const SizedBox(height: 32),
             AnimatedBuilder(

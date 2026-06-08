@@ -15,6 +15,7 @@ import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/lokasi/lokasi_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
+import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 
@@ -105,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    SurahBinding().dependencies();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -135,20 +137,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 0),
-        body: Obx(() {
-          if (controller.isLoading.value) {
-            return const Loading();
-          }
-          if (controller.errorMessage.value != null) {
-            return Scaffold(body: Center(
-              child: Text("Error: ${controller.errorMessage.value}"),
-            ));
-          }
-          if (controller.todayPrayer.value == null) {
-            return const Scaffold(body: Center(child: Text("Data kosong")));
-          }
-          return _buildContent(context);
-        }),
+        body: Stack(
+          children: [
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Loading();
+              }
+              if (controller.errorMessage.value != null) {
+                return Scaffold(body: Center(
+                  child: Text("Error: ${controller.errorMessage.value}"),
+                ));
+              }
+              if (controller.todayPrayer.value == null) {
+                return const Scaffold(body: Center(child: Text("Data kosong")));
+              }
+              return _buildContent(context);
+            }),
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: PlayerBar(),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
+import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -41,7 +42,7 @@ class AlQuranScreen extends StatefulWidget {
 }
 
 class _AlQuranScreenState extends State<AlQuranScreen> {
-  final SurahController controller = Get.put(SurahController());
+  final SurahController controller = Get.put(SurahController(), permanent: true);
   final List<String> categories = ["Surah", "Mekah", "Madinah"];
 
   @override
@@ -110,23 +111,23 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                           color: Theme.of(context).cardColor,
                           boxShadow: context.shadow.small,
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: HexColor.fromHex("#7c97a6"),
-                            ),
-                            const SizedBox(width: 15),
-                            Expanded(
-                              child: Text(
-                                "Cari Surat...",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: HexColor.fromHex("#7c97a6"),
-                                ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextField(
+                            onChanged: controller.search,
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                Icons.search,
+                                color: HexColor.fromHex("#7c97a6"),
                               ),
+                              hintText: "Cari Surat...",
+                              hintStyle: TextStyle(
+                                color: HexColor.fromHex("#7c97a6"),
+                                fontSize: 14,
+                              ),
+                              border: InputBorder.none,
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -275,6 +276,13 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
 
             return const Positioned.fill(child: Loading());
           }),
+
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: PlayerBar(),
+          ),
         ],
       ),
     );

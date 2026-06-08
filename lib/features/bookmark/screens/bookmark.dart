@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,8 +70,9 @@ class BookmarkScreen extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+       
+       Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35),
           child: Text(
             "Ayat yang kamu simpan akan muncul di sini.",
             textAlign: TextAlign.center,
@@ -80,6 +82,28 @@ class BookmarkScreen extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 24),
+        GestureDetector(
+        onTap: () => Get.to(() => AlQuranScreen()),
+        child:  
+       
+        Column(
+          children: [
+            Icon(
+          Icons.add_circle_outline_rounded,
+          size: 40,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "Tambah",
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+          ],)
+        )
       ],
     ),
   );

@@ -12,6 +12,7 @@ import 'package:alquran_new/features/alquran/domain/entities/detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/entities/tafsir.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
@@ -273,17 +274,25 @@ Future<void> clearAllCache() async {
   }
 
   void playAudio(Ayat ayat) async {
-    if (ayat.audio.values.isEmpty || ayat.audio.values.first.isEmpty) return;
+    if (ayat.audio.values.isEmpty) return;
 
     try {
       if (activeAyatNomor.value != null) {
         _setAyatAudioState(activeAyatNomor.value!, "stop");
       }
 
+      final setting = Get.find<SettingsController>();
+      final qariKey = (setting.qariSelected.value + 1)
+          .toString()
+          .padLeft(2, '0');
+
+      final url = ayat.audio[qariKey] ?? ayat.audio.values.first;
+      if (url.isEmpty) return;
+
       activeAyatNomor.value = ayat.nomorAyat;
 
       await player.stop();
-      await player.setUrl(ayat.audio.values.first);
+      await player.setUrl(url);
 
       _setAyatAudioState(ayat.nomorAyat, "playing");
       await player.play();

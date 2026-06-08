@@ -11,11 +11,13 @@ import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
 import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
-class SurahController extends GetxController {
-  final GetAllSurah _getAllSurah = Get.find();
+class SurahController extends GetxController
+    with WidgetsBindingObserver {
+  late final GetAllSurah _getAllSurah;
   final SurahLocalDatasource local = SurahLocalDatasource();
 
   var isLoading = false.obs;
@@ -24,6 +26,7 @@ class SurahController extends GetxController {
   var surahList = <Surah>[].obs;
   var filteredSurah = <Surah>[].obs;
   var activeCategory = "Surah".obs;
+  var searchQuery = ''.obs;
 
   final player = AudioPlayer();
 
@@ -40,9 +43,18 @@ class SurahController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _getAllSurah = Get.find<GetAllSurah>();
+    WidgetsBinding.instance.addObserver(this);
     _audioSub?.cancel();
     fetchSurah();
     _listenToAudio();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      player.stop();
+    }
   }
 
   String getSurahAudioState(int nomor) {
@@ -114,21 +126,23 @@ class SurahController extends GetxController {
 }
 
   Future<void> playAudio(Surah surah) async {
-    final network = Get.find<NetworkController>();
-    if (!network.isConnected.value) return;
+    if (isAudioLoading.value) return;
+    isAudioLoading.value = true;
+    try {
+      final network = Get.find<NetworkController>();
+      if (!network.isConnected.value) return;
 
       _lastCompletedSurah = null;
 
-    final setting = Get.find<SettingsController>();
+      final setting = Get.find<SettingsController>();
 
-    final qariKey = (setting.qariSelected.value + 1)
-        .toString()
-        .padLeft(2, '0');
+      final qariKey = (setting.qariSelected.value + 1)
+          .toString()
+          .padLeft(2, '0');
 
-    final url = surah.audioFull[qariKey] ?? "";
-    if (url.isEmpty) return;
+      final url = surah.audioFull[qariKey] ?? "";
+      if (url.isEmpty) return;
 
-    try {
       final previous = activeSurahNomor.value;
 
       activeSurahNomor.value = surah.nomor;
@@ -145,6 +159,8 @@ class SurahController extends GetxController {
       }
     } catch (_) {
       _setSurahAudioState(surah.nomor, "stop");
+    } finally {
+      isAudioLoading.value = false;
     }
   }
 
@@ -257,15 +273,41 @@ class SurahController extends GetxController {
 
   void filter(String category) {
     activeCategory.value = category;
+    _applyFilter();
+  }
 
-    if (category == "Surah") {
-      filteredSurah.value = surahList;
-    } else {
-      filteredSurah.value = surahList
+  Timer? _debounce;
+
+  void search(String value) {
+    searchQuery.value = value;
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      _applyFilter();
+    });
+  }
+
+  void _applyFilter() {
+    List<Surah> result = surahList;
+
+    if (activeCategory.value != "Surah") {
+      result = result
           .where((e) =>
-              e.tempatTurun.name.toLowerCase() == category.toLowerCase())
+              e.tempatTurun.name.toLowerCase() ==
+              activeCategory.value.toLowerCase())
           .toList();
     }
+
+    final query = searchQuery.value.toLowerCase().trim();
+    if (query.isNotEmpty) {
+      result = result
+          .where((e) =>
+              e.namaLatin.toLowerCase().contains(query) ||
+              e.nama.toLowerCase().contains(query) ||
+              e.arti.toLowerCase().contains(query))
+          .toList();
+    }
+
+    filteredSurah.value = result;
   }
 
   Future<void> playPrevious() async {
@@ -306,6 +348,7 @@ class SurahController extends GetxController {
 
   @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
     _audioSub?.cancel();
     player.stop();
     player.dispose();

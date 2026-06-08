@@ -13,13 +13,14 @@ class KiblatScreen extends StatefulWidget {
 
 class _KiblatScreenState extends State<KiblatScreen> with SingleTickerProviderStateMixin {
   late TabController tabController;
+  final KiblatController controller = Get.put(KiblatController());
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.put(KiblatController()).requestPermissionsAndLocate();
+      controller.requestPermissionsAndLocate();
     });
   }
 

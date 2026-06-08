@@ -8,13 +8,16 @@ class CompassView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.find<KiblatController>();
-    final controller =   Get.put(KiblatController());
+    final controller = Get.find<KiblatController>();
 
     
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Obx(() {
+      if (controller.isDeniedForever.value) {
+        return _buildDeniedForeverView(context, controller);
+      }
+
       if (!controller.hasPermission.value) {
         return _buildPermissionView(context, controller);
       }
@@ -56,6 +59,43 @@ class CompassView extends StatelessWidget {
               onPressed: () => controller.requestPermissionsAndLocate(),
               icon: const Icon(Icons.my_location),
               label: const Text('Aktifkan Lokasi'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeniedForeverView(BuildContext context, KiblatController controller) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.location_off, size: 64, color: Theme.of(context).colorScheme.error),
+            const SizedBox(height: 16),
+            Text(
+              'Izin lokasi ditolak permanen',
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Buka Pengaturan & aktifkan izin lokasi untuk menggunakan fitur kiblat',
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => controller.openAppSettings(),
+              icon: const Icon(Icons.settings),
+              label: const Text('Buka Pengaturan'),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () => controller.requestPermissionsAndLocate(),
+              child: const Text('Coba Lagi'),
             ),
           ],
         ),
