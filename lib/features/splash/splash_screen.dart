@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:alquran_new/features/home/screens/home_screen.dart';
+import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,11 +25,15 @@ class _SplashScreenState extends State<SplashScreen>
     )..repeat();
 
     Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-      }
+      if (!mounted) return;
+      final box = GetStorage();
+      final hasConsented = box.read('has_consented') ?? false;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) =>
+              hasConsented ? const HomeScreen() : const ConsentScreen(),
+        ),
+      );
     });
   }
 

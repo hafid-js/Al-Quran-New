@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:alquran_new/features/kiblat/services/device_sensor_checker.dart';
 import 'package:alquran_new/features/kiblat/services/qibla_calculator.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,6 +16,8 @@ class KiblatController extends GetxController {
   var errorMessage = ''.obs;
   var locationName = ''.obs;
   var isDeniedForever = false.obs;
+  var compassAvailable = true.obs;
+  var hasHeadingData = false.obs;
 
   StreamSubscription? _headingSubscription;
   StreamSubscription? _positionSubscription;
@@ -59,7 +62,7 @@ class KiblatController extends GetxController {
     }
 
     hasPermission.value = true;
-    _startCompass();
+    await _startCompass();
 
     try {
       await getCurrentLocation().timeout(const Duration(seconds: 20));
@@ -101,16 +104,25 @@ class KiblatController extends GetxController {
     }
   }
 
-  void _startCompass() {
+  Future<void> _startCompass() async {
     _headingSubscription?.cancel();
     _sensorTimeout?.cancel();
 
     _hasCompassData = false;
+    hasHeadingData.value = false;
     errorMessage.value = '';
+    compassAvailable.value = true;
+
+    final hasSensor = await DeviceSensorChecker.hasMagnetometer();
+    if (!hasSensor) {
+      compassAvailable.value = false;
+      isLoading.value = false;
+      return;
+    }
 
     final stream = FlutterCompass.events;
     if (stream == null) {
-      errorMessage.value = 'Kompas tidak tersedia di perangkat ini';
+      compassAvailable.value = false;
       isLoading.value = false;
       return;
     }
@@ -118,21 +130,28 @@ class KiblatController extends GetxController {
     _headingSubscription = stream.listen(
       (CompassEvent event) {
         final h = event.heading;
-        if (h == null || h < 0) return;
+        if (h == null) return;
         _hasCompassData = true;
-        heading.value = h;
+        hasHeadingData.value = true;
+        heading.value = (h + 360) % 360;
       },
       onError: (Object e) {
-        errorMessage.value = 'Sensor kompas tidak tersedia di perangkat ini';
+        if (!_hasCompassData) {
+          compassAvailable.value = false;
+          isLoading.value = false;
+        }
       },
     );
 
-    _sensorTimeout = Timer(const Duration(seconds: 10), () {
+    _sensorTimeout = Timer(const Duration(seconds: 15), () {
       if (!_hasCompassData) {
-        if (errorMessage.value.isEmpty) {
-          errorMessage.value =
-              'Kompas tidak merespon. Coba kalibrasi dengan menggerakkan perangkat membentuk angka 8.';
+        if (compassAvailable.value) {
+          if (errorMessage.value.isEmpty) {
+            errorMessage.value =
+                'Kompas tidak merespon. Coba kalibrasi dengan menggerakkan perangkat membentuk angka 8.';
+          }
         }
+        hasHeadingData.value = false;
         isLoading.value = false;
       }
     });

@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/ui/webview_page.dart';
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
@@ -380,178 +381,267 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     ),
                     Column(
                       children: [
-                       Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 0),
-  child: Row(
-    children: List.generate(themeModes.length, (index) {
-      final item = themeModes[index];
-      final bool isSelected =
-          controller.modeSelected.value == index;
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Row(
+                            children: List.generate(themeModes.length, (index) {
+                              final item = themeModes[index];
+                              final bool isSelected =
+                                  controller.modeSelected.value == index;
 
-      return Expanded(
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: index != themeModes.length - 1 ? 10 : 0,
-            left: index == themeModes.length - 1 ? 10 : 0,
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () {
-              controller.changeMode(index);
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 12,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.transparent,
-                  width: 1.5,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    item["icon"],
-                    size: 30,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : HexColor.fromHex("#5A7A8A"),
-                  ),
+                              return Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: index != themeModes.length - 1
+                                        ? 10
+                                        : 0,
+                                    left: index == themeModes.length - 1
+                                        ? 10
+                                        : 0,
+                                  ),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(16),
+                                    onTap: () {
+                                      controller.changeMode(index);
+                                    },
+                                    child: AnimatedContainer(
+                                      duration: const Duration(
+                                        milliseconds: 250,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 12,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.surface
+                                            : Theme.of(context).cardColor,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                              : Colors.transparent,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            item["icon"],
+                                            size: 30,
+                                            color: isSelected
+                                                ? Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary
+                                                : HexColor.fromHex("#5A7A8A"),
+                                          ),
 
-                  const SizedBox(height: 10),
+                                          const SizedBox(height: 10),
 
-                  Text(
-                    item["title"],
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.color,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }),
-  ),
-),
-SizedBox(height: 15),
+                                          Text(
+                                            item["title"],
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: isSelected
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Theme.of(context)
+                                                        .textTheme
+                                                        .titleLarge
+                                                        ?.color,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        SizedBox(height: 15),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                          children: List.generate(colorPicker.length, (index) {
-                            final item = colorPicker[index];
-                            final bool isSelected =
-                                controller.colorSelected.value == index;
+                            children: List.generate(colorPicker.length, (
+                              index,
+                            ) {
+                              final item = colorPicker[index];
+                              final bool isSelected =
+                                  controller.colorSelected.value == index;
 
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10, right: 5),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(16),
-                                onTap: () {
-                                  controller.changeColor(
-                                    index,
-                                    item['color'] as Color,
-                                  );
-                                },
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 10,
+                                  right: 5,
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  onTap: () {
+                                    controller.changeColor(
+                                      index,
+                                      item['color'] as Color,
+                                    );
+                                  },
 
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    (item["color"] == "custom")
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => AlertDialog(
-                                                  backgroundColor:
-                                                      HexColor.fromHex(
-                                                        "#132D3B",
-                                                      ),
-                                                  title: Text(
-                                                    'Tentukan Warna',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-
-                                                  content:
-                                                      SingleChildScrollView(
-                                                        child: ColorPicker(
-                                                          pickerColor:
-                                                              pickerColor,
-                                                          onColorChanged:
-                                                              changeColor,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      (item["color"] == "custom")
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    backgroundColor:
+                                                        HexColor.fromHex(
+                                                          "#132D3B",
                                                         ),
+                                                    title: Text(
+                                                      'Tentukan Warna',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
+                                                    ),
 
-                                                  actions: [
-                                                    ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        elevation:
-                                                            WidgetStatePropertyAll(
-                                                              0,
-                                                            ),
-                                                        foregroundColor:
-                                                            WidgetStatePropertyAll(
-                                                              HexColor.fromHex(
-                                                                "#2EC4B6",
+                                                    content:
+                                                        SingleChildScrollView(
+                                                          child: ColorPicker(
+                                                            pickerColor:
+                                                                pickerColor,
+                                                            onColorChanged:
+                                                                changeColor,
+                                                          ),
+                                                        ),
+
+                                                    actions: [
+                                                      ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          elevation:
+                                                              WidgetStatePropertyAll(
+                                                                0,
                                                               ),
-                                                            ),
-                                                        backgroundColor:
-                                                            WidgetStatePropertyAll(
-                                                              HexColor.fromHex(
-                                                                "#153945",
+                                                          foregroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                HexColor.fromHex(
+                                                                  "#2EC4B6",
+                                                                ),
                                                               ),
-                                                            ),
+                                                          backgroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                HexColor.fromHex(
+                                                                  "#153945",
+                                                                ),
+                                                              ),
+                                                        ),
+
+                                                        child: const Text(
+                                                          'Simpan',
+                                                        ),
+
+                                                        onPressed: () async {
+                                                          await controller
+                                                              .changeColor(
+                                                                index,
+                                                                pickerColor,
+                                                              );
+
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        },
                                                       ),
-
-                                                      child: const Text(
-                                                        'Simpan',
-                                                      ),
-
-                                                      onPressed: () async {
-                                                        await controller
-                                                            .changeColor(
-                                                              index,
-                                                              pickerColor,
-                                                            );
-
-                                                        Navigator.of(
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              child: AnimatedContainer(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                  vertical: 12,
+                                                ),
+                                                duration: const Duration(
+                                                  milliseconds: 250,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: isSelected
+                                                      ? Theme.of(
                                                           context,
-                                                        ).pop();
-                                                      },
+                                                        ).colorScheme.surface
+                                                      : Theme.of(
+                                                          context,
+                                                        ).cardColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  border: Border.all(
+                                                    color:
+                                                        (isSelected &&
+                                                            item["color"] ==
+                                                                "custom")
+                                                        ? Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary
+                                                        : Colors.transparent,
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                        color: currentColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              30,
+                                                            ),
+                                                      ),
+                                                      child: Icon(
+                                                        Icons.edit_rounded,
+                                                        size: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Text(
+                                                      item["name"],
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: isSelected
+                                                            ? Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary
+                                                            : Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge
+                                                                  ?.color,
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                              );
-                                            },
-                                            child: AnimatedContainer(
+                                              ),
+                                            )
+                                          : AnimatedContainer(
                                               padding: EdgeInsets.symmetric(
-                                                horizontal: 16,
+                                                horizontal: 12,
                                                 vertical: 12,
                                               ),
                                               duration: const Duration(
@@ -570,7 +660,7 @@ SizedBox(height: 15),
                                                 border: Border.all(
                                                   color:
                                                       (isSelected &&
-                                                          item["color"] ==
+                                                          item["color"] !=
                                                               "custom")
                                                       ? Theme.of(
                                                           context,
@@ -583,19 +673,15 @@ SizedBox(height: 15),
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  Container(
-                                                    height: 40,
-                                                    width: 40,
-                                                    decoration: BoxDecoration(
-                                                      color: currentColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            30,
-                                                          ),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.edit_rounded,
-                                                      size: 20,
+                                                  CircleAvatar(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: item["color"],
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              30,
+                                                            ),
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(height: 10),
@@ -618,76 +704,13 @@ SizedBox(height: 15),
                                                 ],
                                               ),
                                             ),
-                                          )
-                                        : AnimatedContainer(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 12,
-                                            ),
-                                            duration: const Duration(
-                                              milliseconds: 250,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: isSelected
-                                                  ? Theme.of(
-                                                      context,
-                                                    ).colorScheme.surface
-                                                  : Theme.of(context).cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              border: Border.all(
-                                                color:
-                                                    (isSelected &&
-                                                        item["color"] !=
-                                                            "custom")
-                                                    ? Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary
-                                                    : Colors.transparent,
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                CircleAvatar(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: item["color"],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            30,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  item["name"],
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: isSelected
-                                                        ? Theme.of(
-                                                            context,
-                                                          ).colorScheme.primary
-                                                        : Theme.of(context)
-                                                              .textTheme
-                                                              .titleLarge
-                                                              ?.color,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                          ),
                         ),
-                        )
                       ],
                     ),
                   ],
@@ -768,27 +791,48 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           ),
                           SizedBox(height: 10),
                           Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 8),
-  child: Row(
-    children: [
-      Expanded(
-        child: _menuButton(
-          context,
-          Icons.email_rounded,
-          "Syarat & Ketentuan",
-        ),
-      ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: _menuButton(
-          context,
-          Icons.security_rounded,
-          "Kebijakan Privasi",
-        ),
-      ),
-    ],
-  ),
-)
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => const LocalWebViewPage(
+                                          title: "Syarat & Ketentuan",
+                                          assetPath: "assets/terms.html",
+                                        ),
+                                      );
+                                    },
+                                    child: _menuButton(
+                                      context,
+                                      Icons.email_rounded,
+                                      "Syarat & Ketentuan",
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => const LocalWebViewPage(
+                                          title: "Kebijakan Privasi",
+                                          assetPath:
+                                              "assets/privacy_policy.html",
+                                        ),
+                                      );
+                                    },
+                                    child: _menuButton(
+                                      context,
+                                      Icons.security_rounded,
+                                      "Kebijakan Privasi",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

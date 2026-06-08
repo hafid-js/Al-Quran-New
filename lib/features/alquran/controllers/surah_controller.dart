@@ -68,23 +68,17 @@ class SurahController extends GetxController
   void _listenToAudio() {
   _audioSub?.cancel();
 
-  _audioSub = player.playerStateStream.listen((state) async {
-    if (state.processingState != ProcessingState.completed) {
-      return;
-    }
+  _audioSub = player.positionStream.listen((position) async {
+    final duration = player.duration;
+    if (duration == null || duration == Duration.zero) return;
+    if (!player.playing) return;
+    if (position < duration * 0.98) return;
 
     final currentSurah = activeSurahNomor.value;
     if (currentSurah == null) return;
 
-    // cegah event completed yang sama diproses 2x
-    if (_lastCompletedSurah == currentSurah) {
-      return;
-    }
-
-    // cegah playNext berjalan bersamaan
-    if (_isAutoPlaying) {
-      return;
-    }
+    if (_lastCompletedSurah == currentSurah) return;
+    if (_isAutoPlaying) return;
 
     _lastCompletedSurah = currentSurah;
     _isAutoPlaying = true;
@@ -126,11 +120,17 @@ class SurahController extends GetxController
 }
 
   Future<void> playAudio(Surah surah) async {
-    if (isAudioLoading.value) return;
+    if (isAudioLoading.value) {
+      await player.stop();
+      isAudioLoading.value = false;
+    }
     isAudioLoading.value = true;
     try {
       final network = Get.find<NetworkController>();
-      if (!network.isConnected.value) return;
+      if (!network.isConnected.value) {
+        isAudioLoading.value = false;
+        return;
+      }
 
       _lastCompletedSurah = null;
 
@@ -141,7 +141,10 @@ class SurahController extends GetxController
           .padLeft(2, '0');
 
       final url = surah.audioFull[qariKey] ?? "";
-      if (url.isEmpty) return;
+      if (url.isEmpty) {
+        isAudioLoading.value = false;
+        return;
+      }
 
       final previous = activeSurahNomor.value;
 

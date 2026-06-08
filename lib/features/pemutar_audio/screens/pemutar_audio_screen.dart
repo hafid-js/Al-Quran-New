@@ -1,10 +1,10 @@
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -176,6 +176,15 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                               SizedBox(width: 8),
                               InkWell(
                                 onTap: () {
+                                  if (controller.player.processingState != ProcessingState.idle) {
+                                    Get.snackbar(
+                                      "Audio Aktif",
+                                      "Hentikan audio terlebih dahulu sebelum mengganti qari",
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      duration: const Duration(seconds: 2),
+                                    );
+                                    return;
+                                  }
                                   showBarModalBottomSheet(
                                     backgroundColor: Theme.of(
                                       context,

@@ -152,7 +152,7 @@ class PrayerTimeController extends GetxController {
         if (_isPrayerEnabled(entry.key)) {
           await NotificationService().scheduleNotification(
             id: prayerIds[entry.key]!,
-            title: "Waktu ${entry.key}",
+            title: "Al-Barokah: Quran & Sholat",
             body: "Saatnya sholat ${entry.key}",
             scheduledDate: prayerTime,
             soundType: settingsController.soundType.value,
@@ -273,7 +273,7 @@ class PrayerTimeController extends GetxController {
       if (_isPrayerEnabled(entry.key)) {
         await NotificationService().scheduleNotification(
           id: prayerIds[entry.key]!,
-          title: "Waktu ${entry.key}",
+          title: "Al-Barokah: Quran & Sholat",
           body: "Saatnya sholat ${entry.key}",
           scheduledDate: prayerTime,
           soundType: settingsController.soundType.value,

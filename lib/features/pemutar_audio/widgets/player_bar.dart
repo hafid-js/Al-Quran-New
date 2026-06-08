@@ -13,8 +13,15 @@ final Map<String, String> qariImages = {
   "06": "assets/images/qari/Yasser-Al-Dosari.webp",
 };
 
-class PlayerBar extends StatelessWidget {
+class PlayerBar extends StatefulWidget {
   const PlayerBar({super.key});
+
+  @override
+  State<PlayerBar> createState() => _PlayerBarState();
+}
+
+class _PlayerBarState extends State<PlayerBar> {
+  bool _isDragging = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class PlayerBar extends StatelessWidget {
               .padLeft(2, '0');
 
       return Container(
-        padding: EdgeInsets.only(bottom: 0),
+        padding: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
         ),
@@ -42,151 +49,15 @@ class PlayerBar extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                top: 15,
+                top: 10,
                 left: 16,
                 right: 16,
               ),
-              child: StreamBuilder<Duration>(
-                stream: controller.player.positionStream,
-                builder: (context, snapshot) {
-                  final position =
-                      snapshot.data ?? Duration.zero;
-
-                  final duration =
-                      controller.player.duration ??
-                      Duration.zero;
-
-                  final percent = duration.inMilliseconds == 0
-                      ? 0.0
-                      : position.inMilliseconds /
-                            duration.inMilliseconds;
-
-                  return GestureDetector(
-                    onHorizontalDragUpdate: (details) {
-                      final box =
-                          context.findRenderObject()
-                              as RenderBox;
-                      final local = box.globalToLocal(
-                        details.globalPosition,
-                      );
-
-                      final width = box.size.width;
-                      final dx = local.dx.clamp(0.0, width);
-
-                      final duration =
-                          controller.player.duration ??
-                          Duration.zero;
-                      final newPosition =
-                          duration * (dx / width);
-
-                      controller.player.seek(newPosition);
-                    },
-                    onTapDown: (details) {
-                      final box =
-                          context.findRenderObject()
-                              as RenderBox;
-                      final local = box.globalToLocal(
-                        details.globalPosition,
-                      );
-
-                      final width = box.size.width;
-                      final dx = local.dx.clamp(0.0, width);
-
-                      final duration =
-                          controller.player.duration ??
-                          Duration.zero;
-                      final newPosition =
-                          duration * (dx / width);
-
-                      controller.player.seek(newPosition);
-                    },
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final width = constraints.maxWidth;
-
-                        return StreamBuilder<Duration>(
-                          stream: controller
-                              .player
-                              .positionStream,
-                          builder: (context, snapshot) {
-                            final position =
-                                snapshot.data ??
-                                Duration.zero;
-                            final duration =
-                                controller.player.duration ??
-                                Duration.zero;
-
-                            final percent =
-                                duration.inMilliseconds == 0
-                                ? 0.0
-                                : position.inMilliseconds /
-                                      duration.inMilliseconds;
-
-                            final clamped = percent.clamp(
-                              0.0,
-                              1.0,
-                            );
-                            final knobX = width * clamped;
-
-                            return Stack(
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                Container(
-                                  height: 4,
-                                  width: width,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).disabledColor,
-                                    borderRadius:
-                                        BorderRadius.circular(
-                                          10,
-                                        ),
-                                  ),
-                                ),
-
-                                Container(
-                                  height: 6,
-                                  width: knobX,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    borderRadius:
-                                        BorderRadius.circular(
-                                          10,
-                                        ),
-                                  ),
-                                ),
-
-                                Positioned(
-                                  left: knobX - 6,
-                                  child: Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 4,
-                                          color:
-                                              Colors.black26,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  );
-                },
+              child: _SeekBar(
+                controller: controller,
+                isDragging: _isDragging,
+                onDragStart: () => setState(() => _isDragging = true),
+                onDragEnd: () => setState(() => _isDragging = false),
               ),
             ),
 
@@ -371,5 +242,105 @@ class PlayerBar extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class _SeekBar extends StatelessWidget {
+  final SurahController controller;
+  final bool isDragging;
+  final VoidCallback onDragStart;
+  final VoidCallback onDragEnd;
+
+  const _SeekBar({
+    required this.controller,
+    required this.isDragging,
+    required this.onDragStart,
+    required this.onDragEnd,
+  });
+
+  void _seek(BuildContext context, Offset localPosition) {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box == null) return;
+    final width = box.size.width;
+    final dx = localPosition.dx.clamp(0.0, width);
+    final duration = controller.player.duration ?? Duration.zero;
+    controller.player.seek(duration * (dx / width));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Duration>(
+      stream: controller.player.positionStream,
+      builder: (context, snapshot) {
+        final position = snapshot.data ?? Duration.zero;
+        final duration = controller.player.duration ?? Duration.zero;
+        final pct = duration.inMilliseconds == 0
+            ? 0.0
+            : position.inMilliseconds / duration.inMilliseconds;
+        final clamped = pct.clamp(0.0, 1.0);
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final knobX = width * clamped;
+            final knobSize = isDragging ? 18.0 : 12.0;
+
+            return GestureDetector(
+              onTapDown: (d) => _seek(context, d.localPosition),
+              onHorizontalDragStart: (d) {
+                onDragStart();
+                _seek(context, d.localPosition);
+              },
+              onHorizontalDragUpdate: (d) =>
+                  _seek(context, d.localPosition),
+              onHorizontalDragEnd: (_) => onDragEnd(),
+              child: SizedBox(
+                height: 20,
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: width,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).disabledColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    Container(
+                      height: 6,
+                      width: knobX,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    Positioned(
+                      left: knobX - knobSize / 2,
+                      top: 9 - knobSize / 2,
+                      child: Container(
+                        width: knobSize,
+                        height: knobSize,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          shape: BoxShape.circle,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Colors.black26,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

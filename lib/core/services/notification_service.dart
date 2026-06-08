@@ -21,7 +21,7 @@ class NotificationService {
     await _requestAndroidPermissions();
 
     const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('ic_notification');
 
     const DarwinInitializationSettings iosSettings =
         DarwinInitializationSettings(
@@ -80,6 +80,7 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
+          largeIcon: const DrawableResourceAndroidBitmap('ic_notification'),
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
@@ -132,6 +133,7 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
+          largeIcon: const DrawableResourceAndroidBitmap('ic_notification'),
         );
 
     final DarwinNotificationDetails iosNotificationDetails =

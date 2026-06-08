@@ -26,6 +26,34 @@ class CompassView extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
+      if (controller.compassAvailable.value &&
+          !controller.hasHeadingData.value &&
+          controller.errorMessage.value.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(
+                'Menunggu sensor kompas...',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Gerakkan perangkat membentuk angka 8 untuk kalibrasi',
+                style: Theme.of(context).textTheme.labelSmall,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        );
+      }
+
+      if (!controller.compassAvailable.value) {
+        return _buildNoCompassView(context, controller);
+      }
+
       if (controller.errorMessage.value.isNotEmpty) {
         return _buildErrorView(context, controller);
       }
@@ -96,6 +124,38 @@ class CompassView extends StatelessWidget {
             TextButton(
               onPressed: () => controller.requestPermissionsAndLocate(),
               child: const Text('Coba Lagi'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoCompassView(BuildContext context, KiblatController controller) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.explore_off, size: 64, color: Theme.of(context).colorScheme.error),
+            const SizedBox(height: 16),
+            Text(
+              'Perangkat Tidak Memiliki Kompas',
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Perangkat ini tidak dilengkapi sensor kompas (magnetometer). Arah kiblat tidak dapat ditampilkan.',
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => controller.requestPermissionsAndLocate(),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Coba Lagi'),
             ),
           ],
         ),
