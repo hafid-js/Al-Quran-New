@@ -80,7 +80,6 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
-          largeIcon: const DrawableResourceAndroidBitmap('ic_notification'),
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
@@ -106,6 +105,33 @@ class NotificationService {
       notificationDetails: notificationDetails,
     );
   }
+
+Future<void> testAdhanSound() async {
+  await _notificationsPlugin.show(
+    id: 33,
+    title: "TEST ADZAN",
+    body: "Harusnya bunyi adzan",
+    notificationDetails: const NotificationDetails(
+      iOS: DarwinNotificationDetails(
+        sound: 'alarmsound1.wav',
+        presentSound: true,
+        presentAlert: true,
+      ),
+      android: AndroidNotificationDetails(
+        'prayer_notification',
+        'Notifikasi Sholat',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('adzan'),
+        
+      ),
+      
+    ),
+    
+    
+  );
+}
 
   Future<void> scheduleNotification({
     required int id,
@@ -133,7 +159,6 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
-          largeIcon: const DrawableResourceAndroidBitmap('ic_notification'),
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
@@ -143,7 +168,7 @@ class NotificationService {
           presentSound: playSound && soundResource.isNotEmpty,
           presentBanner: !isSilent,
           sound: playSound && soundResource.isNotEmpty
-              ? soundResource
+            ? soundResource
               : null,
         );
 

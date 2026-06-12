@@ -33,7 +33,7 @@ android {
         applicationId = "com.hafidtech.alquran"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5 
+        versionCode = 7 
         versionName = "1.0.2"
         multiDexEnabled = true
         ndk {

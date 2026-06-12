@@ -8,7 +8,7 @@ class PrayerTimeRepository {
   final String baseUrl;
 
   PrayerTimeRepository({
-    this.baseUrl = 'https://equran.id/api/v2/shalat'
+    this.baseUrl = 'https://equran.id/api/v2/shalat',
   });
 
   Future<Map<String, dynamic>> fetchPrayerTimes({
@@ -52,4 +52,5 @@ class PrayerTimeRepository {
     throw Exception('Failed fetch prayer times: ${response.statusCode}');
   }
 }
+
 }

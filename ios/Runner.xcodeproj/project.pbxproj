@@ -19,6 +19,13 @@
 		D8336C0C2FACF0C500185592 /* adzansubuh.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8336C0A2FACF0C400185592 /* adzansubuh.wav */; };
 		D8336C0E2FACF0D300185592 /* adzansubuh 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8336C0D2FACF0D300185592 /* adzansubuh 2.wav */; };
 		D8336C0F2FACF0D300185592 /* adzansubuh 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8336C0D2FACF0D300185592 /* adzansubuh 2.wav */; };
+		D88956BF2FDC5A5E00C72CBD /* adzan.wav in Resources */ = {isa = PBXBuildFile; fileRef = D88956BE2FDC5A5E00C72CBD /* adzan.wav */; };
+		D88956C12FDC5ED700C72CBD /* adzansubuhcaf.caf in Resources */ = {isa = PBXBuildFile; fileRef = D88956C02FDC5ED700C72CBD /* adzansubuhcaf.caf */; };
+		D88956C22FDC5ED700C72CBD /* adzansubuhcaf.caf in Resources */ = {isa = PBXBuildFile; fileRef = D88956C02FDC5ED700C72CBD /* adzansubuhcaf.caf */; };
+		D88956C42FDC610F00C72CBD /* adzan_abdel_baset.caf in Resources */ = {isa = PBXBuildFile; fileRef = D88956C32FDC610F00C72CBD /* adzan_abdel_baset.caf */; };
+		D88956C52FDC610F00C72CBD /* adzan_abdel_baset.caf in Resources */ = {isa = PBXBuildFile; fileRef = D88956C32FDC610F00C72CBD /* adzan_abdel_baset.caf */; };
+		D88956CA2FDC634E00C72CBD /* alarmsound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = D88956C92FDC634E00C72CBD /* alarmsound1.wav */; };
+		D88956CB2FDC634E00C72CBD /* alarmsound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = D88956C92FDC634E00C72CBD /* alarmsound1.wav */; };
 		D8FB28722FACEE47000E04D6 /* alarmbeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8FB28712FACEE47000E04D6 /* alarmbeep.wav */; };
 		D8FB28732FACEE47000E04D6 /* alarmbeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8FB28712FACEE47000E04D6 /* alarmbeep.wav */; };
 		DFF0F5C8E16049D3CBB7057D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C2EB1F0DBC4D7EB5BF31F0 /* Pods_Runner.framework */; };
@@ -72,6 +79,10 @@
 		C81E3368AEAE05125B4EE2EC /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		D8336C0A2FACF0C400185592 /* adzansubuh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = adzansubuh.wav; sourceTree = "<group>"; };
 		D8336C0D2FACF0D300185592 /* adzansubuh 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "adzansubuh 2.wav"; sourceTree = "<group>"; };
+		D88956BE2FDC5A5E00C72CBD /* adzan.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = adzan.wav; sourceTree = "<group>"; };
+		D88956C02FDC5ED700C72CBD /* adzansubuhcaf.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adzansubuhcaf.caf; sourceTree = "<group>"; };
+		D88956C32FDC610F00C72CBD /* adzan_abdel_baset.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adzan_abdel_baset.caf; sourceTree = "<group>"; };
+		D88956C92FDC634E00C72CBD /* alarmsound1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = alarmsound1.wav; sourceTree = "<group>"; };
 		D8FB28712FACEE47000E04D6 /* alarmbeep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = alarmbeep.wav; sourceTree = "<group>"; };
 		E8A1ED2D8023AA23C13A0648 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -162,6 +173,10 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D88956C92FDC634E00C72CBD /* alarmsound1.wav */,
+				D88956BE2FDC5A5E00C72CBD /* adzan.wav */,
+				D88956C02FDC5ED700C72CBD /* adzansubuhcaf.caf */,
+				D88956C32FDC610F00C72CBD /* adzan_abdel_baset.caf */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -218,6 +233,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				32F5C882066F83CDEB72CFAE /* [CP] Embed Pods Frameworks */,
+				8B97171D56082B2246B80C86 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -272,8 +288,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D88956C42FDC610F00C72CBD /* adzan_abdel_baset.caf in Resources */,
+				D88956C12FDC5ED700C72CBD /* adzansubuhcaf.caf in Resources */,
 				D8336C0F2FACF0D300185592 /* adzansubuh 2.wav in Resources */,
 				D8FB28722FACEE47000E04D6 /* alarmbeep.wav in Resources */,
+				D88956CA2FDC634E00C72CBD /* alarmsound1.wav in Resources */,
 				D8336C0B2FACF0C500185592 /* adzansubuh.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,9 +301,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D88956C52FDC610F00C72CBD /* adzan_abdel_baset.caf in Resources */,
+				D88956C22FDC5ED700C72CBD /* adzansubuhcaf.caf in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				D8FB28732FACEE47000E04D6 /* alarmbeep.wav in Resources */,
 				D8336C0C2FACF0C500185592 /* adzansubuh.wav in Resources */,
+				D88956CB2FDC634E00C72CBD /* alarmsound1.wav in Resources */,
+				D88956BF2FDC5A5E00C72CBD /* adzan.wav in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				D8336C0E2FACF0D300185592 /* adzansubuh 2.wav in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
@@ -303,9 +326,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -327,6 +354,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+		};
+		8B97171D56082B2246B80C86 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -496,6 +544,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = QUVGD7X6F5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -678,6 +727,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = QUVGD7X6F5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -700,6 +750,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = QUVGD7X6F5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

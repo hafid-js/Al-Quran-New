@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:alquran_new/core/constants/api_endpoints.dart';
 import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/features/lokasi/data/location_cache.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class LocationService {
@@ -57,4 +59,131 @@ class LocationService {
   static Future<LocationCache?> getLocation() async {
     return HiveService.locationBox.values.firstOrNull;
   }
+
+
+  static Future<Position> getCurrentPosition() async {
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    throw Exception("GPS tidak aktif");
+  }
+
+  LocationPermission permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    throw Exception("Permission GPS ditolak permanen");
+  }
+
+  return await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+}
+
+static Future<Map<String, String?>> getAddressFromPosition(
+  Position pos,
+) async {
+  final placemarks = await placemarkFromCoordinates(
+    pos.latitude,
+    pos.longitude,
+  );
+
+  if (placemarks.isEmpty) {
+    throw Exception("Tidak bisa membaca lokasi");
+  }
+
+  final place = placemarks.first;
+
+  return {
+    "province": place.administrativeArea,
+    "city": place.subAdministrativeArea ?? place.locality,
+  };
+}
+
+static Future<LocationCache> detectAndSaveLocation() async {
+  // 1. GPS
+  final position = await getCurrentPosition();
+
+  // 2. Reverse geocode
+  final address = await getAddressFromPosition(position);
+
+final detectedProvince =
+    normalizeProvince(address["province"] ?? "");
+final detectedCity =
+    normalizeCity(address["city"] ?? "");
+
+  // 3. Ambil list dari API
+  final provinces = await getProvinces();
+
+  final matchedProvince = _match(detectedProvince, provinces);
+
+  if (matchedProvince == null) {
+    throw Exception("Provinsi tidak ditemukan di sistem");
+  }
+
+  final cities = await getCities(matchedProvince);
+
+  final matchedCity =
+      _match(detectedCity ?? "", cities) ?? cities.first;
+
+  // 4. Save ke Hive
+  final cache = LocationCache()
+    ..province = matchedProvince
+    ..city = matchedCity
+    ..updatedAt = DateTime.now();
+
+  await HiveService.locationBox.clear();
+  await HiveService.locationBox.add(cache);
+
+  return cache;
+}
+
+static String normalizeProvince(String province) {
+  final aliases = {
+    "daerah khusus ibukota jakarta": "DKI Jakarta",
+    "daerah istimewa yogyakarta": "D.I. Yogyakarta",
+    "bangka belitung islands": "Kepulauan Bangka Belitung",
+    "riau islands": "Kepulauan Riau",
+  };
+
+  return aliases[province.toLowerCase()] ?? province;
+}
+
+static String normalizeCity(String city) {
+  final lower = city.toLowerCase();
+
+  if (lower.contains("jakarta")) {
+    return "Kota Jakarta";
+  }
+
+  return city;
+}
+
+static String? _match(String input, List<String> list) {
+  final normalizedInput = input
+      .toLowerCase()
+      .replaceAll("kabupaten", "")
+      .replaceAll("kab.", "")
+      .replaceAll("kota", "")
+      .trim();
+
+  for (final item in list) {
+    final normalizedItem = item
+        .toLowerCase()
+        .replaceAll("kabupaten", "")
+        .replaceAll("kab.", "")
+        .replaceAll("kota", "")
+        .trim();
+
+    if (normalizedItem == normalizedInput ||
+        normalizedItem.contains(normalizedInput) ||
+        normalizedInput.contains(normalizedItem)) {
+      return item;
+    }
+  }
+
+  return null;
+}
 }

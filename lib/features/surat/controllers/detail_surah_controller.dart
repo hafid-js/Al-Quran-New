@@ -117,7 +117,7 @@ Future<void> fetchDetailSurah(int nomor) async {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-  } catch (e, s) {
+  } catch (e) {
     Get.snackbar(
       "Terjadi Kesalahan",
       e.toString(),

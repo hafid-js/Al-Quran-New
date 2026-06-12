@@ -61,6 +61,7 @@ class LocationController extends GetxController {
 
   if (location != null) {
     selectedProvince.value = location.province;
+    await fetchCities(location.province);
     selectedCity.value = location.city;
   }
   }

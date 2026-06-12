@@ -59,14 +59,12 @@ final controller = Get.find<DetailSurahController>();
     ever(controller.detailSurah, (data) {
       if (data == null) return;
       if (targetAyat <= 0) return;
-      if (data != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Future.delayed(const Duration(milliseconds: 300), () {
-            scrollToAyat(targetAyat);
-          });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          scrollToAyat(targetAyat);
         });
-      }
-    });
+      });
+        });
   }
 
   void scrollToAyat(int nomorAyat) {

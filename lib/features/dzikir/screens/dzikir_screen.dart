@@ -1,882 +1,411 @@
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
-import 'package:alquran_new/features/dzikir/widgets/tab_item.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:percent_indicator/flutter_percent_indicator.dart';
+import 'dart:async';
+import 'dart:math';
 
-class DzikirScreen extends StatefulWidget {
-  const DzikirScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sensors_plus/sensors_plus.dart';
+
+class KompasScreen extends StatefulWidget {
+  const KompasScreen({super.key});
 
   @override
-  State<DzikirScreen> createState() => _DzikirScreenState();
+  State<KompasScreen> createState() => _KompasScreenState();
 }
 
-class _DzikirScreenState extends State<DzikirScreen> {
-  final box = GetStorage();
-  final int target = 33;
-  int freeTasbih = 0;
-  int endTasbih = 0;
-  int subhanallah = 0;
-  int alhamdulillah = 0;
-  int allahuakbar = 0;
-  int laillahailallah = 0;
-  int astaghfirullah = 0;
-  int allahumasholialamuhammad = 0;
-  int selectedDzikir = 0;
+class _KompasScreenState extends State<KompasScreen> {
+  double _heading = 0;
+  double _qiblaDirection = 0;
 
-  int dzikirSelesai() {
-    int total = 0;
+  StreamSubscription? _magnetometerSub;
+  StreamSubscription? _accelerometerSub;
 
-    if (subhanallah >= target) total++;
-    if (alhamdulillah >= target) total++;
-    if (allahuakbar >= target) total++;
-    if (laillahailallah >= target) total++;
-    if (astaghfirullah >= target) total++;
-    if (allahumasholialamuhammad >= target) total++;
+  double _mx = 0, _my = 0, _mz = 0;
+  double _ax = 0, _ay = 0, _az = 0;
+  bool _hasMagData = false;
+  bool _hasAccData = false;
 
-    return total;
-  }
-
-  int totalSemuaDzikir() {
-    return subhanallah +
-        alhamdulillah +
-        allahuakbar +
-        laillahailallah +
-        astaghfirullah +
-        allahumasholialamuhammad;
-  }
+  static const double _filterAlpha = 0.35;
 
   @override
   void initState() {
     super.initState();
-    subhanallah = box.read('subhanallah') ?? 0;
-    alhamdulillah = box.read('alhamdulillah') ?? 0;
-    allahuakbar = box.read('allahuakbar') ?? 0;
-    laillahailallah = box.read('laillahailallah ') ?? 0;
-    astaghfirullah = box.read('astaghfirullah') ?? 0;
-    allahumasholialamuhammad = box.read('allahumasholialamuhammad') ?? 0;
-
-    freeTasbih = box.read('freeTasbih') ?? 0;
-    endTasbih = box.read('endTasbih') ?? 0;
+    _initCompass();
   }
 
-  void subhanallahCounter() {
-    if (subhanallah < target) {
-      setState(() {
-        subhanallah++;
-        box.write('subhanallah', subhanallah);
-      });
+  Future<void> _initCompass() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint('Location service tidak aktif');
+        return;
+      }
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        debugPrint('Permission lokasi ditolak');
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      _qiblaDirection = calculateQiblaDirection(
+        position.latitude,
+        position.longitude,
+      );
+    } catch (e) {
+      debugPrint('Error getting location: $e');
     }
+
+    _magnetometerSub = magnetometerEventStream().listen(
+      (event) {
+        _mx += (event.x - _mx) * _filterAlpha;
+        _my += (event.y - _my) * _filterAlpha;
+        _mz += (event.z - _mz) * _filterAlpha;
+        _hasMagData = true;
+        _calculateHeading();
+      },
+      onError: (e) => debugPrint('Magnetometer error: $e'),
+    );
+
+    _accelerometerSub = accelerometerEventStream().listen(
+      (event) {
+        _ax += (event.x - _ax) * _filterAlpha;
+        _ay += (event.y - _ay) * _filterAlpha;
+        _az += (event.z - _az) * _filterAlpha;
+        _hasAccData = true;
+        _calculateHeading();
+      },
+      onError: (e) => debugPrint('Accelerometer error: $e'),
+    );
+
+    if (!mounted) return;
+    setState(() {});
   }
 
-  void alhamdulillahCounter() {
-    if (alhamdulillah < target) {
-      setState(() {
-        alhamdulillah++;
-        box.write('alhamdulillah', alhamdulillah);
-      });
-    }
+  void _calculateHeading() {
+    if (!_hasMagData || !_hasAccData) return;
+
+    final roll = atan2(_ay, -_az);
+    final pitch = atan2(-_ax, sqrt(_ay * _ay + _az * _az));
+
+    final cR = cos(roll), sR = sin(roll);
+    final cP = cos(pitch), sP = sin(pitch);
+
+    final magX = _mx * cP + _mz * sP;
+    final magY = _mx * sR * sP + _my * cR - _mz * sR * cP;
+
+    final heading = (atan2(-magX, magY) * 180 / pi + 360) % 360;
+
+    if (!mounted) return;
+    setState(() => _heading = heading);
   }
 
-  void allahuakbarCounter() {
-    if (allahuakbar < target) {
-      setState(() {
-        allahuakbar++;
-        box.write('allahuakbar', allahuakbar);
-      });
-    }
-  }
-
-  void laillahailallahCounter() {
-    if (laillahailallah < target) {
-      setState(() {
-        laillahailallah++;
-        box.write('laillahailallah', laillahailallah);
-      });
-    }
-  }
-
-  void astaghfirullahCounter() {
-    if (astaghfirullah < target) {
-      setState(() {
-        astaghfirullah++;
-        box.write('astaghfirullah', astaghfirullah);
-      });
-    }
-  }
-
-  void allahumaCounter() {
-    if (allahumasholialamuhammad < target) {
-      setState(() {
-        allahumasholialamuhammad++;
-        box.write('allahumasholialamuhammad', allahumasholialamuhammad);
-      });
-    }
-  }
-
-  void resetCounter() {
-    setState(() {
-      subhanallah = 0;
-      alhamdulillah = 0;
-      allahuakbar = 0;
-      laillahailallah = 0;
-      astaghfirullah = 0;
-      allahumasholialamuhammad = 0;
-      box.write('subhanallah', 0);
-      box.write('alhamdulillah', 0);
-      box.write('allahuakbar', 0);
-      box.write('laillahailallah', 0);
-      box.write('astaghfirullah', 0);
-      box.write('allahumasholialamuhammad', 0);
-    });
-  }
-
-  void resetAllCounter() {
-    setState(() {
-      subhanallah = 0;
-      alhamdulillah = 0;
-      allahuakbar = 0;
-      laillahailallah = 0;
-      astaghfirullah = 0;
-      allahumasholialamuhammad = 0;
-      freeTasbih = 0;
-      endTasbih = 0;
-      box.write('subhanallah', 0);
-      box.write('alhamdulillah', 0);
-      box.write('allahuakbar', 0);
-      box.write('laillahailallah', 0);
-      box.write('astaghfirullah', 0);
-      box.write('allahumasholialamuhammad', 0);
-      box.write('freeTasbih', 0);
-      box.write('endTasbih', 0);
-    });
-  }
-
-  void tasbihCounter() {
-    setState(() {
-      freeTasbih++;
-      box.write('freeTasbih', freeTasbih);
-    });
-  }
-
-  void endTasbihIncrement() {
-    setState(() {
-      endTasbih++;
-      box.write('endTasbih', endTasbih);
-    });
-  }
-
-  void endTasbihDecrement() {
-    setState(() {
-      endTasbih--;
-      box.write('endTasbih', endTasbih);
-    });
-  }
-
-  void resetTasbihCounter() {
-    setState(() {
-      freeTasbih = 0;
-      endTasbih = 0;
-
-      box.write('freeTasbih', 0);
-      box.write('endTasbih', 0);
-    });
+  @override
+  void dispose() {
+    _magnetometerSub?.cancel();
+    _accelerometerSub?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final qiblaAngle = (_qiblaDirection - _heading);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        toolbarHeight: 70,
-        leadingWidth: 65,
-
-        leading: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.arrow_circle_left_rounded,
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              height: 36,
+              width: 36,
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
-                Icons.arrow_circle_left_rounded,
-                color: Theme.of(context).colorScheme.primary,
+                Icons.navigation,
                 size: 20,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
-          ),
-        ),
-        titleSpacing: 5,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Dzikir",
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.titleLarge?.color,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  "Total Dzikir: ${totalSemuaDzikir()}",
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    resetAllCounter();
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.rotate_left_outlined,
-                    color: Theme.of(context).textTheme.labelLarge?.color,
-                    size: 20,
-                  ),
-                ),
-              ),
+            const SizedBox(width: 10),
+            Text(
+              'Kompas Kiblat',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ],
         ),
       ),
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).cardColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 6,
-                  ),
-                  child: TabBar(
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    dividerColor: Colors.transparent,
-                    indicator: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    labelColor: AppColors.light,
-                    labelStyle: Theme.of(context).textTheme.titleSmall,
-                    unselectedLabelStyle: Theme.of(
-                      context,
-                    ).textTheme.labelMedium,
-                    tabs: const [
-                      TabItem(title: "Dzikir Ba'da Sholat"),
-                      TabItem(title: 'Tasbih Bebas'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+      body: _buildBody(context, qiblaAngle),
+    );
+  }
 
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              _dzikirButton("Subhanallah", subhanallah, 0),
-                              const SizedBox(width: 6),
-                              _dzikirButton("Alhamdulillah", alhamdulillah, 1),
-                              const SizedBox(width: 6),
-                              _dzikirButton("Allahuakbar", allahuakbar, 2),
-                              const SizedBox(width: 6),
-                              _dzikirButton(
-                                "La ilaha illallah",
-                                laillahailallah,
-                                3,
-                              ),
-                              const SizedBox(width: 6),
-                              _dzikirButton(
-                                "Astaghfirullahal adzim",
-                                astaghfirullah,
-                                4,
-                              ),
-                              const SizedBox(width: 6),
-                              _dzikirButton(
-                                "Allahuma sholli ala Muhammad",
-                                allahumasholialamuhammad,
-                                5,
-                              ),
-                            ],
-                          ),
-                        ),
+  Widget _buildBody(BuildContext context, double qiblaAngle) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-                        const SizedBox(height: 14),
-
-                        Expanded(child: _dzikirContent()),
-                      ],
-                    ),
-                  ),
-                  Stack(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Target:",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          SizedBox(width: 15),
-                          GestureDetector(
-                            onTap: endTasbih <= freeTasbih
-                                ? null
-                                : () {
-                                    setState(() {
-                                      endTasbihDecrement();
-                                    });
-                                  },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                Icons.indeterminate_check_box_rounded,
-                                color: HexColor.fromHex("#7c97a6"),
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Container(
-                            height: 45,
-                            width: 70,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "$endTasbih",
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                endTasbihIncrement();
-                              });
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                Icons.add_box_rounded,
-                                color: HexColor.fromHex("#7c97a6"),
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: CircularPercentIndicator(
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary.withAlpha(30),
-                          backgroundWidth: 9,
-                          radius: 130.0,
-                          lineWidth: 8.0,
-                          percent: freeTasbih == 0
-                              ? 0
-                              : (freeTasbih / endTasbih).clamp(0.0, 1.0),
-                          circularStrokeCap: CircularStrokeCap.round,
-                          progressColor: Theme.of(context).colorScheme.primary,
-                          center: Material(
-                            color: Colors.transparent,
-                            shape: const CircleBorder(),
-                            clipBehavior: Clip.antiAlias,
-                            child: InkWell(
-                              onTap: freeTasbih >= endTasbih
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        tasbihCounter();
-                                      });
-                                    },
-                              splashColor: Theme.of(
-                                context,
-                              ).colorScheme.primary.withAlpha(30),
-                              highlightColor: Theme.of(
-                                context,
-                              ).colorScheme.primary.withAlpha(80),
-                              child: Ink(
-                                width: 230,
-                                height: 230,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Theme.of(context).cardColor,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "$freeTasbih",
-                                      style: TextStyle(
-                                        fontSize: 60,
-                                        color: Theme.of(
-                                          context,
-                                        ).textTheme.titleLarge?.color,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "/ $endTasbih",
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.labelMedium,
-                                    ),
-                                    Text(
-                                      "Tap untuk menghitung",
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.labelSmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-  left: 0,
-  right: 0,
-  bottom: 0,
-  child: SafeArea(
-    top: false,
-    child: Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Center(
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              resetTasbihCounter();
-            });
-          },
-          child: Container(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 300,
+            height: 300,
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(12),
+              shape: BoxShape.circle,
+              color: isDark ? Colors.grey.shade900 : Colors.grey.shade100,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
+                  color: isDark
+                      ? Colors.black54
+                      : Colors.black.withAlpha(30),
+                  blurRadius: 20,
+                  spreadRadius: 2,
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 10,
+            child: CustomPaint(
+              size: const Size(300, 300),
+              painter: _CompassPainter(
+                heading: _heading,
+                qiblaAngle: qiblaAngle,
+                isDark: isDark,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            '${_heading.toStringAsFixed(0)}°',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _getDirectionName(_heading),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 32),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.cached_rounded,
-                  color:
-                      Theme.of(context).textTheme.labelLarge?.color,
-                  size: 18,
+                  Icons.explore,
+                  color: Colors.amber.shade600,
+                  size: 24,
                 ),
-                SizedBox(width: 6),
+                const SizedBox(width: 8),
                 Text(
-                  "Reset",
-                  style: TextStyle(
-                    color: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.color,
-                  ),
+                  'Kiblat: ${_qiblaDirection.toStringAsFixed(1)}° ${_getDirectionName(_qiblaDirection)}',
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    ),
-  ),
-)
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _dzikirButton(String title, int counter, int index) {
-    final isActive = selectedDzikir == index;
+  String _getDirectionName(double degrees) {
+    if (degrees >= 337.5 || degrees < 22.5) return 'U';
+    if (degrees >= 22.5 && degrees < 67.5) return 'TL';
+    if (degrees >= 67.5 && degrees < 112.5) return 'T';
+    if (degrees >= 112.5 && degrees < 157.5) return 'TG';
+    if (degrees >= 157.5 && degrees < 202.5) return 'S';
+    if (degrees >= 202.5 && degrees < 247.5) return 'BD';
+    if (degrees >= 247.5 && degrees < 292.5) return 'B';
+    return 'BL';
+  }
+}
 
-    final count = counter;
+class _CompassPainter extends CustomPainter {
+  final double heading;
+  final double qiblaAngle;
+  final bool isDark;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedDzikir = index;
-        });
-      },
-      child: Container(
-        height: 50,
+  _CompassPainter({
+    required this.heading,
+    required this.qiblaAngle,
+    required this.isDark,
+  });
 
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final radius = min(cx, cy) - 12;
 
-        decoration: count >= 33
-            ? BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withAlpha(40),
-                borderRadius: BorderRadius.circular(10),
-                border: BoxBorder.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 0.5,
-                ),
-              )
-            : BoxDecoration(
-                color: isActive
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                count >= 33
-                    ? Icon(
-                        Icons.check_circle_rounded,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    : SizedBox.shrink(),
-                count >= 33 ? SizedBox(width: 5) : SizedBox.shrink(),
-                Text(
-                  title,
-                  style: count >= 33
-                      ? TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w500,
-                        )
-                      : TextStyle(
-                          fontSize: 12,
-                          color: isActive
-                              ? AppColors.light
-                              : Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                ),
-              ],
-            ),
-            SizedBox(width: 5),
-            Text(
-              "${counter.toString()}/33",
-              style: TextStyle(
-                fontSize: 12,
-                color: isActive
-                    ? AppColors.light
-                    : Theme.of(context).textTheme.labelLarge?.color,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    canvas.save();
+    canvas.translate(cx, cy);
+
+    _drawCompassRing(canvas, radius);
+
+    canvas.rotate(-heading * pi / 180);
+    _drawTickMarks(canvas, radius);
+    _drawLabels(canvas, radius);
+
+    canvas.restore();
+
+    _drawQiblaArrow(canvas, size, radius, qiblaAngle);
+    _drawCenterDot(canvas, size);
   }
 
-  Widget _dzikirContent() {
-    if (selectedDzikir == 0) {
-      return _dzikirCard(
-        "سُبْحَانَ اللَّهِ",
-        "Maha Suci Allah",
-        subhanallah,
-        subhanallahCounter,
-      );
-    } else if (selectedDzikir == 1) {
-      return _dzikirCard(
-        "الْحَمْدُ لِلَّهِ",
-        "Segala puji bagi Allah",
-        alhamdulillah,
-        alhamdulillahCounter,
-      );
-    } else if (selectedDzikir == 2) {
-      return _dzikirCard(
-        "اللَّهُ أَكْبَرُ",
-        "Allah Maha Besar",
-        allahuakbar,
-        allahuakbarCounter,
-      );
-    } else if (selectedDzikir == 3) {
-      return _dzikirCard(
-        "لَا إِلٰهَ إِلَّا اللَّهُ",
-        "Tiada Tuhan selain Allah",
-        laillahailallah,
-        laillahailallahCounter,
-      );
-    } else if (selectedDzikir == 4) {
-      return _dzikirCard(
-        "أَسْتَغْفِرُ اللَّهَ",
-        "Aku memohon ampun kepada Allah",
-        astaghfirullah,
-        astaghfirullahCounter,
-      );
-    } else {
-      return _dzikirCard(
-        "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
-        "Ya Allah, limpahkan sholawat kepada Nabi Muhammad",
-        allahumasholialamuhammad,
-        allahumaCounter,
+  void _drawCompassRing(Canvas canvas, double radius) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..color = isDark ? Colors.white38 : Colors.black38;
+    canvas.drawCircle(Offset.zero, radius, paint);
+  }
+
+  void _drawTickMarks(Canvas canvas, double radius) {
+    for (int i = 0; i < 360; i += 5) {
+      final angle = i * pi / 180;
+      final isMajor = i % 30 == 0;
+      final isMid = i % 15 == 0 && !isMajor;
+
+      double innerR;
+      final paint = Paint()..style = PaintingStyle.stroke;
+
+      if (isMajor) {
+        innerR = radius * 0.82;
+        paint
+          ..color = isDark ? Colors.white70 : Colors.black54
+          ..strokeWidth = 2.5;
+      } else if (isMid) {
+        innerR = radius * 0.88;
+        paint
+          ..color = isDark ? Colors.white38 : Colors.black26
+          ..strokeWidth = 1.5;
+      } else {
+        innerR = radius * 0.92;
+        paint
+          ..color = isDark ? Colors.white24 : Colors.black12
+          ..strokeWidth = 1;
+      }
+
+      canvas.drawLine(
+        Offset(innerR * sin(angle), -innerR * cos(angle)),
+        Offset(radius * sin(angle), -radius * cos(angle)),
+        paint,
       );
     }
   }
 
-  
-
-  Widget _dzikirCard(
-    String arabic,
-    String arti,
-    int count,
-    VoidCallback increment,
-  ) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Theme.of(context).cardColor,
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                arabic,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                  fontSize: 30,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(arti, style: Theme.of(context).textTheme.labelMedium),
-            ],
-          ),
-        ),
-
-        Align(
-  alignment: Alignment.center,
-  child: CircularPercentIndicator(
-    backgroundColor: Theme.of(context).cardColor.withAlpha(100),
-    backgroundWidth: 9,
-    radius: 130.0,
-    lineWidth: 8.0,
-    percent: (count / 33).clamp(0.0, 1.0),
-    circularStrokeCap: CircularStrokeCap.round,
-    progressColor: Theme.of(context).colorScheme.primary,
-    center: Material(
-      color: Colors.transparent,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: count >= 33
-            ? null
-            : () {
-                setState(() {
-                  increment();
-                });
-              },
-        child: Ink(
-          width: 230,
-          height: 230,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).cardColor,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "$count",
-                style: TextStyle(
-                  fontSize: 60,
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "/ 33",
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              Text(
-                "Tap untuk menghitung",
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
-       Positioned(
-  left: 0,
-  right: 0,
-  bottom: 16,
-  child: SafeArea(
-    top: false,
-    child: Container(
-
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Progress Dzikir",
-                        style: Theme.of(context).textTheme.labelSmall
-                      ),
-                      Text(
-                        "${dzikirSelesai()}/6",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 8),
-
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return LinearPercentIndicator(
-                        backgroundColor: Theme.of(context).disabledColor,
-                        padding: EdgeInsets.zero,
-                        barRadius: Radius.circular(16),
-                        width: constraints.maxWidth,
-                        animation: true,
-                        lineHeight: 6.0,
-                        animationDuration: 500,
-                        percent: (dzikirSelesai() / 6).clamp(0.0, 1.0),
-                        linearStrokeCap: LinearStrokeCap.roundAll,
-                        progressColor:
-                            Theme.of(context).colorScheme.primary,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(width: 12),
-
-            InkWell(
-              onTap: () {
-                setState(() {
-                  resetCounter();
-                });
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.cached_rounded,
-                      color: Theme.of(context).textTheme.labelMedium?.color,
-                      size: 18,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      "Reset",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.labelMedium?.color,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
-      ],
-    );
+  void _drawLabels(Canvas canvas, double radius) {
+    _drawLabel(canvas, 'U', 0, radius, true);
+    _drawLabel(canvas, 'S', pi, radius, false);
+    _drawLabel(canvas, 'T', pi / 2, radius, false);
+    _drawLabel(canvas, 'B', -pi / 2, radius, false);
   }
+
+  void _drawLabel(Canvas canvas, String text, double angle, double radius, bool isNorth) {
+    final tp = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: isNorth
+              ? Colors.redAccent
+              : (isDark ? Colors.white70 : Colors.black54),
+          fontSize: 22,
+          fontWeight: isNorth ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+
+    final x = (radius * 0.7) * sin(angle) - tp.width / 2;
+    final y = -(radius * 0.7) * cos(angle) - tp.height / 2;
+    tp.paint(canvas, Offset(x, y));
+  }
+
+  void _drawQiblaArrow(Canvas canvas, Size size, double radius, double qiblaAngle) {
+    canvas.save();
+    canvas.translate(size.width / 2, size.height / 2);
+    canvas.rotate(qiblaAngle * pi / 180);
+
+    final arrowPaint = Paint()
+      ..color = Colors.amber.shade600
+      ..style = PaintingStyle.fill;
+
+    final stemPaint = Paint()
+      ..color = Colors.amber.shade600
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    final arrowLen = radius * 0.7;
+    final headSize = 18.0;
+
+    final path = Path();
+    path.moveTo(0, -arrowLen);
+    path.lineTo(-headSize, -arrowLen + headSize + 10);
+    path.lineTo(0, -arrowLen + headSize);
+    path.lineTo(headSize, -arrowLen + headSize + 10);
+    path.close();
+
+    canvas.drawPath(path, arrowPaint);
+    canvas.drawLine(
+      Offset(0, -arrowLen + headSize),
+      Offset(0, radius * 0.15),
+      stemPaint,
+    );
+
+    canvas.restore();
+  }
+
+  void _drawCenterDot(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final paint = Paint()
+      ..color = Colors.amber.shade600
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(cx, cy), 8, paint);
+  }
+
+  @override
+  bool shouldRepaint(_CompassPainter oldDelegate) =>
+      (oldDelegate.heading - heading).abs() > 0.5 ||
+      (oldDelegate.qiblaAngle - qiblaAngle).abs() > 0.5 ||
+      oldDelegate.isDark != isDark;
+}
+
+double calculateQiblaDirection(double lat, double lng) {
+  const kaabaLat = 21.422487;
+  const kaabaLng = 39.826206;
+
+  final phiK = kaabaLat * pi / 180;
+  final lambdaK = kaabaLng * pi / 180;
+  final phi = lat * pi / 180;
+  final lambda = lng * pi / 180;
+
+  final y = sin(lambdaK - lambda);
+  final x = cos(phi) * tan(phiK) - sin(phi) * cos(lambdaK - lambda);
+  final bearing = atan2(y, x) * 180 / pi;
+
+  return (bearing + 360) % 360;
 }

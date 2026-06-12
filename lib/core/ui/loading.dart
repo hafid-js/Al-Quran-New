@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
-  const Loading({super.key});
+  final String? message;
+  const Loading({super.key, this.message = "Sedang memuat data..."});
 
   @override
   State<Loading> createState() => _LoadingState();
@@ -58,6 +59,7 @@ class _LoadingState extends State<Loading>
 
   @override
   Widget build(BuildContext context) {
+      final text = widget.message ?? "Sedang memuat data...";
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -65,15 +67,14 @@ class _LoadingState extends State<Loading>
         height: double.infinity,
         color: Colors.black.withOpacity(0.55),
 
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // dots row
               _Dots(),
               SizedBox(height: 16),
               Text(
-                "Sedang memuat data...",
+                text,
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 16,
