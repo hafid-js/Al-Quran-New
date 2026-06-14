@@ -15,8 +15,16 @@ class KiblatMap extends StatelessWidget {
     final controller = Get.find<KiblatController>();
 
     return Obx(() {
+      if (controller.isDeniedForever.value) {
+        return _buildDeniedForeverView(context, controller);
+      }
+
+      if (controller.errorMessage.value.isNotEmpty) {
+        return _buildErrorView(context, controller);
+      }
+
       if (!controller.hasPermission.value) {
-        return _buildMapPlaceholder(context, 'Aktifkan lokasi untuk melihat peta');
+        return _buildPermissionView(context, controller);
       }
 
       if (controller.isLoading.value) {
@@ -122,6 +130,14 @@ class KiblatMap extends StatelessWidget {
                     'Jarak: ${controller.qiblaDistanceText}',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '* Perbesar peta (zoom) untuk melihat posisi kiblat yang sebenarnya',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -131,19 +147,89 @@ class KiblatMap extends StatelessWidget {
     });
   }
 
-  Widget _buildMapPlaceholder(BuildContext context, String message) {
+  Widget _buildPermissionView(BuildContext context, KiblatController controller) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.map, size: 64, color: Theme.of(context).colorScheme.primary),
+            Icon(Icons.location_off, size: 64, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
             Text(
-              message,
+              'Kiblat membutuhkan akses lokasi',
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Aktifkan lokasi untuk mengetahui arah kiblat',
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => controller.requestPermissionsAndLocate(),
+              icon: const Icon(Icons.my_location),
+              label: const Text('Aktifkan Lokasi'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeniedForeverView(BuildContext context, KiblatController controller) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.location_off, size: 64, color: Theme.of(context).colorScheme.error),
+            const SizedBox(height: 16),
+            Text(
+              'Izin lokasi ditolak permanen',
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Buka Pengaturan & aktifkan izin lokasi untuk menggunakan fitur kiblat',
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => controller.openAppSettings(),
+              icon: const Icon(Icons.settings),
+              label: const Text('Buka Pengaturan'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorView(BuildContext context, KiblatController controller) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+            const SizedBox(height: 16),
+            Text(
+              controller.errorMessage.value,
               style: Theme.of(context).textTheme.labelMedium,
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => controller.requestPermissionsAndLocate(),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Coba Lagi'),
             ),
           ],
         ),

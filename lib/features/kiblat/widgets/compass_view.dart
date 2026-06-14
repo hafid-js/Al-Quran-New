@@ -18,6 +18,14 @@ class CompassView extends StatelessWidget {
         return _buildDeniedForeverView(context, controller);
       }
 
+      if (!controller.deviceHasCompassSensor.value) {
+        return _buildNoCompassView(context, controller);
+      }
+
+      if (controller.errorMessage.value.isNotEmpty) {
+        return _buildErrorView(context, controller);
+      }
+
       if (!controller.hasPermission.value) {
         return _buildPermissionView(context, controller);
       }
@@ -27,8 +35,7 @@ class CompassView extends StatelessWidget {
       }
 
       if (controller.compassAvailable.value &&
-          !controller.hasHeadingData.value &&
-          controller.errorMessage.value.isEmpty) {
+          !controller.hasHeadingData.value) {
         return Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -52,10 +59,6 @@ class CompassView extends StatelessWidget {
 
       if (!controller.compassAvailable.value) {
         return _buildNoCompassView(context, controller);
-      }
-
-      if (controller.errorMessage.value.isNotEmpty) {
-        return _buildErrorView(context, controller);
       }
 
       return _buildCompass(context, controller, isDark);
@@ -120,11 +123,6 @@ class CompassView extends StatelessWidget {
               icon: const Icon(Icons.settings),
               label: const Text('Buka Pengaturan'),
             ),
-            const SizedBox(height: 12),
-            TextButton(
-              onPressed: () => controller.requestPermissionsAndLocate(),
-              child: const Text('Coba Lagi'),
-            ),
           ],
         ),
       ),
@@ -150,12 +148,6 @@ class CompassView extends StatelessWidget {
               'Perangkat ini tidak dilengkapi sensor kompas (magnetometer). Arah kiblat tidak dapat ditampilkan.',
               style: Theme.of(context).textTheme.labelSmall,
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => controller.requestPermissionsAndLocate(),
-              icon: const Icon(Icons.refresh),
-              label: const Text('Coba Lagi'),
             ),
           ],
         ),

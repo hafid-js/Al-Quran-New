@@ -123,7 +123,7 @@ Future<void> testAdhanSound() async {
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
-        sound: RawResourceAndroidNotificationSound('default'),
+        sound: RawResourceAndroidNotificationSound('audio_default'),
         
       ),
       

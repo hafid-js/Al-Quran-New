@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:alquran_new/features/kiblat/services/device_sensor_checker.dart';
 import 'package:alquran_new/features/kiblat/services/qibla_calculator.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
-class KiblatController extends GetxController {
+class KiblatController extends GetxController with WidgetsBindingObserver  {
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
   var heading = 0.0.obs;
@@ -26,63 +27,109 @@ class KiblatController extends GetxController {
   bool _hasCompassData = false;
 
   @override
-  void onClose() {
-    _headingSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _sensorTimeout?.cancel();
-    super.onClose();
-  }
+void onInit() {
+  super.onInit();
+  WidgetsBinding.instance.addObserver(this);
+}
 
+  @override
+void onClose() {
+  WidgetsBinding.instance.removeObserver(this);
+
+  _headingSubscription?.cancel();
+  _positionSubscription?.cancel();
+  _sensorTimeout?.cancel();
+
+  super.onClose();
+}
+@override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  if (state == AppLifecycleState.resumed) {
+    _recheckLocation();
+  }
+}
+Future<void> _recheckLocation() async {
+  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  final permission = await Geolocator.checkPermission();
+
+  if (serviceEnabled &&
+      (permission == LocationPermission.whileInUse ||
+       permission == LocationPermission.always)) {
+
+    hasPermission.value = true;
+    isDeniedForever.value = false;
+    errorMessage.value = '';
+
+    await getCurrentLocation();
+  }
+}
   Future<void> requestPermissionsAndLocate() async {
     isLoading.value = true;
     errorMessage.value = '';
-    isDeniedForever.value = false;
 
-    final hasSensor = await DeviceSensorChecker.hasMagnetometer();
-
-    if (!hasSensor || FlutterCompass.events == null) {
-      deviceHasCompassSensor.value = false;
-      compassAvailable.value = false;
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      errorMessage.value = 'GPS belum aktif';
       isLoading.value = false;
+      await Geolocator.openLocationSettings();
       return;
     }
 
-    deviceHasCompassSensor.value = true;
+    LocationPermission perm = await Geolocator.checkPermission();
 
-    final locationEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!locationEnabled) {
-      errorMessage.value = 'Aktifkan lokasi di pengaturan untuk fitur kiblat';
-      isLoading.value = false;
-      return;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        errorMessage.value = 'Izin lokasi diperlukan untuk fitur kiblat';
-        isLoading.value = false;
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
+    if (perm == LocationPermission.deniedForever) {
       isDeniedForever.value = true;
-      errorMessage.value =
-          'Izin lokasi ditolak permanen. Ketuk "Buka Pengaturan" untuk mengaktifkan.';
+      isLoading.value = false;
+      await _showDeniedForeverDialog();
+      return;
+    }
+
+    if (perm == LocationPermission.denied) {
+      perm = await Geolocator.requestPermission();
+    }
+
+    if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) {
+      if (perm == LocationPermission.deniedForever) {
+        isDeniedForever.value = true;
+      } else {
+        errorMessage.value = 'Izin lokasi ditolak';
+      }
       isLoading.value = false;
       return;
     }
 
     hasPermission.value = true;
-    await _startCompass();
 
-    try {
-      await getCurrentLocation().timeout(const Duration(seconds: 20));
-    } on TimeoutException {
-      errorMessage.value = 'Gagal mendapatkan lokasi: waktu habis';
-      isLoading.value = false;
-    }
+    await _startCompass();
+    await getCurrentLocation();
+
+    isLoading.value = false;
+  }
+
+  Future<void> _showDeniedForeverDialog() async {
+    await Get.dialog(
+      AlertDialog(
+        title: const Text('Izin Lokasi Dinonaktifkan'),
+        content: const Text(
+          'Akses lokasi diperlukan untuk menentukan arah kiblat. '
+          'Izin lokasi telah ditolak permanen. '
+          'Silakan buka pengaturan untuk mengaktifkannya.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Tutup'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Geolocator.openAppSettings();
+            },
+            child: const Text('Buka Pengaturan'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> openAppSettings() async {
