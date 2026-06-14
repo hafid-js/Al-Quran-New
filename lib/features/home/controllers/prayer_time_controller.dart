@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
@@ -44,15 +43,15 @@ class PrayerTimeController extends GetxController {
     super.onInit();
     _startCountdown();
 
-  Future.delayed(Duration(seconds: 2), () async {
-    await NotificationService().testAdhanSound();
-  });
+  // Future.delayed(Duration(seconds: 2), () async {
+  //   await NotificationService().testAdhanSound();
+  // });
   //    Future.delayed(Duration.zero, () async {
   //   await _debugTestNotification();
   // });
-  //   Future.delayed(Duration.zero, () {
-  //     if (!_disposed) fetchPrayerTimes();
-  //   });
+    Future.delayed(Duration.zero, () {
+      if (!_disposed) fetchPrayerTimes();
+    });
   }
 
   void _startCountdown() {

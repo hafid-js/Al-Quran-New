@@ -7,14 +7,12 @@ import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
-import 'package:alquran_new/features/dzikir/compass.dart';
-import 'package:alquran_new/features/dzikir/screens/dzikir_screen.dart';
+import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/widgets/prayer_item.dart';
 import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
-import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/lokasi/lokasi_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
@@ -68,16 +66,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "binding": DoaBinding(),
     },
     {
-      "title": "Compass",
+      "title": "Kiblat",
       "icon": Icons.my_location_rounded,
-      "page": () => const Compass(),
+      "page": () => KiblatScreen(),
     },
     {
-      "title": "Dzikir",
-      "icon": Icons.all_inclusive_rounded,
-      "page": () => KompasScreen(),
+      "title": "Tasbih",
+      "icon": Icons.touch_app_rounded,
+      "page": () => const TasbihScreen(),
     },
-
     {
       "title": "Kalender Islam",
       "icon": Icons.calendar_month_rounded,
@@ -101,11 +98,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "title": "Bookmark",
       "icon": Icons.bookmarks_rounded,
       "page": () => const BookmarkScreen(),
-    },
-    {
-      "title": "Tasbih",
-      "icon": Icons.touch_app_rounded,
-      "page": () => const TasbihScreen(),
     },
   ];
 
