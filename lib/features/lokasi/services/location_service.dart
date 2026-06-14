@@ -77,9 +77,18 @@ class LocationService {
     throw Exception("Permission GPS ditolak permanen");
   }
 
-  return await Geolocator.getCurrentPosition(
+  final position = await Geolocator.getCurrentPosition(
     desiredAccuracy: LocationAccuracy.high,
   );
+
+  if (position.accuracy > 0 && position.accuracy > 500) {
+    throw Exception(
+      "Akurasi GPS rendah (${position.accuracy.toStringAsFixed(0)}m). "
+      "Coba di luar ruangan.",
+    );
+  }
+
+  return position;
 }
 
 static Future<Map<String, String?>> getAddressFromPosition(
@@ -98,7 +107,7 @@ static Future<Map<String, String?>> getAddressFromPosition(
 
   return {
     "province": place.administrativeArea,
-    "city": place.subAdministrativeArea ?? place.locality,
+    "city": place.locality ?? place.subAdministrativeArea,
   };
 }
 
@@ -125,8 +134,19 @@ final detectedCity =
 
   final cities = await getCities(matchedProvince);
 
-  final matchedCity =
-      _match(detectedCity ?? "", cities) ?? cities.first;
+  String matchedCity =
+      _match(detectedCity ?? "", cities) ??
+      cities.firstWhere(
+        (c) => !c.toLowerCase().startsWith("kab"),
+        orElse: () => cities.first,
+      );
+
+  // Heuristic: jika DKI Jakarta tapi geocode balikin Kepulauan Seribu
+  // override ke Kota Jakarta (GPS sering meleset ke area administrasi itu)
+  if (matchedProvince == "DKI Jakarta" && matchedCity != "Kota Jakarta") {
+    final kota = cities.where((c) => c == "Kota Jakarta");
+    if (kota.isNotEmpty) matchedCity = "Kota Jakarta";
+  }
 
   // 4. Save ke Hive
   final cache = LocationCache()

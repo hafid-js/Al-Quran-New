@@ -1,5 +1,4 @@
 import 'package:alquran_new/features/kalender/data/events_data.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -126,23 +125,19 @@ final isEventDay = hasEvent(day);
                     ),
             ),
                  
+                  SizedBox(height: 4),
                    day.year == todayDate.year &&
-                      day.month == todayDate.month &&
-                      day.day == todayDate.day
-                  ?
-                  Column(
-                    children: [
-                      SizedBox(height: 4),
-                  if (isEventDay)
-        Positioned(
-          bottom: 6,
-          child: CircleAvatar(
-            radius: 2,
-            backgroundColor: HexColor.fromHex("#2dc8b9"),
-          ),
-        ),
-                    ],
-                  ) : SizedBox.shrink()
+                       day.month == todayDate.month &&
+                       day.day == todayDate.day
+                       ? Container(
+                           width: 6,
+                           height: 6,
+                           decoration: BoxDecoration(
+                             color: highlightBorder,
+                             shape: BoxShape.circle,
+                           ),
+                         )
+                       : const SizedBox.shrink()
           ],
         ),
       );

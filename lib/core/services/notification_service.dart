@@ -14,7 +14,7 @@ class NotificationService {
 
   static const Map<String, String> _soundResources = {
     'default': 'alarmbeep',
-    'adzan': 'adzansubuh',
+    'adzan': 'alarmbeep',
   };
 
   Future<void> initialize() async {
@@ -123,7 +123,7 @@ Future<void> testAdhanSound() async {
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
-        sound: RawResourceAndroidNotificationSound('audio_default'),
+        sound: RawResourceAndroidNotificationSound('adzan'),
         
       ),
       

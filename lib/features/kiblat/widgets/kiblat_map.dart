@@ -132,7 +132,7 @@ class KiblatMap extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '* Perbesar peta (zoom) untuk melihat posisi kiblat yang sebenarnya',
+                    '* Perbesar peta (zoom) untuk melihat posisi kiblat lebih jelas.',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       fontStyle: FontStyle.italic,
                       color: Theme.of(context).colorScheme.outline,

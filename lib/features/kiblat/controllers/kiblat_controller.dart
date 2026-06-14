@@ -60,7 +60,18 @@ Future<void> _recheckLocation() async {
     isDeniedForever.value = false;
     errorMessage.value = '';
 
+    await _startCompass();
     await getCurrentLocation();
+  } else {
+    _headingSubscription?.cancel();
+    _positionSubscription?.cancel();
+    hasPermission.value = false;
+
+    if (permission == LocationPermission.deniedForever) {
+      isDeniedForever.value = true;
+    } else {
+      errorMessage.value = 'Izin lokasi ditolak';
+    }
   }
 }
   Future<void> requestPermissionsAndLocate() async {
@@ -80,7 +91,6 @@ Future<void> _recheckLocation() async {
     if (perm == LocationPermission.deniedForever) {
       isDeniedForever.value = true;
       isLoading.value = false;
-      await _showDeniedForeverDialog();
       return;
     }
 
@@ -100,36 +110,19 @@ Future<void> _recheckLocation() async {
 
     hasPermission.value = true;
 
-    await _startCompass();
-    await getCurrentLocation();
+    try {
+      await _startCompass();
+    } catch (_) {
+      compassAvailable.value = false;
+    }
+
+    try {
+      await getCurrentLocation();
+    } catch (e) {
+      errorMessage.value = 'Gagal mendapatkan lokasi: ${e.toString()}';
+    }
 
     isLoading.value = false;
-  }
-
-  Future<void> _showDeniedForeverDialog() async {
-    await Get.dialog(
-      AlertDialog(
-        title: const Text('Izin Lokasi Dinonaktifkan'),
-        content: const Text(
-          'Akses lokasi diperlukan untuk menentukan arah kiblat. '
-          'Izin lokasi telah ditolak permanen. '
-          'Silakan buka pengaturan untuk mengaktifkannya.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Tutup'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Geolocator.openAppSettings();
-            },
-            child: const Text('Buka Pengaturan'),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> openAppSettings() async {
@@ -139,6 +132,15 @@ Future<void> _recheckLocation() async {
   Future<void> getCurrentLocation() async {
     try {
       _positionSubscription?.cancel();
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      latitude.value = position.latitude;
+      longitude.value = position.longitude;
+      calculateQibla();
+      if (isLoading.value) isLoading.value = false;
+
       _positionSubscription =
           Geolocator.getPositionStream(
             locationSettings: const LocationSettings(
@@ -149,16 +151,7 @@ Future<void> _recheckLocation() async {
             latitude.value = position.latitude;
             longitude.value = position.longitude;
             calculateQibla();
-            if (isLoading.value) isLoading.value = false;
           });
-
-      final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      latitude.value = position.latitude;
-      longitude.value = position.longitude;
-      calculateQibla();
-      if (isLoading.value) isLoading.value = false;
     } catch (e) {
       errorMessage.value = 'Gagal mendapatkan lokasi: ${e.toString()}';
       isLoading.value = false;

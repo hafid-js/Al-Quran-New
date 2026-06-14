@@ -157,26 +157,57 @@ Widget _androidNoCompass() {
 Widget _iosSystemWarning() {
   return Container(
     margin: const EdgeInsets.all(12),
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: Colors.orange.withOpacity(0.1),
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: Colors.orange),
+      color: Colors.orange.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: Colors.orange.withOpacity(0.4)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "⚠ iOS Compass Calibration Required",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              "Kalibrasi Kompas iOS",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.orange.shade800,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 6),
-        const Text("Aktifkan di:"),
-        const SizedBox(height: 6),
-        const Text("• Settings → Privacy & Security"),
-        const Text("• Location Services → System Services"),
-        const Text("• Motion Calibration & Distance = ON"),
-        const Text("• Compass Calibration = ON"),
+        const SizedBox(height: 10),
+        Text(
+          "Aktifkan kalibrasi kompas iOS agar kompas berfungsi:",
+          style: TextStyle(fontSize: 13, color: Colors.orange.shade900),
+        ),
+        const SizedBox(height: 8),
+        _iosBulletItem("Settings → Privacy & Security"),
+        _iosBulletItem("Location Services → System Services"),
+        _iosBulletItem("Motion Calibration & Distance = ON"),
+        _iosBulletItem("Compass Calibration = ON"),
+      ],
+    ),
+  );
+}
+
+Widget _iosBulletItem(String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 2),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(Icons.chevron_right, size: 16, color: Colors.orange.shade700),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 12, color: Colors.orange.shade900),
+          ),
+        ),
       ],
     ),
   );

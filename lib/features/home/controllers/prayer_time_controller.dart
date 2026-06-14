@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:alquran_new/features/adzan/adzan_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
@@ -29,11 +30,12 @@ class PrayerTimeController extends GetxController {
 
   var isLoading = false.obs;
   var errorMessage = RxnString();
-  var currentCity = "Kab. Purworejo".obs;
+  var currentCity = "Kota Jakarta".obs;
   bool _isRefreshing = false;
   bool _disposed = false;
 
   Timer? _prayerTimer;
+  Timer? _adzanTimer;
   Timer? _countdownTimer;
   LocationCache? _cachedLocation;
   var locationStatus = "Idle".obs;
@@ -42,13 +44,6 @@ class PrayerTimeController extends GetxController {
   void onInit() {
     super.onInit();
     _startCountdown();
-
-  // Future.delayed(Duration(seconds: 2), () async {
-  //   await NotificationService().testAdhanSound();
-  // });
-  //    Future.delayed(Duration.zero, () async {
-  //   await _debugTestNotification();
-  // });
     Future.delayed(Duration.zero, () {
       if (!_disposed) fetchPrayerTimes();
     });
@@ -65,60 +60,8 @@ class PrayerTimeController extends GetxController {
     });
   }
 
-Future<void> _debugTestNotification() async {
-  final now = DateTime.now();
-  final testTime = now.add(const Duration(seconds: 10));
+  DateTime? _lastAdzanTriggered;
 
-
-  await NotificationService().scheduleNotification(
-    id: 999,
-    title: "DEBUG ADZAN TEST",
-    body: "Ini test notifikasi 10 detik",
-    scheduledDate: testTime,
-    soundType: settingsController.soundType.value,
-    notificationMode: settingsController.notificationMode.value,
-  );
-}
-
-
-// Future<void> scheduleNotification({
-//   required int id,
-//   required String title,
-//   required String body,
-//   required DateTime scheduledDate,
-// }) async {
-//   const iosDetails = DarwinNotificationDetails(
-//     sound: 'adzansubuh.wav', // 🔥 WAJIB SAMA PERSIS
-//     presentAlert: true,
-//     presentSound: true,
-//     presentBadge: true,
-//   );
-
-//   const androidDetails = AndroidNotificationDetails(
-//     'prayer_channel',
-//     'Prayer Notifications',
-//     importance: Importance.max,
-//     priority: Priority.high,
-//     playSound: true,
-//   );
-
-//   const details = NotificationDetails(
-//     iOS: iosDetails,
-//     android: androidDetails,
-//   );
-
-//   await FlutterLocalNotificationsPlugin.zonedSchedule(
-//     id,
-//     title,
-//     body,
-//     tz.TZDateTime.from(scheduledDate, tz.local),
-//     details,
-//     uiLocalNotificationDateInterpretation:
-//         UILocalNotificationDateInterpretation.absoluteTime,
-//     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-//     matchDateTimeComponents: null,
-//   );
-// }
   void _schedulePrayerTimer() {
     _prayerTimer?.cancel();
     final next = nextPrayerTime.value;
@@ -130,6 +73,27 @@ Future<void> _debugTestNotification() async {
     _prayerTimer = Timer(diff, () {
       if (!_disposed) fetchPrayerTimes();
     });
+  }
+
+  void _scheduleAdzanTimer() {
+    final next = nextPrayerTime.value;
+    if (next == null) return;
+
+    final diff = next.difference(DateTime.now());
+    if (diff.isNegative) return;
+
+    _adzanTimer = Timer(diff + const Duration(seconds: 4), () {
+      if (!_disposed) _triggerAdzan();
+    });
+  }
+
+  void _triggerAdzan() {
+    if (_lastAdzanTriggered != null &&
+        DateTime.now().difference(_lastAdzanTriggered!) < const Duration(minutes: 1)) {
+      return;
+    }
+    _lastAdzanTriggered = DateTime.now();
+    Get.to(() => const AdzanScreen());
   }
 
 Future<void> detectLocation() async {
@@ -227,8 +191,8 @@ if (cached != null &&
       }
 
       final data = await repo.fetchPrayerTimes(
-        province: _cachedLocation?.province ?? "Jawa Tengah",
-        city: _cachedLocation?.city ?? "Kab. Purworejo",
+        province: _cachedLocation?.province ?? "DKI Jakarta",
+        city: _cachedLocation?.city ?? "Kota Jakarta",
       );
 
       final schedules = data['schedules'] as List<PrayerTimeModel>;
@@ -281,21 +245,6 @@ if (cached != null &&
         }
       }
 
-      for (final entry in prayers.entries) {
-  DateTime prayerTime = DateTime.now().add(const Duration(seconds: 10));
-
-  if (_isPrayerEnabled(entry.key)) {
-    await NotificationService().scheduleNotification(
-      id: prayerIds[entry.key]!,
-      title: "Al-Barokah: Quran & Sholat",
-      body: "Saatnya sholat ${entry.key}",
-      scheduledDate: prayerTime,
-      soundType: settingsController.soundType.value,
-      notificationMode: settingsController.notificationMode.value,
-    );
-  }
-}
-
       _calculateNextPrayer(item);
     } catch (e) {
       errorMessage.value = e.toString();
@@ -322,6 +271,7 @@ if (cached != null &&
         nextPrayerName.value = entry.key;
         nextPrayerTime.value = dt;
         _schedulePrayerTimer();
+        _scheduleAdzanTimer();
         return;
       }
     }
@@ -330,6 +280,7 @@ if (cached != null &&
     nextPrayerName.value = "Subuh";
     nextPrayerTime.value = _parseTime(item.subuh, tomorrow);
     _schedulePrayerTimer();
+    _scheduleAdzanTimer();
   }
 
   DateTime _parseTime(String time, DateTime base) {
@@ -422,6 +373,7 @@ if (cached != null &&
   @override
   void onClose() {
     _prayerTimer?.cancel();
+    _adzanTimer?.cancel();
     _countdownTimer?.cancel();
     _isRefreshing = false;
     _disposed = true;

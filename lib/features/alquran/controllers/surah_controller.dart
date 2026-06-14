@@ -186,6 +186,18 @@ class SurahController extends GetxController
               .toList()
             ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
 
+          Map<String, String> audioFull;
+          try {
+            final decoded = jsonDecode(e.audioUrl);
+            if (decoded is Map) {
+              audioFull = Map<String, String>.from(decoded);
+            } else {
+              audioFull = {qariKey: decoded as String};
+            }
+          } catch (_) {
+            audioFull = {qariKey: e.audioUrl};
+          }
+
           return Surah(
             nomor: e.nomor,
             namaLatin: e.namaLatin,
@@ -196,7 +208,7 @@ class SurahController extends GetxController
               (t) => t.name == e.tempatTurun,
             ),
             arti: e.arti,
-            audioFull: {qariKey: e.audioUrl},
+            audioFull: audioFull,
             ayat: ayatList.map((a) {
               return Ayat(
                 nomorAyat: a.nomorAyat,
@@ -245,7 +257,7 @@ class SurahController extends GetxController
             ..jumlahAyat = e.jumlahAyat
             ..tempatTurun = e.tempatTurun.name
             ..arti = e.arti
-            ..audioUrl = e.audioFull.values.first;
+            ..audioUrl = jsonEncode(e.audioFull);
 
           await HiveService.surahBox.add(surah);
 
