@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
@@ -14,7 +15,7 @@ class PemutarAudioScreen extends StatefulWidget {
   @override
   State<PemutarAudioScreen> createState() => _PemutarAudioScreenState();
 }
-
+final SettingsController setting = Get.find<SettingsController>();
 final Map<String, String> qariImages = {
   "01": "assets/images/qari/Abdullah-Al-Juhany.webp",
   "02": "assets/images/qari/Abdul-Muhsin-Al-Qasim.webp",
@@ -379,6 +380,11 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                             );
                             final activeSurahNomor =
                                 controller.activeSurahNomor.value;
+                                  final selectedIndex = setting
+                                                      .fontSelected
+                                                      .value;
+                                                  final fontFamily =
+                                                      fontArabs[selectedIndex]["title"];
 
                             Widget buildPlaying() {
                               return Padding(
@@ -491,6 +497,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                             Text(
                                               surah.nama,
                                               style: TextStyle(
+                                                fontFamily: fontFamily,
                                                 fontSize: 18,
                                                 color: Theme.of(
                                                   context,
@@ -626,6 +633,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                             Text(
                                               surah.nama,
                                               style: TextStyle(
+                                                               fontFamily: fontFamily,
                                                 fontSize: 18,
                                                 color: Theme.of(
                                                   context,
@@ -767,6 +775,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               Text(
                                                 surah.nama,
                                                 style: TextStyle(
+                                                                 fontFamily: fontFamily,
                                                   fontSize: 18,
                                                   color: Theme.of(context)
                                                       .textTheme

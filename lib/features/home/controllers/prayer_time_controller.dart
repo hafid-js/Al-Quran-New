@@ -89,54 +89,49 @@ class PrayerTimeController extends GetxController {
 
   void _triggerAdzan() {
     if (_lastAdzanTriggered != null &&
-        DateTime.now().difference(_lastAdzanTriggered!) < const Duration(minutes: 1)) {
+        DateTime.now().difference(_lastAdzanTriggered!) <
+            const Duration(minutes: 1)) {
       return;
     }
     _lastAdzanTriggered = DateTime.now();
     Get.to(() => const AdzanScreen());
   }
 
-Future<void> detectLocation() async {
-  try {
-    isLoading.value = true;
+  Future<void> detectLocation() async {
+    try {
+      isLoading.value = true;
 
-    locationStatus.value = "Mendeteksi lokasi...";
+      locationStatus.value = "Mendeteksi lokasi...";
 
-    final location = await LocationService.detectAndSaveLocation();
+      final location = await LocationService.detectAndSaveLocation();
 
-    locationStatus.value = "Mengambil data kota...";
+      locationStatus.value = "Mengambil data kota...";
 
-    _cachedLocation = location;
-    currentCity.value = location.city;
+      _cachedLocation = location;
+      currentCity.value = location.city;
 
-    locationStatus.value = "Memperbarui jadwal...";
+      locationStatus.value = "Memperbarui jadwal...";
 
-        await local.clear();
+      await local.clear();
 
+      await fetchPrayerTimes();
 
-    await fetchPrayerTimes();
+      locationStatus.value = "Selesai";
 
-    locationStatus.value = "Selesai";
+      Get.snackbar("Sukses", "Lokasi diperbarui: ${location.city}");
+    } catch (e) {
+      locationStatus.value = "Gagal";
 
-    Get.snackbar(
-      "Sukses",
-      "Lokasi diperbarui: ${location.city}",
-    );
-  } catch (e) {
-    locationStatus.value = "Gagal";
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
 
-    Get.snackbar("Error", e.toString());
-  } finally {
-    isLoading.value = false;
-
-    // optional reset setelah delay
-    Future.delayed(const Duration(seconds: 2), () {
-      locationStatus.value = "Idle";
-    });
+      // optional reset setelah delay
+      Future.delayed(const Duration(seconds: 2), () {
+        locationStatus.value = "Idle";
+      });
+    }
   }
-}
-
-
 
   Future<void> fetchPrayerTimes() async {
     if (_isRefreshing) return;
@@ -146,39 +141,35 @@ Future<void> detectLocation() async {
       _isRefreshing = true;
       isLoading.value = true;
 
-  final controller = Get.find<PrayerTimeController>();
+      final controller = Get.find<PrayerTimeController>();
 
-controller._cachedLocation =
-    await LocationService.getLocation();
+      controller._cachedLocation = await LocationService.getLocation();
 
-await controller.fetchPrayerTimes();
+      await controller.fetchPrayerTimes();
 
       final String todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-     final cached = local.get();
+      final cached = local.get();
 
-final sameLocation =
-    cached != null &&
-    cached.province == _cachedLocation?.province &&
-    cached.city == _cachedLocation?.city;
+      final sameLocation =
+          cached != null &&
+          cached.province == _cachedLocation?.province &&
+          cached.city == _cachedLocation?.city;
 
-if (cached != null &&
-    cached.tanggalLengkap == todayStr &&
-    sameLocation) {
+      if (cached != null && cached.tanggalLengkap == todayStr && sameLocation) {
+        todayPrayer.value = cached.toEntity();
 
-  todayPrayer.value = cached.toEntity();
+        final loc = _cachedLocation;
+        if (loc != null) {
+          currentCity.value = loc.city;
+        }
 
-  final loc = _cachedLocation;
-  if (loc != null) {
-    currentCity.value = loc.city;
-  }
+        _calculateNextPrayer(cached.toEntity());
 
-  _calculateNextPrayer(cached.toEntity());
-
-  isLoading.value = false;
-  _isRefreshing = false;
-  return;
-}
+        isLoading.value = false;
+        _isRefreshing = false;
+        return;
+      }
 
       final net = Get.find<NetworkController>();
       if (!net.isConnected.value) {
@@ -206,8 +197,11 @@ if (cached != null &&
         currentCity.value = loc.city;
       }
 
-      final cacheData = PrayerTimeCache.fromEntity(item,
-          province: loc?.province, city: loc?.city);
+      final cacheData = PrayerTimeCache.fromEntity(
+        item,
+        province: loc?.province,
+        city: loc?.city,
+      );
       await local.save(cacheData);
 
       final now = DateTime.now();
@@ -253,7 +247,6 @@ if (cached != null &&
       _isRefreshing = false;
     }
   }
-  
 
   void _calculateNextPrayer(PrayerTimeModel item) {
     final now = DateTime.now();

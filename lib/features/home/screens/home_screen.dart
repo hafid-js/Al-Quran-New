@@ -7,6 +7,9 @@ import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
+import 'package:alquran_new/features/dzikir/dzikir_screen.dart';
+import 'package:alquran_new/features/icon/icon_screen.dart';
+import 'package:alquran_new/features/icon/widgets/all_icon_islamic.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
@@ -21,6 +24,7 @@ import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_sc
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 
 import 'package:get/get.dart';
 import 'package:hijri/hijri_calendar.dart';
@@ -99,6 +103,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "icon": Icons.bookmarks_rounded,
       "page": () => const BookmarkScreen(),
     },
+     {
+      "title": "Dzikir",
+      "icon": FlutterIslamicIcons.solidPrayingPerson,
+      "page": () => const DzikirScreen(),
+    },
+    {
+      "title": "Icon",
+      "icon": Icons.dock_rounded,
+      "page": () => const AllIconIslamic(),
+    },
   ];
 
   bool showAllMenus = false;
@@ -136,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 20),
+        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 10),
         body: Stack(
           children: [
             Obx(() {

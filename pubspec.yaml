@@ -66,6 +66,7 @@ dependencies:
   flutter_svg: ^2.3.0
   flutter_compass: ^0.8.1
   permission_handler: ^12.0.3
+  flutter_islamic_icons: ^1.0.2
 dependency_overrides:
   device_info_plus: ^10.1.0
 

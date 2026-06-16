@@ -1,15 +1,18 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     BookmarkController controller = Get.put(BookmarkController());
+      final SettingsController setting = Get.find<SettingsController>();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -57,6 +60,8 @@ class BookmarkScreen extends StatelessWidget {
       ),
 
       body: Obx(() {
+          final selectedIndex = setting.fontSelected.value;
+                        final fontFamily = fontArabs[selectedIndex]["title"];
 
         if (controller.bookmarks.isEmpty) {
   return Center(
@@ -170,6 +175,7 @@ class BookmarkScreen extends StatelessWidget {
                     Text(
                       bm.arabName,
                       style: TextStyle(
+                        fontFamily: fontFamily,
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.primary,
                       ),

@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/tasbih/widgets/tab_item.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class TasbihScreen extends StatefulWidget {
 }
 
 class _TasbihScreenState extends State<TasbihScreen> {
+  final SettingsController setting = Get.find<SettingsController>();
   final box = GetStorage();
   final int target = 33;
   int freeTasbih = 0;
@@ -482,63 +484,63 @@ class _TasbihScreenState extends State<TasbihScreen> {
                         ),
                       ),
                       Positioned(
-  left: 0,
-  right: 0,
-  bottom: 0,
-  child: SafeArea(
-    top: false,
-    child: Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Center(
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              resetTasbihCounter();
-            });
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 10,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.cached_rounded,
-                  color:
-                      Theme.of(context).textTheme.labelLarge?.color,
-                  size: 18,
-                ),
-                SizedBox(width: 6),
-                Text(
-                  "Reset",
-                  style: TextStyle(
-                    color: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.color,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ),
-  ),
-)
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: SafeArea(
+                          top: false,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    resetTasbihCounter();
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 10,
+                                        offset: Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.cached_rounded,
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.labelLarge?.color,
+                                        size: 18,
+                                      ),
+                                      SizedBox(width: 6),
+                                      Text(
+                                        "Reset",
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.labelLarge?.color,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -675,8 +677,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     }
   }
 
-  
-
   Widget _dzikirCard(
     String arabic,
     String arti,
@@ -696,14 +696,22 @@ class _TasbihScreenState extends State<TasbihScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                arabic,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                  fontSize: 30,
-                ),
-              ),
+              Obx(() {
+                final selectedIndex = setting.fontSelected.value;
+                final fontFamily = fontArabs[selectedIndex]["title"];
+                return Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    arabic,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                      fontSize: 30,
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 10),
               Text(arti, style: Theme.of(context).textTheme.labelMedium),
             ],
@@ -711,171 +719,177 @@ class _TasbihScreenState extends State<TasbihScreen> {
         ),
 
         Align(
-  alignment: Alignment.center,
-  child: CircularPercentIndicator(
-    backgroundColor: Theme.of(context).cardColor.withAlpha(100),
-    backgroundWidth: 9,
-    radius: 130.0,
-    lineWidth: 8.0,
-    percent: (count / 33).clamp(0.0, 1.0),
-    circularStrokeCap: CircularStrokeCap.round,
-    progressColor: Theme.of(context).colorScheme.primary,
-    center: Material(
-      color: Colors.transparent,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: count >= 33
-            ? null
-            : () {
-                setState(() {
-                  increment();
-                });
-              },
-        child: Ink(
-          width: 230,
-          height: 230,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).cardColor,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "$count",
-                style: TextStyle(
-                  fontSize: 60,
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "/ 33",
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              Text(
-                "Tap untuk menghitung",
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
-       Positioned(
-  left: 0,
-  right: 0,
-  bottom: 16,
-  child: SafeArea(
-    top: false,
-    child: Container(
-
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          alignment: Alignment.center,
+          child: CircularPercentIndicator(
+            backgroundColor: Theme.of(context).cardColor.withAlpha(100),
+            backgroundWidth: 9,
+            radius: 130.0,
+            lineWidth: 8.0,
+            percent: (count / 33).clamp(0.0, 1.0),
+            circularStrokeCap: CircularStrokeCap.round,
+            progressColor: Theme.of(context).colorScheme.primary,
+            center: Material(
+              color: Colors.transparent,
+              shape: const CircleBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: count >= 33
+                    ? null
+                    : () {
+                        setState(() {
+                          increment();
+                        });
+                      },
+                child: Ink(
+                  width: 230,
+                  height: 230,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).cardColor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Progress Dzikir",
-                        style: Theme.of(context).textTheme.labelSmall
+                        "$count",
+                        style: TextStyle(
+                          fontSize: 60,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
-                        "${dzikirSelesai()}/6",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        "/ 33",
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      Text(
+                        "Tap untuk menghitung",
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+          ),
+        ),
 
-                  SizedBox(height: 8),
-
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return LinearPercentIndicator(
-                        backgroundColor: Theme.of(context).disabledColor,
-                        padding: EdgeInsets.zero,
-                        barRadius: Radius.circular(16),
-                        width: constraints.maxWidth,
-                        animation: true,
-                        lineHeight: 6.0,
-                        animationDuration: 500,
-                        percent: (dzikirSelesai() / 6).clamp(0.0, 1.0),
-                        linearStrokeCap: LinearStrokeCap.roundAll,
-                        progressColor:
-                            Theme.of(context).colorScheme.primary,
-                      );
-                    },
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 16,
+          child: SafeArea(
+            top: false,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),
-            ),
-
-            SizedBox(width: 12),
-
-            InkWell(
-              onTap: () {
-                setState(() {
-                  resetCounter();
-                });
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.cached_rounded,
-                      color: Theme.of(context).textTheme.labelMedium?.color,
-                      size: 18,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Progress Dzikir",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              Text(
+                                "${dzikirSelesai()}/6",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 8),
+
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return LinearPercentIndicator(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).disabledColor,
+                                padding: EdgeInsets.zero,
+                                barRadius: Radius.circular(16),
+                                width: constraints.maxWidth,
+                                animation: true,
+                                lineHeight: 6.0,
+                                animationDuration: 500,
+                                percent: (dzikirSelesai() / 6).clamp(0.0, 1.0),
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                progressColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(width: 6),
-                    Text(
-                      "Reset",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.labelMedium?.color,
+
+                    SizedBox(width: 12),
+
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          resetCounter();
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).disabledColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.cached_rounded,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.labelMedium?.color,
+                              size: 18,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              "Reset",
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.labelMedium?.color,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-  ),
-),
       ],
     );
   }

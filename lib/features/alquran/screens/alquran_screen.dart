@@ -43,7 +43,10 @@ class AlQuranScreen extends StatefulWidget {
 }
 
 class _AlQuranScreenState extends State<AlQuranScreen> {
-  final SurahController controller = Get.put(SurahController(), permanent: true);
+  final SurahController controller = Get.put(
+    SurahController(),
+    permanent: true,
+  );
   final List<String> categories = ["Surah", "Mekah", "Madinah"];
   final SettingsController setting = Get.find<SettingsController>();
 
@@ -156,13 +159,8 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                       itemCount: controller.filteredSurah.length,
                       itemBuilder: (context, index) {
                         final surah = controller.filteredSurah[index];
-                                      final selectedIndex = setting
-                                                      .fontSelected
-                                                      .value;
-                                                  final fontFamily =
-                                                      fontArabs[selectedIndex]["title"];
-
-
+                        final selectedIndex = setting.fontSelected.value;
+                        final fontFamily = fontArabs[selectedIndex]["title"];
 
                         return Column(
                           children: [
@@ -285,12 +283,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
             return const Positioned.fill(child: Loading());
           }),
 
-          const Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: PlayerBar(),
-          ),
+          const Positioned(bottom: 0, left: 0, right: 0, child: PlayerBar()),
         ],
       ),
     );
