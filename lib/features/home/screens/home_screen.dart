@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 0),
+        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 20),
         body: Stack(
           children: [
             Obx(() {

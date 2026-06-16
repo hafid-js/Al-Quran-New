@@ -3,6 +3,7 @@ import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -44,6 +45,7 @@ class AlQuranScreen extends StatefulWidget {
 class _AlQuranScreenState extends State<AlQuranScreen> {
   final SurahController controller = Get.put(SurahController(), permanent: true);
   final List<String> categories = ["Surah", "Mekah", "Madinah"];
+  final SettingsController setting = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +156,13 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                       itemCount: controller.filteredSurah.length,
                       itemBuilder: (context, index) {
                         final surah = controller.filteredSurah[index];
+                                      final selectedIndex = setting
+                                                      .fontSelected
+                                                      .value;
+                                                  final fontFamily =
+                                                      fontArabs[selectedIndex]["title"];
+
+
 
                         return Column(
                           children: [
@@ -236,6 +245,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                           Text(
                                             surah.nama,
                                             style: TextStyle(
+                                              fontFamily: fontFamily,
                                               fontSize: Theme.of(
                                                 context,
                                               ).textTheme.titleLarge?.fontSize,
@@ -267,8 +277,6 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
               ],
             ),
           ),
-
-          /// ================= FULL SCREEN LOADING OVERLAY =================
           Obx(() {
             if (!controller.isLoading.value) {
               return const SizedBox();

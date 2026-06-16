@@ -1,16 +1,19 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/utils/constants/shadow_theme.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'app_colors.dart';
 import 'text_theme.dart';
 
 class AppTheme {
   AppTheme._();
+    static SettingsController setting = Get.find<SettingsController>();
 
   static ThemeData lightTheme() {
     return ThemeData(
   useMaterial3: true,
-  fontFamily: 'Poppins',
+  fontFamily: setting.fontSelected.value.toString(),
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
   disabledColor: AppColors.lightDisableColor,

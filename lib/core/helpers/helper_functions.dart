@@ -8,3 +8,9 @@ extension HexColor on Color {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
+
+  final List<Map<String, dynamic>> fontArabs = [
+    {"title": "Amiri Quran"},
+    {"title": "LPMQ Isep Misbah"},
+    {"title": "Spectral"},
+  ];

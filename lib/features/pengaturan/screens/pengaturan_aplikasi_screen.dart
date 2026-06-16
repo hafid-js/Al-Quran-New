@@ -21,9 +21,6 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
   int qariSelected = 4;
   String title = "Misyari Rasyid Al-Afi";
 
-  int fontSelected = 1;
-  String font = "Naskh";
-
   int modeSelected = 1;
   String mode = "Mode Gelap";
 
@@ -37,12 +34,6 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
     {"title": "Ibraim Al-Dossari"},
     {"title": "Misyari Rasyid Al-Afsi"},
     {"title": "Yaser Al-Dosari"},
-  ];
-
-  final List<Map<String, dynamic>> fontArabs = [
-    {"title": "Naskh", "subtitle": "Noto Naskh Arabic"},
-    {"title": "Mushaf Madinah"},
-    {"title": "Mushaf Indonesia"},
   ];
 
   final List<Map<String, dynamic>> themeModes = [
@@ -64,6 +55,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
       currentColor = color;
     });
   }
+
 
   final controller = Get.find<SettingsController>();
 
@@ -251,21 +243,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     Column(
                       children: List.generate(fontArabs.length, (index) {
                         final item = fontArabs[index];
-                        final bool isSelected = fontSelected == index;
+                        final bool isSelected = controller.fontSelected.value == index;
 
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(16),
                             onTap: () {
-                              setState(() {
-                                fontSelected = index;
-                                title = item["title"];
-                              });
-
-                              if (index == 0) {
-                                {}
-                              }
+                              controller.changeFont(index);
                             },
 
                             child: AnimatedContainer(

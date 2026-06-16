@@ -3,6 +3,7 @@ import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -16,6 +17,7 @@ class DoaScreen extends StatefulWidget {
 
 class _DoaScreenState extends State<DoaScreen> {
   final DoaController controller = Get.put(DoaController());
+  final SettingsController setting = Get.find<SettingsController>();
 
   String? activeCategory;
 
@@ -150,6 +152,8 @@ class _DoaScreenState extends State<DoaScreen> {
 
                       itemBuilder: (context, index) {
                         final doa = controller.filteredDoa[index];
+                        final selectedIndex = setting.fontSelected.value;
+                        final fontFamily = fontArabs[selectedIndex]["title"];
 
                         return Column(
                           children: [
@@ -230,6 +234,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                       doa.ar,
 
                                                       style: TextStyle(
+                                                        fontFamily: fontFamily,
                                                         fontSize: 27,
                                                         color: Theme.of(context)
                                                             .textTheme
@@ -337,7 +342,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                     );
                                                   }).toList(),
                                                 ),
-                                                  const SizedBox(height: 20),
+                                                const SizedBox(height: 20),
                                               ],
                                             ),
                                           ),

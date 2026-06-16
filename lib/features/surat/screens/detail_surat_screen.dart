@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,9 @@ class DetailSuratScreen extends StatefulWidget {
 }
 
 class _DetailSuratScreenState extends State<DetailSuratScreen> {
-final controller = Get.find<DetailSurahController>();
+  final controller = Get.find<DetailSurahController>();
+
+  final SettingsController setting = Get.find<SettingsController>();
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
@@ -64,7 +67,7 @@ final controller = Get.find<DetailSurahController>();
           scrollToAyat(targetAyat);
         });
       });
-        });
+    });
   }
 
   void scrollToAyat(int nomorAyat) {
@@ -85,23 +88,24 @@ final controller = Get.find<DetailSurahController>();
       extendBodyBehindAppBar: true,
 
       body: Obx(() {
+        final selectedIndex = setting.fontSelected.value;
+        final fontFamily = fontArabs[selectedIndex]["title"];
+
         if (controller.isLoading.value) {
           return Loading();
         }
 
         final data = controller.detailSurah.value;
 
-       if (data == null) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.transparent,
-      title: const Text("Detail Surah"),
-    ),
-    body: const Center(
-      child: Text("Data kosong"),
-    ),
-  );
-}
+        if (data == null) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: const Text("Detail Surah"),
+            ),
+            body: const Center(child: Text("Data kosong")),
+          );
+        }
 
         return Stack(
           children: [
@@ -115,7 +119,7 @@ final controller = Get.find<DetailSurahController>();
                       colors: [
                         // HexColor.fromHex("#23867c"),
                         // HexColor.fromHex("#37b0a5"),
-                            Theme.of(context).colorScheme.primary.withAlpha(160),
+                        Theme.of(context).colorScheme.primary.withAlpha(160),
                         Theme.of(context).colorScheme.primary.withAlpha(190),
                       ],
                     ),
@@ -128,6 +132,7 @@ final controller = Get.find<DetailSurahController>();
                       Text(
                         data.nama,
                         style: TextStyle(
+                          fontFamily: fontFamily,
                           fontSize: 35,
                           fontWeight: FontWeight.w300,
                           color: Colors.white,
@@ -226,30 +231,30 @@ final controller = Get.find<DetailSurahController>();
                             itemCount: data.ayat.length + 1,
                             itemBuilder: (context, index) {
                               if (index == 0) {
-                                if(data.namaLatin == "Al-Fatihah"){
-                                  return SizedBox(height: 16,);
-                                  
+                                if (data.namaLatin == "Al-Fatihah") {
+                                  return SizedBox(height: 16);
                                 } else {
                                   return Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Container(
                                     padding: EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Text(
-                                      "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Theme.of(context).textTheme.titleLarge?.color,
-                                        fontSize: 25,
+                                    child: Container(
+                                      padding: EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).cardColor,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Text(
+                                        "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.titleLarge?.color,
+                                          fontSize: 25,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
+                                  );
                                 }
-
                               }
 
                               final ayat = data.ayat[index - 1];
@@ -289,22 +294,24 @@ final controller = Get.find<DetailSurahController>();
                                                     Text(
                                                       ayat.nomorAyat.toString(),
                                                       style: TextStyle(
-                                                        color: Theme.of(context).colorScheme.primary,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
                                                     ),
                                                     Icon(
                                                       Icons.brightness_5_sharp,
-                                                      color: Theme.of(context).colorScheme.surface,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.surface,
                                                       size: 40,
                                                     ),
                                                   ],
                                                 ),
                                                 Row(
                                                   children: [
-                                                    
-
                                                     InkWell(
                                                       onTap: () {
                                                         setState(() {
@@ -329,15 +336,21 @@ final controller = Get.find<DetailSurahController>();
                                                               BorderRadius.circular(
                                                                 12,
                                                               ),
-                                                          color:
-                                                              Theme.of(context).colorScheme.surface
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).colorScheme.surface,
                                                         ),
                                                         child: Icon(
                                                           Icons
                                                               .menu_book_rounded,
                                                           color: isOpen
                                                               ? Colors.amber
-                                                              : Theme.of(context).textTheme.labelLarge?.color
+                                                              : Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .textTheme
+                                                                    .labelLarge
+                                                                    ?.color,
                                                         ),
                                                       ),
                                                     ),
@@ -368,7 +381,11 @@ final controller = Get.find<DetailSurahController>();
                                                                   12,
                                                                 ),
                                                             color:
-                                                                Theme.of(context).colorScheme.surface,
+                                                                Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .colorScheme
+                                                                    .surface,
                                                           ),
                                                           child: Icon(
                                                             isSaved
@@ -377,7 +394,12 @@ final controller = Get.find<DetailSurahController>();
                                                                       .bookmark_border,
                                                             color: isSaved
                                                                 ? Colors.amber
-                                                                : Theme.of(context).textTheme.labelLarge?.color,
+                                                                : Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .textTheme
+                                                                      .labelLarge
+                                                                      ?.color,
                                                           ),
                                                         ),
                                                       );
@@ -398,8 +420,9 @@ final controller = Get.find<DetailSurahController>();
                                                                     BorderRadius.circular(
                                                                       12,
                                                                     ),
-                                                                color:
-                                                                    Theme.of(context).colorScheme.surface
+                                                                color: Theme.of(
+                                                                  context,
+                                                                ).colorScheme.surface,
                                                               ),
                                                               child: IconButton(
                                                                 onPressed: () {
@@ -411,8 +434,9 @@ final controller = Get.find<DetailSurahController>();
                                                                 icon: Icon(
                                                                   Icons
                                                                       .play_circle_filled_rounded,
-                                                                  color:
-                                                                      Theme.of(context).colorScheme.primary
+                                                                  color: Theme.of(
+                                                                    context,
+                                                                  ).colorScheme.primary,
                                                                 ),
                                                               ),
                                                             )
@@ -434,7 +458,9 @@ final controller = Get.find<DetailSurahController>();
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.pause,
-                                                                            color: Theme.of(context).colorScheme.primary
+                                                                            color: Theme.of(
+                                                                              context,
+                                                                            ).colorScheme.primary,
                                                                           ),
                                                                         )
                                                                       : IconButton(
@@ -445,7 +471,9 @@ final controller = Get.find<DetailSurahController>();
                                                                           },
                                                                           icon: Icon(
                                                                             Icons.play_arrow,
-                                                                            color: Theme.of(context).colorScheme.primary
+                                                                            color: Theme.of(
+                                                                              context,
+                                                                            ).colorScheme.primary,
                                                                           ),
                                                                         ),
                                                                   IconButton(
@@ -458,7 +486,9 @@ final controller = Get.find<DetailSurahController>();
                                                                     icon: Icon(
                                                                       Icons
                                                                           .stop,
-                                                                      color: Theme.of(context).colorScheme.primary
+                                                                      color: Theme.of(
+                                                                        context,
+                                                                      ).colorScheme.primary,
                                                                     ),
                                                                   ),
                                                                 ],
@@ -480,7 +510,11 @@ final controller = Get.find<DetailSurahController>();
                                                     ayat.teksArab,
                                                     textAlign: TextAlign.right,
                                                     style: TextStyle(
-                                                      color: Theme.of(context).textTheme.titleLarge?.color,
+                                                      fontFamily: fontFamily,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .titleLarge
+                                                          ?.color,
                                                       fontSize: 25,
                                                     ),
                                                   ),
@@ -504,14 +538,17 @@ final controller = Get.find<DetailSurahController>();
                                                       Text(
                                                         ayat.teksLatin,
                                                         style: TextStyle(
-                                                          color:
-                                                              Theme.of(context).colorScheme.primary
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary,
                                                         ),
                                                       ),
                                                       SizedBox(height: 10),
                                                       Text(
                                                         ayat.teksIndonesia,
-                                                        style: Theme.of(context).textTheme.labelMedium
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.labelMedium,
                                                       ),
                                                     ],
                                                   ),
@@ -525,78 +562,75 @@ final controller = Get.find<DetailSurahController>();
                                   ),
                                   if (expandedIndexes.contains(index))
                                     Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                        ),
-                                        child: ExpansionTile(
-                                          initiallyExpanded: isOpen,
-                                          onExpansionChanged: (val) {
-                                            setState(() {
-                                              if (val) {
-                                                expandedIndexes.add(index);
-                                              } else {
-                                                expandedIndexes.remove(index);
-                                              }
-                                            });
-                                          },
-                                          tilePadding: EdgeInsets.zero,
-                                          childrenPadding: EdgeInsets.zero,
-                                          minTileHeight: 0,
-                                          visualDensity: VisualDensity.compact,
-                                          shape: Border(),
-                                          collapsedShape: Border(),
-                                          showTrailingIcon: false,
-                                          title: SizedBox.shrink(),
-                                          children: <Widget>[
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.amber.withAlpha(
-                                                  10,
-                                                ),
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(16),
-                                                ),
-                                              ),
-                                              alignment: Alignment.center,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 16,
-                                                    vertical: 16,
-                                                  ),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.menu_book_rounded,
-                                                        color: Colors.amber,
-                                                      ),
-                                                      SizedBox(width: 10),
-                                                      Text(
-                                                        "Tafsir",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.amber,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 15),
-                                                  Text(
-                                                    tafsir?.teks ??
-                                                        "Tafsir tidak tersedia.",
-                                                    style: TextStyle(
-                                                      color: HexColor.fromHex(
-                                                        "#7c97a6",
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: ExpansionTile(
+                                        initiallyExpanded: isOpen,
+                                        onExpansionChanged: (val) {
+                                          setState(() {
+                                            if (val) {
+                                              expandedIndexes.add(index);
+                                            } else {
+                                              expandedIndexes.remove(index);
+                                            }
+                                          });
+                                        },
+                                        tilePadding: EdgeInsets.zero,
+                                        childrenPadding: EdgeInsets.zero,
+                                        minTileHeight: 0,
+                                        visualDensity: VisualDensity.compact,
+                                        shape: Border(),
+                                        collapsedShape: Border(),
+                                        showTrailingIcon: false,
+                                        title: SizedBox.shrink(),
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.amber.withAlpha(10),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(16),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 16,
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.menu_book_rounded,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Text(
+                                                      "Tafsir",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.amber,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15),
+                                                Text(
+                                                  tafsir?.teks ??
+                                                      "Tafsir tidak tersedia.",
+                                                  style: TextStyle(
+                                                    color: HexColor.fromHex(
+                                                      "#7c97a6",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                    ),
 
                                   SizedBox(height: 20),
                                 ],
