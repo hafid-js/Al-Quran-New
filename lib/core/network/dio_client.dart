@@ -24,12 +24,14 @@ class DioClient {
     String path, {
     Map<String, dynamic>? queryParams,
     String? customBaseUrl,
+    ResponseType? responseType,
   }) async {
     try {
       final fullPath = customBaseUrl != null ? '$customBaseUrl$path' : path;
       final response = await _dio.get(
         fullPath,
         queryParameters: queryParams,
+        options: responseType != null ? Options(responseType: responseType) : null,
       );
       return Success(response);
     } on DioException catch (e) {
@@ -55,6 +57,9 @@ class DioClient {
   }
 
   String _mapDioError(DioException e) {
+    if (e.error is FormatException) {
+      return 'Gagal memproses data dari server.';
+    }
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:

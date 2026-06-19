@@ -10,8 +10,12 @@ class ApiEndpoints {
 
   static const provinsi = "/shalat/provinsi";
   static const kabkota = "/shalat/kabkota";
-    static String get provinsiUrl => "$baseUrlV2$provinsi";
-        static String get kabkotaUrl => "$baseUrlV2$kabkota";
+  static String get provinsiUrl => "$baseUrlV2$provinsi";
+  static String get kabkotaUrl => "$baseUrlV2$kabkota";
+
+  static const dzikirBaseUrl = "https://hafidtech.com";
+  static const dzikir = "/dzikir.json";
+  static String get dzikirUrl => "$dzikirBaseUrl$dzikir";
 
   static String detailSurah(int nomor) => "$baseUrlV2$surah/$nomor";
 

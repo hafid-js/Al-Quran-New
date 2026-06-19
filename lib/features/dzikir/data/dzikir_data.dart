@@ -10,6 +10,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Allāhu lā ilāha illā huwal-ḥayyul-qayyūm(u), lā ta'khużuhū sinatuw wa lā naum(un), lahū mā fis-samāwāti wa mā fil-arḍ(i), man żal-lażī yasyfa'u 'indahū illā bi'iżnih(ī), ya'lamu mā baina aidīhim wa mā khalfahum, wa lā yuḥīṭūna bi syai'im min 'ilmihī illā bimā syā'(a), wasi'a kursiyyuhus-samāwāti wal-arḍ(a), wa lā ya'ūduhū ḥifẓuhumā, wa huwal-'aliyyul-'aẓīm(u)",
     arti: 'Allah, tidak ada Tuhan selain Dia, Yang Maha Hidup, Yang terus menerus mengurus (makhluk-Nya), tidak mengantuk dan tidak tidur. Milik-Nya apa yang ada di langit dan di bumi. Tidak ada yang dapat memberi syafaat di sisi-Nya tanpa izin-Nya. Dia mengetahui apa yang di hadapan mereka dan di belakang mereka, dan mereka tidak mengetahui sesuatu apa pun tentang ilmu-Nya melainkan apa yang Dia kehendaki. Kursi-Nya meliputi langit dan bumi. Dan Dia tidak merasa berat memelihara keduanya, dan Dia Maha Tinggi, Maha Besar.',
+    penjelasan: "test ini untuk penjelasan",
     sumber: 'QS. Al-Baqarah: 255',
     jumlah: 1,
   ),
@@ -22,6 +23,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Qul huwallāhu aḥad(un). Allāhuṣ-ṣamad(u). Lam yalid wa lam yūlad. Wa lam yakul lahū kufuwan aḥad(un).",
     arti: 'Katakanlah: Dialah Allah, Yang Maha Esa. Allah adalah Tuhan yang bergantung kepada-Nya segala sesuatu. Dia tidak beranak dan tidak diperanakkan. Dan tidak ada seorang pun yang setara dengan Dia.',
+    penjelasan: "test ini untuk penjelasan",
     sumber: 'QS. Al-Ikhlas: 1-4',
     jumlah: 3,
   ),
@@ -34,6 +36,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Qul a'ūżu birabbil-falaq(i). Min syarri mā khalaq(a). Wa min syarri gāsiqin iżā waqab(a). Wa min syarrin-naffāṡāti fil-'uqad(i). Wa min syarri ḥāsidin iżā ḥasad(a).",
     arti: 'Katakanlah: Aku berlindung kepada Tuhan yang menguasai subuh (fajar). Dari kejahatan makhluk-Nya. Dan dari kejahatan malam apabila telah gelap gulita. Dan dari kejahatan wanita-wanita penyihir yang meniup pada buhul-buhul (talinya). Dan dari kejahatan orang yang dengki apabila ia dengki.',
+        penjelasan: "test ini untuk penjelasan",
     sumber: 'QS. Al-Falaq: 1-5',
     jumlah: 3,
   ),
@@ -46,6 +49,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Qul a'ūżu birabbin-nās(i). Malikin-nās(i). Ilāhin-nās(i). Min syarril-waswāsil-khannās(i). Allażī yuwaswisu fī ṣudūrin-nās(i). Minal-jinnati wan-nās(i).",
     arti: 'Katakanlah: Aku berlindung kepada Tuhan (yang memelihara dan menguasai) manusia. Raja manusia. Sembahan manusia. Dari kejahatan (bisikan) setan yang biasa bersembunyi. Yang membisikkan (kejahatan) ke dalam dada manusia. Dari (golongan) jin dan manusia.',
+        penjelasan: "test ini untuk penjelasan",
     sumber: 'QS. An-Nas: 1-6',
     jumlah: 3,
   ),
@@ -58,6 +62,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Subḥānallāhi wa biḥamdihī",
     arti: 'Maha Suci Allah dan dengan memuji-Nya.',
+        penjelasan: "test ini untuk penjelasan",
     sumber: 'HR. Bukhari dan Muslim',
     jumlah: 100,
   ),
@@ -70,6 +75,7 @@ final List<DzikirItem> dzikirList = [
     latin:
         "Allāhumma bika aṣbaḥnā wa bika amsainā, wa bika naḥyā wa bika namūtu wa ilaikan-nusyūr(u).",
     arti: 'Ya Allah, dengan-Mu kami memasuki waktu pagi, dengan-Mu kami memasuki waktu petang, dengan-Mu kami hidup, dengan-Mu kami mati, dan kepada-Mu kami dibangkitkan.',
+        penjelasan: "test ini untuk penjelasan",
     sumber: 'HR. Abu Dawud, Tirmidzi, Ibnu Majah',
     jumlah: 1,
   ),
