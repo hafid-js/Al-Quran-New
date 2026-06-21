@@ -6,7 +6,7 @@ import 'package:get/state_manager.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
 
 class DzikirCard extends StatefulWidget {
-  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti});
+  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti, required this.ukuranTeksArab, required this.ukuranTeksLatinTerjemah});
 
   int dibaca;
   final String title;
@@ -15,6 +15,9 @@ class DzikirCard extends StatefulWidget {
   final String arab;
   final String latin;
   final String arti;
+  final double ukuranTeksArab;
+  final double ukuranTeksLatinTerjemah;
+
 
   @override
   State<DzikirCard> createState() => _DzikirCardState();
@@ -112,7 +115,7 @@ class _DzikirCardState extends State<DzikirCard> {
               "${widget.arab}",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: widget.ukuranTeksArab,
                 fontFamily: fontFamily,
               ),
             ),
@@ -122,14 +125,14 @@ class _DzikirCardState extends State<DzikirCard> {
             "${widget.latin}",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: widget.ukuranTeksLatinTerjemah,
               fontStyle: FontStyle.italic,
             ),
           ),
           SizedBox(height: 10),
           Text(
             "${widget.arti}",
-            style: TextStyle(color: Colors.white, fontSize: 14),
+            style: TextStyle(color: Colors.white, fontSize: widget.ukuranTeksLatinTerjemah,),
           ),
           SizedBox(height: 10),
           LayoutBuilder(

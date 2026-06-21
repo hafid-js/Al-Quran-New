@@ -1,98 +1,496 @@
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/features/dzikir/widgets/dzikir_card.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/state_manager.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class DetailMatsuratScreen extends StatelessWidget {
+class DetailMatsuratScreen extends StatefulWidget {
   const DetailMatsuratScreen({super.key});
 
   @override
+  State<DetailMatsuratScreen> createState() => _DetailMatsuratScreenState();
+}
+
+class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
+  double ukuranteksArab = 18;
+  double ukuranLatinTerjemah = 14;
+  bool latin = true;
+  bool terjemah = true;
+  bool getar = true;
+  bool tasbih = true;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Column(
-      //     children: [
-      //       Text("Dzikir Pagi Sugro", style: Theme.of(context).textTheme.titleMedium),
-      //       Text("Gulir untuk membaca seluruh dzikir", style: TextStyle(color: Colors.white, fontSize: 11),)
-      //     ],
-      //   ),
-      //   actions: [
-      //     Icon(Icons.settings)
-      //   ],
-      //   actionsPadding: EdgeInsets.only(right: 16),
-      // ),
-      body: SingleChildScrollView(
-        child: Padding(
-        padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 80),
-        child: Column(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            pinned: false,
+            floating: true,
+            backgroundColor: Colors.transparent,
+            expandedHeight: 120,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Padding(
+                padding: EdgeInsets.only(
+                  right: 16,
+                  left: 16,
+                  bottom: 16,
+                  top: 80,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 18,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                        children: [
+                          GestureDetector(
+                            onTap: () => Get.back(),
+                            child: Icon(Icons.arrow_back_ios),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "Dzikir Pagi Sugro",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              Text("Gulir untuk mebaca seluruh dzikir"),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              WoltModalSheet.show(
+                                context: context,
+                                pageListBuilder: (modalSheetContext) => [
+                                  SliverWoltModalSheetPage(
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).cardColor,
+                                    hasTopBarLayer: false,
+                                    mainContentSliversBuilder: (context) => [
+                                      SliverToBoxAdapter(
+                                        child: StatefulBuilder(
+                                          builder: (context, modalSetState) {
+                                            return Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Center(
+                                                    child: Text(
+                                                      "Pengaturan",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleLarge!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 20),
+
+                                                  Text(
+                                                    "Ukuran Teks Arab",
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.titleSmall,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          modalSetState(() {
+                                                            if (ukuranteksArab >
+                                                                10) {
+                                                              ukuranteksArab -=
+                                                                  1;
+                                                            }
+                                                          });
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.remove_rounded,
+                                                        ),
+                                                      ),
+
+                                                      Expanded(
+                                                        child: Slider(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          value:
+                                                              ukuranteksArab,
+                                                          max: 30,
+                                                          divisions: 30,
+                                                          label:
+                                                              ukuranteksArab
+                                                                  .round()
+                                                                  .toString(),
+                                                          onChanged: (value) {
+                                                            modalSetState(() {
+                                                              ukuranteksArab =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {
+                                                              modalSetState(() {
+                                                                if (ukuranteksArab <
+                                                                    30) {
+                                                                  ukuranteksArab +=
+                                                                      1;
+                                                                }
+                                                              });
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.add_rounded,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "${ukuranteksArab.toInt()}pt",
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+
+                                                  Text(
+                                                    "Ukuran Teks latin & Terjemah",
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.titleSmall,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          modalSetState(() {
+                                                            if (ukuranLatinTerjemah >
+                                                                10) {
+                                                              ukuranLatinTerjemah -=
+                                                                  1;
+                                                            }
+                                                          });
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.remove_rounded,
+                                                        ),
+                                                      ),
+
+                                                      Expanded(
+                                                        child: Slider(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          value:
+                                                              ukuranLatinTerjemah,
+                                                          max: 30,
+                                                          divisions: 30,
+                                                          label:
+                                                              ukuranLatinTerjemah
+                                                                  .round()
+                                                                  .toString(),
+                                                          onChanged: (value) {
+                                                            modalSetState(() {
+                                                              ukuranLatinTerjemah =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {
+                                                              modalSetState(() {
+                                                                if (ukuranLatinTerjemah <
+                                                                    30) {
+                                                                  ukuranLatinTerjemah +=
+                                                                      1;
+                                                                }
+                                                              });
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.add_rounded,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "${ukuranLatinTerjemah.toInt()}pt",
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Tampilan Latin",
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.titleSmall,
+                                                      ),
+                                                      Switch(
+                                                        value: latin,
+                                                        activeThumbColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                        onChanged:
+                                                            (bool value) {
+                                                              modalSetState(() {
+                                                                latin = value;
+                                                              });
+                                                            },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Tampilan Terjemah",
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.titleSmall,
+                                                      ),
+                                                      Switch(
+                                                        value: terjemah,
+                                                        activeThumbColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                        onChanged:
+                                                            (bool value) {
+                                                              modalSetState(() {
+                                                                terjemah =
+                                                                    value;
+                                                              });
+                                                            },
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  const SizedBox(height: 20),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Getar Saat Tap",
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.titleSmall,
+                                                      ),
+                                                      Switch(
+                                                        value: getar,
+                                                        activeThumbColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                        onChanged:
+                                                            (bool value) {
+                                                              modalSetState(() {
+                                                                getar = value;
+                                                              });
+                                                            },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Tampilkan Tasbih Scroll",
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.titleSmall,
+                                                      ),
+                                                      Switch(
+                                                        value: tasbih,
+                                                        activeThumbColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                        onChanged:
+                                                            (bool value) {
+                                                              modalSetState(() {
+                                                                tasbih = value;
+                                                              });
+                                                            },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                            child: const Icon(Icons.settings),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    DzikirCard(
+                      ukuranTeksArab: ukuranteksArab,
+                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
+                      dibaca: 3,
+                      title: "Ta'awudz",
+                      hitung: 0,
+                      jumlah: 1,
+                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
+                      arti:
+                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+                    ),
+                    SizedBox(height: 10),
+                    DzikirCard(
+                           ukuranTeksArab: ukuranteksArab,
+                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
+                      dibaca: 3,
+                      title: "Ta'awudz",
+                      hitung: 0,
+                      jumlah: 1,
+                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
+                      arti:
+                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+                    ),
+                    SizedBox(height: 10),
+                    DzikirCard(
+                           ukuranTeksArab: ukuranteksArab,
+                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
+                      dibaca: 3,
+                      title: "Ta'awudz",
+                      hitung: 0,
+                      jumlah: 1,
+                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
+                      arti:
+                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+                    ),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+        ],
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 25),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
+                border: BoxBorder.all(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.primary.withAlpha(100),
+                ),
+                color: Theme.of(context).colorScheme.primary.withAlpha(18),
+                borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                 children: [
                   GestureDetector(
                     onTap: () => Get.back(),
-                    child: Icon(Icons.arrow_back_ios),
+                    child: const Icon(Icons.play_arrow_rounded, size: 30),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        "Dzikir Pagi Sugro",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      Text("Gulir untuk mebaca seluruh dzikir"),
-                    ],
-                  ),
-                  Icon(Icons.settings),
+                  const SizedBox(width: 80),
+                  const Icon(Icons.share_rounded),
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            DzikirCard(
-              dibaca: 3,
-              title: "Ta'awudz",
-              hitung: 0,
-              jumlah: 1,
-              arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-              latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-              arti:
-                  "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
-            ),
-            SizedBox(height: 10),
-            DzikirCard(
-              dibaca: 3,
-              title: "Ta'awudz",
-              hitung: 0,
-              jumlah: 1,
-              arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-              latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-              arti:
-                  "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
-            ),
-            SizedBox(height: 10),
-            DzikirCard(
-              dibaca: 3,
-              title: "Ta'awudz",
-              hitung: 0,
-              jumlah: 1,
-              arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-              latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-              arti:
-                  "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+
+            Positioned(
+              top: -40,
+              child: CircularPercentIndicator(
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withAlpha(20),
+                backgroundWidth: 9,
+                radius: 45,
+                lineWidth: 4,
+                percent: (20 / 33).clamp(0.0, 1.0),
+                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: Theme.of(context).colorScheme.primary,
+                center: Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            top: 15,
+                            left: 12,
+                            child: Text(
+                              "10",
+                              style: Theme.of(context).textTheme.titleSmall!
+                                  .copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Icon(FlutterIslamicIcons.solidTasbih, size: 48),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      )
     );
   }
 }

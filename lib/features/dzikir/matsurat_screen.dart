@@ -2,18 +2,211 @@ import 'package:alquran_new/core/utils/constants/app_colors.dart';
 import 'package:alquran_new/features/dzikir/detail_matsurat_screen.dart';
 import 'package:alquran_new/features/tasbih/widgets/tab_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
-class MatsuratScreen extends StatelessWidget {
+class MatsuratScreen extends StatefulWidget {
   const MatsuratScreen({super.key});
 
   @override
+  State<MatsuratScreen> createState() => _MatsuratScreenState();
+}
+
+class _MatsuratScreenState extends State<MatsuratScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSugroColumn() {
+    return Column(
+      key: const ValueKey('sugro'),
+      children: [
+        GestureDetector(
+          onTap: () => Get.to(DetailMatsuratScreen()),
+          child: Container(
+            padding: EdgeInsets.only(
+              right: 16,
+              left: 16,
+              bottom: 16,
+              top: 35,
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/dzikir_sugro_background_1.png",
+                ),
+                fit: BoxFit.cover,
+              
+              ),
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Dzikir Pagi Sugro",
+                  style:             TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  "Dzikir pagi versi Sugro, ringan dan singkat untuk memulai hari.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        SizedBox(height: 10),
+
+        Container(
+          padding: EdgeInsets.only(
+            right: 16,
+            left: 16,
+            bottom: 16,
+            top: 35,
+          ),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                "assets/images/dzikir_sugro_background_2.png",
+              ),
+   
+              fit: BoxFit.cover,
+            ),
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Dzikir Petang Sugro",
+                style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Text(
+                "Dzikir petang versi Sugro, untuk penenang hati menjelang sore.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildKubroColumn() {
+    return Column(
+      key: const ValueKey('kubro'),
+      children: [
+        GestureDetector(
+          onTap: () => Get.to(DetailMatsuratScreen()),
+          child: Container(
+            padding: EdgeInsets.only(
+              right: 16,
+              left: 16,
+              bottom: 16,
+              top: 35,
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/dzikir_kubro_background_1.png",
+                ),
+           
+                fit: BoxFit.cover,
+              ),
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Dzikir Pagi Kubro",
+                                  style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  "Dzikir pagi versi Kubro, ringan dan singkat untuk memulai hari.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.only(
+            right: 16,
+            left: 16,
+            bottom: 16,
+            top: 35,
+          ),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                "assets/images/dzikir_kubro_background_2.png",
+              ),
+
+              fit: BoxFit.cover,
+            ),
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Dzikir Petang Kubro",
+                                style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Text(
+                "Dzikir petang versi Kubro, untuk penenang hati menjelang sore.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
 
@@ -27,7 +220,6 @@ class MatsuratScreen extends StatelessWidget {
 
           title: Row(
             children: [
-              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -67,14 +259,15 @@ class MatsuratScreen extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 3,
-                            vertical: 2,
+                            horizontal: 5,
+                            vertical: 5,
                           ),
                           child: TabBar(
+                            controller: _tabController,
                             indicatorSize: TabBarIndicatorSize.tab,
                             dividerColor: Colors.transparent,
                             indicator: BoxDecoration(
-                              color: AppColors.light,
+                              color: Theme.of(context).textTheme.titleLarge!.color,
                               borderRadius: BorderRadius.circular(18),
                             ),
 
@@ -82,12 +275,15 @@ class MatsuratScreen extends StatelessWidget {
                               horizontal: 8,
                             ),
 
-                            labelColor: AppColors.dark,
+                            labelColor: isDark ? Colors.black : Colors.white,
                             labelStyle: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
-                            unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                            unselectedLabelStyle: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                            ),
 
                             tabs: const [
                               TabItem(title: "Sugro"),
@@ -98,200 +294,31 @@ class MatsuratScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 10),
                   ],
                 ),
 
                 SizedBox(
-                  height: 220,
+                  height: 230,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(18),
-                    child: TabBarView(
-                      children: [
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () => Get.to(DetailMatsuratScreen()),
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                  right: 16,
-                                  left: 16,
-                                  bottom: 16,
-                                  top: 30,
-                                ),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                      "assets/images/dzikir_background_1.png",
-                                    ),
-                                    fit: BoxFit.cover,
-                                    opacity: 0.7,
-                                  ),
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(16),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Dzikir Pagi Sugro",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    Text(
-                                      "Dzikir pagi versi Sugro, ringan dan singkat untuk memulai hari.",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(height: 10),
-
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: 16,
-                                left: 16,
-                                bottom: 16,
-                                top: 30,
-                              ),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    "assets/images/dzikir_background_2.png",
-                                  ),
-                                  opacity: 0.7,
-                                  fit: BoxFit.cover,
-                                ),
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(16),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Dzikir Petang Sugro",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Dzikir petang versi Sugro, untuk penenang hati menjelang sore.",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () => Get.to(DetailMatsuratScreen()),
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                  right: 16,
-                                  left: 16,
-                                  bottom: 16,
-                                  top: 30,
-                                ),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                      "assets/images/dzikir_background_1.png",
-                                    ),
-                                    opacity: 0.7,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(16),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Dzikir Pagi Sugro",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    Text(
-                                      "Dzikir pagi versi Sugro, ringan dan singkat untuk memulai hari.",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(height: 10),
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: 16,
-                                left: 16,
-                                bottom: 16,
-                                top: 30,
-                              ),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    "assets/images/dzikir_background_2.png",
-                                  ),
-                                  opacity: 0.7,
-                                  fit: BoxFit.cover,
-                                ),
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(16),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Dzikir Petang Sugro",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Dzikir petang versi Sugro, untuk penenang hati menjelang sore.",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      switchInCurve: Curves.easeInOut,
+                      switchOutCurve: Curves.easeInOut,
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: Tween<double>(begin: 0.95, end: 1.0)
+                                .animate(animation),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: _tabController.index == 0
+                          ? _buildSugroColumn()
+                          : _buildKubroColumn(),
                     ),
                   ),
                 ),
@@ -324,7 +351,7 @@ class MatsuratScreen extends StatelessWidget {
                                   Text("🕌", style: TextStyle(fontSize: 18)),
                                   SizedBox(width: 10),
                                   Text(
-                                    "Dzikir Pagi Sugro",
+                                    "Surah Al-Kahfi",
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleSmall,
@@ -342,7 +369,7 @@ class MatsuratScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Text(
                             "Bacalah Surah Al-Kahfi setiap hari jumat untuk ketenangan hati dan perlindungan dari fitnah Dajjal.",
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),
@@ -384,7 +411,7 @@ class MatsuratScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Text(
                             "Almalkan Surah Al-Waqiah setiap malam untuk memperluas rezeki dan mendapatkan keberkahan hidup.",
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                    style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),
@@ -426,7 +453,7 @@ class MatsuratScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Text(
                             "Surah Al-Mulk dibaca setiap malam untuk memohon perlindungan dan syafaat di alam kubur.",
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                 style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),
@@ -468,7 +495,7 @@ class MatsuratScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Text(
                             "Surah Ar-Rahman indah dibaca untuk mengingat luasnya nikmat Allah dan menenangkan hati.",
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                 style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),
@@ -510,7 +537,7 @@ class MatsuratScreen extends StatelessWidget {
                           SizedBox(height: 10),
                           Text(
                             "Surah Yasin disebut jantung Al-Quran. Bacalah untuk memohon kemudahan urusan dunia dan akhirat.",
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+            style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),
@@ -521,7 +548,6 @@ class MatsuratScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
