@@ -8,6 +8,7 @@ import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
 import 'package:alquran_new/features/dzikir/dzikir_screen.dart';
+import 'package:alquran_new/features/dzikir/matsurat_screen.dart';
 import 'package:alquran_new/features/icon/icon_screen.dart';
 import 'package:alquran_new/features/icon/widgets/all_icon_islamic.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
      {
       "title": "Dzikir",
       "icon": FlutterIslamicIcons.solidPrayingPerson,
-      "page": () => const DzikirScreen(),
+      "page": () => const MatsuratScreen(),
     },
     {
       "title": "Icon",

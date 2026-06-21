@@ -17,7 +17,7 @@ class SettingsController extends GetxController {
   var modeSelected = 0.obs;
   var colorSelected = 0.obs;
 
-  var currentColor = const Color(0xFF2EC4B6).obs;
+  var currentColor = const Color(0xFF00AA5B).obs;
 
   @override
   void onInit() {

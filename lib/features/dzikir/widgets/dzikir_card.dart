@@ -1,0 +1,176 @@
+import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
+import 'package:percent_indicator/flutter_percent_indicator.dart';
+
+class DzikirCard extends StatefulWidget {
+  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti});
+
+  int dibaca;
+  final String title;
+  int hitung = 0;
+  int jumlah;
+  final String arab;
+  final String latin;
+  final String arti;
+
+  @override
+  State<DzikirCard> createState() => _DzikirCardState();
+}
+
+class _DzikirCardState extends State<DzikirCard> {
+  void dzikirCounter() {
+    if (widget.hitung < widget.jumlah) {
+      setState(() {
+        widget.hitung++;
+      });
+    }
+  }
+
+   int dzikirSelesai() {
+    int total = 0;
+
+    if (widget.hitung >= widget.jumlah) total++;
+
+    return total;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final SettingsController setting = Get.find<SettingsController>();
+    final selectedIndex = setting.fontSelected.value;
+    final fontFamily = fontArabs[selectedIndex]["title"];
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(30),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      "${widget.dibaca} x",
+                      style: TextStyle(
+                        fontSize: Theme.of(
+                          context,
+                        ).textTheme.labelSmall?.fontSize,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    "${widget.title}",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  "${widget.hitung}/${widget.jumlah}",
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "${widget.arab}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: fontFamily,
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            "${widget.latin}",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            "${widget.arti}",
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          SizedBox(height: 10),
+          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return LinearPercentIndicator(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).disabledColor,
+                                padding: EdgeInsets.zero,
+                                barRadius: Radius.circular(16),
+                                width: constraints.maxWidth,
+                                animation: true,
+                                lineHeight: 6.0,
+                                animationDuration: 500,
+                                percent: (dzikirSelesai() / widget.jumlah).clamp(0.0, 1.0),
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                progressColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                              );
+                            },
+                          ),
+                               SizedBox(height: 10),
+          InkWell(
+            onTap: () {
+              setState(() {
+                dzikirCounter();
+              });
+            },
+            child: Center(
+              child: Text(
+                widget.hitung == widget.jumlah ? "Target tercapai" : "Tap kartu untuk + 1",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

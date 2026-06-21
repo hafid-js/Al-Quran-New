@@ -3,6 +3,7 @@ import 'package:alquran_new/features/dzikir/controllers/dzikir_controller.dart';
 import 'package:alquran_new/features/dzikir/screens/dzikir_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DzikirScreen extends StatefulWidget {
   const DzikirScreen({super.key});
@@ -37,6 +38,22 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
   int itemCount(String category) {
     return controller.dzikirList.where((e) => e.kategori == category).length;
+  }
+
+  void _resetAllDzikirCounts() {
+    final box = GetStorage();
+    final keys = box.getKeys().toList();
+    for (final key in keys) {
+      if (key.startsWith('dzikir_count_')) {
+        box.remove(key);
+      }
+    }
+    Get.snackbar(
+      'Berhasil',
+      'Semua hitungan dzikir direset',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: const Duration(seconds: 2),
+    );
   }
 
   @override
@@ -87,6 +104,31 @@ class _DzikirScreenState extends State<DzikirScreen> {
             ),
           ],
         ),
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Tooltip(
+              message: 'Reset Hitungan Dzikir',
+              child: GestureDetector(
+                onTap: _resetAllDzikirCounts,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.rotate_left_outlined,
+                    color: Theme.of(context).textTheme.labelLarge?.color,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
 
       body: Obx(() {
