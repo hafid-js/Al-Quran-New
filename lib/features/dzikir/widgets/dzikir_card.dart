@@ -6,15 +6,16 @@ import 'package:get/state_manager.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
 
 class DzikirCard extends StatefulWidget {
-  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti, required this.ukuranTeksArab, required this.ukuranTeksLatinTerjemah});
+  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti, required this.ukuranTeksArab, required this.ukuranTeksLatinTerjemah, this.onIncrement});
 
-  int dibaca;
+  final int dibaca;
   final String title;
-  int hitung = 0;
-  int jumlah;
+  final int hitung;
+  final int jumlah;
   final String arab;
   final String latin;
   final String arti;
+  final VoidCallback? onIncrement;
   final double ukuranTeksArab;
   final double ukuranTeksLatinTerjemah;
 
@@ -24,22 +25,6 @@ class DzikirCard extends StatefulWidget {
 }
 
 class _DzikirCardState extends State<DzikirCard> {
-  void dzikirCounter() {
-    if (widget.hitung < widget.jumlah) {
-      setState(() {
-        widget.hitung++;
-      });
-    }
-  }
-
-   int dzikirSelesai() {
-    int total = 0;
-
-    if (widget.hitung >= widget.jumlah) total++;
-
-    return total;
-  }
-
   @override
   Widget build(BuildContext context) {
     final SettingsController setting = Get.find<SettingsController>();
@@ -142,12 +127,13 @@ class _DzikirCardState extends State<DzikirCard> {
                                   context,
                                 ).disabledColor,
                                 padding: EdgeInsets.zero,
+                                animateFromLastPercent: true,
                                 barRadius: Radius.circular(16),
                                 width: constraints.maxWidth,
                                 animation: true,
                                 lineHeight: 6.0,
                                 animationDuration: 500,
-                                percent: (dzikirSelesai() / widget.jumlah).clamp(0.0, 1.0),
+                                percent: (widget.hitung / widget.jumlah).clamp(0.0, 1.0),
                                 linearStrokeCap: LinearStrokeCap.roundAll,
                                 progressColor: Theme.of(
                                   context,
@@ -158,9 +144,7 @@ class _DzikirCardState extends State<DzikirCard> {
                                SizedBox(height: 10),
           InkWell(
             onTap: () {
-              setState(() {
-                dzikirCounter();
-              });
+              widget.onIncrement?.call();
             },
             child: Center(
               child: Text(

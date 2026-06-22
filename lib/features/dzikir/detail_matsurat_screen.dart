@@ -19,6 +19,80 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
   bool terjemah = true;
   bool getar = true;
   bool tasbih = true;
+
+  final List<Map<String, dynamic>> _dzikirItems = [
+    {
+      "dibaca": 3,
+      "title": "Ta'awudz",
+      "jumlah": 3,
+      "arab": "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+      "latin": "A'uudzu billaahi minasy-syaitoonir rojiim",
+      "arti": "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+    },
+    {
+      "dibaca": 2,
+      "title": "Ta'awudz",
+      "jumlah": 2,
+      "arab": "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+      "latin": "A'uudzu billaahi minasy-syaitoonir rojiim",
+      "arti": "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+    },
+    {
+      "dibaca": 3,
+      "title": "Ta'awudz",
+      "jumlah": 3,
+      "arab": "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+      "latin": "A'uudzu billaahi minasy-syaitoonir rojiim",
+      "arti": "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
+    },
+  ];
+
+  late List<GlobalKey> _cardKeys;
+  late List<int> _hitungList;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _cardKeys = List.generate(_dzikirItems.length, (_) => GlobalKey());
+    _hitungList = List.filled(_dzikirItems.length, 0);
+  }
+
+  void _onTasbihTap() {
+    if (_currentIndex >= _dzikirItems.length) return;
+    final jumlah = _dzikirItems[_currentIndex]["jumlah"] as int;
+    if (_hitungList[_currentIndex] < jumlah) {
+      setState(() {
+        _hitungList[_currentIndex]++;
+      });
+      if (_hitungList[_currentIndex] >= jumlah &&
+          _currentIndex < _dzikirItems.length - 1) {
+        final nextIndex = _currentIndex + 1;
+        setState(() {
+          _currentIndex = nextIndex;
+        });
+        _scrollToCard(nextIndex);
+      }
+    }
+  }
+
+  void _onCardTap(int index) {
+    if (index != _currentIndex) return;
+    _onTasbihTap();
+  }
+
+  void _scrollToCard(int index) {
+    final context = _cardKeys[index].currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeInOutCubic,
+        alignment: 0.02,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,11 +186,12 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                         onPressed: () {
                                                           modalSetState(() {
                                                             if (ukuranteksArab >
-                                                                10) {
+                                                                 10) {
                                                               ukuranteksArab -=
                                                                   1;
                                                             }
                                                           });
+                                                          setState(() {});
                                                         },
                                                         icon: const Icon(
                                                           Icons.remove_rounded,
@@ -140,6 +215,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                               ukuranteksArab =
                                                                   value;
                                                             });
+                                                            setState(() {});
                                                           },
                                                         ),
                                                       ),
@@ -154,6 +230,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                                       1;
                                                                 }
                                                               });
+                                                              setState(() {});
                                                             },
                                                             icon: const Icon(
                                                               Icons.add_rounded,
@@ -180,11 +257,12 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                         onPressed: () {
                                                           modalSetState(() {
                                                             if (ukuranLatinTerjemah >
-                                                                10) {
+                                                                 10) {
                                                               ukuranLatinTerjemah -=
                                                                   1;
                                                             }
                                                           });
+                                                          setState(() {});
                                                         },
                                                         icon: const Icon(
                                                           Icons.remove_rounded,
@@ -208,6 +286,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                               ukuranLatinTerjemah =
                                                                   value;
                                                             });
+                                                            setState(() {});
                                                           },
                                                         ),
                                                       ),
@@ -222,6 +301,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                                                                       1;
                                                                 }
                                                               });
+                                                              setState(() {});
                                                             },
                                                             icon: const Icon(
                                                               Icons.add_rounded,
@@ -371,45 +451,28 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
-                    DzikirCard(
-                      ukuranTeksArab: ukuranteksArab,
-                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
-                      dibaca: 3,
-                      title: "Ta'awudz",
-                      hitung: 0,
-                      jumlah: 1,
-                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-                      arti:
-                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
-                    ),
-                    SizedBox(height: 10),
-                    DzikirCard(
-                           ukuranTeksArab: ukuranteksArab,
-                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
-                      dibaca: 3,
-                      title: "Ta'awudz",
-                      hitung: 0,
-                      jumlah: 1,
-                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-                      arti:
-                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
-                    ),
-                    SizedBox(height: 10),
-                    DzikirCard(
-                           ukuranTeksArab: ukuranteksArab,
-                      ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
-                      dibaca: 3,
-                      title: "Ta'awudz",
-                      hitung: 0,
-                      jumlah: 1,
-                      arab: "أَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
-                      latin: "A'uudzu billaahi minasy-syaitoonir rojiim",
-                      arti:
-                          "Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.",
-                    ),
+                    const SizedBox(height: 10),
+                    ...List.generate(_dzikirItems.length, (i) {
+                      final item = _dzikirItems[i];
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: i < _dzikirItems.length - 1 ? 10 : 0,
+                        ),
+                        child: DzikirCard(
+                          key: _cardKeys[i],
+                          ukuranTeksArab: ukuranteksArab,
+                          ukuranTeksLatinTerjemah: ukuranLatinTerjemah,
+                          dibaca: item["dibaca"],
+                          title: item["title"],
+                          hitung: _hitungList[i],
+                          jumlah: item["jumlah"],
+                          arab: item["arab"],
+                          latin: item["latin"],
+                          arti: item["arti"],
+                          onIncrement: () => _onCardTap(i),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -449,41 +512,51 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
             Positioned(
               top: -40,
               child: CircularPercentIndicator(
+                animateFromLastPercent: true,
                 backgroundColor: Theme.of(
                   context,
                 ).colorScheme.primary.withAlpha(20),
                 backgroundWidth: 9,
                 radius: 45,
                 lineWidth: 4,
-                percent: (20 / 33).clamp(0.0, 1.0),
+                percent: _currentIndex < _dzikirItems.length
+                    ? (_hitungList[_currentIndex] /
+                            _dzikirItems[_currentIndex]["jumlah"])
+                        .clamp(0.0, 1.0)
+                    : 0.0,
                 circularStrokeCap: CircularStrokeCap.round,
                 progressColor: Theme.of(context).colorScheme.primary,
-                center: Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            top: 15,
-                            left: 12,
-                            child: Text(
-                              "10",
-                              style: Theme.of(context).textTheme.titleSmall!
-                                  .copyWith(fontWeight: FontWeight.w700),
+                center: GestureDetector(
+                  onTap: _onTasbihTap,
+                  child: Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Positioned(
+                              top: 15,
+                              left: 15,
+                              child: Text(
+                                "${_hitungList[_currentIndex]}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(fontWeight: FontWeight.w700),
+                              ),
                             ),
-                          ),
-                          Icon(FlutterIslamicIcons.solidTasbih, size: 48),
-                        ],
-                      ),
-                    ],
+                            Icon(FlutterIslamicIcons.solidTasbih, size: 48),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
