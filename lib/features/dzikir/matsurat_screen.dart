@@ -33,7 +33,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
       key: const ValueKey('sugro'),
       children: [
         GestureDetector(
-          onTap: () => Get.to(DetailMatsuratScreen()),
+          onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_sugro')),
           child: Container(
             padding: EdgeInsets.only(
               right: 16,
@@ -75,41 +75,44 @@ class _MatsuratScreenState extends State<MatsuratScreen>
 
         SizedBox(height: 10),
 
-        Container(
-          padding: EdgeInsets.only(
-            right: 16,
-            left: 16,
-            bottom: 16,
-            top: 35,
-          ),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/dzikir_sugro_background_2.png",
-              ),
-   
-              fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_sugro')),
+          child: Container(
+            padding: EdgeInsets.only(
+              right: 16,
+              left: 16,
+              bottom: 16,
+              top: 35,
             ),
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Dzikir Petang Sugro",
-                style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              Text(
-                "Dzikir petang versi Sugro, untuk penenang hati menjelang sore.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/dzikir_sugro_background_2.png",
                 ),
+   
+                fit: BoxFit.cover,
               ),
-            ],
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Dzikir Petang Sugro",
+                  style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  "Dzikir petang versi Sugro, untuk penenang hati menjelang sore.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -121,7 +124,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
       key: const ValueKey('kubro'),
       children: [
         GestureDetector(
-          onTap: () => Get.to(DetailMatsuratScreen()),
+          onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_kubro')),
           child: Container(
             padding: EdgeInsets.only(
               right: 16,
@@ -134,7 +137,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                 image: AssetImage(
                   "assets/images/dzikir_kubro_background_1.png",
                 ),
-           
+            
                 fit: BoxFit.cover,
               ),
               color: Theme.of(context).cardColor,
@@ -162,41 +165,44 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         ),
 
         SizedBox(height: 10),
-        Container(
-          padding: EdgeInsets.only(
-            right: 16,
-            left: 16,
-            bottom: 16,
-            top: 35,
-          ),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/dzikir_kubro_background_2.png",
-              ),
-
-              fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_kubro')),
+          child: Container(
+            padding: EdgeInsets.only(
+              right: 16,
+              left: 16,
+              bottom: 16,
+              top: 35,
             ),
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Dzikir Petang Kubro",
-                                style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              Text(
-                "Dzikir petang versi Kubro, untuk penenang hati menjelang sore.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/dzikir_kubro_background_2.png",
                 ),
+
+                fit: BoxFit.cover,
               ),
-            ],
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Dzikir Petang Kubro",
+                                  style:TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  "Dzikir petang versi Kubro, untuk penenang hati menjelang sore.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -537,7 +543,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                           SizedBox(height: 10),
                           Text(
                             "Surah Yasin disebut jantung Al-Quran. Bacalah untuk memohon kemudahan urusan dunia dan akhirat.",
-            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),

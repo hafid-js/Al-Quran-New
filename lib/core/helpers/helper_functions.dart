@@ -13,4 +13,6 @@ extension HexColor on Color {
     {"title": "Amiri Quran"},
     {"title": "LPMQ Isep Misbah"},
     {"title": "Spectral"},
+    {"title": "Uthmanic"},
+
   ];

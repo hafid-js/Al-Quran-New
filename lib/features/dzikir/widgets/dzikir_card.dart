@@ -6,7 +6,19 @@ import 'package:get/state_manager.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
 
 class DzikirCard extends StatefulWidget {
-  DzikirCard({super.key, required this.dibaca, required this.title, required this.hitung, required this.jumlah, required this.arab, required this.latin, required this.arti, required this.ukuranTeksArab, required this.ukuranTeksLatinTerjemah, this.onIncrement});
+  DzikirCard({
+    super.key,
+    required this.dibaca,
+    required this.title,
+    required this.hitung,
+    required this.jumlah,
+    required this.arab,
+    required this.latin,
+    required this.arti,
+    required this.ukuranTeksArab,
+    required this.ukuranTeksLatinTerjemah,
+    this.onIncrement,
+  });
 
   final int dibaca;
   final String title;
@@ -19,7 +31,6 @@ class DzikirCard extends StatefulWidget {
   final double ukuranTeksArab;
   final double ukuranTeksLatinTerjemah;
 
-
   @override
   State<DzikirCard> createState() => _DzikirCardState();
 }
@@ -31,6 +42,7 @@ class _DzikirCardState extends State<DzikirCard> {
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
     return Container(
+      constraints: BoxConstraints(minHeight: 260),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -40,39 +52,35 @@ class _DzikirCardState extends State<DzikirCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withAlpha(30),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      "${widget.dibaca} x",
-                      style: TextStyle(
-                        fontSize: Theme.of(
-                          context,
-                        ).textTheme.labelSmall?.fontSize,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  "${widget.dibaca} x",
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
                   ),
-                  SizedBox(width: 10),
-                  Text(
-                    "${widget.title}",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                ],
+                ),
               ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  "${widget.title}",
+                  style: Theme.of(context).textTheme.titleSmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -98,8 +106,11 @@ class _DzikirCardState extends State<DzikirCard> {
             alignment: Alignment.centerRight,
             child: Text(
               "${widget.arab}",
+              softWrap: true,
+              textAlign: TextAlign.justify,
               style: TextStyle(
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
                 fontSize: widget.ukuranTeksArab,
                 fontFamily: fontFamily,
               ),
@@ -111,44 +122,47 @@ class _DzikirCardState extends State<DzikirCard> {
             style: TextStyle(
               color: Colors.white,
               fontSize: widget.ukuranTeksLatinTerjemah,
-              fontStyle: FontStyle.italic,
+
+              fontFamily: fontFamily,
             ),
           ),
           SizedBox(height: 10),
           Text(
             "${widget.arti}",
-            style: TextStyle(color: Colors.white, fontSize: widget.ukuranTeksLatinTerjemah,),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: widget.ukuranTeksLatinTerjemah,
+              fontFamily: fontFamily,
+            ),
           ),
           SizedBox(height: 10),
           LayoutBuilder(
-                            builder: (context, constraints) {
-                              return LinearPercentIndicator(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).disabledColor,
-                                padding: EdgeInsets.zero,
-                                animateFromLastPercent: true,
-                                barRadius: Radius.circular(16),
-                                width: constraints.maxWidth,
-                                animation: true,
-                                lineHeight: 6.0,
-                                animationDuration: 500,
-                                percent: (widget.hitung / widget.jumlah).clamp(0.0, 1.0),
-                                linearStrokeCap: LinearStrokeCap.roundAll,
-                                progressColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                              );
-                            },
-                          ),
-                               SizedBox(height: 10),
+            builder: (context, constraints) {
+              return LinearPercentIndicator(
+                backgroundColor: Theme.of(context).disabledColor,
+                padding: EdgeInsets.zero,
+                animateFromLastPercent: true,
+                barRadius: Radius.circular(16),
+                width: constraints.maxWidth,
+                animation: true,
+                lineHeight: 6.0,
+                animationDuration: 500,
+                percent: (widget.hitung / widget.jumlah).clamp(0.0, 1.0),
+                linearStrokeCap: LinearStrokeCap.roundAll,
+                progressColor: Theme.of(context).colorScheme.primary,
+              );
+            },
+          ),
+          SizedBox(height: 10),
           InkWell(
             onTap: () {
               widget.onIncrement?.call();
             },
             child: Center(
               child: Text(
-                widget.hitung == widget.jumlah ? "Target tercapai" : "Tap kartu untuk + 1",
+                widget.hitung == widget.jumlah
+                    ? "Target tercapai"
+                    : "Tap kartu untuk + 1",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,

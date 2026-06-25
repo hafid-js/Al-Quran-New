@@ -141,6 +141,9 @@ flutter:
     - family: Spectral
       fonts:
         - asset: assets/fonts/Spectral-Regular.ttf
+    - family: Uthmanic
+      fonts:
+        - asset: assets/fonts/KFGQPC-Uthmanic-Script-HAFS-Regular.otf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
