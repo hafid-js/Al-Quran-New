@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:alquran_new/core/constants/api_endpoints.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,13 @@ class MatsuratController extends GetxController {
         error.value = 'Gagal memuat data (${response.statusCode})';
       }
     } catch (e) {
-      error.value = 'Terjadi kesalahan: $e';
+      if (e is SocketException || e is HttpException) {
+        error.value = 'Periksa Koneksi Jaringan Anda';
+      } else if (e is FormatException) {
+        error.value = 'Data yang diterima tidak valid';
+      } else {
+        error.value = 'Terjadi kesalahan: $e';
+      }
     } finally {
       isLoading.value = false;
     }

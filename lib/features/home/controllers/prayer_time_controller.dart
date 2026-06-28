@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:alquran_new/features/adzan/adzan_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -121,8 +122,13 @@ class PrayerTimeController extends GetxController {
       Get.snackbar("Sukses", "Lokasi diperbarui: ${location.city}");
     } catch (e) {
       locationStatus.value = "Gagal";
-
-      Get.snackbar("Error", e.toString());
+      String msg;
+      if (e is SocketException || e is HttpException) {
+        msg = 'Periksa Koneksi Jaringan Anda';
+      } else {
+        msg = e.toString();
+      }
+      Get.snackbar("Error", msg);
     } finally {
       isLoading.value = false;
 
@@ -241,7 +247,11 @@ class PrayerTimeController extends GetxController {
 
       _calculateNextPrayer(item);
     } catch (e) {
-      errorMessage.value = e.toString();
+      if (e is SocketException || e is HttpException) {
+        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
+      } else {
+        errorMessage.value = e.toString();
+      }
     } finally {
       isLoading.value = false;
       _isRefreshing = false;

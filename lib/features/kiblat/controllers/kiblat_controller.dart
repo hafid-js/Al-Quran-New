@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:alquran_new/features/kiblat/services/device_sensor_checker.dart';
 import 'package:alquran_new/features/kiblat/services/qibla_calculator.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +120,13 @@ Future<void> _recheckLocation() async {
     try {
       await getCurrentLocation();
     } catch (e) {
-      errorMessage.value = 'Gagal mendapatkan lokasi: ${e.toString()}';
+      if (e is SocketException || e is HttpException) {
+        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
+      } else if (e is FormatException) {
+        errorMessage.value = 'Data lokasi tidak valid';
+      } else {
+        errorMessage.value = 'Gagal mendapatkan lokasi. Periksa izin lokasi dan koneksi.';
+      }
     }
 
     isLoading.value = false;
@@ -153,7 +160,11 @@ Future<void> _recheckLocation() async {
             calculateQibla();
           });
     } catch (e) {
-      errorMessage.value = 'Gagal mendapatkan lokasi: ${e.toString()}';
+      if (e is SocketException || e is HttpException) {
+        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
+      } else {
+        errorMessage.value = 'Gagal mendapatkan lokasi. Periksa izin lokasi dan koneksi.';
+      }
       isLoading.value = false;
     }
   }

@@ -37,7 +37,7 @@ class AdzanController extends GetxController {
       await player.play();
       isPlaying.value = true;
     } catch (e) {
-      errorMessage.value = e.toString();
+      errorMessage.value = 'Gagal memainkan adzan';
       debugPrint('AdzanController error: $e');
     } finally {
       isLoading.value = false;
@@ -53,7 +53,7 @@ class AdzanController extends GetxController {
       await player.play();
       isPlaying.value = true;
     } catch (e) {
-      errorMessage.value = e.toString();
+      errorMessage.value = 'Gagal memainkan adzan';
       debugPrint('AdzanController.playAdzan error: $e');
     } finally {
       isLoading.value = false;

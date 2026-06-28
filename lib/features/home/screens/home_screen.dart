@@ -109,14 +109,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "icon": FlutterIslamicIcons.solidPrayingPerson,
       "page": () => const MatsuratScreen(),
     },
-    {
-      "title": "Icon",
-      "icon": Icons.dock_rounded,
-      "page": () => const AllIconIslamic(),
-    },
+    // {
+    //   "title": "Icon",
+    //   "icon": Icons.dock_rounded,
+    //   "page": () => const AllIconIslamic(),
+    // },
   ];
 
-  bool showAllMenus = false;
+  bool showAllMenus = true;
 
   @override
   void initState() {
@@ -552,43 +552,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 Text("Menu", style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
-            InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: () => setState(() => showAllMenus = !showAllMenus),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).colorScheme.surface.withAlpha(20),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      showAllMenus ? "Sembunyikan" : "Lihat Semua",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    AnimatedRotation(
-                      turns: showAllMenus ? 0.5 : 0,
-                      duration: Duration(milliseconds: 250),
-                      child: Icon(
-                        Icons.arrow_circle_down_rounded,
-                        size: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // InkWell(
+            //   borderRadius: BorderRadius.circular(12),
+            //   onTap: () => setState(() => showAllMenus = !showAllMenus),
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(
+            //       horizontal: 10,
+            //       vertical: 5,
+            //     ),
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(12),
+            //       color: Theme.of(context).colorScheme.surface.withAlpha(20),
+            //     ),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Text(
+            //           showAllMenus ? "Sembunyikan" : "Lihat Semua",
+            //           style: TextStyle(
+            //             color: Theme.of(context).colorScheme.primary,
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 12,
+            //           ),
+            //         ),
+            //         const SizedBox(width: 5),
+            //         AnimatedRotation(
+            //           turns: showAllMenus ? 0.5 : 0,
+            //           duration: Duration(milliseconds: 250),
+            //           child: Icon(
+            //             Icons.arrow_circle_down_rounded,
+            //             size: 20,
+            //             color: Theme.of(context).colorScheme.primary,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         const SizedBox(height: 20),
