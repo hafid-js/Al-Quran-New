@@ -1,4 +1,7 @@
+import 'package:alquran_new/features/adzan/adzan_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
@@ -14,7 +17,7 @@ class NotificationService {
 
   static const Map<String, String> _soundResources = {
     'default': 'alarmbeep',
-    'adzan': 'alarmbeep',
+    'adzan': 'adzan',
   };
 
   Future<void> initialize() async {
@@ -39,7 +42,14 @@ class NotificationService {
     );
   }
 
-  void _onNotificationResponse(NotificationResponse response) {}
+  void _onNotificationResponse(NotificationResponse response) {
+    final id = response.id;
+    if (id != null && id >= 1 && id <= 5) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.to(() => const AdzanScreen());
+      });
+    }
+  }
 
   Future<void> _requestAndroidPermissions() async {
     final androidPlugin = _notificationsPlugin
@@ -80,6 +90,7 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
+          fullScreenIntent: true,
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
@@ -106,7 +117,7 @@ class NotificationService {
     );
   }
 
-Future<void> testAdhanSound() async {
+  Future<void> testAdhanSound() async {
   await _notificationsPlugin.show(
     id: 33,
     title: "TEST ADZAN",
@@ -159,6 +170,7 @@ Future<void> testAdhanSound() async {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
+          fullScreenIntent: true,
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
