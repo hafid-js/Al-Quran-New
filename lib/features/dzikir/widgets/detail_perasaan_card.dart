@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailPerasaanCard extends StatelessWidget {
   final DoaPerasaanModel item;
@@ -24,6 +25,38 @@ class DetailPerasaanCard extends StatelessWidget {
     required this.ukuranTeksArab,
     required this.ukuranTeksLatinTerjemah,
   });
+
+  String buildShareText() {
+  final buffer = StringBuffer();
+
+  buffer.writeln(item.arab);
+
+  if (controller.latin.value) {
+    buffer
+      ..writeln()
+      ..writeln(item.latin);
+  }
+
+  if (controller.terjemah.value) {
+    buffer
+      ..writeln()
+      ..writeln(item.arti);
+  }
+
+  if ((item.keterangan ?? '').isNotEmpty) {
+    buffer
+      ..writeln()
+      ..writeln("💡 Faedah/Konteks")
+      ..writeln(item.keterangan);
+  }
+
+  buffer
+    ..writeln()
+    ..writeln("📚 Sumber")
+    ..writeln(item.sumber);
+
+  return buffer.toString();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +126,8 @@ class DetailPerasaanCard extends StatelessWidget {
                             duration: const Duration(seconds: 1),
                             backgroundColor: Theme.of(context).cardColor,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(width: 1, color: Theme.of(context).colorScheme.primary),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             content: Text(
                               'Berhasil Disalin',
@@ -108,9 +142,15 @@ class DetailPerasaanCard extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.share_rounded),
-                    ),
+  onPressed: () {
+    SharePlus.instance.share(
+      ShareParams(
+        text: buildShareText(),
+      ),
+    );
+  },
+  icon: const Icon(Icons.share_rounded),
+),
                   ],
                 ),
               ],

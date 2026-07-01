@@ -82,23 +82,15 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                     );
 
                     return kondisi == "stop"
-                        ? Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Theme.of(context).colorScheme.surface,
-                            ),
-                            child: IconButton(
+                        ? IconButton(
                               onPressed: () {
                                 controller.playAudio(widget.ayat);
                               },
                               icon: Icon(
                                 Icons.play_circle_filled_rounded,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary, size: 28,
                               ),
-                            ),
-                          )
+                            )
                         : SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(

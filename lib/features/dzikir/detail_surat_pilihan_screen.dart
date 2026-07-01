@@ -7,8 +7,7 @@ import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DetailSuratPilihanScreen extends StatefulWidget {
-  final String type;
-  const DetailSuratPilihanScreen({super.key, this.type = 'pagi_sugro'});
+  const DetailSuratPilihanScreen({super.key});
 
   @override
   State<DetailSuratPilihanScreen> createState() =>

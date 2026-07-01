@@ -40,6 +40,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: Obx(() {
         _syncCardKeys();
       if (controller.isLoading.value) {
@@ -514,42 +515,26 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
       bottomNavigationBar: Obx(
         () => controller.tasbih.value
             ? SafeArea(
-          minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 25),
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 decoration: BoxDecoration(
                   border: BoxBorder.all(
-                    width: 1,
+                    width: 1.5,
                     color: Theme.of(context)
                         .colorScheme
                         .primary
                         .withAlpha(100),
                   ),
                   color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withAlpha(18),
-                  borderRadius: BorderRadius.circular(30),
+                      .cardColor,
+                  borderRadius: BorderRadius.circular(100),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child:
-                          const Icon(Icons.play_arrow_rounded, size: 30),
-                    ),
-                    const SizedBox(width: 80),
-                    const Icon(Icons.share_rounded),
-                  ],
-                ),
-              ),
-              Positioned(
+                child: Positioned(
                 top: -40,
                 child: GestureDetector(
                   onTap: () => controller.onTasbihTap(_cardKeys),
@@ -614,6 +599,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                   ),
                 ),
               ),
+              ),
+              
             ],
           ),
         )
