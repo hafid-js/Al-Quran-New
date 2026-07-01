@@ -2,6 +2,7 @@ import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
+import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/utils/constants/app_theme.dart';
 
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
@@ -62,6 +63,8 @@ void main() async {
 }
 
 void _registerDependencies() {
+  Get.put(UkuranController(), permanent: true);
+
   final dioClient = DioClient();
   Get.put(dioClient);
 

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/datasource/surah_local_datasource.dart';
@@ -35,12 +36,14 @@ class DetailSurahController extends GetxController {
   final ayatAudioStates = <int, RxString>{};
   var activeAyatNomor = Rxn<int>();
 
-  final ukuranTeksArab = 18.0.obs;
-  final ukuranLatinTerjemah = 14.0.obs;
-  final latin = true.obs;
-  final terjemah = true.obs;
-  final getar = true.obs;
-  final tasbih = true.obs;
+  final _ukuran = Get.find<UkuranController>();
+
+  RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
+  RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
+  RxBool get latin => _ukuran.latin;
+  RxBool get terjemah => _ukuran.terjemah;
+  RxBool get getar => _ukuran.getar;
+  RxBool get tasbih => _ukuran.tasbih;
 
   String getAyatAudioState(int nomorAyat) {
     return ayatAudioStates.putIfAbsent(nomorAyat, () => "stop".obs).value;

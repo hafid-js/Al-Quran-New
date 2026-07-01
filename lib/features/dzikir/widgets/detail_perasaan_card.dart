@@ -1,185 +1,228 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/features/dzikir/controllers/doa_perasaan_controller.dart';
+import 'package:alquran_new/features/dzikir/models/doa_perasaan_model.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
-import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:alquran_new/features/alquran/domain/entities/ayat.dart';
+import 'package:get/state_manager.dart';
 
-class DetailPerasaanCard extends StatefulWidget {
-  DetailPerasaanCard({
-    super.key,
-    required this.nomorAyat,
-    required this.ayat,
-    required this.nama,
-    required this.teksArab,
-    required this.teksLatin,
-    required this.teksIndonesia,
-    required this.ukuranTeksArab,
-    required this.ukuranTeksLatinTerjemah,
-    this.onIncrement,
-  });
-
-  final int nomorAyat;
-  final Ayat ayat;
-  final String nama;
-  final String teksArab;
-  final String teksLatin;
-  final String teksIndonesia;
-  final VoidCallback? onIncrement;
+class DetailPerasaanCard extends StatelessWidget {
+  final DoaPerasaanModel item;
+  final DoaPerasaanController controller;
+  final int index;
+  final int itemCount;
   final double ukuranTeksArab;
   final double ukuranTeksLatinTerjemah;
 
-  @override
-  State<DetailPerasaanCard> createState() => _DetailPerasaanCardState();
-}
+  const DetailPerasaanCard({
+    super.key,
+    required this.item,
+    required this.controller,
+    required this.index,
+    required this.itemCount,
+    required this.ukuranTeksArab,
+    required this.ukuranTeksLatinTerjemah,
+  });
 
-final controller = Get.find<DetailSurahController>();
-
-class _DetailPerasaanCardState extends State<DetailPerasaanCard> {
-  Set<int> expandedIndexes = {};
   @override
   Widget build(BuildContext context) {
     final SettingsController setting = Get.find<SettingsController>();
     final selectedIndex = setting.fontSelected.value;
-    final fontFamily = fontArabs[selectedIndex]["nama"];
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
+    final fontFamily = fontArabs[selectedIndex]["title"];
+    return Padding(
+      padding: EdgeInsets.only(bottom: index < itemCount - 1 ? 10 : 0),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withAlpha(40),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    "Data Ke-${item.nomor}",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall!.copyWith(fontSize: 11),
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
-                  borderRadius: BorderRadius.circular(12),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.copy_rounded),
+                      onPressed: () async {
+                        final buffer = StringBuffer();
+                        buffer.writeln(item.arab);
+                        if (controller.latin.value) {
+                          buffer.writeln('');
+                          buffer.writeln(item.latin);
+                        }
+                        if (controller.terjemah.value) {
+                          buffer.writeln('');
+                          buffer.writeln(item.arti);
+                        }
+                        buffer.writeln('');
+                        buffer.writeln(
+                            '💡 Faedah/Konteks: ${item.keterangan ?? ''}');
+                        buffer.writeln('');
+                        buffer.writeln('📚 Sumber:');
+                        buffer.writeln(item.sumber);
+                        final copyText = buffer.toString();
+
+                        await Clipboard.setData(ClipboardData(text: copyText));
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              bottom: 5,
+                            ),
+                            duration: const Duration(seconds: 1),
+                            backgroundColor: Theme.of(context).cardColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            content: Text(
+                              'Berhasil Disalin',
+                              style: Theme.of(context).textTheme.titleSmall!
+                                  .copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.share_rounded),
+                    ),
+                  ],
                 ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(left: 18),
                 child: Text(
-                  "Ayat ${widget.nomorAyat}",
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
+                  item.arab,
+                  softWrap: true,
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontFamily: fontFamily,
+                    height: 2,
+                    fontSize: ukuranTeksArab,
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Obx(() {
-                    final kondisi = controller.getAyatAudioState(
-                      widget.nomorAyat,
-                    );
-
-                    return kondisi == "stop"
-                        ? Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Theme.of(context).colorScheme.surface,
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                controller.playAudio(widget.ayat);
-                              },
-                              icon: Icon(
-                                Icons.play_circle_filled_rounded,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          )
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                kondisi == "playing"
-                                    ? IconButton(
-                                        onPressed: () {
-                                          controller.pauseAudio(widget.ayat);
-                                        },
-                                        icon: Icon(
-                                          Icons.pause,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                      )
-                                    : IconButton(
-                                        onPressed: () {
-                                          controller.resumeAudio(widget.ayat);
-                                        },
-                                        icon: Icon(
-                                          Icons.play_arrow,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                      ),
-                                IconButton(
-                                  onPressed: () {
-                                    controller.stopAudio(widget.ayat);
-                                  },
-                                  icon: Icon(
-                                    Icons.stop,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                  }),
-                ],
+            ),
+            if (controller.latin.value) ...[
+              SizedBox(height: 15),
+              Text(
+                item.latin,
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: ukuranTeksLatinTerjemah,
+                  fontFamily: fontFamily,
+                ),
               ),
             ],
-          ),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(left: 18),
-              child: Text(
-                "${widget.teksArab}",
-                softWrap: true,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: widget.ukuranTeksArab,
+            if (controller.terjemah.value) ...[
+              SizedBox(height: 10),
+              Text(
+                item.arti,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontSize: ukuranTeksLatinTerjemah,
                   fontFamily: fontFamily,
-                  height: 2,
+                ),
+              ),
+            ],
+            SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(width: 3, color: Colors.amber)),
+
+                color: Colors.amber.withAlpha(10),
+
+                borderRadius: BorderRadius.circular(12),
+              ),
+
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "💡Faedah/Konteks: ",
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ukuranTeksLatinTerjemah,
+                                ),
+                          ),
+                          TextSpan(
+                            text: item.keterangan,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontSize: ukuranTeksLatinTerjemah,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 10),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "📚 Sumber: ",
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ukuranTeksLatinTerjemah,
+                                ),
+                          ),
+                          TextSpan(
+                            text: item.sumber,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontSize: ukuranTeksLatinTerjemah,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.teksLatin}",
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              fontSize: 14,
-              fontFamily: fontFamily,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.teksIndonesia}",
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontSize: 12,
-              fontFamily: fontFamily,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

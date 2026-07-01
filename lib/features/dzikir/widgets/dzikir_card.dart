@@ -17,6 +17,8 @@ class DzikirCard extends StatefulWidget {
     required this.arti,
     required this.ukuranTeksArab,
     required this.ukuranTeksLatinTerjemah,
+    this.showLatin = true,
+    this.showTerjemah = true,
     this.onIncrement,
   });
 
@@ -27,6 +29,8 @@ class DzikirCard extends StatefulWidget {
   final String arab;
   final String latin;
   final String arti;
+  final bool showLatin;
+  final bool showTerjemah;
   final VoidCallback? onIncrement;
   final double ukuranTeksArab;
   final double ukuranTeksLatinTerjemah;
@@ -116,25 +120,28 @@ class _DzikirCardState extends State<DzikirCard> {
               ),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.latin}",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: widget.ukuranTeksLatinTerjemah,
-
-              fontFamily: fontFamily,
+          if (widget.showLatin) ...[
+            SizedBox(height: 10),
+            Text(
+              "${widget.latin}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widget.ukuranTeksLatinTerjemah,
+                fontFamily: fontFamily,
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.arti}",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: widget.ukuranTeksLatinTerjemah,
-              fontFamily: fontFamily,
+          ],
+          if (widget.showTerjemah) ...[
+            SizedBox(height: 10),
+            Text(
+              "${widget.arti}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widget.ukuranTeksLatinTerjemah,
+                fontFamily: fontFamily,
+              ),
             ),
-          ),
+          ],
           SizedBox(height: 10),
           LayoutBuilder(
             builder: (context, constraints) {

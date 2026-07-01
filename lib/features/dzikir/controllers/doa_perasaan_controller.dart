@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:alquran_new/core/constants/api_endpoints.dart';
+import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/features/dzikir/models/doa_perasaan_model.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class DoaPerasaanController extends GetxController {
@@ -11,18 +13,22 @@ class DoaPerasaanController extends GetxController {
 
   DoaPerasaanController({required this.type});
 
+  final _ukuran = Get.find<UkuranController>();
+  final _box = GetStorage();
+  String get _cacheKey => 'dzikir_perasaan_$type';
+
   var data = <DoaPerasaanModel>[].obs;
   final isLoading = true.obs;
   final error = RxString('');
   final hitungList = <int>[].obs;
   final currentIndex = 0.obs;
 
-  final ukuranTeksArab = 18.0.obs;
-  final ukuranLatinTerjemah = 14.0.obs;
-  final latin = true.obs;
-  final terjemah = true.obs;
-  final getar = true.obs;
-  final tasbih = true.obs;
+  RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
+  RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
+  RxBool get latin => _ukuran.latin;
+  RxBool get terjemah => _ukuran.terjemah;
+  RxBool get getar => _ukuran.getar;
+  RxBool get tasbih => _ukuran.tasbih;
 
   String get title {
     switch (type) {
@@ -81,7 +87,31 @@ class DoaPerasaanController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _loadCache();
     fetchData();
+  }
+
+  void _loadCache() {
+    final cached = _box.read<String>(_cacheKey);
+    if (cached != null && cached.isNotEmpty) {
+      final List<dynamic> jsonList = json.decode(cached);
+      data.value = jsonList.map((e) => DoaPerasaanModel.fromJson(e)).toList();
+      hitungList.value = List.filled(data.length, 0);
+      currentIndex.value = 0;
+      isLoading.value = false;
+    }
+  }
+
+  void _saveCache() {
+    final jsonStr = json.encode(data.map((e) => {
+      'nomor': e.nomor.toString(),
+      'arab': e.arab,
+      'latin': e.latin,
+      'arti': e.arti,
+      'keterangan': e.keterangan,
+      'sumber': e.sumber,
+    }).toList());
+    _box.write(_cacheKey, jsonStr);
   }
 
   Future<void> fetchData() async {
@@ -90,22 +120,23 @@ class DoaPerasaanController extends GetxController {
       error.value = '';
       final response = await http.get(Uri.parse(_url));
       if (response.statusCode == 200) {
-        print("STATUS: ${response.statusCode}");
-print("BODY: ${response.body}");
-       final List<dynamic> jsonList = json.decode(response.body);
+        final List<dynamic> jsonList = json.decode(response.body);
         data.value = jsonList.map((e) => DoaPerasaanModel.fromJson(e)).toList();
         hitungList.value = List.filled(data.length, 0);
         currentIndex.value = 0;
-      } else {
+        _saveCache();
+      } else if (data.isEmpty) {
         error.value = 'Gagal memuat data (${response.statusCode})';
       }
     } catch (e) {
-      if (e is SocketException || e is HttpException) {
-        error.value = 'Periksa Koneksi Jaringan Anda';
-      } else if (e is FormatException) {
-        error.value = 'Data yang diterima tidak valid';
-      } else {
-        error.value = 'Terjadi kesalahan: $e';
+      if (data.isEmpty) {
+        if (e is SocketException || e is HttpException) {
+          error.value = 'Periksa Koneksi Jaringan Anda';
+        } else if (e is FormatException) {
+          error.value = 'Data yang diterima tidak valid';
+        } else {
+          error.value = 'Terjadi kesalahan: $e';
+        }
       }
     } finally {
       isLoading.value = false;

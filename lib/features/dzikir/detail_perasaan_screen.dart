@@ -1,7 +1,7 @@
 import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/dzikir/controllers/doa_perasaan_controller.dart';
+import 'package:alquran_new/features/dzikir/widgets/detail_perasaan_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -37,7 +37,9 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
+    
+    return Scaffold(
+      body: Obx(() {
       _syncCardKeys();
       if (controller.isLoading.value) {
         return Loading();
@@ -369,70 +371,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen> {
                                                       ),
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 20),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Getar Saat Tap",
-                                                        style: Theme.of(
-                                                          context,
-                                                        ).textTheme.titleSmall,
-                                                      ),
-                                                      Switch(
-                                                        value: controller
-                                                            .getar
-                                                            .value,
-                                                        activeThumbColor:
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .primary,
-                                                        onChanged:
-                                                            (bool value) {
-                                                              modalSetState(() {
-                                                                controller
-                                                                        .getar
-                                                                        .value =
-                                                                    value;
-                                                              });
-                                                            },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 20),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Tampilkan Tasbih Scroll",
-                                                        style: Theme.of(
-                                                          context,
-                                                        ).textTheme.titleSmall,
-                                                      ),
-                                                      Switch(
-                                                        value: controller
-                                                            .tasbih
-                                                            .value,
-                                                        activeThumbColor:
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .primary,
-                                                        onChanged:
-                                                            (bool value) {
-                                                              modalSetState(() {
-                                                                controller
-                                                                        .tasbih
-                                                                        .value =
-                                                                    value;
-                                                              });
-                                                            },
-                                                      ),
-                                                    ],
-                                                  ),
+                                                  
                                                 ],
                                               ),
                                             );
@@ -462,245 +401,13 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen> {
                   children: [
                     ...List.generate(controller.data.length, (i) {
                       final item = controller.data[i];
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: i < controller.data.length - 1 ? 10 : 0,
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withAlpha(80),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      "Data Ke-${item.nomor}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(fontSize: 11),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.copy_rounded),
-                                        onPressed: () async {
-                                          final copyText =
-                                              '''
-$item['arab']
-$item['latin]
-$item['arti]
-
-💡 Faedah/Konteks: $item['keterangan']
-
-📚 Sumber:
-$item['sumber']
-''';
-
-                                          await Clipboard.setData(
-                                            ClipboardData(text: copyText),
-                                          );
-
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              margin: const EdgeInsets.only(
-                                                left: 16,
-                                                right: 16,
-                                                bottom: 5,
-                                              ),
-                                              duration: const Duration(
-                                                seconds: 1,
-                                              ),
-                                              backgroundColor: Theme.of(
-                                                context,
-                                              ).cardColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                              ),
-                                              content: Text(
-                                                'Berhasil Disalin',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall!
-                                                    .copyWith(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.share_rounded),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 18),
-                                  child: Text(
-                                    item.arab,
-                                    softWrap: true,
-                                    textAlign: TextAlign.right,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          fontFamily: 'Uthmanic',
-                                          height: 2,
-                                          fontSize:
-                                              controller.ukuranTeksArab.value,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                item.latin,
-                                style: Theme.of(context).textTheme.titleSmall!
-                                    .copyWith(
-                                      fontSize:
-                                          controller.ukuranLatinTerjemah.value,
-                                      fontFamily: "Uthmanic",
-                                    ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                item.arti,
-                                style: Theme.of(context).textTheme.bodyLarge!
-                                    .copyWith(
-                                      fontSize:
-                                          controller.ukuranLatinTerjemah.value,
-                                      fontFamily: "Uthmanic",
-                                    ),
-                              ),
-                              SizedBox(height: 20),
-                              Container(
-                                width: double.infinity,
-
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    left: BorderSide(
-                                      width: 3,
-                                      color: Colors.amber,
-                                    ),
-                                  ),
-
-                                  color: Colors.amber.withAlpha(10),
-
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "💡Faedah/Konteks: ",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: controller
-                                                        .ukuranLatinTerjemah
-                                                        .value,
-                                                  ),
-                                            ),
-                                            TextSpan(
-                                              text: item.keterangan,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  ?.copyWith(
-                                                    fontSize: controller
-                                                        .ukuranLatinTerjemah
-                                                        .value,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "📚 Sumber: ",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: controller
-                                                        .ukuranLatinTerjemah
-                                                        .value,
-                                                  ),
-                                            ),
-                                            TextSpan(
-                                              text: item.sumber,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  ?.copyWith(
-                                                    fontSize: controller
-                                                        .ukuranLatinTerjemah
-                                                        .value,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      return DetailPerasaanCard(
+                        item: item,
+                        controller: controller,
+                        index: i,
+                        itemCount: controller.data.length,
+                        ukuranTeksArab: controller.ukuranTeksArab.value,
+                        ukuranTeksLatinTerjemah: controller.ukuranLatinTerjemah.value,
                       );
                     }),
                   ],
@@ -710,6 +417,7 @@ $item['sumber']
           ),
         ],
       );
-    });
+    }),
+    );
   }
 }

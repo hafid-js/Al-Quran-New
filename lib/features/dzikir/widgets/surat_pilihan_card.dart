@@ -165,22 +165,26 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
               ),
             ),
           ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.teksLatin}",
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              fontSize: 14,
-              fontFamily: fontFamily,
+          if (controller.latin.value) ...[
+            SizedBox(height: 10),
+            Text(
+              "${widget.teksLatin}",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                fontSize: 14,
+                fontFamily: fontFamily,
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "${widget.teksIndonesia}",
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontSize: 12,
-              fontFamily: fontFamily,
+          ],
+          if (controller.terjemah.value) ...[
+            SizedBox(height: 10),
+            Text(
+              "${widget.teksIndonesia}",
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontSize: 12,
+                fontFamily: fontFamily,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

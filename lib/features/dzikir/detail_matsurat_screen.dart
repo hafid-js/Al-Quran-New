@@ -485,6 +485,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
                             ukuranTeksArab: controller.ukuranTeksArab.value,
                             ukuranTeksLatinTerjemah:
                                 controller.ukuranLatinTerjemah.value,
+                            showLatin: controller.latin.value,
+                            showTerjemah: controller.terjemah.value,
                             dibaca: item["dibaca"],
                             title: item["title"],
                             hitung: controller.hitungList.isNotEmpty
@@ -510,7 +512,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
         );
       }),
       bottomNavigationBar: Obx(
-        () => SafeArea(
+        () => controller.tasbih.value
+            ? SafeArea(
           minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Stack(
             clipBehavior: Clip.none,
@@ -613,7 +616,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
               ),
             ],
           ),
-        ),
+        )
+            : SizedBox.shrink(),
       ),
     );
   }

@@ -335,7 +335,12 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                          onTap: () =>
                               Get.to(DetailPerasaanScreen(type: "cemas_gelisah",)),
                         ),
-                        PerasaanCard(title: "Bosan", color: "#D4D4D4"),
+                          PerasaanCard(
+                          title: "Bosan",
+                          color: "#D4D4D4",
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "bosan",)),
+                        ),
                         PerasaanCard(
                           title: "Percaya Diri",
                           color: "#B8E8D4",
