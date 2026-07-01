@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/ui/loading.dart';
 import 'package:alquran_new/features/dzikir/controllers/matsurat_controller.dart';
 import 'package:alquran_new/features/dzikir/widgets/dzikir_card.dart';
 import 'package:flutter/material.dart';
@@ -41,84 +42,33 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> {
     return Scaffold(
       body: Obx(() {
         _syncCardKeys();
-        if (controller.isLoading.value || controller.error.value.isNotEmpty) {
-          return CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                pinned: false,
-                floating: true,
-                backgroundColor: Colors.transparent,
-                expandedHeight: 120,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Padding(
-                    padding: EdgeInsets.only(
-                      right: 16,
-                      left: 16,
-                      bottom: 16,
-                      top: 80,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 28,
-                        vertical: 18,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Get.back(),
-                            child: Icon(Icons.arrow_back_ios),
-                          ),
-                          Text(
-                            controller.title,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          SizedBox(width: 24),
-                        ],
-                      ),
-                    ),
+      if (controller.isLoading.value) {
+        return Loading();
+        }
+
+        if (controller.data.isEmpty || controller.error.isNotEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.cloud_off_rounded, size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text(
+                    controller.error.value,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: controller.fetchData,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text("Coba Lagi"),
+                  ),
+                ],
               ),
-              SliverFillRemaining(
-                child: Center(
-                  child: controller.isLoading.value
-                      ? CircularProgressIndicator()
-                      : Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.cloud_off_rounded,
-                                size: 64,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: 16),
-                              Text(
-                                controller.error.value,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  controller.fetchData();
-                                },
-                                icon: Icon(Icons.refresh),
-                                label: Text("Coba Lagi"),
-                              ),
-                            ],
-                          ),
-                        ),
-                ),
-              ),
-            ],
+            ),
           );
         }
         return CustomScrollView(

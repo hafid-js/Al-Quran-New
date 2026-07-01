@@ -327,63 +327,56 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                           title: "Marah",
                           color: "#F4B8C1",
                           onTap: () =>
-                              Get.to(DetailPerasaanScreen(title: "Marah")),
+                              Get.to(DetailPerasaanScreen(type: "marah",)),
                         ),
                         PerasaanCard(
                           title: "Cemas/Gelisah",
                           color: "#B8D4F4",
-                          onTap: () => Get.to(
-                            DetailPerasaanScreen(title: "Cemas/Gelisah"),
-                          ),
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "cemas_gelisah",)),
                         ),
                         PerasaanCard(title: "Bosan", color: "#D4D4D4"),
                         PerasaanCard(
                           title: "Percaya Diri",
                           color: "#B8E8D4",
-                          onTap: () => Get.to(
-                            DetailPerasaanScreen(title: "Percaya Diri"),
-                          ),
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "percaya_diri",)),
                         ),
                         PerasaanCard(
                           title: "Bingung",
                           color: "#E8DDB8",
-                          onTap: () =>
-                              Get.to(DetailPerasaanScreen(title: "Bingung")),
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "bingung",)),
                         ),
                         PerasaanCard(
                           title: "Puas/Tenang",
                           color: "#F4C8E8",
-                          onTap: () => Get.to(
-                            DetailPerasaanScreen(title: "Puas/Tenang"),
-                          ),
+                       onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "puas_tenang",)),
                         ),
                         PerasaanCard(
                           title: "Depresi/Sedih Mendalam",
                           color: "#C8B4D4",
-                          onTap: () => Get.to(
-                            DetailPerasaanScreen(
-                              title: "Depresi/Sedih Mendalam",
-                            ),
-                          ),
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "depresi_sedih_mendalam",)),
                         ),
                         PerasaanCard(
                           title: "Ragu-Ragu",
                           color: "#D4B8E8",
                           onTap: () =>
-                              Get.to(DetailPerasaanScreen(title: "Ragu-Ragu")),
+                              Get.to(DetailPerasaanScreen(type: "ragu_ragu",)),
                         ),
                         PerasaanCard(
                           title: "Bersyukur",
                           color: "#B8E8C8",
                           onTap: () =>
-                              Get.to(DetailPerasaanScreen(title: "Bersyukur")),
+                              Get.to(DetailPerasaanScreen(type: "bersyukur",)),
                         ),
                         PerasaanCard(
                           title: "Serakah/Tamak",
                           color: "#E8D4B8",
-                          onTap: () => Get.to(
-                            DetailPerasaanScreen(title: "Serakah/Tamak"),
-                          ),
+                         onTap: () =>
+                              Get.to(DetailPerasaanScreen(type: "serakah_tamak",)),
                         ),
                       ],
                     ),
