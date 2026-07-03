@@ -1,6 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/dzikir/detail_matsurat_screen.dart';
-import 'package:alquran_new/features/dzikir/detail_perasaan_screen.dart';
+import 'package:alquran_new/features/dzikir/screens/detail_matsurat_screen.dart';
+import 'package:alquran_new/features/dzikir/screens/detail_perasaan_screen.dart';
 import 'package:alquran_new/features/dzikir/widgets/perasaan_card.dart';
 import 'package:alquran_new/features/dzikir/widgets/surat_pilihan_list_tile.dart';
 import 'package:alquran_new/features/tasbih/widgets/tab_item.dart';
@@ -28,6 +28,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    
     super.dispose();
   }
 

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:alquran_new/core/constants/api_endpoints.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/utils/result.dart';
@@ -45,14 +43,10 @@ class DzikirController extends GetxController {
           errorMessage.value = message;
         },
       );
+    } on FormatException {
+      errorMessage.value = 'Data yang diterima tidak valid';
     } catch (e) {
-      if (e is SocketException || e is HttpException) {
-        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
-      } else if (e is FormatException) {
-        errorMessage.value = 'Data yang diterima tidak valid';
-      } else {
-        errorMessage.value = 'Terjadi kesalahan: $e';
-      }
+      errorMessage.value = 'Terjadi kesalahan: $e';
     } finally {
       isLoading.value = false;
     }

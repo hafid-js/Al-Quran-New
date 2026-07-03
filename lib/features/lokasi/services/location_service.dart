@@ -1,49 +1,48 @@
-import 'dart:convert';
-
-import 'package:alquran_new/core/constants/api_endpoints.dart';
 import 'package:alquran_new/core/db/hive_service.dart';
+import 'package:alquran_new/core/network/dio_client.dart';
+import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
 class LocationService {
   static Future<List<String>> getProvinces() async {
-    final res = await http.get(Uri.parse(ApiEndpoints.provinsiUrl));
+    final client = Get.find<DioClient>();
+    final result = await client.get('/shalat/provinsi');
 
-    if (res.statusCode != 200) {
-      throw Exception("Failed request: ${res.statusCode}");
-    }
-
-    final json = jsonDecode(res.body);
-    final data = json['data'];
-
-    if (data == null || data is! List) {
-      throw Exception("Invalid response format");
-    }
-
-    return data.map((e) => e.toString()).toList();
+    return result.when(
+      success: (response) {
+        final data = response.data['data'];
+        if (data == null || data is! List) {
+          throw const FormatException('Invalid response format');
+        }
+        return data.map((e) => e.toString()).toList();
+      },
+      failure: (message, statusCode) {
+        throw Exception(message);
+      },
+    );
   }
 
   static Future<List<String>> getCities(String province) async {
-    final res = await http.post(
-      Uri.parse(ApiEndpoints.kabkotaUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"provinsi": province}),
+    final client = Get.find<DioClient>();
+    final result = await client.post('/shalat/kabkota', data: {
+      'provinsi': province,
+    });
+
+    return result.when(
+      success: (response) {
+        final data = response.data['data'];
+        if (data == null || data is! List) {
+          throw const FormatException('Invalid response format');
+        }
+        return data.map((e) => e.toString()).toList();
+      },
+      failure: (message, statusCode) {
+        throw Exception(message);
+      },
     );
-
-    if (res.statusCode != 200) {
-      throw Exception("Failed request: ${res.statusCode}");
-    }
-
-    final json = jsonDecode(res.body);
-    final data = json['data'];
-
-    if (data == null || data is! List) {
-      throw Exception("Invalid response format");
-    }
-
-    return data.map((e) => e.toString()).toList();
   }
 
     static Future<void> saveLocation(String province, String city) async {

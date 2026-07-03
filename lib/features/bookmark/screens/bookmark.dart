@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
@@ -11,8 +12,10 @@ class BookmarkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = Responsive.scale(context);
     BookmarkController controller = Get.put(BookmarkController());
       final SettingsController setting = Get.find<SettingsController>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -43,7 +46,7 @@ class BookmarkScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +76,7 @@ class BookmarkScreen extends StatelessWidget {
          style: Theme.of(context).textTheme.titleMedium
         ),
 
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
 
        
        Padding(
@@ -83,11 +86,11 @@ class BookmarkScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: HexColor.fromHex("#8BA4B4"),
-              fontSize: 14,
+              fontSize: 14 * scale,
             ),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         GestureDetector(
         onTap: () => Get.to(() => AlQuranScreen()),
         child:  
@@ -99,7 +102,7 @@ class BookmarkScreen extends StatelessWidget {
           size: 40,
           color: Theme.of(context).colorScheme.primary,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
           "Tambah",
           style: TextStyle(
@@ -114,7 +117,7 @@ class BookmarkScreen extends StatelessWidget {
   );
 }
         return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: Responsive.padding(context), vertical: 20),
         child: Column(
           children: [
 
@@ -126,7 +129,7 @@ class BookmarkScreen extends StatelessWidget {
                 return Padding(padding: EdgeInsets.only(bottom: 10), child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16 * scale),
               ),
               child: ListTile(
                 onTap: () {
@@ -138,18 +141,18 @@ class BookmarkScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   onTap: () {},
                   child: Container(
-                    height: 45,
-                    width: 45,
+                    height: 45 * scale,
+                    width: 45 * scale,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12 * scale),
                     ),
                     child: Center(
                       child: Text(
                         bm.surahNumber.toString(),
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary,
+                        fontSize: 16 * scale,
+                        color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -176,7 +179,7 @@ class BookmarkScreen extends StatelessWidget {
                       bm.arabName,
                       style: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: 20,
+                        fontSize: 20 * scale,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),

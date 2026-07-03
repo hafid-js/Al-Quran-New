@@ -1,4 +1,4 @@
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/tasbih/widgets/tab_item.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';

@@ -1,28 +1,28 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:alquran_new/features/adzan/adzan_screen.dart';
+
+import 'package:alquran_new/features/adzan/screens/adzan_screen.dart';
+import 'package:alquran_new/features/home/domain/entities/prayer_time.dart';
+import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
+import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
+import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/home/data/datasources/prayer_time_local_datasource.dart';
 import 'package:alquran_new/features/home/data/local/prayer_time_cache.dart';
-import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/lokasi/services/location_service.dart';
-import 'package:alquran_new/features/home/models/prayer_time_model.dart';
 import 'package:alquran_new/features/lokasi/data/location_cache.dart';
 import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
 
 class PrayerTimeController extends GetxController {
-  final PrayerTimeRepository repo;
+  final GetPrayerTimes _getPrayerTimes = Get.find();
   final PrayerTimeLocalDatasource local = PrayerTimeLocalDatasource();
-
-  PrayerTimeController({required this.repo});
 
   final NotificationSettingsController settingsController =
       Get.find<NotificationSettingsController>();
 
-  var todayPrayer = Rxn<PrayerTimeModel>();
+  var todayPrayer = Rxn<PrayerTime>();
   var nextPrayerName = "".obs;
   var nextPrayerTime = Rxn<DateTime>();
 
@@ -39,7 +39,7 @@ class PrayerTimeController extends GetxController {
   Timer? _adzanTimer;
   Timer? _countdownTimer;
   LocationCache? _cachedLocation;
-  var locationStatus = "Idle".obs;
+  var locationStatus = "Sedang memuat data...".obs;
 
   @override
   void onInit() {
@@ -122,17 +122,10 @@ class PrayerTimeController extends GetxController {
       Get.snackbar("Sukses", "Lokasi diperbarui: ${location.city}");
     } catch (e) {
       locationStatus.value = "Gagal";
-      String msg;
-      if (e is SocketException || e is HttpException) {
-        msg = 'Periksa Koneksi Jaringan Anda';
-      } else {
-        msg = e.toString();
-      }
-      Get.snackbar("Error", msg);
+      Get.snackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
 
-      // optional reset setelah delay
       Future.delayed(const Duration(seconds: 2), () {
         locationStatus.value = "Idle";
       });
@@ -147,11 +140,7 @@ class PrayerTimeController extends GetxController {
       _isRefreshing = true;
       isLoading.value = true;
 
-      final controller = Get.find<PrayerTimeController>();
-
-      controller._cachedLocation = await LocationService.getLocation();
-
-      await controller.fetchPrayerTimes();
+      _cachedLocation = await LocationService.getLocation();
 
       final String todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -172,6 +161,8 @@ class PrayerTimeController extends GetxController {
 
         _calculateNextPrayer(cached.toEntity());
 
+        await _schedulePrayerNotifications(cached.toEntity());
+
         isLoading.value = false;
         _isRefreshing = false;
         return;
@@ -187,12 +178,18 @@ class PrayerTimeController extends GetxController {
         return;
       }
 
-      final data = await repo.fetchPrayerTimes(
+      final result = await _getPrayerTimes.call(
         province: _cachedLocation?.province ?? "DKI Jakarta",
         city: _cachedLocation?.city ?? "Kota Jakarta",
       );
 
-      final schedules = data['schedules'] as List<PrayerTimeModel>;
+      if (result is Failure) {
+        errorMessage.value = (result as Failure).message;
+        return;
+      }
+
+      final success = result as Success<PrayerTimeResponse>;
+      final schedules = success.data.schedules;
       if (schedules.isEmpty) return;
 
       final item = schedules.first;
@@ -210,55 +207,18 @@ class PrayerTimeController extends GetxController {
       );
       await local.save(cacheData);
 
-      final now = DateTime.now();
-
-      final prayers = {
-        "Subuh": item.subuh,
-        "Dzuhur": item.dzuhur,
-        "Ashar": item.ashar,
-        "Maghrib": item.maghrib,
-        "Isya": item.isya,
-      };
-
-      final prayerIds = {
-        "Subuh": 1,
-        "Dzuhur": 2,
-        "Ashar": 3,
-        "Maghrib": 4,
-        "Isya": 5,
-      };
-
-      for (final entry in prayers.entries) {
-        DateTime prayerTime = _parseTime(entry.value, now);
-        if (prayerTime.isBefore(now)) {
-          prayerTime = prayerTime.add(const Duration(days: 1));
-        }
-        if (_isPrayerEnabled(entry.key)) {
-          await NotificationService().scheduleNotification(
-            id: prayerIds[entry.key]!,
-            title: "Al-Barokah: Quran & Sholat",
-            body: "Saatnya sholat ${entry.key}",
-            scheduledDate: prayerTime,
-            soundType: settingsController.soundType.value,
-            notificationMode: settingsController.notificationMode.value,
-          );
-        }
-      }
+      await _schedulePrayerNotifications(item);
 
       _calculateNextPrayer(item);
     } catch (e) {
-      if (e is SocketException || e is HttpException) {
-        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
-      } else {
-        errorMessage.value = e.toString();
-      }
+      errorMessage.value = 'Terjadi kesalahan: $e';
     } finally {
       isLoading.value = false;
       _isRefreshing = false;
     }
   }
 
-  void _calculateNextPrayer(PrayerTimeModel item) {
+  void _calculateNextPrayer(PrayerTime item) {
     final now = DateTime.now();
     final prayers = {
       "Subuh": item.subuh,
@@ -332,12 +292,7 @@ class PrayerTimeController extends GetxController {
         "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
-  Future<void> rescheduleNotifications() async {
-    final item = todayPrayer.value;
-    if (item == null) return;
-
-    await NotificationService().cancelAllNotification();
-
+  Future<void> _schedulePrayerNotifications(PrayerTime item) async {
     final now = DateTime.now();
     final prayers = {
       "Subuh": item.subuh,
@@ -357,7 +312,7 @@ class PrayerTimeController extends GetxController {
 
     for (final entry in prayers.entries) {
       DateTime prayerTime = _parseTime(entry.value, now);
-      if (prayerTime.isBefore(now)) {
+      if (!prayerTime.isAfter(now.add(const Duration(seconds: 3)))) {
         prayerTime = prayerTime.add(const Duration(days: 1));
       }
       if (_isPrayerEnabled(entry.key)) {
@@ -371,6 +326,14 @@ class PrayerTimeController extends GetxController {
         );
       }
     }
+  }
+
+  Future<void> rescheduleNotifications() async {
+    final item = todayPrayer.value;
+    if (item == null) return;
+
+    await NotificationService().cancelAllNotification();
+    await _schedulePrayerNotifications(item);
   }
 
   @override

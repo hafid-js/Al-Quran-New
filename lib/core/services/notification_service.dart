@@ -1,4 +1,6 @@
-import 'package:alquran_new/features/adzan/adzan_screen.dart';
+import 'dart:io';
+
+import 'package:alquran_new/features/adzan/screens/adzan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -22,6 +24,7 @@ class NotificationService {
 
   Future<void> initialize() async {
     await _requestAndroidPermissions();
+    await _requestExactAlarmPermission();
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('ic_notification');
@@ -57,6 +60,16 @@ class NotificationService {
           AndroidFlutterLocalNotificationsPlugin
         >();
     await androidPlugin?.requestNotificationsPermission();
+  }
+
+  Future<void> _requestExactAlarmPermission() async {
+    if (Platform.isAndroid) {
+      final androidPlugin = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      await androidPlugin?.requestExactAlarmsPermission();
+    }
   }
 
   String _resolveSoundResource(String? soundType) {
@@ -195,7 +208,7 @@ class NotificationService {
       body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: notificationDetails,
-     androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 

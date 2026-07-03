@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:alquran_new/core/constants/api_endpoints.dart';
+import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
+import 'package:alquran_new/core/utils/result.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:vibration/vibration.dart';
 
 class MatsuratController extends GetxController {
@@ -30,6 +31,7 @@ class MatsuratController extends GetxController {
   RxBool get terjemah => _ukuran.terjemah;
   RxBool get getar => _ukuran.getar;
   RxBool get tasbih => _ukuran.tasbih;
+  RxBool get arabBold => _ukuran.arabBold;
 
   String get title {
     switch (type) {
@@ -87,21 +89,26 @@ class MatsuratController extends GetxController {
     try {
       isLoading.value = true;
       error.value = '';
-      final response = await http.get(Uri.parse(_url));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        data.value = jsonList.cast<Map<String, dynamic>>();
-        hitungList.value = List.filled(data.length, 0);
-        currentIndex.value = 0;
-        _saveCache();
-      } else if (data.isEmpty) {
-        error.value = 'Gagal memuat data (${response.statusCode})';
-      }
+      final client = Get.find<DioClient>();
+      final result = await client.get('', customBaseUrl: _url, responseType: ResponseType.plain);
+
+      result.when(
+        success: (response) {
+          final List<dynamic> jsonList = json.decode(response.data as String);
+          data.value = jsonList.cast<Map<String, dynamic>>();
+          hitungList.value = List.filled(data.length, 0);
+          currentIndex.value = 0;
+          _saveCache();
+        },
+        failure: (message, statusCode) {
+          if (data.isEmpty) {
+            error.value = message;
+          }
+        },
+      );
     } catch (e) {
       if (data.isEmpty) {
-        if (e is SocketException || e is HttpException) {
-          error.value = 'Periksa Koneksi Jaringan Anda';
-        } else if (e is FormatException) {
+        if (e is FormatException) {
           error.value = 'Data yang diterima tidak valid';
         } else {
           error.value = 'Terjadi kesalahan: $e';
@@ -114,16 +121,22 @@ class MatsuratController extends GetxController {
 
   void onTasbihTap(List<GlobalKey> cardKeys) {
     if (currentIndex.value >= data.length) return;
-    final jumlah = data[currentIndex.value]["jumlah"] as int;
-    if (hitungList[currentIndex.value] < jumlah) {
-      _vibrate();
-      hitungList[currentIndex.value]++;
-      if (hitungList[currentIndex.value] >= jumlah &&
-          currentIndex.value < data.length - 1) {
-        final nextIndex = currentIndex.value + 1;
+    final index = currentIndex.value;
+    final jumlah = data[index]["jumlah"] as int;
+
+    if (hitungList[index] >= jumlah) return;
+
+    _vibrate();
+    final updated = [...hitungList];
+    updated[index]++;
+    hitungList.value = updated;
+
+    if (updated[index] >= jumlah && index < data.length - 1) {
+      final nextIndex = index + 1;
+      Future.delayed(const Duration(milliseconds: 800), () {
         currentIndex.value = nextIndex;
         scrollToCard(nextIndex, cardKeys);
-      }
+      });
     }
   }
 

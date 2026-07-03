@@ -1,5 +1,5 @@
+import 'package:alquran_new/features/home/domain/entities/prayer_time.dart';
 import 'package:hive/hive.dart';
-import 'package:alquran_new/features/home/models/prayer_time_model.dart';
 
 part 'prayer_time_cache.g.dart';
 
@@ -34,7 +34,7 @@ class PrayerTimeCache extends HiveObject {
   @HiveField(12)
   String? city;
 
-  PrayerTimeModel toEntity() => PrayerTimeModel(
+  PrayerTime toEntity() => PrayerTime(
         day: day,
         tanggalLengkap: tanggalLengkap,
         hari: hari,
@@ -48,7 +48,7 @@ class PrayerTimeCache extends HiveObject {
         isya: isya,
       );
 
-  factory PrayerTimeCache.fromEntity(PrayerTimeModel model,
+  factory PrayerTimeCache.fromEntity(PrayerTime model,
       {String? province, String? city}) {
     return PrayerTimeCache()
       ..day = model.day

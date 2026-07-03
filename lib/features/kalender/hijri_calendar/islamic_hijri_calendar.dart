@@ -1,5 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';

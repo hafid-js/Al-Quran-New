@@ -1,5 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/utils/constants/shadow_theme.dart';
+import 'package:alquran_new/core/constants/shadow_theme.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

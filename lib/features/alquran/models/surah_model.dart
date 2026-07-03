@@ -88,9 +88,9 @@ enum TempatTurun { MADINAH, MEKAH }
 extension TempatTurunX on TempatTurun {
   static TempatTurun fromString(String? value) {
     switch (value?.toLowerCase()) {
-      case 'madinah':
+      case 'Madinah':
         return TempatTurun.MADINAH;
-      case 'mekah':
+      case 'Mekah':
         return TempatTurun.MEKAH;
       default:
         return TempatTurun.MEKAH;

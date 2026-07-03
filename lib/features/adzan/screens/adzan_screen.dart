@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:alquran_new/features/adzan/adzan_controller.dart';
+import 'package:alquran_new/features/adzan/controllers/adzan_controller.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
 import 'package:flutter/material.dart';

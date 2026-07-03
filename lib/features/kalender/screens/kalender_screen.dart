@@ -1,5 +1,6 @@
 import 'package:alquran_new/features/kalender/hijri_calendar/islamic_hijri_calendar.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
@@ -32,7 +33,7 @@ class KalenderScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: Responsive.padding(context), vertical: 16),
           child: IslamicHijriCalendar(
                         defaultBorder: HexColor.fromHex("#132e3a"),
                         defaultBackColor: HexColor.fromHex("#132e3a"),

@@ -1,12 +1,14 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
+import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/core/widgets/search_bar.dart';
+import 'package:alquran_new/core/constants/shadow_extension.dart';
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/features/doa/widgets/category_filter.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 
 class DoaScreen extends StatefulWidget {
   const DoaScreen({super.key});
@@ -24,8 +26,11 @@ class _DoaScreenState extends State<DoaScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final scale = Responsive.scale(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: false,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -41,20 +46,20 @@ class _DoaScreenState extends State<DoaScreen> {
         title: Row(
           children: [
             Container(
-              height: 36,
-              width: 36,
+              height: 36 * scale,
+              width: 36 * scale,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.menu_book_rounded,
-                size: 20,
+                size: 20 * scale,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
 
-            const SizedBox(width: 10),
+            SizedBox(width: 10 * scale),
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +69,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                 Obx(() {
                   if (controller.isLoading.value) {
-                    return const SizedBox(height: 10);
+                    return SizedBox(height: 10 * scale);
                   }
 
                   return Text(
@@ -81,53 +86,19 @@ class _DoaScreenState extends State<DoaScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            padding: EdgeInsets.symmetric(
+              horizontal: Responsive.padding(context),
+              vertical: 15 * scale,
+            ),
 
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 55,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: context.shadow.small,
-                        ),
-
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-
-                          child: TextField(
-                            onChanged: controller.search,
-                            style: const TextStyle(color: Colors.white),
-
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.search,
-                                color: HexColor.fromHex("#7c97a6"),
-                              ),
-
-                              hintText: "Cari Doa...",
-
-                              hintStyle: TextStyle(
-                                color: HexColor.fromHex("#7c97a6"),
-                                fontSize: 14,
-                              ),
-
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                AppSearchBar(
+                  onChanged: controller.search,
+                  hintText: "Cari Doa...",
                 ),
 
-                const SizedBox(height: 10),
+                SizedBox(height: 10 * scale),
 
                 Obx(() {
                   final categories =
@@ -143,7 +114,7 @@ class _DoaScreenState extends State<DoaScreen> {
                   );
                 }),
 
-                const SizedBox(height: 10),
+                SizedBox(height: 10 * scale),
 
                 Expanded(
                   child: Obx(() {
@@ -173,10 +144,10 @@ class _DoaScreenState extends State<DoaScreen> {
                                       mainContentSliversBuilder: (context) => [
                                         SliverToBoxAdapter(
                                           child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 25,
+                                            padding: EdgeInsets.only(
+                                              right: 20 * scale,
+                                              left: 20 * scale,
+                                              top: 25 * scale,
                                             ),
 
                                             child: Column(
@@ -192,7 +163,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                   ).textTheme.titleMedium,
                                                 ),
 
-                                                const SizedBox(height: 5),
+                                                SizedBox(height: 5 * scale),
 
                                                 Text(
                                                   doa.grup,
@@ -202,7 +173,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                   ).textTheme.labelSmall,
                                                 ),
 
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
 
                                                 Container(
                                                   width: double.infinity,
@@ -220,7 +191,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          12,
+                                                          12 * scale,
                                                         ),
                                                   ),
 
@@ -235,7 +206,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                       style: TextStyle(
                                                         fontFamily: fontFamily,
-                                                        fontSize: 27,
+                                                        fontSize: 27 * scale,
                                                         color: Theme.of(context)
                                                             .textTheme
                                                             .titleLarge
@@ -248,7 +219,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                   ),
                                                 ),
 
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
 
                                                 Text(
                                                   doa.tr,
@@ -261,17 +232,23 @@ class _DoaScreenState extends State<DoaScreen> {
                                                   ),
                                                 ),
 
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
 
                                                 Text(
                                                   doa.idn,
 
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.labelMedium,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelMedium!
+                                                      .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.color,
+                                                      ),
                                                 ),
 
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
 
                                                 Container(
                                                   width: double.infinity,
@@ -289,7 +266,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          12,
+                                                          12 * scale,
                                                         ),
                                                   ),
 
@@ -312,7 +289,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                   ),
                                                 ),
 
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
                                                 Wrap(
                                                   spacing: 6,
                                                   runSpacing: 6,
@@ -342,7 +319,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                                     );
                                                   }).toList(),
                                                 ),
-                                                const SizedBox(height: 20),
+                                                SizedBox(height: 20 * scale),
                                               ],
                                             ),
                                           ),
@@ -354,12 +331,14 @@ class _DoaScreenState extends State<DoaScreen> {
                               },
 
                               child: Container(
-                                height: 80,
+                                height: 80 * scale,
 
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).cardColor,
                                   boxShadow: context.shadow.small,
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(
+                                    16 * scale,
+                                  ),
                                 ),
 
                                 child: Row(
@@ -371,12 +350,12 @@ class _DoaScreenState extends State<DoaScreen> {
                                         ),
 
                                         leading: Container(
-                                          height: 45,
-                                          width: 45,
+                                          height: 45 * scale,
+                                          width: 45 * scale,
 
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              12 * scale,
                                             ),
 
                                             color: Theme.of(
@@ -440,7 +419,7 @@ class _DoaScreenState extends State<DoaScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                           ],
                         );
                       },

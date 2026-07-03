@@ -1,24 +1,24 @@
 import 'package:alquran_new/features/alquran/models/detail_surah_model.dart';
 
-enum TempatTurun { madinah, mekah }
+enum TempatTurun { Madinah, Mekah }
 
 extension TempatTurunX on TempatTurun {
   static TempatTurun fromString(String? value) {
     switch (value?.toLowerCase()) {
-      case 'madinah':
-        return TempatTurun.madinah;
-      case 'mekah':
-        return TempatTurun.mekah;
+      case 'Madinah':
+        return TempatTurun.Madinah;
+      case 'Mekah':
+        return TempatTurun.Mekah;
       default:
-        return TempatTurun.mekah;
+        return TempatTurun.Mekah;
     }
   }
 
   String get name {
     switch (this) {
-      case TempatTurun.madinah:
+      case TempatTurun.Madinah:
         return 'Madinah';
-      case TempatTurun.mekah:
+      case TempatTurun.Mekah:
         return 'Mekah';
     }
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
-import 'package:alquran_new/features/lokasi/location_controller.dart';
+import 'package:alquran_new/features/lokasi/controllers/location_controller.dart';
 import 'package:alquran_new/features/lokasi/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

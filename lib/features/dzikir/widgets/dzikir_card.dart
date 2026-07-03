@@ -1,4 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
+import 'package:alquran_new/features/dzikir/controllers/matsurat_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +21,7 @@ class DzikirCard extends StatefulWidget {
     required this.ukuranTeksLatinTerjemah,
     this.showLatin = true,
     this.showTerjemah = true,
+    this.isBold = true,
     this.onIncrement,
   });
 
@@ -31,6 +34,7 @@ class DzikirCard extends StatefulWidget {
   final String arti;
   final bool showLatin;
   final bool showTerjemah;
+  final bool isBold;
   final VoidCallback? onIncrement;
   final double ukuranTeksArab;
   final double ukuranTeksLatinTerjemah;
@@ -38,11 +42,12 @@ class DzikirCard extends StatefulWidget {
   @override
   State<DzikirCard> createState() => _DzikirCardState();
 }
-
 class _DzikirCardState extends State<DzikirCard> {
+
   @override
   Widget build(BuildContext context) {
     final SettingsController setting = Get.find<SettingsController>();
+         final _controller = Get.find<MatsuratController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
     return Container(
@@ -109,24 +114,30 @@ class _DzikirCardState extends State<DzikirCard> {
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              "${widget.arab}",
-              softWrap: true,
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: widget.ukuranTeksArab,
-                fontFamily: fontFamily,
-              ),
-            ),
+                  widget.arab,
+                  softWrap: true,
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: widget.isBold ? FontWeight.bold : FontWeight.w200,
+                    fontFamily: fontFamily,
+                    height: 2,
+                    fontSize: widget.ukuranTeksArab,
+                  ),
+                ),
           ),
           if (widget.showLatin) ...[
             SizedBox(height: 10),
             Text(
               "${widget.latin}",
               style: TextStyle(
-                color: Colors.white,
-                fontSize: widget.ukuranTeksLatinTerjemah,
+                color: Theme.of(context)
+                                                                    .colorScheme
+                                                                    .primary,
+               fontSize:
+                                                                    Responsive.fontSize(
+                                                                      context,
+                                                                      phone: widget.ukuranTeksLatinTerjemah
+                                                                    ),
                 fontFamily: fontFamily,
               ),
             ),
@@ -135,11 +146,14 @@ class _DzikirCardState extends State<DzikirCard> {
             SizedBox(height: 10),
             Text(
               "${widget.arti}",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: widget.ukuranTeksLatinTerjemah,
-                fontFamily: fontFamily,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontSize:
+                                                                    Responsive.fontSize(
+                                                                      context,
+                                                                      phone: widget.ukuranTeksLatinTerjemah,
+                                                                    ),
+                  fontFamily: fontFamily,
+                ),
             ),
           ],
           SizedBox(height: 10),

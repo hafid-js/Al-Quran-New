@@ -1,27 +1,26 @@
 import 'package:alquran_new/binding/doa_binding.dart';
 import 'package:alquran_new/binding/pemutar_audio_binding.dart';
 import 'package:alquran_new/binding/surah_binding.dart';
+import 'package:alquran_new/core/constants/shadow_extension.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
+import 'package:alquran_new/core/widgets/error_view.dart';
+import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/core/widgets/section_header.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
-import 'package:alquran_new/features/dzikir/dzikir_screen.dart';
-import 'package:alquran_new/features/dzikir/matsurat_screen.dart';
-import 'package:alquran_new/features/icon/icon_screen.dart';
-import 'package:alquran_new/features/icon/widgets/all_icon_islamic.dart';
+import 'package:alquran_new/features/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/features/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/features/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
-import 'package:alquran_new/features/home/repository/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/widgets/prayer_item.dart';
 import 'package:alquran_new/features/kalender/screens/kalender_screen.dart';
-import 'package:alquran_new/features/lokasi/lokasi_screen.dart';
+import 'package:alquran_new/features/lokasi/screens/lokasi_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/screens/pemutar_audio_screen.dart';
 import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,9 +52,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  final controller = Get.put(
-    PrayerTimeController(repo: PrayerTimeRepository()),
-  );
+  final controller = Get.put(PrayerTimeController());
 
   final List<Map<String, dynamic>> menus = [
     {
@@ -104,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "icon": Icons.bookmarks_rounded,
       "page": () => const BookmarkScreen(),
     },
-     {
+    {
       "title": "Dzikir",
       "icon": FlutterIslamicIcons.solidPrayingPerson,
       "page": () => const MatsuratScreen(),
@@ -163,16 +160,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 );
               }
               if (controller.errorMessage.value != null) {
-                return Scaffold(
-                  body: Center(
-                    child: Text("Error: ${controller.errorMessage.value}"),
-                  ),
+                return ErrorView(
+                  message: controller.errorMessage.value!,
+                  onRetry: controller.fetchPrayerTimes,
                 );
               }
               if (controller.todayPrayer.value == null) {
                 return const Scaffold(body: Center(child: Text("Data kosong")));
               }
-              return _buildContent(context);
+              return SafeArea(child: _buildContent(context));
             }),
             const Positioned(bottom: 0, left: 0, right: 0, child: PlayerBar()),
           ],
@@ -182,9 +178,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildContent(BuildContext context) {
+    final pad = Responsive.padding(context);
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(right: 16, left: 16, bottom: 20),
+        padding: EdgeInsets.only(right: pad, left: pad, bottom: 20),
         child: Column(
           children: [
             _buildCityRow(context),
@@ -397,48 +394,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildJadwalHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              height: 35,
-              width: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: Icon(
-                Icons.access_time_filled_outlined,
-                color: Theme.of(context).colorScheme.primary,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              "Jadwal Sholat",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
-        ),
-        GestureDetector(
-          onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
-          child: Container(
-            height: 35,
-            width: 35,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            child: Icon(
-              Icons.notifications,
-              color: Theme.of(context).colorScheme.primary,
-              size: 20,
-            ),
+    return SectionHeader(
+      icon: Icons.access_time_filled_outlined,
+      title: "Jadwal Sholat",
+      trailing: GestureDetector(
+        onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
+        child: Container(
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          child: Icon(
+            Icons.notifications,
+            color: Theme.of(context).colorScheme.primary,
+            size: 20,
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -457,18 +431,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: Stack(
           children: [
             GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: Responsive.gridColumns(context, phone: 3),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 7,
-              padding: const EdgeInsets.only(
-                right: 18,
-                left: 18,
-                top: 5,
+              crossAxisSpacing: Responsive.value(context, phone: 2, tablet: 8),
+              mainAxisSpacing: Responsive.value(context, phone: 7, tablet: 12),
+              padding: EdgeInsets.only(
+                right: Responsive.value(context, phone: 18, tablet: 24),
+                left: Responsive.value(context, phone: 18, tablet: 24),
+                top: Responsive.value(context, phone: 5, tablet: 12),
                 bottom: 5,
               ),
-              childAspectRatio: 1,
+              childAspectRatio: Responsive.value(context, phone: 1, tablet: 1.2),
               children: [
                 PrayerItemWidget(
                   nextPrayer: nextPrayer,
@@ -530,78 +504,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget _buildMenuSection(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                  child: Icon(
-                    Icons.grid_view_rounded,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text("Menu", style: Theme.of(context).textTheme.titleMedium),
-              ],
-            ),
-            // InkWell(
-            //   borderRadius: BorderRadius.circular(12),
-            //   onTap: () => setState(() => showAllMenus = !showAllMenus),
-            //   child: Container(
-            //     padding: const EdgeInsets.symmetric(
-            //       horizontal: 10,
-            //       vertical: 5,
-            //     ),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(12),
-            //       color: Theme.of(context).colorScheme.surface.withAlpha(20),
-            //     ),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Text(
-            //           showAllMenus ? "Sembunyikan" : "Lihat Semua",
-            //           style: TextStyle(
-            //             color: Theme.of(context).colorScheme.primary,
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 12,
-            //           ),
-            //         ),
-            //         const SizedBox(width: 5),
-            //         AnimatedRotation(
-            //           turns: showAllMenus ? 0.5 : 0,
-            //           duration: Duration(milliseconds: 250),
-            //           child: Icon(
-            //             Icons.arrow_circle_down_rounded,
-            //             size: 20,
-            //             color: Theme.of(context).colorScheme.primary,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
+        SectionHeader(icon: Icons.grid_view_rounded, title: "Menu"),
         const SizedBox(height: 20),
         AnimatedSize(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           child: GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: Responsive.gridColumns(context, phone: 3, tablet: 4),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.9,
+            crossAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
+            mainAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
+            childAspectRatio: Responsive.value(context, phone: 0.9, tablet: 1.0),
             padding: EdgeInsets.zero,
             children: menus
                 .map((menu) => _buildMenuItem(context, menu))
@@ -614,12 +528,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             child: GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: Responsive.gridColumns(context, phone: 3, tablet: 4),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.9,
+              crossAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
+              mainAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
+              childAspectRatio: Responsive.value(context, phone: 0.9, tablet: 1.0),
               padding: EdgeInsets.zero,
               children: nextMenus
                   .map((menu) => _buildMenuItem(context, menu))

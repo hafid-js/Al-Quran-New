@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class SuratPilihanCard extends StatefulWidget {
     required this.ayat,
     required this.nama,
     required this.teksArab,
+    this.isBold = true,
     required this.teksLatin,
     required this.teksIndonesia,
     required this.ukuranTeksArab,
@@ -25,6 +27,7 @@ class SuratPilihanCard extends StatefulWidget {
   final Ayat ayat;
   final String nama;
   final String teksArab;
+  final bool isBold;
   final String teksLatin;
   final String teksIndonesia;
   final VoidCallback? onIncrement;
@@ -83,14 +86,15 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
 
                     return kondisi == "stop"
                         ? IconButton(
-                              onPressed: () {
-                                controller.playAudio(widget.ayat);
-                              },
-                              icon: Icon(
-                                Icons.play_circle_filled_rounded,
-                                color: Theme.of(context).colorScheme.primary, size: 28,
-                              ),
-                            )
+                            onPressed: () {
+                              controller.playAudio(widget.ayat);
+                            },
+                            icon: Icon(
+                              Icons.play_circle_filled_rounded,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 28,
+                            ),
+                          )
                         : SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
@@ -139,44 +143,57 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
             ],
           ),
           SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(left: 18),
-              child: Text(
-                "${widget.teksArab}",
-                softWrap: true,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: widget.ukuranTeksArab,
-                  fontFamily: fontFamily,
-                  height: 2,
+          Obx(() {
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 18),
+                    child: Text(
+                      "${widget.teksArab}",
+                      softWrap: true,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: widget.isBold ? FontWeight.bold : null,
+                        fontSize: widget.ukuranTeksArab,
+                        fontFamily: fontFamily,
+                        height: 2,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          if (controller.latin.value) ...[
-            SizedBox(height: 10),
-            Text(
-              "${widget.teksLatin}",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                fontSize: 14,
-                fontFamily: fontFamily,
-              ),
-            ),
-          ],
-          if (controller.terjemah.value) ...[
-            SizedBox(height: 10),
-            Text(
-              "${widget.teksIndonesia}",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: 12,
-                fontFamily: fontFamily,
-              ),
-            ),
-          ],
+                if (controller.latin.value) ...[
+                  SizedBox(height: 10),
+                  Text(
+                    "${widget.teksLatin}",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: Responsive.fontSize(
+                        context,
+                        phone: controller.ukuranLatinTerjemah.value,
+                      ),
+                      fontFamily: fontFamily,
+                    ),
+                  ),
+                ],
+                if (controller.terjemah.value) ...[
+                  SizedBox(height: 10),
+                  Text(
+                    "${widget.teksIndonesia}",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: Responsive.fontSize(
+                        context,
+                        phone: controller.ukuranLatinTerjemah.value,
+                      ),
+                      fontFamily: fontFamily,
+                    ),
+                  ),
+                ],
+              ],
+            );
+          }),
         ],
       ),
     );

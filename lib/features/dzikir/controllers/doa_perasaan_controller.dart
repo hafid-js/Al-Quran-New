@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:alquran_new/core/constants/api_endpoints.dart';
+import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
+import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/dzikir/models/doa_perasaan_model.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart' as http;
 
 class DoaPerasaanController extends GetxController {
   final String type;
@@ -29,6 +30,7 @@ class DoaPerasaanController extends GetxController {
   RxBool get terjemah => _ukuran.terjemah;
   RxBool get getar => _ukuran.getar;
   RxBool get tasbih => _ukuran.tasbih;
+  RxBool get arabBold => _ukuran.arabBold;
 
   String get title {
     switch (type) {
@@ -118,21 +120,26 @@ class DoaPerasaanController extends GetxController {
     try {
       isLoading.value = true;
       error.value = '';
-      final response = await http.get(Uri.parse(_url));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        data.value = jsonList.map((e) => DoaPerasaanModel.fromJson(e)).toList();
-        hitungList.value = List.filled(data.length, 0);
-        currentIndex.value = 0;
-        _saveCache();
-      } else if (data.isEmpty) {
-        error.value = 'Gagal memuat data (${response.statusCode})';
-      }
+      final client = Get.find<DioClient>();
+      final result = await client.get('', customBaseUrl: _url, responseType: ResponseType.plain);
+
+      result.when(
+        success: (response) {
+          final List<dynamic> jsonList = json.decode(response.data as String);
+          data.value = jsonList.map((e) => DoaPerasaanModel.fromJson(e)).toList();
+          hitungList.value = List.filled(data.length, 0);
+          currentIndex.value = 0;
+          _saveCache();
+        },
+        failure: (message, statusCode) {
+          if (data.isEmpty) {
+            error.value = message;
+          }
+        },
+      );
     } catch (e) {
       if (data.isEmpty) {
-        if (e is SocketException || e is HttpException) {
-          error.value = 'Periksa Koneksi Jaringan Anda';
-        } else if (e is FormatException) {
+        if (e is FormatException) {
           error.value = 'Data yang diterima tidak valid';
         } else {
           error.value = 'Terjadi kesalahan: $e';

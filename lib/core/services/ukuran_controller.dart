@@ -8,6 +8,7 @@ class UkuranController extends GetxController {
   static const _keyShowTerjemah = 'tampilan_terjemah';
   static const _keyGetar = 'getar_saat_tap';
   static const _keyTasbih = 'tasbih_scroll';
+  static const _keyArabBold = 'arab_bold';
   static const _defaultArab = 18.0;
   static const _defaultLatin = 14.0;
 
@@ -19,6 +20,7 @@ class UkuranController extends GetxController {
   final terjemah = true.obs;
   final getar = true.obs;
   final tasbih = true.obs;
+  final arabBold = true.obs;
 
   @override
   void onInit() {
@@ -29,6 +31,7 @@ class UkuranController extends GetxController {
     terjemah.value = _box.read(_keyShowTerjemah) ?? true;
     getar.value = _box.read(_keyGetar) ?? true;
     tasbih.value = _box.read(_keyTasbih) ?? true;
+        arabBold.value = _box.read(_keyArabBold) ?? true;
 
     ever(ukuranTeksArab, (val) => _box.write(_keyArab, val));
     ever(ukuranLatinTerjemah, (val) => _box.write(_keyLatin, val));
@@ -36,5 +39,6 @@ class UkuranController extends GetxController {
     ever(terjemah, (val) => _box.write(_keyShowTerjemah, val));
     ever(getar, (val) => _box.write(_keyGetar, val));
     ever(tasbih, (val) => _box.write(_keyTasbih, val));
+    ever(arabBold, (val) => _box.write(_keyArabBold, val));
   }
 }

@@ -5,6 +5,7 @@ import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/doa/data/local/datasource/doa_local_datasource.dart';
 import 'package:alquran_new/features/doa/domain/entities/doa.dart';
 import 'package:alquran_new/features/doa/domain/usecases/get_all_doa.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class DoaController extends GetxController {
@@ -52,7 +53,8 @@ class DoaController extends GetxController {
       } else if (result is Failure<List<Doa>>) {
         Get.snackbar('Error', result.message);
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('fetchDoa error: $e');
     } finally {
       isLoading.value = false;
     }

@@ -1,12 +1,15 @@
 import 'package:alquran_new/binding/surah_binding.dart';
-import 'package:alquran_new/core/ui/loading.dart';
-import 'package:alquran_new/core/utils/constants/shadow_extension.dart';
+import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/core/widgets/search_bar.dart';
+import 'package:alquran_new/core/constants/shadow_extension.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
+
 import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/screens/detail_surat_screen.dart';
 import 'package:alquran_new/features/alquran/widgets/category_filter.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,8 +55,10 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scale = Responsive.scale(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: false,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -99,192 +104,202 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
         ),
       ),
 
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 55,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: context.shadow.small,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextField(
-                            onChanged: controller.search,
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.search,
-                                color: HexColor.fromHex("#7c97a6"),
-                              ),
-                              hintText: "Cari Surat...",
-                              hintStyle: TextStyle(
-                                color: HexColor.fromHex("#7c97a6"),
-                                fontSize: 14,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.padding(context),
+                vertical: 15,
+              ),
+              child: Column(
+                children: [
+                  AppSearchBar(
+                    onChanged: controller.search,
+                    hintText: "Cari Surat...",
+                  ),
 
-                const SizedBox(height: 10),
+                  SizedBox(height: 10 * scale),
 
-                Obx(() {
-                  return CategoryFilter(
-                    categories: categories,
-                    activeCategory: controller.activeCategory.value,
-                    onCategorySelected: (category) {
-                      controller.filter(category);
-                    },
-                  );
-                }),
-
-                const SizedBox(height: 15),
-
-                Expanded(
-                  child: Obx(() {
-                    return ListView.builder(
-                      itemCount: controller.filteredSurah.length,
-                      itemBuilder: (context, index) {
-                        final surah = controller.filteredSurah[index];
-                        final selectedIndex = setting.fontSelected.value;
-                        final fontFamily = fontArabs[selectedIndex]["title"];
-
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () => Get.to(
-                                () => DetailSuratScreen(),
-                                binding: SurahBinding(),
-                                arguments: {"surah": surah.nomor, "ayat": null},
-                              ),
-                              child: Container(
-                                height: 90,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: context.shadow.small,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 16,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Text(
-                                                surah.nomor.toString(),
-                                                style: TextStyle(
-                                                  color: Theme.of(
-                                                    context,
-                                                  ).colorScheme.primary,
-                                                  fontSize: TextTheme.of(
-                                                    context,
-                                                  ).labelSmall?.fontSize,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.brightness_5_sharp,
-                                                size: 45,
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.surface,
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                surah.namaLatin,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.titleSmall,
-                                              ),
-                                              const SizedBox(height: 3),
-                                              Text(
-                                                "${surah.jumlahAyat} Ayat",
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.labelSmall,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            surah.nama,
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: Theme.of(
-                                                context,
-                                              ).textTheme.titleLarge?.fontSize,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                            ),
-                                          ),
-                                          Text(
-                                            surah.arti,
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.labelSmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        );
+                  Obx(() {
+                    return CategoryFilter(
+                      categories: categories,
+                      activeCategory: controller.activeCategory.value,
+                      onCategorySelected: (category) {
+                        controller.filter(category);
                       },
                     );
                   }),
-                ),
-              ],
+
+                  SizedBox(height: 15 * scale),
+
+                  Expanded(
+                    child: Obx(() {
+                      return ListView.builder(
+                        itemCount: controller.filteredSurah.length,
+                        itemBuilder: (context, index) {
+                          final surah = controller.filteredSurah[index];
+                          final selectedIndex = setting.fontSelected.value;
+                          final fontFamily = fontArabs[selectedIndex]["title"];
+
+                          return Column(
+                            children: [
+                              InkWell(
+                                onTap: () => Get.to(
+                                  () => DetailSuratScreen(),
+                                  binding: SurahBinding(),
+                                  arguments: {
+                                    "surah": surah.nomor,
+                                    "ayat": null,
+                                  },
+                                ),
+                                child: Container(
+                                  height: 90 * scale,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(
+                                      16 * scale,
+                                    ),
+                                    boxShadow: context.shadow.small,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16 * scale,
+                                      vertical: 16 * scale,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Text(
+                                                  surah.nomor.toString(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                                    fontSize: 14 * scale,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                    Icons.brightness_5_sharp,
+                                                    size: 45 * scale,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.surface,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(width: 12 * scale),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  surah.namaLatin,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.copyWith(
+                                                          fontSize: 16 * scale,
+                                                      ),
+                                                ),
+                                                SizedBox(height: 3),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                  "${surah.jumlahAyat} Ayat",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall
+                                                      ?.copyWith(
+                                                          fontSize: 12 * scale,
+                                                      ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: surah.tempatTurun.name == "Mekah" ? Theme.of(context).colorScheme.primary.withAlpha(120) : Colors.blue.withAlpha(120)
+                                                  ),
+                                                  child: Text(
+                                                  surah.tempatTurun.name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.copyWith(
+                                                          fontSize: 8 * scale,
+                                                      ),
+                                                ),
+                                                )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              surah.nama,
+                                              style: TextStyle(
+                                                fontFamily: fontFamily,
+                                                fontSize: 20 * scale,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                              ),
+                                            ),
+                                            Text(
+                                              surah.arti,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall
+                                                  ?.copyWith(
+                                                    fontSize: 12,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10 * scale,
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Obx(() {
-            if (!controller.isLoading.value) {
-              return const SizedBox();
-            }
+            Obx(() {
+              if (!controller.isLoading.value) {
+                return const SizedBox();
+              }
 
-            return const Positioned.fill(child: Loading());
-          }),
+              return const Positioned.fill(child: Loading());
+            }),
 
-          const Positioned(bottom: 0, left: 0, right: 0, child: PlayerBar()),
-        ],
+            const Positioned(bottom: 0, left: 0, right: 0, child: PlayerBar()),
+          ],
+        ),
       ),
     );
   }

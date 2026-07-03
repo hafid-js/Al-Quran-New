@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:alquran_new/features/lokasi/services/location_service.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +27,8 @@ class LocationController extends GetxController {
 
     try {
       provinces.value = await LocationService.getProvinces();
-    } catch (_) {
+    } catch (e) {
+      debugPrint('fetchProvinces error: $e');
     } finally {
       isLoadingProvince.value = false;
     }
@@ -38,7 +40,8 @@ class LocationController extends GetxController {
     try {
       final data = await LocationService.getCities(province);
       cities.value = data;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('fetchCities error: $e');
       cities.clear();
     } finally {
       isLoadingCity.value = false;

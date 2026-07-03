@@ -1,9 +1,11 @@
-import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/widgets/error_view.dart';
+import 'package:alquran_new/core/widgets/search_bar.dart';
 import 'package:alquran_new/features/dzikir/controllers/dzikir_controller.dart';
 import 'package:alquran_new/features/dzikir/screens/dzikir_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 
 class DzikirScreen extends StatefulWidget {
   const DzikirScreen({super.key});
@@ -30,9 +32,11 @@ class _DzikirScreenState extends State<DzikirScreen> {
     return categories.where((c) {
       final items = controller.dzikirList.where((e) => e.kategori == c);
       return c.toLowerCase().contains(q) ||
-          items.any((e) =>
-              e.judul.toLowerCase().contains(q) ||
-              e.arti.toLowerCase().contains(q));
+          items.any(
+            (e) =>
+                e.judul.toLowerCase().contains(q) ||
+                e.arti.toLowerCase().contains(q),
+          );
     }).toList();
   }
 
@@ -58,8 +62,11 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scale = Responsive.scale(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: false,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -75,15 +82,17 @@ class _DzikirScreenState extends State<DzikirScreen> {
         title: Row(
           children: [
             Container(
-              height: 36,
-              width: 36,
+              height: 36 * scale,
+              width: 36 * scale,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(
+                      10 * scale,
+                    ),
                 color: Theme.of(context).colorScheme.surface,
               ),
               child: Icon(
                 Icons.mosque_rounded,
-                size: 20,
+                size: 20 * scale,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -96,10 +105,12 @@ class _DzikirScreenState extends State<DzikirScreen> {
               children: [
                 Text("Dzikir", style: Theme.of(context).textTheme.titleLarge),
 
-                Obx(() => Text(
-                  "${controller.isLoading.value ? '-' : categories.length} Kategori",
-                  style: Theme.of(context).textTheme.labelSmall,
-                )),
+                Obx(
+                  () => Text(
+                    "${controller.isLoading.value ? '-' : categories.length} Kategori",
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
               ],
             ),
           ],
@@ -113,16 +124,16 @@ class _DzikirScreenState extends State<DzikirScreen> {
               child: GestureDetector(
                 onTap: _resetAllDzikirCounts,
                 child: Container(
-                  height: 40,
-                  width: 40,
+                  height: 40 * scale,
+                  width: 40 * scale,
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12 * scale),
                   ),
                   child: Icon(
                     Icons.rotate_left_outlined,
                     color: Theme.of(context).textTheme.labelLarge?.color,
-                    size: 20,
+                    size: 20 * scale,
                   ),
                 ),
               ),
@@ -137,72 +148,26 @@ class _DzikirScreenState extends State<DzikirScreen> {
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.cloud_off_rounded, size: 64, color: Colors.grey),
-                  const SizedBox(height: 16),
-                  Text(
-                    controller.errorMessage.value,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: controller.fetchDzikir,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text("Coba Lagi"),
-                  ),
-                ],
-              ),
-            ),
+          return ErrorView(
+            message: controller.errorMessage.value,
+            onRetry: controller.fetchDzikir,
           );
         }
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+           padding: EdgeInsets.symmetric(
+             horizontal: Responsive.padding(context),
+             vertical: 15,
+           ),
 
           child: Column(
             children: [
-              Container(
-                height: 55,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).cardColor,
-                ),
-
-                child: Align(
-                  alignment: Alignment.centerLeft,
-
-                  child: TextField(
-                    onChanged: (v) => searchQuery.value = v,
-                    style: const TextStyle(color: Colors.white),
-
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.search,
-                        color: HexColor.fromHex("#7c97a6"),
-                      ),
-
-                      hintText: "Cari Dzikir...",
-
-                      hintStyle: TextStyle(
-                        color: HexColor.fromHex("#7c97a6"),
-                        fontSize: 14,
-                      ),
-
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
+              AppSearchBar(
+                onChanged: (v) => searchQuery.value = v,
+                hintText: "Cari Dzikir...",
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 15 * scale),
 
               Expanded(
                 child: Obx(() {
@@ -216,7 +181,9 @@ class _DzikirScreenState extends State<DzikirScreen> {
                       final count = itemCount(category);
 
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: EdgeInsets.only(
+                          bottom: 10 * scale,
+                        ),
 
                         child: InkWell(
                           onTap: () {
@@ -227,40 +194,44 @@ class _DzikirScreenState extends State<DzikirScreen> {
                           },
 
                           child: Container(
-                            height: 80,
+                            height: 80 * scale,
 
                             decoration: BoxDecoration(
                               color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(
+                                16 * scale,
+                              ),
                             ),
 
                             child: Row(
                               children: [
                                 Expanded(
                                   child: ListTile(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 16),
+                                    contentPadding: const EdgeInsets.only(
+                                      left: 16,
+                                    ),
 
                                     leading: Container(
-                                      height: 45,
-                                      width: 45,
+                                      height: 45 * scale,
+                                      width: 45 * scale,
 
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(
+                                          12 * scale,
+                                        ),
 
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.surface,
                                       ),
 
                                       child: Center(
                                         child: Icon(
                                           Icons.auto_awesome_mosaic_rounded,
-                                          size: 20,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          size: 20 * scale,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                       ),
                                     ),
@@ -269,15 +240,13 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                       category,
 
                                       style: TextStyle(
-                                        fontSize: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.fontSize,
+                                        fontSize: Theme.of(
+                                          context,
+                                        ).textTheme.labelMedium?.fontSize,
                                         fontWeight: FontWeight.w600,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.color,
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge?.color,
                                       ),
 
                                       overflow: TextOverflow.ellipsis,
@@ -288,15 +257,13 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                       "$count Dzikir",
 
                                       style: TextStyle(
-                                        fontSize: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall
-                                            ?.fontSize,
+                                        fontSize: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall?.fontSize,
 
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall
-                                            ?.color,
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall?.color,
                                       ),
                                     ),
                                   ),
@@ -306,10 +273,9 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                   padding: const EdgeInsets.only(right: 16),
                                   child: Icon(
                                     Icons.chevron_right_rounded,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.color,
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall?.color,
                                   ),
                                 ),
                               ],

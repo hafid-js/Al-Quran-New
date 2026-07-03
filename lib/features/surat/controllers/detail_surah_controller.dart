@@ -42,8 +42,7 @@ class DetailSurahController extends GetxController {
   RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
   RxBool get latin => _ukuran.latin;
   RxBool get terjemah => _ukuran.terjemah;
-  RxBool get getar => _ukuran.getar;
-  RxBool get tasbih => _ukuran.tasbih;
+  RxBool get arabBold => _ukuran.arabBold;
 
   String getAyatAudioState(int nomorAyat) {
     return ayatAudioStates.putIfAbsent(nomorAyat, () => "stop".obs).value;

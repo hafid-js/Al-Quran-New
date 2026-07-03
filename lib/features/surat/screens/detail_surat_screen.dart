@@ -1,11 +1,15 @@
-import 'package:alquran_new/core/ui/loading.dart';
+import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/core/widgets/settings_slider.dart';
+import 'package:alquran_new/core/widgets/settings_switch.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 const scrollDuration = Duration(seconds: 2);
 
@@ -16,7 +20,8 @@ class DetailSuratScreen extends StatefulWidget {
   State<DetailSuratScreen> createState() => _DetailSuratScreenState();
 }
 
-class _DetailSuratScreenState extends State<DetailSuratScreen> {
+class _DetailSuratScreenState extends State<DetailSuratScreen>
+    with SingleTickerProviderStateMixin {
   final controller = Get.find<DetailSurahController>();
 
   final SettingsController setting = Get.find<SettingsController>();
@@ -38,6 +43,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
 
   final ScrollController _scrollController = ScrollController();
   double appBarOpacity = 0.0;
+
+  late AnimationController _animationController;
+  late Animation<double> _rotation;
+  late Animation<double> _scale;
 
   @override
   void initState() {
@@ -68,6 +77,27 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
         });
       });
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _rotation = Tween<double>(
+      begin: 0,
+      end: 0.5,
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+
+    _scale = Tween<double>(
+      begin: 1,
+      end: 1.25,
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   void scrollToAyat(int nomorAyat) {
@@ -82,10 +112,12 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
   Set<int> expandedIndexes = {};
   @override
   Widget build(BuildContext context) {
+    final scale = Responsive.scale(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: true,
 
       body: Obx(() {
         final selectedIndex = setting.fontSelected.value;
@@ -109,276 +141,486 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
 
         return Stack(
           children: [
-            Column(
-              children: [
-                Container(
-                  height: 280,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        // HexColor.fromHex("#23867c"),
-                        // HexColor.fromHex("#37b0a5"),
-                        Theme.of(context).colorScheme.primary.withAlpha(160),
-                        Theme.of(context).colorScheme.primary.withAlpha(190),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 40),
-                      Text(
-                        data.nama,
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: 35,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white,
+            SafeArea(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        left: 10,
+                        right: 8,
+                        bottom: 20,
+                      ),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(
+                              context,
+                            ).colorScheme.primary.withAlpha(160),
+                            Theme.of(
+                              context,
+                            ).colorScheme.primary.withAlpha(190),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        data.namaLatin,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        data.arti,
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                      ),
-                      SizedBox(height: 12),
-                      Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            height: 25,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(40),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.mosque,
-                                    size: 14,
-                                    color: Colors.white,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () => Get.back(),
+                                child: Container(
+                                  height: Responsive.boxSize(
+                                    context,
+                                    phone: 40,
                                   ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    data.tempatTurun,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
+                                  width: Responsive.boxSize(context, phone: 40),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(
+                                      12 * scale,
                                     ),
                                   ),
-                                ],
+                                  child: Icon(
+                                    Icons.arrow_circle_left_rounded,
+                                    color: Colors.white,
+                                    size: Responsive.iconSize(
+                                      context,
+                                      phone: 22,
+                                    ),
+                                  ),
+                                ),
                               ),
+                              GestureDetector(
+                                onTap: () async {
+                                  _animationController.forward();
+                                  await WoltModalSheet.show(
+                                    context: context,
+                                    pageListBuilder: (context) => [
+                                      SliverWoltModalSheetPage(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).cardColor,
+                                        hasTopBarLayer: false,
+                                        mainContentSliversBuilder: (context) => [
+                                          SliverToBoxAdapter(
+                                            child: StatefulBuilder(
+                                              builder: (context, modalSetState) {
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    16,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          "Pengaturan",
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .titleLarge!
+                                                              .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      SettingsSlider(
+                                                        label:
+                                                            "Ukuran Teks Arab",
+                                                        value: controller
+                                                            .ukuranTeksArab
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          modalSetState(() {
+                                                            controller
+                                                                    .ukuranTeksArab
+                                                                    .value =
+                                                                value;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      SettingsSlider(
+                                                        label:
+                                                            "Ukuran Teks latin & Terjemah",
+                                                        value: controller
+                                                            .ukuranLatinTerjemah
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          modalSetState(() {
+                                                            controller
+                                                                    .ukuranLatinTerjemah
+                                                                    .value =
+                                                                value;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      SettingsSwitchTile(
+                                                        title: "Font Arab Bold",
+                                                        value: controller
+                                                            .arabBold
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          modalSetState(() {
+                                                            controller
+                                                                    .arabBold
+                                                                    .value =
+                                                                value;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      SettingsSwitchTile(
+                                                        title: "Tampilan Latin",
+                                                        value: controller
+                                                            .latin
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          modalSetState(() {
+                                                            controller
+                                                                    .latin
+                                                                    .value =
+                                                                value;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      SettingsSwitchTile(
+                                                        title:
+                                                            "Tampilan Terjemah",
+                                                        value: controller
+                                                            .terjemah
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          modalSetState(() {
+                                                            controller
+                                                                    .terjemah
+                                                                    .value =
+                                                                value;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                  if (mounted) {
+                                    await _animationController.reverse();
+                                  }
+                                },
+                                child: Container(
+                                  height: Responsive.boxSize(
+                                    context,
+                                    phone: 40,
+                                  ),
+                                  width: Responsive.boxSize(context, phone: 40),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(
+                                      12 * scale,
+                                    ),
+                                  ),
+                                  child: RotationTransition(
+                                    turns: _rotation,
+                                    child: ScaleTransition(
+                                      scale: _scale,
+                                      child: Icon(
+                                        Icons.settings_rounded,
+                                        color: Colors.white,
+                                        size: Responsive.iconSize(
+                                          context,
+                                          phone: 22,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            data.nama,
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: Responsive.fontSize(context, phone: 35),
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
                             ),
                           ),
-                          SizedBox(width: 15),
-                          Container(
-                            height: 25,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(40),
-                              borderRadius: BorderRadius.circular(12),
+                          SizedBox(
+                            height: Responsive.boxSize(context, phone: 10),
+                          ),
+                          Text(
+                            data.namaLatin,
+                            style: TextStyle(
+                              fontSize: Responsive.fontSize(context, phone: 22),
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.feed_outlined,
-                                    size: 14,
-                                    color: Colors.white,
+                          ),
+                          SizedBox(height: 5 * scale),
+                          Text(
+                            data.arti,
+                            style: TextStyle(
+                              fontSize: Responsive.fontSize(context, phone: 16),
+                              color: Colors.white70,
+                            ),
+                          ),
+                          SizedBox(height: 12 * scale),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 25 * scale,
+                                width: 100 * scale,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withAlpha(40),
+                                  borderRadius: BorderRadius.circular(
+                                    12 * scale,
                                   ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "${data.jumlahAyat.toString()} Ayat",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.mosque,
+                                        size: 14,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 5 * scale),
+                                      Text(
+                                        data.tempatTurun,
+                                        style: TextStyle(
+                                          fontSize: Responsive.fontSize(
+                                            context,
+                                            phone: 14,
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
+                              SizedBox(width: 15 * scale),
+                              Container(
+                                height: 25 * scale,
+                                width: 100 * scale,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withAlpha(40),
+                                  borderRadius: BorderRadius.circular(
+                                    12 * scale,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.feed_outlined,
+                                        size: 14,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 5 * scale),
+                                      Text(
+                                        "${data.jumlahAyat.toString()} Ayat",
+                                        style: TextStyle(
+                                          fontSize: Responsive.fontSize(
+                                            context,
+                                            phone: 14,
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: OrientationBuilder(
-                    builder: (context, orientation) => Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: ScrollablePositionedList.builder(
-                            itemScrollController: itemScrollController,
-                            itemPositionsListener: itemPositionsListener,
-                            scrollOffsetController: scrollOffsetController,
-                            scrollDirection: Axis.vertical,
-                            itemCount: data.ayat.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                if (data.namaLatin == "Al-Fatihah") {
-                                  return SizedBox(height: 16);
-                                } else {
-                                  return Padding(
-                                    padding: EdgeInsets.all(16),
-                                    child: Container(
-                                      padding: EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(16),
+                  Expanded(
+                    child: OrientationBuilder(
+                      builder: (context, orientation) => Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: ScrollablePositionedList.builder(
+                              itemScrollController: itemScrollController,
+                              itemPositionsListener: itemPositionsListener,
+                              scrollOffsetController: scrollOffsetController,
+                              scrollDirection: Axis.vertical,
+                              itemCount: data.ayat.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  if (data.namaLatin == "Al-Fatihah") {
+                                    return SizedBox(height: 16 * scale);
+                                  } else {
+                                    return Padding(
+                                      padding: EdgeInsets.all(
+                                        Responsive.padding(context),
                                       ),
-                                      child: Text(
-                                        "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Theme.of(
-                                            context,
-                                          ).textTheme.titleLarge?.color,
-                                          fontSize: 25,
+                                      child: Container(
+                                        padding: EdgeInsets.all(
+                                          Responsive.padding(context),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).cardColor,
+                                          borderRadius: BorderRadius.circular(
+                                            16 * scale,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.titleLarge?.color,
+                                            fontSize: Responsive.fontSize(
+                                              context,
+                                              phone: 25,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 }
-                              }
 
-                              final ayat = data.ayat[index - 1];
-                              final surah = data;
-                              final isOpen = expandedIndexes.contains(index);
-                              final tafsir = controller.tafsirList
-                                  .firstWhereOrNull(
-                                    (t) => t.ayat == ayat.nomorAyat,
-                                  );
+                                final ayat = data.ayat[index - 1];
+                                final surah = data;
+                                final isOpen = expandedIndexes.contains(index);
+                                final tafsir = controller.tafsirList
+                                    .firstWhereOrNull(
+                                      (t) => t.ayat == ayat.nomorAyat,
+                                    );
+                                final pad = Responsive.padding(context);
 
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: Theme.of(context).cardColor,
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: pad,
                                       ),
-                                      child: Padding(
-                                        padding: EdgeInsetsGeometry.symmetric(
-                                          horizontal: 16,
-                                          vertical: 16,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            16 * scale,
+                                          ),
+                                          color: Theme.of(context).cardColor,
                                         ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    Text(
-                                                      ayat.nomorAyat.toString(),
-                                                      style: TextStyle(
-                                                        color: Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.brightness_5_sharp,
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.surface,
-                                                      size: 40,
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          if (expandedIndexes
-                                                              .contains(
-                                                                index,
-                                                              )) {
-                                                            expandedIndexes
-                                                                .remove(index);
-                                                          } else {
-                                                            expandedIndexes.add(
-                                                              index,
-                                                            );
-                                                          }
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                        height: 40,
-                                                        width: 40,
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                12,
-                                                              ),
+                                        child: Padding(
+                                          padding: EdgeInsetsGeometry.symmetric(
+                                            horizontal: Responsive.cardPadding(
+                                              context,
+                                            ),
+                                            vertical: Responsive.cardPadding(
+                                              context,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      Text(
+                                                        ayat.nomorAyat
+                                                            .toString(),
+                                                        style: TextStyle(
                                                           color: Theme.of(
                                                             context,
-                                                          ).colorScheme.surface,
-                                                        ),
-                                                        child: Icon(
-                                                          Icons
-                                                              .menu_book_rounded,
-                                                          color: isOpen
-                                                              ? Colors.amber
-                                                              : Theme.of(
-                                                                      context,
-                                                                    )
-                                                                    .textTheme
-                                                                    .labelLarge
-                                                                    ?.color,
+                                                          ).colorScheme.primary,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize:
+                                                              Responsive.fontSize(
+                                                                context,
+                                                                phone: 14,
+                                                              ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(width: 8),
-                                                    Obx(() {
-                                                      final isSaved =
-                                                          bookmarkController
-                                                              .isBookmarked(
-                                                                nomor,
-                                                                ayat.nomorAyat,
-                                                              );
-                                                      return InkWell(
+                                                      Icon(
+                                                        Icons
+                                                            .brightness_5_sharp,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.surface,
+                                                        size:
+                                                            Responsive.iconSize(
+                                                              context,
+                                                              phone: 40,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      InkWell(
                                                         onTap: () {
-                                                          bookmarkController
-                                                              .toggle(
-                                                                nomor,
-                                                                surah.nama,
-                                                                surah.namaLatin,
-                                                                ayat.nomorAyat,
-                                                              );
+                                                          setState(() {
+                                                            if (expandedIndexes
+                                                                .contains(
+                                                                  index,
+                                                                )) {
+                                                              expandedIndexes
+                                                                  .remove(
+                                                                    index,
+                                                                  );
+                                                            } else {
+                                                              expandedIndexes
+                                                                  .add(index);
+                                                            }
+                                                          });
                                                         },
                                                         child: Container(
-                                                          height: 40,
-                                                          width: 40,
+                                                          height:
+                                                              Responsive.boxSize(
+                                                                context,
+                                                                phone: 40,
+                                                              ),
+                                                          width:
+                                                              Responsive.boxSize(
+                                                                context,
+                                                                phone: 40,
+                                                              ),
                                                           decoration: BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius.circular(
-                                                                  12,
+                                                                  12 * scale,
                                                                 ),
                                                             color:
                                                                 Theme.of(
@@ -388,11 +630,14 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                     .surface,
                                                           ),
                                                           child: Icon(
-                                                            isSaved
-                                                                ? Icons.bookmark
-                                                                : Icons
-                                                                      .bookmark_border,
-                                                            color: isSaved
+                                                            Icons
+                                                                .menu_book_rounded,
+                                                            size:
+                                                                Responsive.iconSize(
+                                                                  context,
+                                                                  phone: 22,
+                                                                ),
+                                                            color: isOpen
                                                                 ? Colors.amber
                                                                 : Theme.of(
                                                                         context,
@@ -402,298 +647,428 @@ class _DetailSuratScreenState extends State<DetailSuratScreen> {
                                                                       ?.color,
                                                           ),
                                                         ),
-                                                      );
-                                                    }),
-                                                    SizedBox(width: 8),
-                                                    Obx(() {
-                                                      final kondisi = controller
-                                                          .getAyatAudioState(
-                                                            ayat.nomorAyat,
-                                                          );
-
-                                                      return kondisi == "stop"
-                                                          ? Container(
-                                                              height: 40,
-                                                              width: 40,
-                                                              decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      12,
-                                                                    ),
-                                                                color: Theme.of(
+                                                      ),
+                                                      SizedBox(
+                                                        width: 8 * scale,
+                                                      ),
+                                                      Obx(() {
+                                                        final isSaved =
+                                                            bookmarkController
+                                                                .isBookmarked(
+                                                                  nomor,
+                                                                  ayat.nomorAyat,
+                                                                );
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            bookmarkController
+                                                                .toggle(
+                                                                  nomor,
+                                                                  surah.nama,
+                                                                  surah
+                                                                      .namaLatin,
+                                                                  ayat.nomorAyat,
+                                                                );
+                                                          },
+                                                          child: Container(
+                                                            height:
+                                                                Responsive.boxSize(
                                                                   context,
-                                                                ).colorScheme.surface,
-                                                              ),
-                                                              child: IconButton(
-                                                                onPressed: () {
-                                                                  controller
-                                                                      .playAudio(
-                                                                        ayat,
-                                                                      );
-                                                                },
-                                                                icon: Icon(
-                                                                  Icons
-                                                                      .play_circle_filled_rounded,
+                                                                  phone: 40,
+                                                                ),
+                                                            width:
+                                                                Responsive.boxSize(
+                                                                  context,
+                                                                  phone: 40,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    12 * scale,
+                                                                  ),
+                                                              color:
+                                                                  Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .colorScheme
+                                                                      .surface,
+                                                            ),
+                                                            child: Icon(
+                                                              isSaved
+                                                                  ? Icons
+                                                                        .bookmark
+                                                                  : Icons
+                                                                        .bookmark_border,
+                                                              size:
+                                                                  Responsive.iconSize(
+                                                                    context,
+                                                                    phone: 22,
+                                                                  ),
+                                                              color: isSaved
+                                                                  ? Colors.amber
+                                                                  : Theme.of(
+                                                                          context,
+                                                                        )
+                                                                        .textTheme
+                                                                        .labelLarge
+                                                                        ?.color,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }),
+                                                      SizedBox(
+                                                        width: 8 * scale,
+                                                      ),
+                                                      Obx(() {
+                                                        final kondisi = controller
+                                                            .getAyatAudioState(
+                                                              ayat.nomorAyat,
+                                                            );
+
+                                                        return kondisi == "stop"
+                                                            ? Container(
+                                                                height:
+                                                                    Responsive.boxSize(
+                                                                      context,
+                                                                      phone: 40,
+                                                                    ),
+                                                                width:
+                                                                    Responsive.boxSize(
+                                                                      context,
+                                                                      phone: 40,
+                                                                    ),
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        12 *
+                                                                            scale,
+                                                                      ),
                                                                   color: Theme.of(
                                                                     context,
-                                                                  ).colorScheme.primary,
+                                                                  ).colorScheme.surface,
                                                                 ),
-                                                              ),
-                                                            )
-                                                          : SingleChildScrollView(
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  kondisi ==
-                                                                          "playing"
-                                                                      ? IconButton(
-                                                                          onPressed: () {
-                                                                            controller.pauseAudio(
-                                                                              ayat,
-                                                                            );
-                                                                          },
-                                                                          icon: Icon(
-                                                                            Icons.pause,
-                                                                            color: Theme.of(
-                                                                              context,
-                                                                            ).colorScheme.primary,
-                                                                          ),
-                                                                        )
-                                                                      : IconButton(
-                                                                          onPressed: () {
-                                                                            controller.resumeAudio(
-                                                                              ayat,
-                                                                            );
-                                                                          },
-                                                                          icon: Icon(
-                                                                            Icons.play_arrow,
-                                                                            color: Theme.of(
-                                                                              context,
-                                                                            ).colorScheme.primary,
-                                                                          ),
-                                                                        ),
-                                                                  IconButton(
-                                                                    onPressed: () {
-                                                                      controller
-                                                                          .stopAudio(
-                                                                            ayat,
-                                                                          );
-                                                                    },
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .stop,
-                                                                      color: Theme.of(
-                                                                        context,
-                                                                      ).colorScheme.primary,
+                                                                child: IconButton(
+                                                                  onPressed: () {
+                                                                    controller
+                                                                        .playAudio(
+                                                                          ayat,
+                                                                        );
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .play_circle_filled_rounded,
+                                                                    size: Responsive.iconSize(
+                                                                      context,
+                                                                      phone: 22,
                                                                     ),
+                                                                    color: Theme.of(
+                                                                      context,
+                                                                    ).colorScheme.primary,
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            );
-                                                    }),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                                ),
+                                                              )
+                                                            : SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    kondisi ==
+                                                                            "playing"
+                                                                        ? IconButton(
+                                                                            onPressed: () {
+                                                                              controller.pauseAudio(
+                                                                                ayat,
+                                                                              );
+                                                                            },
+                                                                            icon: Icon(
+                                                                              Icons.pause,
+                                                                              size: Responsive.iconSize(
+                                                                                context,
+                                                                                phone: 22,
+                                                                              ),
+                                                                              color: Theme.of(
+                                                                                context,
+                                                                              ).colorScheme.primary,
+                                                                            ),
+                                                                          )
+                                                                        : IconButton(
+                                                                            onPressed: () {
+                                                                              controller.resumeAudio(
+                                                                                ayat,
+                                                                              );
+                                                                            },
+                                                                            icon: Icon(
+                                                                              Icons.play_arrow,
+                                                                              size: Responsive.iconSize(
+                                                                                context,
+                                                                                phone: 22,
+                                                                              ),
+                                                                              color: Theme.of(
+                                                                                context,
+                                                                              ).colorScheme.primary,
+                                                                            ),
+                                                                          ),
+                                                                    IconButton(
+                                                                      onPressed: () {
+                                                                        controller
+                                                                            .stopAudio(
+                                                                              ayat,
+                                                                            );
+                                                                      },
+                                                                      icon: Icon(
+                                                                        Icons
+                                                                            .stop,
+                                                                        size: Responsive.iconSize(
+                                                                          context,
+                                                                          phone:
+                                                                              20,
+                                                                        ),
+                                                                        color: Theme.of(
+                                                                          context,
+                                                                        ).colorScheme.primary,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
 
-                                            SizedBox(height: 15),
-                                            Column(
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Text(
-                                                    ayat.teksArab,
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      fontFamily: fontFamily,
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .titleLarge
-                                                          ?.color,
-                                                      fontSize: 25,
+                                              SizedBox(
+                                                height: Responsive.boxSize(
+                                                  context,
+                                                  phone: 15,
+                                                ),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Obx(() {
+                                                    return Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Text(
+                                                      ayat.teksArab,
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        fontFamily: fontFamily,
+                                                        fontWeight: controller.arabBold.value ? FontWeight.bold : null,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.color,
+                                                        fontSize:
+                                                            Responsive.fontSize(
+                                                              context,
+                                                              phone: controller.ukuranTeksArab.value,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  }),
+                                                  SizedBox(
+                                                    height: Responsive.boxSize(
+                                                      context,
+                                                      phone: 22,
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(height: 20),
-                                                Divider(
-                                                  color: HexColor.fromHex(
-                                                    "#5a7b8a",
-                                                  ).withAlpha(90),
-                                                  thickness: 0.1,
-                                                ),
-                                                SizedBox(height: 10),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        ayat.teksLatin,
-                                                        style: TextStyle(
-                                                          color: Theme.of(
-                                                            context,
-                                                          ).colorScheme.primary,
+                                                  Obx(() {
+                                                    if (controller.latin.value || controller.terjemah.value)
+                                                    return Column(
+                                                      children: [
+                                                         Divider(
+                                                    color: HexColor.fromHex(
+                                                      "#5a7b8a",
+                                                    ).withAlpha(90),
+                                                    thickness: 0.1,
+                                                  ),
+                                                  SizedBox(
+                                                    height: Responsive.boxSize(
+                                                      context,
+                                                      phone: 10,
+                                                    ),
+                                                  ),
+                                                      ],
+                                                    );
+                                                    return SizedBox.shrink();
+                                                  }),
+                                                 
+                                                  Obx(() {
+                                                    return Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        if (controller.latin.value)
+                                                          Text(
+                                                          ayat.teksLatin,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                Responsive.fontSize(
+                                                                  context,
+                                                                  phone: controller.ukuranLatinTerjemah.value,
+                                                                ),
+                                                            color:
+                                                                Theme.of(context)
+                                                                    .colorScheme
+                                                                    .primary,
+                                                          ),
                                                         ),
+                                                        if (controller.latin.value || controller.terjemah.value)
+                                                          SizedBox(
+                                                            height:
+                                                                Responsive.boxSize(
+                                                                  context,
+                                                                  phone: 10,
+                                                                ),
+                                                          ),
+                                                        if (controller.terjemah.value)
+                                                          Text(
+                                                          ayat.teksIndonesia,
+                                                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontSize:
+                                                                    Responsive.fontSize(
+                                                                      context,
+                                                                      phone: controller.ukuranLatinTerjemah.value,
+                                                                    ),
+                  fontFamily: fontFamily,
+                  
+                ),
+                                                          ),
+                                                      ],
+                                                    );
+                                                  }),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (expandedIndexes.contains(index))
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: pad,
+                                        ),
+                                        child: ExpansionTile(
+                                          initiallyExpanded: isOpen,
+                                          onExpansionChanged: (val) {
+                                            setState(() {
+                                              if (val) {
+                                                expandedIndexes.add(index);
+                                              } else {
+                                                expandedIndexes.remove(index);
+                                              }
+                                            });
+                                          },
+                                          tilePadding: EdgeInsets.zero,
+                                          childrenPadding: EdgeInsets.zero,
+                                          minTileHeight: 0,
+                                          visualDensity: VisualDensity.compact,
+                                          shape: Border(),
+                                          collapsedShape: Border(),
+                                          showTrailingIcon: false,
+                                          title: SizedBox.shrink(),
+                                          children: <Widget>[
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber.withAlpha(
+                                                  10,
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(16 * scale),
+                                                ),
+                                              ),
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    Responsive.cardPadding(
+                                                      context,
+                                                    ),
+                                                vertical:
+                                                    Responsive.cardPadding(
+                                                      context,
+                                                    ),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.menu_book_rounded,
+                                                        color: Colors.amber,
+                                                        size:
+                                                            Responsive.iconSize(
+                                                              context,
+                                                              phone: 22,
+                                                            ),
                                                       ),
-                                                      SizedBox(height: 10),
+                                                      SizedBox(
+                                                        width: 10 * scale,
+                                                      ),
                                                       Text(
-                                                        ayat.teksIndonesia,
-                                                        style: Theme.of(
-                                                          context,
-                                                        ).textTheme.labelMedium,
+                                                        "Tafsir",
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              Responsive.fontSize(
+                                                                context,
+                                                                phone: 16,
+                                                              ),
+                                                          color: Colors.amber,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                              ],
+                                                  SizedBox(
+                                                    height: Responsive.boxSize(
+                                                      context,
+                                                      phone: 15,
+                                                    ),
+                                                  ),
+                                                  Obx(() {
+                                                    return Text(
+                                                    tafsir?.teks ??
+                                                        "Tafsir tidak tersedia.",
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          Responsive.fontSize(
+                                                            context,
+                                                            phone: controller.ukuranLatinTerjemah.value,
+                                                          ),
+                                                      color: HexColor.fromHex(
+                                                        "#7c97a6",
+                                                      ),
+                                                    ),
+                                                  );
+                                                  })
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  if (expandedIndexes.contains(index))
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                      child: ExpansionTile(
-                                        initiallyExpanded: isOpen,
-                                        onExpansionChanged: (val) {
-                                          setState(() {
-                                            if (val) {
-                                              expandedIndexes.add(index);
-                                            } else {
-                                              expandedIndexes.remove(index);
-                                            }
-                                          });
-                                        },
-                                        tilePadding: EdgeInsets.zero,
-                                        childrenPadding: EdgeInsets.zero,
-                                        minTileHeight: 0,
-                                        visualDensity: VisualDensity.compact,
-                                        shape: Border(),
-                                        collapsedShape: Border(),
-                                        showTrailingIcon: false,
-                                        title: SizedBox.shrink(),
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.amber.withAlpha(10),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(16),
-                                              ),
-                                            ),
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 16,
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.menu_book_rounded,
-                                                      color: Colors.amber,
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Text(
-                                                      "Tafsir",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.amber,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 15),
-                                                Text(
-                                                  tafsir?.teks ??
-                                                      "Tafsir tidak tersedia.",
-                                                  style: TextStyle(
-                                                    color: HexColor.fromHex(
-                                                      "#7c97a6",
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
 
-                                  SizedBox(height: 20),
-                                ],
-                              );
-                            },
+                                    SizedBox(
+                                      height: Responsive.boxSize(
+                                        context,
+                                        phone: 22,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: 60,
-                  left: 16,
-                  right: 16,
-                  bottom: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: HexColor.fromHex(
-                    "#0c1d27",
-                  ).withValues(alpha: appBarOpacity),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.arrow_circle_left_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.list_alt_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
           ],

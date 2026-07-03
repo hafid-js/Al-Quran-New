@@ -1,5 +1,5 @@
 import 'package:alquran_new/binding/surah_binding.dart';
-import 'package:alquran_new/features/dzikir/detail_surat_pilihan_screen.dart';
+import 'package:alquran_new/features/dzikir/screens/detail_surat_pilihan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

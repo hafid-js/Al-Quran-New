@@ -1,10 +1,11 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/ui/webview_page.dart';
-import 'package:alquran_new/core/utils/constants/app_colors.dart';
+import 'package:alquran_new/core/widgets/webview_page.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 
 class PengaturanAplikasiScreen extends StatefulWidget {
   const PengaturanAplikasiScreen({super.key});
@@ -62,6 +63,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final scale = Responsive.scale(context);
+
     return Obx(() {
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -77,15 +80,15 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
           title: Row(
             children: [
               Container(
-                height: 36,
-                width: 36,
+                height: 36 * scale,
+                width: 36 * scale,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10 * scale),
                   color: Theme.of(context).colorScheme.surface,
                 ),
                 child: Icon(
                   Icons.settings,
-                  size: 20,
+                  size: 20 * scale,
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
@@ -97,7 +100,11 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
 
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(right: 16, left: 16, bottom: 30),
+            padding: EdgeInsets.only(
+              right: Responsive.padding(context),
+              left: Responsive.padding(context),
+              bottom: 30,
+            ),
             child: Column(
               children: [
                 Column(
@@ -107,7 +114,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.headphones_rounded,
-                        size: 24,
+                        size: 24 * scale,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       title: Text(
@@ -122,9 +129,9 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                             controller.qariSelected.value == index;
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: EdgeInsets.only(bottom: 10 * scale),
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16 * scale),
                             onTap: () {
                               controller.changeQari(index);
                             },
@@ -137,7 +144,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                     ? Theme.of(context).colorScheme.surface
                                     : Theme.of(context).cardColor,
 
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16 * scale),
 
                                 border: Border.all(
                                   color: isSelected
@@ -148,17 +155,17 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               ),
 
                               child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
+                                 contentPadding: EdgeInsets.symmetric(
+                                   horizontal: Responsive.padding(context),
+                                 ),
 
                                 leading: isSelected
                                     ? Container(
-                                        height: 36,
-                                        width: 35,
+                                        height: 36 * scale,
+                                        width: 35 * scale,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
-                                            10,
+                                            10 * scale,
                                           ),
                                           color: Theme.of(
                                             context,
@@ -166,18 +173,18 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ),
                                         child: Icon(
                                           Icons.check_circle_rounded,
-                                          size: 20,
+                                          size: 20 * scale,
                                           color: Theme.of(
                                             context,
                                           ).colorScheme.primary,
                                         ),
                                       )
                                     : Container(
-                                        height: 36,
-                                        width: 35,
+                                        height: 36 * scale,
+                                        width: 35 * scale,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
-                                            10,
+                                            10 * scale,
                                           ),
                                           color: isDark
                                               ? HexColor.fromHex("#1A3A4A")
@@ -185,7 +192,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ),
                                         child: Icon(
                                           Icons.mic_none_rounded,
-                                          size: 20,
+                                          size: 20 * scale,
                                           color: HexColor.fromHex("#5A7A8A"),
                                         ),
                                       ),
@@ -232,7 +239,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.text_fields_rounded,
-                        size: 24,
+                        size: 24 * scale,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       title: Text(
@@ -246,22 +253,22 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                         final bool isSelected = controller.fontSelected.value == index;
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: EdgeInsets.only(bottom: 10 * scale),
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16 * scale),
                             onTap: () {
                               controller.changeFont(index);
                             },
 
-                            child: AnimatedContainer(
-                              padding: EdgeInsets.all(5),
-                              duration: const Duration(milliseconds: 250),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.surface
-                                    : Theme.of(context).cardColor,
+                              child: AnimatedContainer(
+                               padding: EdgeInsets.all(5),
+                               duration: const Duration(milliseconds: 250),
+                               decoration: BoxDecoration(
+                                 color: isSelected
+                                     ? Theme.of(context).colorScheme.surface
+                                     : Theme.of(context).cardColor,
 
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16 * scale),
 
                                 border: Border.all(
                                   color: isSelected
@@ -272,17 +279,17 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               ),
 
                               child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
+                                 contentPadding: EdgeInsets.symmetric(
+                                   horizontal: Responsive.padding(context),
+                                 ),
 
                                 leading: isSelected
                                     ? Container(
-                                        height: 36,
-                                        width: 35,
+                                        height: 36 * scale,
+                                        width: 35 * scale,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
-                                            10,
+                                            10 * scale,
                                           ),
                                           color: Theme.of(
                                             context,
@@ -290,18 +297,18 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ),
                                         child: Icon(
                                           Icons.check_circle_rounded,
-                                          size: 20,
+                                          size: 20 * scale,
                                           color: Theme.of(
                                             context,
                                           ).colorScheme.primary,
                                         ),
                                       )
                                     : Container(
-                                        height: 36,
-                                        width: 35,
+                                        height: 36 * scale,
+                                        width: 35 * scale,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
-                                            10,
+                                            10 * scale,
                                           ),
                                           color: isDark
                                               ? HexColor.fromHex("#1A3A4A")
@@ -309,7 +316,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ),
                                         child: Icon(
                                           Icons.text_fields_rounded,
-                                          size: 20,
+                                          size: 20 * scale,
                                           color: HexColor.fromHex("#5A7A8A"),
                                         ),
                                       ),
@@ -356,7 +363,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.headphones_rounded,
-                        size: 24,
+                        size: 24 * scale,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       title: Text(
@@ -384,8 +391,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ? 10
                                         : 0,
                                   ),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(16),
+                                    child: InkWell(
+                                    borderRadius: BorderRadius.circular(16 * scale),
                                     onTap: () {
                                       controller.changeMode(index);
                                     },
@@ -393,7 +400,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       duration: const Duration(
                                         milliseconds: 250,
                                       ),
-                                      padding: const EdgeInsets.symmetric(
+                                      padding: EdgeInsets.symmetric(
                                         vertical: 16,
                                         horizontal: 12,
                                       ),
@@ -403,7 +410,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                 context,
                                               ).colorScheme.surface
                                             : Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius: BorderRadius.circular(16 * scale),
                                         border: Border.all(
                                           color: isSelected
                                               ? Theme.of(
@@ -418,7 +425,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         children: [
                                           Icon(
                                             item["icon"],
-                                            size: 30,
+                                            size: 30 * scale,
                                             color: isSelected
                                                 ? Theme.of(
                                                     context,
@@ -426,14 +433,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                 : HexColor.fromHex("#5A7A8A"),
                                           ),
 
-                                          const SizedBox(height: 10),
+                                          SizedBox(height: 10),
 
                                           Text(
                                             item["title"],
                                             textAlign: TextAlign.center,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 14 * scale,
                                               fontWeight: FontWeight.w500,
                                               color: isSelected
                                                   ? Theme.of(
@@ -468,12 +475,12 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                   controller.colorSelected.value == index;
 
                               return Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 10,
+                                padding: EdgeInsets.only(
+                                  bottom: 10 * scale,
                                   right: 5,
                                 ),
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16 * scale),
                                   onTap: () {
                                     controller.changeColor(
                                       index,
@@ -497,7 +504,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     title: Text(
                                                       'Tentukan Warna',
                                                       style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 18 * scale,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
@@ -555,10 +562,10 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                 );
                                               },
                                               child: AnimatedContainer(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 16,
-                                                  vertical: 12,
-                                                ),
+                                                 padding: EdgeInsets.symmetric(
+                                                   horizontal: Responsive.padding(context),
+                                                   vertical: 12,
+                                                 ),
                                                 duration: const Duration(
                                                   milliseconds: 250,
                                                 ),
@@ -571,7 +578,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                           context,
                                                         ).cardColor,
                                                   borderRadius:
-                                                      BorderRadius.circular(16),
+                                                      BorderRadius.circular(16 * scale),
                                                   border: Border.all(
                                                     color:
                                                         (isSelected &&
@@ -589,25 +596,25 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Container(
-                                                      height: 40,
-                                                      width: 40,
+                                                      height: 40 * scale,
+                                                      width: 40 * scale,
                                                       decoration: BoxDecoration(
                                                         color: currentColor,
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                              30,
+                                                              30 * scale,
                                                             ),
                                                       ),
                                                       child: Icon(
                                                         Icons.edit_rounded,
-                                                        size: 20,
+                                                        size: 20 * scale,
                                                       ),
                                                     ),
                                                     SizedBox(height: 10),
                                                     Text(
                                                       item["name"],
                                                       style: TextStyle(
-                                                        fontSize: 11,
+                                                        fontSize: 11 * scale,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color: isSelected
@@ -641,7 +648,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                         context,
                                                       ).cardColor,
                                                 borderRadius:
-                                                    BorderRadius.circular(16),
+                                                    BorderRadius.circular(16 * scale),
                                                 border: Border.all(
                                                   color:
                                                       (isSelected &&
@@ -659,21 +666,14 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   CircleAvatar(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: item["color"],
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              30,
-                                                            ),
-                                                      ),
-                                                    ),
+                                                    radius: 20 * scale,
+                                                    backgroundColor: item["color"],
                                                   ),
                                                   SizedBox(height: 10),
                                                   Text(
                                                     item["name"],
                                                     style: TextStyle(
-                                                      fontSize: 11,
+                                                      fontSize: 11 * scale,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       color: isSelected
@@ -708,7 +708,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: Icon(
                         Icons.error_rounded,
-                        size: 24,
+                        size: 24 * scale,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       title: Text(
@@ -718,25 +718,25 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     ),
 
                     Container(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(Responsive.cardPadding(context)),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16 * scale),
                       ),
                       child: Column(
                         children: [
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
-                              height: 45,
-                              width: 45,
+                              height: 45 * scale,
+                              width: 45 * scale,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10 * scale),
                                 color: Theme.of(context).colorScheme.surface,
                               ),
                               child: Icon(
                                 Icons.menu_book_rounded,
-                                size: 25,
+                                size: 25 * scale,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
@@ -764,7 +764,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                             children: [
                               Icon(
                                 Icons.email_rounded,
-                                size: 20,
+                                size: 20 * scale,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               SizedBox(width: 10),
@@ -776,7 +776,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           ),
                           SizedBox(height: 10),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
                                 Expanded(
@@ -796,7 +796,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
@@ -833,23 +833,24 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
 }
 
 Widget _menuButton(BuildContext context, IconData icon, String text) {
+  final scale = Responsive.scale(context);
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(8 * scale),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
+        Icon(icon, size: 18 * scale, color: Theme.of(context).colorScheme.primary),
         const SizedBox(width: 8),
         Flexible(
           child: Text(
             text,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12 * scale,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),

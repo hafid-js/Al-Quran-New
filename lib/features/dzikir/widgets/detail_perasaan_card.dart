@@ -1,11 +1,11 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/features/dzikir/controllers/doa_perasaan_controller.dart';
 import 'package:alquran_new/features/dzikir/models/doa_perasaan_model.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:share_plus/share_plus.dart';
 
 class DetailPerasaanCard extends StatelessWidget {
@@ -14,6 +14,7 @@ class DetailPerasaanCard extends StatelessWidget {
   final int index;
   final int itemCount;
   final double ukuranTeksArab;
+  final bool isBold;
   final double ukuranTeksLatinTerjemah;
 
   const DetailPerasaanCard({
@@ -23,6 +24,7 @@ class DetailPerasaanCard extends StatelessWidget {
     required this.index,
     required this.itemCount,
     required this.ukuranTeksArab,
+    this.isBold = true,
     required this.ukuranTeksLatinTerjemah,
   });
 
@@ -156,7 +158,10 @@ class DetailPerasaanCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            Align(
+            Obx(() {
+              return Column(
+                children: [
+                  Align(
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: EdgeInsets.only(left: 18),
@@ -165,6 +170,7 @@ class DetailPerasaanCard extends StatelessWidget {
                   softWrap: true,
                   textAlign: TextAlign.right,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: isBold ? FontWeight.bold : FontWeight.w200,
                     fontFamily: fontFamily,
                     height: 2,
                     fontSize: ukuranTeksArab,
@@ -177,8 +183,13 @@ class DetailPerasaanCard extends StatelessWidget {
               Text(
                 item.latin,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  fontSize: ukuranTeksLatinTerjemah,
+                  fontSize:
+                                                                    Responsive.fontSize(
+                                                                      context,
+                                                                      phone: controller.ukuranLatinTerjemah.value,
+                                                                    ),
                   fontFamily: fontFamily,
+                  color: Theme.of(context).colorScheme.primary
                 ),
               ),
             ],
@@ -187,7 +198,11 @@ class DetailPerasaanCard extends StatelessWidget {
               Text(
                 item.arti,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize: ukuranTeksLatinTerjemah,
+                 fontSize:
+                                                                    Responsive.fontSize(
+                                                                      context,
+                                                                      phone: controller.ukuranLatinTerjemah.value,
+                                                                    ),
                   fontFamily: fontFamily,
                 ),
               ),
@@ -261,6 +276,9 @@ class DetailPerasaanCard extends StatelessWidget {
                 ),
               ),
             ),
+                ],
+              );
+            })
           ],
         ),
       ),
