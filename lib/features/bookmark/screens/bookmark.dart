@@ -12,7 +12,7 @@ class BookmarkScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scale = Responsive.scale(context);
-    BookmarkController controller = Get.put(BookmarkController());
+    BookmarkController controller = Get.find<BookmarkController>();
     final SettingsController setting = Get.find<SettingsController>();
 
     return Scaffold(
@@ -113,7 +113,7 @@ class BookmarkScreen extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Responsive.padding(context),
-            vertical: 20,
+            vertical: 10,
           ),
           child: Column(
             children: [
@@ -134,7 +134,7 @@ class BookmarkScreen extends StatelessWidget {
                           onTap: () {
                             controller.openBookmark(bm);
                           },
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           leading: InkWell(
                             borderRadius: BorderRadius.circular(16),
                             onTap: () {},

@@ -76,7 +76,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                 ),
                 flexibleSpace: FlexibleSpaceBar(
                   background: Padding(
-                    padding: EdgeInsets.only(top: 50, right: 16, left: 16),
+                    padding: EdgeInsets.only(top: 50, right: 10, left: 10),
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -249,8 +249,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                               child: SingleChildScrollView(
                                                 child: Padding(
                                                   padding: EdgeInsets.symmetric(
-                                                    horizontal: 16,
-                                                    vertical: 16,
+                                                    horizontal: 10,
+                                                    vertical: 10,
                                                   ),
                                                   child: Column(
                                                     mainAxisSize:
@@ -509,7 +509,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
 
                     Widget buildActiveCardContent() {
                       return Padding(
-                        padding: EdgeInsets.only(top: 10, right: 16, left: 16),
+                        padding: EdgeInsets.only(top: 10, right: 10, left: 10),
                         child: Column(
                           children: [
                             Container(
@@ -660,8 +660,8 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                           Padding(
                             padding: EdgeInsets.only(
                               top: 10,
-                              right: 16,
-                              left: 16,
+                              right: 10,
+                              left: 10,
                             ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(16),

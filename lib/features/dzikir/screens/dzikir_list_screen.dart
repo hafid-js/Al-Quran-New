@@ -111,7 +111,7 @@ class _DzikirListScreenState extends State<DzikirListScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         child: ListView.builder(
           itemCount: list.length,
           itemBuilder: (context, index) {
@@ -131,7 +131,7 @@ class _DzikirListScreenState extends State<DzikirListScreen> {
                     children: [
                       Expanded(
                         child: ListTile(
-                          contentPadding: const EdgeInsets.only(left: 16),
+                          contentPadding: const EdgeInsets.only(left: 10),
                           leading: Container(
                             height: 45,
                             width: 45,

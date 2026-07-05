@@ -347,7 +347,7 @@ class _DoaScreenState extends State<DoaScreen> {
                                     Expanded(
                                       child: ListTile(
                                         contentPadding: const EdgeInsets.only(
-                                          left: 16,
+                                          left: 10,
                                         ),
 
                                         leading: Container(

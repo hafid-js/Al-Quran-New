@@ -41,7 +41,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_sugro')),
           child: Container(
                           width: double.infinity,
-            padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
+            padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
@@ -78,7 +78,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_sugro')),
           child: Container(
                   width: double.infinity,
-            padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
+            padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
@@ -121,7 +121,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_kubro')),
           child: Container(
                     width: double.infinity,
-            padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
+            padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
@@ -158,7 +158,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_kubro')),
           child: Container(
                     width: double.infinity,
-            padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
+            padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
@@ -234,7 +234,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
             
           ],
         ),
-        actionsPadding: EdgeInsets.only(right: 16),
+        actionsPadding: EdgeInsets.only(right: 10),
         actions: [
           Align(
                     alignment: Alignment.centerRight,
@@ -289,7 +289,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

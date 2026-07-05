@@ -31,6 +31,11 @@ class DetailPerasaanCard extends StatelessWidget {
   String buildShareText() {
   final buffer = StringBuffer();
 
+  buffer
+  ..writeln(controller.title)
+  ..writeln();
+  
+
   buffer.writeln(item.arab);
 
   if (controller.latin.value) {
@@ -55,7 +60,9 @@ class DetailPerasaanCard extends StatelessWidget {
   buffer
     ..writeln()
     ..writeln("📚 Sumber")
-    ..writeln(item.sumber);
+    ..writeln(item.sumber)
+    ..writeln()
+    ..writeln("Hafid Tech - Al-Barokah App");
 
   return buffer.toString();
 }
@@ -68,7 +75,7 @@ class DetailPerasaanCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: index < itemCount - 1 ? 10 : 0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
@@ -121,8 +128,8 @@ class DetailPerasaanCard extends StatelessWidget {
                           SnackBar(
                             behavior: SnackBarBehavior.floating,
                             margin: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
+                              left: 10,
+                              right: 10,
                               bottom: 5,
                             ),
                             duration: const Duration(seconds: 1),
@@ -147,6 +154,7 @@ class DetailPerasaanCard extends StatelessWidget {
   onPressed: () {
     SharePlus.instance.share(
       ShareParams(
+        title: controller.title,
         text: buildShareText(),
       ),
     );
@@ -188,7 +196,6 @@ class DetailPerasaanCard extends StatelessWidget {
                                                                       context,
                                                                       phone: controller.ukuranLatinTerjemah.value,
                                                                     ),
-                  fontFamily: fontFamily,
                   color: Theme.of(context).colorScheme.primary
                 ),
               ),
@@ -203,7 +210,7 @@ class DetailPerasaanCard extends StatelessWidget {
                                                                       context,
                                                                       phone: controller.ukuranLatinTerjemah.value,
                                                                     ),
-                  fontFamily: fontFamily,
+
                 ),
               ),
             ],

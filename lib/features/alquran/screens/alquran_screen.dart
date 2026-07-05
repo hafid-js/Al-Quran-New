@@ -165,8 +165,8 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 16 * scale,
-                                      vertical: 16 * scale,
+                                      horizontal: 10 * scale,
+                                      vertical: 10 * scale,
                                     ),
                                     child: Row(
                                       mainAxisAlignment:

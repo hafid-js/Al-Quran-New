@@ -17,6 +17,8 @@ class NotificationService {
   static const String _channelId = 'prayer_notification';
   static const String _channelName = 'Notifikasi Sholat';
 
+  bool _canScheduleExact = false;
+
   static const Map<String, String> _soundResources = {
     'default': 'alarmbeep',
     'adzan': 'adzan',
@@ -59,18 +61,29 @@ class NotificationService {
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
-    await androidPlugin?.requestNotificationsPermission();
+    final granted = await androidPlugin?.requestNotificationsPermission();
+    if (granted == false) {
+      debugPrint('[NotificationService] POST_NOTIFICATIONS permission denied');
+    }
   }
 
   Future<void> _requestExactAlarmPermission() async {
-    if (Platform.isAndroid) {
-      final androidPlugin = _notificationsPlugin
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
-      await androidPlugin?.requestExactAlarmsPermission();
+    if (!Platform.isAndroid) return;
+    final androidPlugin = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    final result = await androidPlugin?.requestExactAlarmsPermission();
+    _canScheduleExact = result ?? false;
+    if (!_canScheduleExact) {
+      debugPrint('[NotificationService] Exact alarm not available, using inexact scheduling');
     }
   }
+
+  AndroidScheduleMode get _androidScheduleMode =>
+      _canScheduleExact
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle;
 
   String _resolveSoundResource(String? soundType) {
     if (soundType == null) return '';
@@ -208,7 +221,7 @@ class NotificationService {
       body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: notificationDetails,
-     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: _androidScheduleMode,
     );
   }
 

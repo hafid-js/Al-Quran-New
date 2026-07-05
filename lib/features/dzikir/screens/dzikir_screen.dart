@@ -208,7 +208,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                 Expanded(
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.only(
-                                      left: 16,
+                                      left: 10,
                                     ),
 
                                     leading: Container(
@@ -270,7 +270,7 @@ class _DzikirScreenState extends State<DzikirScreen> {
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 16),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Icon(
                                     Icons.chevron_right_rounded,
                                     color: Theme.of(

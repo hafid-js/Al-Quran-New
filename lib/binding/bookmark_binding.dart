@@ -5,7 +5,6 @@ import 'package:alquran_new/features/alquran/data/repositories/surah_repository_
 import 'package:alquran_new/features/alquran/domain/repositories/surah_repository.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
 import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
-import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +26,6 @@ class BookmarkBinding extends Bindings {
 
     Get.lazyPut(() => GetDetailSurah(Get.find()));
     Get.lazyPut(() => GetTafsir(Get.find()));
-    Get.put(BookmarkController(), permanent: true);
     Get.lazyPut(() => DetailSurahController());
     Get.lazyPut(() => NetworkController());
   }

@@ -96,6 +96,7 @@ class _KiblatScreenState extends State<KiblatScreen>
                   ),
                   const SizedBox(width: 6),
                   const Text("Kompas"),
+                  
                 ],
               ),
             ),
@@ -116,6 +117,9 @@ class _KiblatScreenState extends State<KiblatScreen>
         return Column(
           children: [
             _deviceWarning(controller),
+
+            if (controller.hasHeadingData.value)
+            
 
             Expanded(
               child: TabBarView(

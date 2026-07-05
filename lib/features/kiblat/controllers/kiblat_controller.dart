@@ -26,6 +26,8 @@ class KiblatController extends GetxController with WidgetsBindingObserver  {
   StreamSubscription? _positionSubscription;
   Timer? _sensorTimeout;
   bool _hasCompassData = false;
+  double _smoothedHeading = -1;
+  static const double _filterAlpha = 0.85;
 
   @override
 void onInit() {
@@ -174,6 +176,7 @@ Future<void> _recheckLocation() async {
     _sensorTimeout?.cancel();
 
     _hasCompassData = false;
+    _smoothedHeading = -1;
     hasHeadingData.value = false;
     errorMessage.value = '';
     compassAvailable.value = true;
@@ -195,15 +198,32 @@ Future<void> _recheckLocation() async {
     _headingSubscription = stream.listen((CompassEvent event) {
       final h = event.heading;
 
-      // print('Heading: $h');
-
       if (h == null || h < 0) {
         hasHeadingData.value = false;
         return;
       }
+
       _hasCompassData = true;
       hasHeadingData.value = true;
-      heading.value = h;
+
+      if (_smoothedHeading < 0) {
+        _smoothedHeading = h;
+      } else {
+        double diff = h - _smoothedHeading;
+        if (diff > 180) {
+          diff -= 360;
+        } else if (diff < -180) {
+          diff += 360;
+        }
+        _smoothedHeading = _smoothedHeading + diff * (1 - _filterAlpha);
+        if (_smoothedHeading < 0) {
+          _smoothedHeading += 360;
+        } else if (_smoothedHeading >= 360) {
+          _smoothedHeading -= 360;
+        }
+      }
+
+      heading.value = _smoothedHeading;
     });
 
     _sensorTimeout = Timer(const Duration(seconds: 15), () {

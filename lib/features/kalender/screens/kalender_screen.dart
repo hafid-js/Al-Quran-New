@@ -38,7 +38,7 @@ class KalenderScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Responsive.padding(context),
-            vertical: 16,
+            vertical: 10,
           ),
           child: IslamicHijriCalendar(
             defaultBorder: HexColor.fromHex("#132e3a"),

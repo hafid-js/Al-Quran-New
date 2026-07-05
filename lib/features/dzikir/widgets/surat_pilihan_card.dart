@@ -45,7 +45,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["nama"];
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),

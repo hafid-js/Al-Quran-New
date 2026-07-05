@@ -105,8 +105,8 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
                   padding: EdgeInsets.only(
-                    right: 16,
-                    left: 16,
+                    right: 10,
+                    left: 10,
                     bottom: 16,
                     top: 80,
                   ),
@@ -290,7 +290,7 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
             SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
                       ...List.generate(data.ayat.length, (i) {

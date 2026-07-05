@@ -45,7 +45,7 @@ class CategoryFilter extends StatelessWidget {
                     : Theme.of(context).cardColor,
                 foregroundColor: isActive ? Colors.white : HexColor.fromHex("#7c97a6"),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                  horizontal: 10,
                   vertical: 8,
                 ),
                 shape: RoundedRectangleBorder(

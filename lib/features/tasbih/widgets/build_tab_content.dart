@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 Widget buildTabContent(String name, int counter) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
+    padding: const EdgeInsets.symmetric(horizontal: 10),
     child: Column(
       children: [
         const SizedBox(height: 14),
@@ -16,8 +16,8 @@ Widget buildTabContent(String name, int counter) {
             color: HexColor.fromHex("#132e3a"),
           ),
           padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
+            horizontal: 10,
+            vertical: 10,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

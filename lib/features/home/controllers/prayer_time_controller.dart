@@ -263,6 +263,8 @@ class PrayerTimeController extends GetxController {
 
   bool _isPrayerEnabled(String prayer) {
     switch (prayer) {
+      case "Imsak":
+        return settingsController.imsak.value;
       case "Subuh":
         return settingsController.subuh.value;
       case "Dzuhur":
@@ -299,6 +301,7 @@ class PrayerTimeController extends GetxController {
   Future<void> _schedulePrayerNotifications(PrayerTime item) async {
     final now = DateTime.now();
     final prayers = {
+      "Imsak": item.imsak,
       "Subuh": item.subuh,
       "Dzuhur": item.dzuhur,
       "Ashar": item.ashar,
@@ -307,6 +310,7 @@ class PrayerTimeController extends GetxController {
     };
 
     final prayerIds = {
+      "Imsak": 6,
       "Subuh": 1,
       "Dzuhur": 2,
       "Ashar": 3,
@@ -320,10 +324,11 @@ class PrayerTimeController extends GetxController {
         prayerTime = prayerTime.add(const Duration(days: 1));
       }
       if (_isPrayerEnabled(entry.key)) {
+        final isImsak = entry.key == "Imsak";
         await NotificationService().scheduleNotification(
           id: prayerIds[entry.key]!,
           title: "Al-Barokah: Quran & Sholat",
-          body: "Saatnya sholat ${entry.key}",
+          body: isImsak ? "Waktu imsak tiba, bersiaplah untuk berpuasa" : "Saatnya sholat ${entry.key}",
           scheduledDate: prayerTime,
           soundType: settingsController.soundType.value,
           notificationMode: settingsController.notificationMode.value,

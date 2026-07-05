@@ -4,7 +4,7 @@ import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/constants/app_theme.dart';
-
+import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
@@ -63,6 +63,8 @@ void main() async {
     debugPrint('NotificationService.init error: $e');
   }
 
+  Get.put(UkuranController(), permanent: true);
+
   try {
     final settingsService = SettingsService();
     final settingsController = SettingsController(settingsService);
@@ -93,8 +95,6 @@ void _configureSystemUI() {
 }
 
 void _registerDependencies() {
-  Get.put(UkuranController(), permanent: true);
-
   final dioClient = DioClient();
   Get.put(dioClient);
 
@@ -112,10 +112,9 @@ void _registerDependencies() {
 
   Get.put(GetPrayerTimes(prayerTimeRepository));
 
-  Get.put(
-    SettingsController(SettingsService()),
-    permanent: true,
-  );
+  if (!Get.isRegistered<SettingsController>()) {
+    Get.put(SettingsController(SettingsService()), permanent: true);
+  }
 
   Get.put(NotificationSettingsService());
 
@@ -124,6 +123,8 @@ void _registerDependencies() {
       Get.find<NotificationSettingsService>(),
     ),
   );
+
+  Get.put(BookmarkController(), permanent: true);
 }
 
 class MyApp extends StatefulWidget {

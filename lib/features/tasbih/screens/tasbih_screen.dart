@@ -3,6 +3,7 @@ import 'package:alquran_new/features/pengaturan/controllers/settings_controller.
 import 'package:alquran_new/features/tasbih/widgets/tab_item.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
@@ -223,7 +224,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Dzikir",
+                  "Tasbih",
                   style: TextStyle(
                     color: Theme.of(context).textTheme.titleLarge?.color,
                     fontSize: 22,
@@ -231,7 +232,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                   ),
                 ),
                 Text(
-                  "Total Dzikir: ${totalSemuaDzikir()}",
+                  "Total Tasbih: ${totalSemuaDzikir()}",
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
@@ -267,7 +268,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
@@ -291,7 +292,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                       context,
                     ).textTheme.labelMedium,
                     tabs: const [
-                      TabItem(title: "Dzikir Ba'da Sholat"),
+                      TabItem(title: "Tasbih Ba'da Sholat"),
                       TabItem(title: 'Tasbih Bebas'),
                     ],
                   ),
@@ -303,7 +304,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
               child: TabBarView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         SingleChildScrollView(
@@ -434,6 +435,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                               onTap: freeTasbih >= endTasbih
                                   ? null
                                   : () {
+                                      HapticFeedback.lightImpact();
                                       setState(() {
                                         tasbihCounter();
                                       });
@@ -566,7 +568,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
       child: Container(
         height: 50,
 
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
 
         decoration: count >= 33
             ? BoxDecoration(
@@ -736,6 +738,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                 onTap: count >= 33
                     ? null
                     : () {
+                        HapticFeedback.lightImpact();
                         setState(() {
                           increment();
                         });
@@ -805,7 +808,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Progress Dzikir",
+                                "Progress Tasbih",
                                 style: Theme.of(context).textTheme.labelSmall,
                               ),
                               Text(

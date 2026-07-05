@@ -42,15 +42,15 @@ class DzikirCard extends StatefulWidget {
   @override
   State<DzikirCard> createState() => _DzikirCardState();
 }
-class _DzikirCardState extends State<DzikirCard> {
 
+class _DzikirCardState extends State<DzikirCard> {
   @override
   Widget build(BuildContext context) {
     final SettingsController setting = Get.find<SettingsController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
@@ -112,31 +112,27 @@ class _DzikirCardState extends State<DzikirCard> {
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-                  widget.arab,
-                  softWrap: true,
-                  textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: widget.isBold ? FontWeight.bold : FontWeight.w200,
-                    fontFamily: fontFamily,
-                    height: 2,
-                    fontSize: widget.ukuranTeksArab,
-                  ),
-                ),
+              widget.arab,
+              softWrap: true,
+              textAlign: TextAlign.right,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: widget.isBold ? FontWeight.bold : FontWeight.w200,
+                fontFamily: fontFamily,
+                height: 2,
+                fontSize: widget.ukuranTeksArab,
+              ),
+            ),
           ),
           if (widget.showLatin) ...[
             SizedBox(height: 10),
             Text(
               "${widget.latin}",
               style: TextStyle(
-                color: Theme.of(context)
-                                                                    .colorScheme
-                                                                    .primary,
-               fontSize:
-                                                                    Responsive.fontSize(
-                                                                      context,
-                                                                      phone: widget.ukuranTeksLatinTerjemah
-                                                                    ),
-                fontFamily: fontFamily,
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: Responsive.fontSize(
+                  context,
+                  phone: widget.ukuranTeksLatinTerjemah,
+                ),
               ),
             ),
           ],
@@ -145,13 +141,11 @@ class _DzikirCardState extends State<DzikirCard> {
             Text(
               "${widget.arti}",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize:
-                                                                    Responsive.fontSize(
-                                                                      context,
-                                                                      phone: widget.ukuranTeksLatinTerjemah,
-                                                                    ),
-                  fontFamily: fontFamily,
+                fontSize: Responsive.fontSize(
+                  context,
+                  phone: widget.ukuranTeksLatinTerjemah,
                 ),
+              ),
             ),
           ],
           SizedBox(height: 10),

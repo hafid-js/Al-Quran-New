@@ -71,10 +71,10 @@ class Responsive {
   // ---------- SPACING ----------
 
   static double padding(BuildContext context) =>
-      value(context, phone: 16.0, tablet: 24.0, desktop: 32.0);
+      value(context, phone: 10.0, tablet: 24.0, desktop: 32.0);
 
   static double cardPadding(BuildContext context) =>
-      value(context, phone: 16.0, tablet: 20.0, desktop: 24.0);
+      value(context, phone: 10.0, tablet: 20.0, desktop: 24.0);
 
   static double spacing(BuildContext context) =>
       value(context, phone: 12.0, tablet: 16.0, desktop: 20.0);

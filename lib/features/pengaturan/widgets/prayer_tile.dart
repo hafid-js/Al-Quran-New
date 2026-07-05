@@ -58,7 +58,7 @@ class PrayerTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
             leading: Icon(
               leadingIcon,
               size: 24,

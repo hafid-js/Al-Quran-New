@@ -64,7 +64,7 @@ class _PengaturanNotifikasiScreenState
       ),
 
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -101,7 +101,7 @@ class _PengaturanNotifikasiScreenState
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: List.generate(notificationModes.length, (
                           index,
@@ -137,7 +137,7 @@ class _PengaturanNotifikasiScreenState
 
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
+                                      horizontal: 10,
                                     ),
 
                                     leading: Icon(
@@ -217,7 +217,7 @@ class _PengaturanNotifikasiScreenState
                     ),
 
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: [
                           Obx(
@@ -376,7 +376,7 @@ class _PengaturanNotifikasiScreenState
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: [
                           Obx(

@@ -37,7 +37,7 @@ class CategoryFilter extends StatelessWidget {
                     : Theme.of(context).cardColor,
                 foregroundColor: isActive ? AppColors.light : AppColors.textSecondaryDark,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                  horizontal: 10,
                   vertical: 8,
                 ),
                 shape: RoundedRectangleBorder(
