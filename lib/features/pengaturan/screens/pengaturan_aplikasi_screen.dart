@@ -57,7 +57,6 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
     });
   }
 
-
   final controller = Get.find<SettingsController>();
 
   @override
@@ -70,6 +69,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
           leadingWidth: 65,
           leading: IconButton(
             onPressed: () => Get.back(),
@@ -155,9 +155,9 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               ),
 
                               child: ListTile(
-                                 contentPadding: EdgeInsets.symmetric(
-                                   horizontal: Responsive.padding(context),
-                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Responsive.padding(context),
+                                ),
 
                                 leading: isSelected
                                     ? Container(
@@ -250,7 +250,8 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                     Column(
                       children: List.generate(fontArabs.length, (index) {
                         final item = fontArabs[index];
-                        final bool isSelected = controller.fontSelected.value == index;
+                        final bool isSelected =
+                            controller.fontSelected.value == index;
 
                         return Padding(
                           padding: EdgeInsets.only(bottom: 10 * scale),
@@ -260,13 +261,13 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               controller.changeFont(index);
                             },
 
-                              child: AnimatedContainer(
-                               padding: EdgeInsets.all(5),
-                               duration: const Duration(milliseconds: 250),
-                               decoration: BoxDecoration(
-                                 color: isSelected
-                                     ? Theme.of(context).colorScheme.surface
-                                     : Theme.of(context).cardColor,
+                            child: AnimatedContainer(
+                              padding: EdgeInsets.all(5),
+                              duration: const Duration(milliseconds: 250),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.surface
+                                    : Theme.of(context).cardColor,
 
                                 borderRadius: BorderRadius.circular(16 * scale),
 
@@ -279,9 +280,9 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               ),
 
                               child: ListTile(
-                                 contentPadding: EdgeInsets.symmetric(
-                                   horizontal: Responsive.padding(context),
-                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Responsive.padding(context),
+                                ),
 
                                 leading: isSelected
                                     ? Container(
@@ -391,8 +392,10 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                         ? 10
                                         : 0,
                                   ),
-                                    child: InkWell(
-                                    borderRadius: BorderRadius.circular(16 * scale),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(
+                                      16 * scale,
+                                    ),
                                     onTap: () {
                                       controller.changeMode(index);
                                     },
@@ -410,7 +413,9 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                 context,
                                               ).colorScheme.surface
                                             : Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(16 * scale),
+                                        borderRadius: BorderRadius.circular(
+                                          16 * scale,
+                                        ),
                                         border: Border.all(
                                           color: isSelected
                                               ? Theme.of(
@@ -462,244 +467,147 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                           ),
                         ),
                         SizedBox(height: 15),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                            children: List.generate(colorPicker.length, (
-                              index,
-                            ) {
+                        Row(
+                          children: List.generate(
+                            colorPicker.length,
+                            (index) {
                               final item = colorPicker[index];
-                              final bool isSelected =
-                                  controller.colorSelected.value == index;
+                              final isSelected = controller.colorSelected.value == index;
 
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: 10 * scale,
-                                  right: 5,
-                                ),
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(16 * scale),
-                                  onTap: () {
-                                    controller.changeColor(
-                                      index,
-                                      item['color'] as Color,
-                                    );
-                                  },
-
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      (item["color"] == "custom")
+                              return Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 4),
+                                  child: InkWell(
+                                    onTap: () {
+                                      controller.changeColor(
+                                        index,
+                                        item['color'] as Color,
+                                      );
+                                    },
+                                    child: AnimatedContainer(
+                                      duration: const Duration(milliseconds: 250),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 12,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? Theme.of(context).colorScheme.surface
+                                            : Theme.of(context).cardColor,
+                                        borderRadius: BorderRadius.circular(16 * scale),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Theme.of(context).colorScheme.primary
+                                              : Colors.transparent,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: (item["color"] == "custom")
                                           ? GestureDetector(
                                               onTap: () {
                                                 showDialog(
                                                   context: context,
                                                   builder: (context) => AlertDialog(
                                                     backgroundColor:
-                                                        HexColor.fromHex(
-                                                          "#132D3B",
-                                                        ),
+                                                        HexColor.fromHex("#132D3B"),
                                                     title: Text(
                                                       'Tentukan Warna',
                                                       style: TextStyle(
                                                         fontSize: 18 * scale,
-                                                        fontWeight:
-                                                            FontWeight.w500,
+                                                        fontWeight: FontWeight.w500,
                                                       ),
                                                     ),
-
-                                                    content:
-                                                        SingleChildScrollView(
-                                                          child: ColorPicker(
-                                                            pickerColor:
-                                                                pickerColor,
-                                                            onColorChanged:
-                                                                changeColor,
-                                                          ),
-                                                        ),
-
+                                                    content: SingleChildScrollView(
+                                                      child: ColorPicker(
+                                                        pickerColor: pickerColor,
+                                                        onColorChanged: changeColor,
+                                                      ),
+                                                    ),
                                                     actions: [
                                                       ElevatedButton(
                                                         style: ButtonStyle(
-                                                          elevation:
-                                                              WidgetStatePropertyAll(
-                                                                0,
-                                                              ),
-                                                          foregroundColor:
-                                                              WidgetStatePropertyAll(
-                                                                HexColor.fromHex(
-                                                                  "#2EC4B6",
-                                                                ),
-                                                              ),
-                                                          backgroundColor:
-                                                              WidgetStatePropertyAll(
-                                                                HexColor.fromHex(
-                                                                  "#153945",
-                                                                ),
-                                                              ),
+                                                          elevation: WidgetStatePropertyAll(0),
+                                                          foregroundColor: WidgetStatePropertyAll(
+                                                            HexColor.fromHex("#2EC4B6"),
+                                                          ),
+                                                          backgroundColor: WidgetStatePropertyAll(
+                                                            HexColor.fromHex("#153945"),
+                                                          ),
                                                         ),
-
-                                                        child: const Text(
-                                                          'Simpan',
-                                                        ),
-
+                                                        child: const Text('Simpan'),
                                                         onPressed: () async {
-                                                          await controller
-                                                              .changeColor(
-                                                                index,
-                                                                pickerColor,
-                                                              );
-
-                                                          Navigator.of(
-                                                            context,
-                                                          ).pop();
+                                                          await controller.changeColor(
+                                                            index,
+                                                            pickerColor,
+                                                          );
+                                                          Navigator.of(context).pop();
                                                         },
                                                       ),
                                                     ],
                                                   ),
                                                 );
                                               },
-                                              child: AnimatedContainer(
-                                                 padding: EdgeInsets.symmetric(
-                                                   horizontal: Responsive.padding(context),
-                                                   vertical: 12,
-                                                 ),
-                                                duration: const Duration(
-                                                  milliseconds: 250,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: isSelected
-                                                      ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.surface
-                                                      : Theme.of(
-                                                          context,
-                                                        ).cardColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(16 * scale),
-                                                  border: Border.all(
-                                                    color:
-                                                        (isSelected &&
-                                                            item["color"] ==
-                                                                "custom")
-                                                        ? Theme.of(
-                                                            context,
-                                                          ).colorScheme.primary
-                                                        : Colors.transparent,
-                                                    width: 1.5,
-                                                  ),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 40 * scale,
-                                                      width: 40 * scale,
-                                                      decoration: BoxDecoration(
-                                                        color: currentColor,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              30 * scale,
-                                                            ),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.edit_rounded,
-                                                        size: 20 * scale,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    Text(
-                                                      item["name"],
-                                                      style: TextStyle(
-                                                        fontSize: 11 * scale,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: isSelected
-                                                            ? Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary
-                                                            : Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleLarge
-                                                                  ?.color,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          : AnimatedContainer(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 12,
-                                                vertical: 12,
-                                              ),
-                                              duration: const Duration(
-                                                milliseconds: 250,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? Theme.of(
-                                                        context,
-                                                      ).colorScheme.surface
-                                                    : Theme.of(
-                                                        context,
-                                                      ).cardColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(16 * scale),
-                                                border: Border.all(
-                                                  color:
-                                                      (isSelected &&
-                                                          item["color"] !=
-                                                              "custom")
-                                                      ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary
-                                                      : Colors.transparent,
-                                                  width: 1.5,
-                                                ),
-                                              ),
                                               child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  CircleAvatar(
-                                                    radius: 20 * scale,
-                                                    backgroundColor: item["color"],
+                                                  Container(
+                                                    height: 40 * scale,
+                                                    width: 40 * scale,
+                                                    decoration: BoxDecoration(
+                                                      color: currentColor,
+                                                      borderRadius: BorderRadius.circular(30 * scale),
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.edit_rounded,
+                                                      size: 20 * scale,
+                                                    ),
                                                   ),
                                                   SizedBox(height: 10),
                                                   Text(
                                                     item["name"],
                                                     style: TextStyle(
-                                                      fontSize: 11 * scale,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontSize: 9 * scale,
+                                                      fontWeight: FontWeight.w500,
                                                       color: isSelected
-                                                          ? Theme.of(context)
-                                                                .colorScheme
-                                                                .primary
-                                                          : Theme.of(context)
-                                                                .textTheme
-                                                                .titleLarge
-                                                                ?.color,
+                                                          ? Theme.of(context).colorScheme.primary
+                                                          : Theme.of(context).textTheme.titleLarge?.color,
                                                     ),
                                                   ),
                                                 ],
                                               ),
+                                            )
+                                          : Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 20 * scale,
+                                                  backgroundColor: item["color"],
+                                                ),
+                                                SizedBox(height: 10),
+                                                Text(
+                                                  item["name"],
+                                                  style: TextStyle(
+                                                    fontSize: 11 * scale,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: isSelected
+                                                        ? Theme.of(context).colorScheme.primary
+                                                        : Theme.of(context).textTheme.titleLarge?.color,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               );
-                            }),
+                            },
                           ),
                         ),
+                        ]
+                        )
                       ],
                     ),
-                  ],
-                ),
+                  
 
                 Column(
                   children: [
@@ -843,7 +751,11 @@ Widget _menuButton(BuildContext context, IconData icon, String text) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, size: 18 * scale, color: Theme.of(context).colorScheme.primary),
+        Icon(
+          icon,
+          size: 18 * scale,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         const SizedBox(width: 8),
         Flexible(
           child: Text(

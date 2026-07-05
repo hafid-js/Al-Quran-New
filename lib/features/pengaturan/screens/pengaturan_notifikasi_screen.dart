@@ -29,13 +29,13 @@ class _PengaturanNotifikasiScreenState
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_circle_left_rounded),
           color: Colors.white,
         ),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 36,

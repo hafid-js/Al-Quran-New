@@ -43,6 +43,7 @@ class _PlayerBarState extends State<PlayerBar> {
         padding: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

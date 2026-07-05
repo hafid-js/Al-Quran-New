@@ -42,7 +42,7 @@ class _PerasaanCardState extends State<PerasaanCard> {
           child: Text(
             widget.title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize:12, fontWeight: FontWeight.w800),
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize:12, fontWeight: FontWeight.w700),
           ),
         ),
       ),

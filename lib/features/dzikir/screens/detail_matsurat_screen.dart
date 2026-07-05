@@ -19,10 +19,11 @@ class DetailMatsuratScreen extends StatefulWidget {
   State<DetailMatsuratScreen> createState() => _DetailMatsuratScreenState();
 }
 
-class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with SingleTickerProviderStateMixin {
+class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
+    with SingleTickerProviderStateMixin {
   late final MatsuratController controller;
   List<GlobalKey> _cardKeys = [];
-    late AnimationController _animationController;
+  late AnimationController _animationController;
   late Animation<double> _rotation;
   late Animation<double> _scale;
 
@@ -36,21 +37,19 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
       duration: const Duration(milliseconds: 800),
     );
 
-    _rotation = Tween<double>(
-      begin: 0,
-      end: 0.5,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    _rotation = Tween<double>(begin: 0, end: 0.5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _scale = Tween<double>(
-      begin: 1,
-      end: 1.25,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack));
+    _scale = Tween<double>(begin: 1, end: 1.25).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
+    );
   }
 
   @override
   void dispose() {
     Get.delete<MatsuratController>();
-        _animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -62,12 +61,15 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
 
   @override
   Widget build(BuildContext context) {
+      final isLandscape =
+    MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       extendBody: true,
       body: Obx(() {
+        
         _syncCardKeys();
-      if (controller.isLoading.value) {
-        return Loading();
+        if (controller.isLoading.value) {
+          return Loading();
         }
 
         if (controller.data.isEmpty || controller.error.isNotEmpty) {
@@ -83,7 +85,13 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
               pinned: false,
               floating: true,
               backgroundColor: Colors.transparent,
-              expandedHeight: 120,
+              surfaceTintColor: Colors.transparent,
+         expandedHeight: Responsive.boxSize(
+  context,
+  phone: isLandscape
+    ? 150
+    : 130,
+) * (MediaQuery.of(context).size.height > 600 ? 1 : 1),
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
                   padding: EdgeInsets.only(
@@ -114,189 +122,183 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
                               children: [
                                 Text(
                                   controller.title,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleSmall,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 Text("Gulir untuk mebaca seluruh dzikir"),
                               ],
                             ),
                             GestureDetector(
                               onTap: () async {
-                                  _animationController.forward();
-                                  await WoltModalSheet.show(
-                                    context: context,
-                                    pageListBuilder: (context) => [
-                                      SliverWoltModalSheetPage(
-                                        backgroundColor: Theme.of(
-                                          context,
-                                        ).cardColor,
-                                        hasTopBarLayer: false,
-                                        mainContentSliversBuilder: (context) => [
-                                          SliverToBoxAdapter(
-                                            child: StatefulBuilder(
-                                              builder: (context, modalSetState) {
-                                                return Padding(
-                                                  padding: const EdgeInsets.all(
-                                                    16,
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Center(
-                                                        child: Text(
-                                                          "Pengaturan",
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .titleLarge!
-                                                              .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                        ),
+                                _animationController.forward();
+                                await WoltModalSheet.show(
+                                  context: context,
+                                  pageListBuilder: (context) => [
+                                    SliverWoltModalSheetPage(
+                                      backgroundColor: Theme.of(
+                                        context,
+                                      ).cardColor,
+                                      hasTopBarLayer: false,
+                                      mainContentSliversBuilder: (context) => [
+                                        SliverToBoxAdapter(
+                                          child: StatefulBuilder(
+                                            builder: (context, modalSetState) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        "Pengaturan",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                       ),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      SettingsSlider(
-                                                        label:
-                                                            "Ukuran Teks Arab",
-                                                        value: controller
-                                                            .ukuranTeksArab
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .ukuranTeksArab
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSlider(
-                                                        label:
-                                                            "Ukuran Teks latin & Terjemah",
-                                                        value: controller
-                                                            .ukuranLatinTerjemah
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .ukuranLatinTerjemah
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title: "Tampilan Latin",
-                                                        value: controller
-                                                            .latin
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .latin
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title: "Font Arab Bold",
-                                                        value: controller
-                                                            .arabBold
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .arabBold
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title:
-                                                            "Tampilan Terjemah",
-                                                        value: controller
-                                                            .terjemah
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .terjemah
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title: "Getar Saat Tap",
-                                                        value: controller
-                                                            .getar
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .getar
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title:
-                                                            "Tampilkan Tasbih Scroll",
-                                                        value: controller
-                                                            .tasbih
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .tasbih
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    SettingsSlider(
+                                                      label: "Ukuran Teks Arab",
+                                                      value: controller
+                                                          .ukuranTeksArab
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .ukuranTeksArab
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSlider(
+                                                      label:
+                                                          "Ukuran Teks latin & Terjemah",
+                                                      value: controller
+                                                          .ukuranLatinTerjemah
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .ukuranLatinTerjemah
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSwitchTile(
+                                                      title: "Tampilan Latin",
+                                                      value: controller
+                                                          .latin
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .latin
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSwitchTile(
+                                                      title: "Font Arab Bold",
+                                                      value: controller
+                                                          .arabBold
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .arabBold
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSwitchTile(
+                                                      title:
+                                                          "Tampilan Terjemah",
+                                                      value: controller
+                                                          .terjemah
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .terjemah
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSwitchTile(
+                                                      title: "Getar Saat Tap",
+                                                      value: controller
+                                                          .getar
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .getar
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    SettingsSwitchTile(
+                                                      title:
+                                                          "Tampilkan Tasbih Scroll",
+                                                      value: controller
+                                                          .tasbih
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .tasbih
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                  if (mounted) {
-                                    await _animationController.reverse();
-                                  }
-                                },
-                              child: RotationTransition(
-                                    turns: _rotation,
-                                    child: ScaleTransition(
-                                      scale: _scale,
-                                      child: Icon(
-                                        Icons.settings_rounded,
-                                        color: Colors.white,
-                                        size: Responsive.iconSize(
-                                          context,
-                                          phone: 22,
                                         ),
-                                      ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                                if (mounted) {
+                                  await _animationController.reverse();
+                                }
+                              },
+                              child: RotationTransition(
+                                turns: _rotation,
+                                child: ScaleTransition(
+                                  scale: _scale,
+                                  child: Icon(
+                                    Icons.settings_rounded,
+                                    color: Colors.white,
+                                    size: Responsive.iconSize(
+                                      context,
+                                      phone: 22,
                                     ),
                                   ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -312,7 +314,6 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      const SizedBox(height: 10),
                       ...List.generate(controller.data.length, (i) {
                         final item = controller.data[i];
                         return Padding(
@@ -336,10 +337,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
                             isBold: controller.arabBold.value,
                             latin: item["latin"],
                             arti: item["arti"],
-                            onIncrement: () => controller.onCardTap(
-                              i,
-                              _cardKeys,
-                            ),
+                            onIncrement: () =>
+                                controller.onCardTap(i, _cardKeys),
                           ),
                         );
                       }),
@@ -354,84 +353,88 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen> with Single
       bottomNavigationBar: Obx(
         () => controller.tasbih.value
             ? SafeArea(
-          child: GestureDetector(
-            onTap: () => controller.onTasbihTap(_cardKeys),
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-              decoration: BoxDecoration(
-                border: BoxBorder.all(
-                  width: 1.5,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withAlpha(100),
-                ),
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: CircularPercentIndicator(
-                animateFromLastPercent: true,
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withAlpha(20),
-                backgroundWidth: 9,
-                radius: 45,
-                lineWidth: 4,
-                percent: controller.hitungList.isNotEmpty &&
-                        controller.currentIndex.value <
-                            controller.data.length
-                    ? (controller.hitungList[
-                                controller.currentIndex.value] /
-                            (controller.data[
-                                        controller.currentIndex
-                                            .value]["jumlah"]
-                                    as int))
-                        .clamp(0.0, 1.0)
-                    : 0.0,
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor:
-                    Theme.of(context).colorScheme.primary,
-                center: Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            top: 15,
-                            left: 17,
-                            child: Text(
-                              "${controller.hitungList.isNotEmpty && controller.currentIndex.value < controller.hitungList.length ? controller.hitungList[controller.currentIndex.value] : 0}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                          ),
-                          Icon(
-                            FlutterIslamicIcons.solidTasbih,
-                            size: 48,
-                          ),
-                        ],
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () => controller.onTasbihTap(_cardKeys),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 15,
                       ),
-                    ],
+                      decoration: BoxDecoration(
+                        border: BoxBorder.all(
+                          width: 1.5,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withAlpha(100),
+                        ),
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: CircularPercentIndicator(
+                        animateFromLastPercent: true,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primary.withAlpha(20),
+                        backgroundWidth: 9,
+                        radius: 45,
+                        lineWidth: 4,
+                        percent:
+                            controller.hitungList.isNotEmpty &&
+                                controller.currentIndex.value <
+                                    controller.data.length
+                            ? (controller.hitungList[controller
+                                          .currentIndex
+                                          .value] /
+                                      (controller.data[controller
+                                              .currentIndex
+                                              .value]["jumlah"]
+                                          as int))
+                                  .clamp(0.0, 1.0)
+                            : 0.0,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Theme.of(context).colorScheme.primary,
+                        center: Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned(
+                                    top: 15,
+                                    left: 17,
+                                    child: Text(
+                                      "${controller.hitungList.isNotEmpty && controller.currentIndex.value < controller.hitungList.length ? controller.hitungList[controller.currentIndex.value] : 0}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    FlutterIslamicIcons.solidTasbih,
+                                    size: 48,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        )
+              )
             : SizedBox.shrink(),
       ),
     );

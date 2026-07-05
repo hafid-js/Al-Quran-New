@@ -2,7 +2,6 @@ import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/core/widgets/settings_slider.dart';
 import 'package:alquran_new/core/widgets/settings_switch.dart';
-import 'package:alquran_new/features/dzikir/controllers/matsurat_controller.dart';
 import 'package:alquran_new/features/dzikir/widgets/surat_pilihan_card.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +16,13 @@ class DetailSuratPilihanScreen extends StatefulWidget {
       _DetailSuratPilihanScreenState();
 }
 
-class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> with SingleTickerProviderStateMixin {
+class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
+    with SingleTickerProviderStateMixin {
   final controller = Get.find<DetailSurahController>();
   List<GlobalKey> _cardKeys = [];
-    late AnimationController _animationController;
+  late AnimationController _animationController;
   late Animation<double> _rotation;
   late Animation<double> _scale;
-  
 
   late int nomor;
   late int targetAyat;
@@ -40,25 +39,22 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
     controller.fetchDetailSurah(nomor);
     controller.fetchTafsirAyat(nomor);
 
-        _animationController = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
 
-    _rotation = Tween<double>(
-      begin: 0,
-      end: 0.5,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    _rotation = Tween<double>(begin: 0, end: 0.5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _scale = Tween<double>(
-      begin: 1,
-      end: 1.25,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack));
+    _scale = Tween<double>(begin: 1, end: 1.25).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
+    );
   }
 
   @override
   void dispose() {
-    Get.delete<MatsuratController>();
     _animationController.dispose();
     super.dispose();
   }
@@ -71,6 +67,8 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+    MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -97,7 +95,13 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
               pinned: false,
               floating: true,
               backgroundColor: Colors.transparent,
-              expandedHeight: 120,
+              surfaceTintColor: Colors.transparent,
+       expandedHeight: Responsive.boxSize(
+  context,
+  phone: isLandscape
+    ? 150
+    : 130,
+) * (MediaQuery.of(context).size.height > 600 ? 1 : 1),
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
                   padding: EdgeInsets.only(
@@ -135,7 +139,7 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                             ),
                             GestureDetector(
                               onTap: () async {
-                                        _animationController.forward();
+                                _animationController.forward();
                                 await WoltModalSheet.show(
                                   context: context,
                                   pageListBuilder: (modalSheetContext) => [
@@ -173,12 +177,14 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                                                     SettingsSlider(
                                                       label: "Ukuran Teks Arab",
                                                       value: controller
-                                                          .ukuranTeksArab.value,
+                                                          .ukuranTeksArab
+                                                          .value,
                                                       onChanged: (value) {
                                                         modalSetState(() {
                                                           controller
-                                                              .ukuranTeksArab
-                                                              .value = value;
+                                                                  .ukuranTeksArab
+                                                                  .value =
+                                                              value;
                                                         });
                                                       },
                                                     ),
@@ -192,35 +198,39 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                                                       onChanged: (value) {
                                                         modalSetState(() {
                                                           controller
-                                                              .ukuranLatinTerjemah
-                                                              .value = value;
+                                                                  .ukuranLatinTerjemah
+                                                                  .value =
+                                                              value;
                                                         });
                                                       },
                                                     ),
                                                     const SizedBox(height: 5),
-                                                      SettingsSwitchTile(
-                                                        title: "Font Arab Bold",
-                                                        value: controller
-                                                            .arabBold
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          modalSetState(() {
-                                                            controller
-                                                                    .arabBold
-                                                                    .value =
-                                                                value;
-                                                          });
-                                                        },
-                                                      ),
+                                                    SettingsSwitchTile(
+                                                      title: "Font Arab Bold",
+                                                      value: controller
+                                                          .arabBold
+                                                          .value,
+                                                      onChanged: (value) {
+                                                        modalSetState(() {
+                                                          controller
+                                                                  .arabBold
+                                                                  .value =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
                                                     const SizedBox(height: 5),
                                                     SettingsSwitchTile(
                                                       title: "Tampilan Latin",
                                                       value: controller
-                                                          .latin.value,
+                                                          .latin
+                                                          .value,
                                                       onChanged: (value) {
                                                         modalSetState(() {
-                                                          controller.latin
-                                                              .value = value;
+                                                          controller
+                                                                  .latin
+                                                                  .value =
+                                                              value;
                                                         });
                                                       },
                                                     ),
@@ -229,15 +239,17 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                                                       title:
                                                           "Tampilan Terjemah",
                                                       value: controller
-                                                          .terjemah.value,
+                                                          .terjemah
+                                                          .value,
                                                       onChanged: (value) {
                                                         modalSetState(() {
-                                                          controller.terjemah
-                                                              .value = value;
+                                                          controller
+                                                                  .terjemah
+                                                                  .value =
+                                                              value;
                                                         });
                                                       },
                                                     ),
-                                                    
                                                   ],
                                                 ),
                                               );
@@ -248,24 +260,24 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                                     ),
                                   ],
                                 );
-                                  if (mounted) {
-                                    await _animationController.reverse();
-                                  }
+                                if (mounted) {
+                                  await _animationController.reverse();
+                                }
                               },
                               child: RotationTransition(
-                                    turns: _rotation,
-                                    child: ScaleTransition(
-                                      scale: _scale,
-                                      child: Icon(
-                                        Icons.settings_rounded,
-                                        color: Colors.white,
-                                        size: Responsive.iconSize(
-                                          context,
-                                          phone: 22,
-                                        ),
-                                      ),
+                                turns: _rotation,
+                                child: ScaleTransition(
+                                  scale: _scale,
+                                  child: Icon(
+                                    Icons.settings_rounded,
+                                    color: Colors.white,
+                                    size: Responsive.iconSize(
+                                      context,
+                                      phone: 22,
                                     ),
                                   ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -281,7 +293,6 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen> wit
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      const SizedBox(height: 10),
                       ...List.generate(data.ayat.length, (i) {
                         final ayat = data.ayat[i];
 

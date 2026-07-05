@@ -289,7 +289,7 @@ class DetailSurahController extends GetxController {
     }
   }
 
-  void playAudio(Ayat ayat) async {
+  Future<void> playAudio(Ayat ayat) async {
     if (ayat.audio.values.isEmpty) return;
 
     try {
@@ -314,11 +314,13 @@ class DetailSurahController extends GetxController {
       _setAyatAudioState(ayat.nomorAyat, "playing");
       await player.play();
     } catch (e) {
+      _setAyatAudioState(ayat.nomorAyat, "stop");
+      activeAyatNomor.value = null;
       Get.defaultDialog(title: "Gagal Memutar Audio", middleText: 'Terjadi kesalahan saat memutar audio. Silakan coba lagi.');
     }
   }
 
-  void pauseAudio(Ayat ayat) async {
+  Future<void> pauseAudio(Ayat ayat) async {
     try {
       if (player.playing) {
         await player.pause();
@@ -329,7 +331,7 @@ class DetailSurahController extends GetxController {
     }
   }
 
-  void stopAudio(Ayat ayat) async {
+  Future<void> stopAudio(Ayat ayat) async {
     try {
       await player.stop();
       _setAyatAudioState(ayat.nomorAyat, "stop");
@@ -338,7 +340,7 @@ class DetailSurahController extends GetxController {
     }
   }
 
-  void resumeAudio(Ayat ayat) async {
+  Future<void> resumeAudio(Ayat ayat) async {
     try {
       if (!player.playing) {
         _setAyatAudioState(ayat.nomorAyat, "playing");

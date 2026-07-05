@@ -47,11 +47,9 @@ class _DzikirCardState extends State<DzikirCard> {
   @override
   Widget build(BuildContext context) {
     final SettingsController setting = Get.find<SettingsController>();
-         final _controller = Get.find<MatsuratController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
     return Container(
-      constraints: BoxConstraints(minHeight: 260),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -166,7 +164,7 @@ class _DzikirCardState extends State<DzikirCard> {
                 barRadius: Radius.circular(16),
                 width: constraints.maxWidth,
                 animation: true,
-                lineHeight: 6.0,
+                lineHeight: 2.0,
                 animationDuration: 500,
                 percent: (widget.hitung / widget.jumlah).clamp(0.0, 1.0),
                 linearStrokeCap: LinearStrokeCap.roundAll,

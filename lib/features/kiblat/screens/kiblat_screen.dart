@@ -53,6 +53,7 @@ class _KiblatScreenState extends State<KiblatScreen>
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_circle_left_rounded),

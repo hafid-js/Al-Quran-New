@@ -34,6 +34,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () => Get.back(),

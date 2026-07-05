@@ -31,10 +31,10 @@ android {
 
     defaultConfig {
         applicationId = "com.hafidtech.alquran"
-        minSdk = 26
+        minSdk = flutter.minSdkVersion
         targetSdk = 36
-        versionCode = 8 
-        versionName = "1.0.3"
+        versionCode = 9 
+        versionName = "1.0.4"
         multiDexEnabled = true
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")

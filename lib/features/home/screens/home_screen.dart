@@ -88,9 +88,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "page": () => const PemutarAudioScreen(),
       "binding": PemutarAudioBinding(),
     },
-  ];
-
-  final List<Map<String, dynamic>> nextMenus = [
     {
       "title": "Pengaturan",
       "icon": Icons.settings,
@@ -106,11 +103,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       "icon": FlutterIslamicIcons.solidPrayingPerson,
       "page": () => const MatsuratScreen(),
     },
-    // {
-    //   "title": "Icon",
-    //   "icon": Icons.dock_rounded,
-    //   "page": () => const AllIconIslamic(),
-    // },
   ];
 
   bool showAllMenus = true;
@@ -148,7 +140,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(backgroundColor: Colors.transparent, toolbarHeight: 10),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          toolbarHeight: 10,
+        ),
         body: Stack(
           children: [
             Obx(() {
@@ -442,7 +438,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 top: Responsive.value(context, phone: 5, tablet: 12),
                 bottom: 5,
               ),
-              childAspectRatio: Responsive.value(context, phone: 1, tablet: 1.2),
+              childAspectRatio: Responsive.value(
+                context,
+                phone: 1,
+                tablet: 1.2,
+              ),
               children: [
                 PrayerItemWidget(
                   nextPrayer: nextPrayer,
@@ -510,36 +510,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           child: GridView.count(
-            crossAxisCount: Responsive.gridColumns(context, phone: 3, tablet: 4),
+            crossAxisCount: Responsive.gridColumns(
+              context,
+              phone: 3,
+              tablet: 4,
+            ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
             mainAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
-            childAspectRatio: Responsive.value(context, phone: 0.9, tablet: 1.0),
+            childAspectRatio: Responsive.value(
+              context,
+              phone: 0.9,
+              tablet: 1.0,
+            ),
             padding: EdgeInsets.zero,
             children: menus
                 .map((menu) => _buildMenuItem(context, menu))
                 .toList(),
           ),
         ),
-        const SizedBox(height: 12),
-        if (showAllMenus)
-          AnimatedSize(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            child: GridView.count(
-              crossAxisCount: Responsive.gridColumns(context, phone: 3, tablet: 4),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
-              mainAxisSpacing: Responsive.value(context, phone: 12, tablet: 16),
-              childAspectRatio: Responsive.value(context, phone: 0.9, tablet: 1.0),
-              padding: EdgeInsets.zero,
-              children: nextMenus
-                  .map((menu) => _buildMenuItem(context, menu))
-                  .toList(),
-            ),
-          ),
       ],
     );
   }

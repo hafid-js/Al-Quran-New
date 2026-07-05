@@ -192,7 +192,11 @@ class PrayerTimeController extends GetxController {
       final schedules = success.data.schedules;
       if (schedules.isEmpty) return;
 
-      final item = schedules.first;
+      final todayDateStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final item = schedules.firstWhere(
+        (s) => s.tanggalLengkap == todayDateStr,
+        orElse: () => schedules.first,
+      );
       todayPrayer.value = item;
 
       final loc = _cachedLocation;

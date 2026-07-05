@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/features/dzikir/screens/detail_matsurat_screen.dart';
 import 'package:alquran_new/features/dzikir/screens/detail_perasaan_screen.dart';
 import 'package:alquran_new/features/dzikir/widgets/perasaan_card.dart';
@@ -39,6 +40,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_sugro')),
           child: Container(
+                          width: double.infinity,
             padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -75,6 +77,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_sugro')),
           child: Container(
+                  width: double.infinity,
             padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -117,6 +120,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_kubro')),
           child: Container(
+                    width: double.infinity,
             padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -153,6 +157,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_kubro')),
           child: Container(
+                    width: double.infinity,
             padding: EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -191,9 +196,12 @@ class _MatsuratScreenState extends State<MatsuratScreen>
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+        final isLandscape =
+    MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -204,6 +212,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         titleSpacing: 5,
 
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +220,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
               children: [
                 Text(
                   "Al-Barokah",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
@@ -222,30 +231,25 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                 ),
               ],
             ),
+            
           ],
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  Align(
+        actionsPadding: EdgeInsets.only(right: 16),
+        actions: [
+          Align(
                     alignment: Alignment.centerRight,
                     child: Container(
-                      height: 40,
-                      width: 150,
+                      height: 33,
+                      width: 120,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
                         color: Theme.of(context).cardColor,
+                        border: BoxBorder.all(  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),)
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 5,
+                          horizontal: 3,
+                          vertical: 3,
                         ),
                         child: TabBar(
                           controller: _tabController,
@@ -280,13 +284,23 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 10),
-                ],
-              ),
-
+                            const SizedBox(height: 10),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
               SizedBox(
-                height: 230,
+                height: Responsive.boxSize(
+  context,
+  phone: isLandscape
+    ? 160
+    : Responsive.boxSize(context, phone: 222),
+) * (MediaQuery.of(context).size.height > 600 ? 1 : 1),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: AnimatedSwitcher(
@@ -312,18 +326,30 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                 ),
               ),
               SizedBox(height: 10),
-
+      Text(
+                "Bagaimana Perasaanmu Saat Ini?",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              SizedBox(height: 10),
               Column(
                 children: [
                   SizedBox(
-                    height: 160,
-                    child: GridView.count(
-                      scrollDirection: Axis.horizontal,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 130 / 220,
-                      children: [
+                    height: 120,
+                    width: double.infinity,
+                    child: LayoutBuilder(
+  builder: (context, constraints) {
+    final itemHeight = (constraints.maxHeight - 0.2) / 1.5;
+
+    return GridView.count(
+      scrollDirection: Axis.horizontal,
+      crossAxisCount: 2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      padding: EdgeInsets.zero,
+      childAspectRatio: itemHeight / 220,
+      children: [
                         PerasaanCard(
                           title: "Marah",
                           color: "#F4B8C1",
@@ -385,15 +411,16 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                               Get.to(DetailPerasaanScreen(type: "serakah_tamak",)),
                         ),
                       ],
-                    ),
-                  ),
+                    );
+  }
+                  ))
                 ],
               ),
               SizedBox(height: 10),
 
               Text(
                 "Bacaan Surat Pilihan",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),

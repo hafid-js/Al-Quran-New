@@ -4,8 +4,6 @@ import 'package:alquran_new/features/pengaturan/controllers/settings_controller.
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
-import 'package:percent_indicator/flutter_percent_indicator.dart';
 import 'package:alquran_new/features/alquran/domain/entities/ayat.dart';
 
 class SuratPilihanCard extends StatefulWidget {
@@ -38,9 +36,8 @@ class SuratPilihanCard extends StatefulWidget {
   State<SuratPilihanCard> createState() => _SuratPilihanCardState();
 }
 
-final controller = Get.find<DetailSurahController>();
-
 class _SuratPilihanCardState extends State<SuratPilihanCard> {
+  final controller = Get.find<DetailSurahController>();
   Set<int> expandedIndexes = {};
   @override
   Widget build(BuildContext context) {

@@ -9,16 +9,19 @@ class KalenderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: AnimatedRotation(
             turns: 1.5,
             duration: Duration(milliseconds: 300),
-            child: Icon(Icons.not_started_rounded, color:  Theme.of(context).textTheme.titleLarge?.color,),
+            child: Icon(
+              Icons.not_started_rounded,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
           ),
           onPressed: () => Get.back(),
         ),
@@ -33,11 +36,14 @@ class KalenderScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Responsive.padding(context), vertical: 16),
+          padding: EdgeInsets.symmetric(
+            horizontal: Responsive.padding(context),
+            vertical: 16,
+          ),
           child: IslamicHijriCalendar(
-                        defaultBorder: HexColor.fromHex("#132e3a"),
-                        defaultBackColor: HexColor.fromHex("#132e3a"),
-                ),
+            defaultBorder: HexColor.fromHex("#132e3a"),
+            defaultBackColor: HexColor.fromHex("#132e3a"),
+          ),
         ),
       ),
     );
