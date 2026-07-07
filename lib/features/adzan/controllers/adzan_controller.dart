@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:alquran_new/core/services/adzan_scheduler_service.dart';
 import 'package:alquran_new/core/services/volume_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ class AdzanController extends GetxController {
   var isPlaying = false.obs;
   var isLoading = true.obs;
   var errorMessage = RxnString();
+  var isNativePlaying = false.obs;
 
   @override
   void onInit() {
@@ -31,6 +33,15 @@ class AdzanController extends GetxController {
   Future<void> _initPlayer() async {
     try {
       isLoading.value = true;
+
+      final nativePlaying = await AdzanSchedulerService.isAdzanPlaying();
+      if (nativePlaying) {
+        isNativePlaying.value = true;
+        isPlaying.value = true;
+        isLoading.value = false;
+        return;
+      }
+
       final path = await _extractAssetToFile();
       await VolumeService.setMediaVolume(0.7);
       await player.setFilePath(path);
@@ -44,25 +55,11 @@ class AdzanController extends GetxController {
     }
   }
 
-  Future<void> playAdzan() async {
-    try {
-      isLoading.value = true;
-      final path = await _extractAssetToFile();
-      await VolumeService.setMediaVolume(0.7);
-      await player.setFilePath(path);
-      await player.play();
-      isPlaying.value = true;
-    } catch (e) {
-      errorMessage.value = 'Gagal memainkan adzan';
-      debugPrint('AdzanController.playAdzan error: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  void stopAdzan() {
+  Future<void> stopAdzan() async {
+    await AdzanSchedulerService.stopAdzan();
     player.stop();
     isPlaying.value = false;
+    isNativePlaying.value = false;
   }
 
   @override

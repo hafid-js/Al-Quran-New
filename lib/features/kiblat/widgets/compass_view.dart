@@ -1,143 +1,128 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:alquran_new/features/kiblat/controllers/kiblat_controller.dart';
+import 'package:alquran_new/features/kiblat/services/qibla_calculator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_qiblah/flutter_qiblah.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
-class CompassView extends StatelessWidget {
+class CompassView extends StatefulWidget {
   const CompassView({super.key});
 
   @override
+  State<CompassView> createState() => _CompassViewState();
+}
+
+class _CompassViewState extends State<CompassView> {
+  final _locationStreamController =
+      StreamController<LocationStatus>.broadcast();
+
+  Stream<LocationStatus> get stream => _locationStreamController.stream;
+  bool? _hasCompassSensor;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDeviceSupport();
+    _checkLocationStatus();
+  }
+
+  @override
+  void dispose() {
+    _locationStreamController.close();
+    super.dispose();
+  }
+
+  Future<void> _checkDeviceSupport() async {
+    if (Platform.isAndroid) {
+      final hasSensor = await FlutterQiblah.androidDeviceSensorSupport();
+      if (mounted) setState(() => _hasCompassSensor = hasSensor ?? false);
+    } else {
+      _hasCompassSensor = true;
+    }
+  }
+
+  Future<void> _checkLocationStatus() async {
+    final locationStatus = await FlutterQiblah.checkLocationStatus();
+    if (locationStatus.enabled &&
+        locationStatus.status == LocationPermission.denied) {
+      await FlutterQiblah.requestPermissions();
+      final s = await FlutterQiblah.checkLocationStatus();
+      _locationStreamController.sink.add(s);
+    } else {
+      _locationStreamController.sink.add(locationStatus);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.find<KiblatController>();
+    if (_hasCompassSensor == false) {
+      return _buildNoCompassView(context);
+    }
 
-    
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (_hasCompassSensor == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    return Obx(() {
-      if (controller.isDeniedForever.value) {
-        return _buildDeniedForeverView(context, controller);
-      }
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<LocationStatus>(
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-      if (!controller.deviceHasCompassSensor.value) {
-        return _buildNoCompassView(context, controller);
-      }
+          if (!snapshot.hasData || !snapshot.data!.enabled) {
+            return _LocationErrorWidget(
+              error: "Hidupkan GPS untuk menggunakan kompas",
+              callback: _checkLocationStatus,
+            );
+          }
 
-      if (controller.errorMessage.value.isNotEmpty) {
-        return _buildErrorView(context, controller);
-      }
+          switch (snapshot.data!.status) {
+            case LocationPermission.always:
+            case LocationPermission.whileInUse:
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Get.find<KiblatController>().startLocation();
+              });
+              return const _QiblahCompassWidget();
 
-      if (!controller.hasPermission.value) {
-        return _buildPermissionView(context, controller);
-      }
-
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      if (controller.compassAvailable.value &&
-          !controller.hasHeadingData.value) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text(
-                'Menunggu sensor kompas...',
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Gerakkan perangkat membentuk angka 8 untuk kalibrasi',
-                style: Theme.of(context).textTheme.labelSmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        );
-      }
-
-      if (!controller.compassAvailable.value) {
-        return _buildNoCompassView(context, controller);
-      }
-
-      return _buildCompass(context, controller, isDark);
-    });
-  }
-
-  Widget _buildPermissionView(BuildContext context, KiblatController controller) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.location_off, size: 64, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 16),
-            Text(
-              'Kiblat membutuhkan akses lokasi',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Aktifkan lokasi untuk mengetahui arah kiblat',
-              style: Theme.of(context).textTheme.labelSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => controller.requestPermissionsAndLocate(),
-              icon: const Icon(Icons.my_location),
-              label: const Text('Aktifkan Lokasi'),
-            ),
-          ],
-        ),
+            case LocationPermission.denied:
+              return _LocationErrorWidget(
+                error: "Izin lokasi ditolak",
+                callback: _checkLocationStatus,
+              );
+            case LocationPermission.deniedForever:
+              return _LocationErrorWidget(
+                error: "Izin lokasi ditolak permanen",
+                callback: () {
+                  Get.find<KiblatController>().openAppSettings();
+                },
+              );
+            case LocationPermission.unableToDetermine:
+              return _LocationErrorWidget(
+                error: "Tidak dapat menentukan izin lokasi",
+                callback: _checkLocationStatus,
+              );
+          }
+        },
       ),
     );
   }
 
-  Widget _buildDeniedForeverView(BuildContext context, KiblatController controller) {
+  Widget _buildNoCompassView(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.location_off, size: 64, color: Theme.of(context).colorScheme.error),
-            const SizedBox(height: 16),
-            Text(
-              'Izin lokasi ditolak permanen',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Buka Pengaturan & aktifkan izin lokasi untuk menggunakan fitur kiblat',
-              style: Theme.of(context).textTheme.labelSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => controller.openAppSettings(),
-              icon: const Icon(Icons.settings),
-              label: const Text('Buka Pengaturan'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNoCompassView(BuildContext context, KiblatController controller) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.explore_off, size: 64, color: Theme.of(context).colorScheme.error),
+            Icon(Icons.explore_off,
+                size: 64, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text(
               'Perangkat Tidak Memiliki Kompas',
@@ -146,7 +131,7 @@ class CompassView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Perangkat ini tidak dilengkapi sensor kompas (magnetometer). Arah kiblat tidak dapat ditampilkan.',
+              'Perangkat ini tidak dilengkapi sensor kompas (magnetometer).\nGunakan tab Peta untuk melihat arah kiblat.',
               style: Theme.of(context).textTheme.labelSmall,
               textAlign: TextAlign.center,
             ),
@@ -155,24 +140,36 @@ class CompassView extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildErrorView(BuildContext context, KiblatController controller) {
+class _LocationErrorWidget extends StatelessWidget {
+  final String error;
+  final VoidCallback callback;
+
+  const _LocationErrorWidget({
+    required this.error,
+    required this.callback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+            Icon(Icons.location_off,
+                size: 64, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text(
-              controller.errorMessage.value,
-              style: Theme.of(context).textTheme.labelMedium,
+              error,
+              style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () => controller.requestPermissionsAndLocate(),
+              onPressed: callback,
               icon: const Icon(Icons.refresh),
               label: const Text('Coba Lagi'),
             ),
@@ -181,133 +178,104 @@ class CompassView extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildCompass(BuildContext context, KiblatController controller, bool isDark) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-            Container(
-                margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.amber.withOpacity(0.4)),
+class _QiblahCompassWidget extends StatelessWidget {
+  const _QiblahCompassWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<KiblatController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return StreamBuilder<QiblahDirection>(
+      stream: FlutterQiblah.qiblahStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 16),
+                Text(
+                  'Menunggu sensor kompas...',
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
-                child: Row(
+              ],
+            ),
+          );
+        }
+
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text(
+              'Menunggu data kompas...',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          );
+        }
+
+        final data = snapshot.data!;
+
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              _buildInfoCard(context, data, controller),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: 280,
+                height: 280,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Icon(Icons.info_outline, size: 16, color: Colors.amber.shade700),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Masih dalam pengembangan, mungkin kurang akurat di beberapa perangkat.',
-                        style: TextStyle(fontSize: 12, color: Colors.amber.shade900),
+                    Transform.rotate(
+                      angle: (data.direction * pi / 180 * -1),
+                      child: CustomPaint(
+                        size: const Size(280, 280),
+                        painter: _CompassRosePainter(isDark: isDark),
+                      ),
+                    ),
+                    Transform.rotate(
+                      angle: (data.qiblah * pi / 180 * -1),
+                      alignment: Alignment.center,
+                      child: CustomPaint(
+                        size: const Size(280, 280),
+                        painter: _NeedlePainter(),
+                      ),
+                    ),
+                    Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primary,
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
                     ),
                   ],
                 ),
               ),
-          const SizedBox(height: 10),
-
-          _buildInfoCard(context, controller, isDark),
-
-          const SizedBox(height: 32),
-
-          SizedBox(
-            width: 320,
-            height: 320,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CustomPaint(
-                  size: const Size(320, 320),
-                  painter: CompassRosePainter(
-                    heading: controller.heading.value,
-                    isDark: isDark,
-                  ),
-                ),
-                CustomPaint(
-                  size: const Size(320, 320),
-                  painter: QiblaArrowPainter(
-                    qiblaAngle: controller.qiblaDirection.value,
-                    heading: controller.heading.value,
-                    isDark: isDark,
-                  ),
-                ),
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.navigation, size: 20, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 8),
+              const SizedBox(height: 16),
               Text(
-                '${controller.heading.value.toStringAsFixed(0)}° ${controller.headingDirectionName}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                '${data.offset.toStringAsFixed(1)}° dari arah hadap',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
+              const SizedBox(height: 24),
+              _buildLocationCard(context, controller),
+              const SizedBox(height: 24),
             ],
           ),
-
-          const SizedBox(height: 32),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Latitude', style: Theme.of(context).textTheme.labelSmall),
-                      Text(
-                        controller.latitude.value.toStringAsFixed(4),
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Longitude', style: Theme.of(context).textTheme.labelSmall),
-                      Text(
-                        controller.longitude.value.toStringAsFixed(4),
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildInfoCard(BuildContext context, KiblatController controller, bool isDark) {
+  Widget _buildInfoCard(
+      BuildContext context, QiblahDirection data, KiblatController controller) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.all(20),
@@ -328,57 +296,97 @@ class CompassView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.explore,
-                size: 28,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              Icon(Icons.explore,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
               Text(
-                '${controller.qiblaDirection.value.toStringAsFixed(1)}°',
+                '${data.qiblah.toStringAsFixed(1)}°',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
               const SizedBox(width: 8),
               Text(
-                controller.qiblaDirectionName,
+                QiblaCalculator.getDirectionName(data.qiblah),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.straighten,
-                size: 16,
-                color: Theme.of(context).textTheme.labelSmall?.color,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                'Jarak: ${controller.qiblaDistanceText}',
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            ],
-          ),
+          Obx(() {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.straighten,
+                    size: 16,
+                    color: Theme.of(context).textTheme.labelSmall?.color),
+                const SizedBox(width: 4),
+                Text(
+                  'Jarak: ${controller.qiblaDistanceText}',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );
   }
+
+  Widget _buildLocationCard(
+      BuildContext context, KiblatController controller) {
+    return Obx(() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Latitude',
+                      style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    controller.latitude.value.toStringAsFixed(4),
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Longitude',
+                      style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    controller.longitude.value.toStringAsFixed(4),
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
 }
 
-class CompassRosePainter extends CustomPainter {
-  final double heading;
+class _CompassRosePainter extends CustomPainter {
   final bool isDark;
 
-  CompassRosePainter({required this.heading, required this.isDark});
+  _CompassRosePainter({required this.isDark});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -388,13 +396,9 @@ class CompassRosePainter extends CustomPainter {
 
     canvas.save();
     canvas.translate(cx, cy);
-    canvas.rotate(-heading * pi / 180);
 
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke;
-
-    final markPaint = Paint()
-      ..style = PaintingStyle.stroke;
+    final borderPaint = Paint()..style = PaintingStyle.stroke;
+    final markPaint = Paint()..style = PaintingStyle.stroke;
 
     for (int i = 0; i < 360; i += 5) {
       final angle = i * pi / 180;
@@ -410,11 +414,11 @@ class CompassRosePainter extends CustomPainter {
         markPaint.strokeWidth = 2.0;
       } else if (isMid) {
         innerR = radius * 0.88;
-        markPaint.color = (isDark ? Colors.white38 : Colors.black26);
+        markPaint.color = isDark ? Colors.white38 : Colors.black26;
         markPaint.strokeWidth = 1.5;
       } else {
         innerR = radius * 0.92;
-        markPaint.color = (isDark ? Colors.white24 : Colors.black12);
+        markPaint.color = isDark ? Colors.white24 : Colors.black12;
         markPaint.strokeWidth = 1.0;
       }
 
@@ -442,7 +446,8 @@ class CompassRosePainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawLabel(Canvas canvas, String text, double angle, double radius, bool isDark, bool isNorth) {
+  void _drawLabel(Canvas canvas, String text, double angle, double radius,
+      bool isDark, bool isNorth) {
     final tp = TextPainter(
       text: TextSpan(
         text: text,
@@ -463,31 +468,19 @@ class CompassRosePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CompassRosePainter oldDelegate) =>
-      oldDelegate.heading != heading || oldDelegate.isDark != isDark;
+  bool shouldRepaint(_CompassRosePainter oldDelegate) =>
+      oldDelegate.isDark != isDark;
 }
 
-class QiblaArrowPainter extends CustomPainter {
-  final double qiblaAngle;
-  final double heading;
-  final bool isDark;
-
-  QiblaArrowPainter({
-    required this.qiblaAngle,
-    required this.heading,
-    required this.isDark,
-  });
-
+class _NeedlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final cx = size.width / 2;
     final cy = size.height / 2;
     final radius = min(cx, cy) - 8;
-    final arrowAngle = (qiblaAngle - heading) * pi / 180;
 
     canvas.save();
     canvas.translate(cx, cy);
-    canvas.rotate(arrowAngle);
 
     final arrowPaint = Paint()
       ..color = Colors.amber.shade600
@@ -519,8 +512,5 @@ class QiblaArrowPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(QiblaArrowPainter oldDelegate) =>
-      oldDelegate.qiblaAngle != qiblaAngle ||
-      oldDelegate.heading != heading ||
-      oldDelegate.isDark != isDark;
+  bool shouldRepaint(_NeedlePainter oldDelegate) => false;
 }

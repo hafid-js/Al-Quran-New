@@ -97,7 +97,7 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                           top: 10 * Responsive.scale(context),
                           left: 10 * Responsive.scale(context),
                           right: 8 * Responsive.scale(context),
-                          bottom: 20 * Responsive.scale(context),
+                          bottom: 10 * Responsive.scale(context),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -154,18 +154,18 @@ class _PemutarAudioScreenState extends State<PemutarAudioScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 12 * Responsive.scale(context)),
+                            SizedBox(height: 6 * Responsive.scale(context)),
                             Text(
                               "Pemutar Audio",
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            SizedBox(height: 16 * Responsive.scale(context)),
+                            SizedBox(height: 8 * Responsive.scale(context)),
                             ConstrainedBox(
                               constraints: BoxConstraints(maxWidth: 370),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
+                                  horizontal: 8,
+                                  vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withAlpha(30),

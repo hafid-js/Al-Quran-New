@@ -7,6 +7,7 @@ import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart'
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/core/services/adzan_scheduler_service.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/features/home/data/datasources/prayer_time_local_datasource.dart';
@@ -330,9 +331,18 @@ class PrayerTimeController extends GetxController {
           title: "Al-Barokah: Quran & Sholat",
           body: isImsak ? "Waktu imsak tiba, bersiaplah untuk berpuasa" : "Saatnya sholat ${entry.key}",
           scheduledDate: prayerTime,
-          soundType: settingsController.soundType.value,
-          notificationMode: settingsController.notificationMode.value,
+          soundType: isImsak ? 'default' : settingsController.soundType.value,
+          notificationMode: isImsak ? 0 : settingsController.notificationMode.value,
         );
+
+        if (entry.key != "Imsak") {
+          await AdzanSchedulerService.scheduleAlarm(
+            prayerId: prayerIds[entry.key]!,
+            dateTime: prayerTime,
+          );
+        }
+      } else {
+        await AdzanSchedulerService.cancelAlarm(prayerIds[entry.key]!);
       }
     }
   }
@@ -342,6 +352,7 @@ class PrayerTimeController extends GetxController {
     if (item == null) return;
 
     await NotificationService().cancelAllNotification();
+    await AdzanSchedulerService.cancelAllAlarms();
     await _schedulePrayerNotifications(item);
   }
 

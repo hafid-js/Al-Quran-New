@@ -53,6 +53,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
   final List<String> categories = ["Surah", "Mekah", "Madinah"];
   final SettingsController setting = Get.find<SettingsController>();
 
+
   @override
   Widget build(BuildContext context) {
     final scale = Responsive.scale(context);
@@ -248,6 +249,7 @@ class _AlQuranScreenState extends State<AlQuranScreen> {
                                         ),
 
                                         Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [

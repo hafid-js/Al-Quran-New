@@ -64,7 +64,7 @@ dependencies:
   geolocator: ^14.0.2
   google_maps_flutter: ^2.14.2
   flutter_svg: ^2.3.0
-  flutter_compass: ^0.8.1
+  flutter_qiblah: ^3.2.0
   permission_handler: ^12.0.3
   flutter_islamic_icons: ^1.0.2
   share_plus: ^12.0.2

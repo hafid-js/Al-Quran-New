@@ -108,14 +108,14 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                     right: 10,
                     left: 10,
                     bottom: 16,
-                    top: 80,
+                    top: 60,
                   ),
                   child: Column(
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 28,
-                          vertical: 18,
+                          vertical: 12,
                         ),
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,

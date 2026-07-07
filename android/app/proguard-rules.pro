@@ -15,6 +15,9 @@
 # Keep flutter_compass
 -keep class com.hemanthraj.fluttercompass.** { *; }
 
+# Suppress missing class warnings for TSAGeoMag (referenced by flutter_compass_v2)
+-dontwarn com.hemanthraj.fluttercompass.util.TSAGeoMag
+
 # Keep flutter_local_notifications
 -keep class com.dexterous.flutterlocalnotifications.** { *; }
 

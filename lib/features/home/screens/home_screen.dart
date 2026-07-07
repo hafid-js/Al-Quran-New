@@ -6,6 +6,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/error_view.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/core/widgets/section_header.dart';
+import 'package:alquran_new/features/adzan/screens/adzan_screen.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';
@@ -21,7 +22,7 @@ import 'package:alquran_new/features/pemutar_audio/widgets/player_bar.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_aplikasi_screen.dart';
 import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-
+import 'package:alquran_new/core/services/adzan_scheduler_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
@@ -46,6 +47,12 @@ class PrayerItem {
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  static DateTime _lastAdzanDismissed = DateTime(2000);
+
+  static void markAdzanDismissed() {
+    _lastAdzanDismissed = DateTime.now();
+  }
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -112,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
     SurahBinding().dependencies();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAdzanOnOpen());
   }
 
   @override
@@ -125,9 +133,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       controller.resumeCountdown();
       controller.fetchPrayerTimes();
+      _checkAdzanOnOpen();
     } else if (state == AppLifecycleState.paused) {
       controller.pauseCountdown();
     }
+  }
+
+  Future<void> _checkAdzanOnOpen() async {
+    if (DateTime.now().difference(HomeScreen._lastAdzanDismissed).inSeconds < 3) return;
+    try {
+      final playing = await AdzanSchedulerService.isAdzanPlaying();
+      if (playing && mounted) {
+        Get.to(() => const AdzanScreen());
+      }
+    } catch (_) {}
   }
 
   @override

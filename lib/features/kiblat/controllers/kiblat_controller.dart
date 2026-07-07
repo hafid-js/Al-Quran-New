@@ -1,153 +1,64 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:alquran_new/features/kiblat/services/device_sensor_checker.dart';
 import 'package:alquran_new/features/kiblat/services/qibla_calculator.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
-class KiblatController extends GetxController with WidgetsBindingObserver  {
+class KiblatController extends GetxController {
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
-  var heading = 0.0.obs;
   var qiblaDirection = 0.0.obs;
   var qiblaDistance = 0.0.obs;
   var isLoading = true.obs;
-  var hasPermission = false.obs;
   var errorMessage = ''.obs;
-  var locationName = ''.obs;
-  var isDeniedForever = false.obs;
-  var compassAvailable = true.obs;
-  var hasHeadingData = false.obs;
-  var deviceHasCompassSensor = true.obs;
 
-  StreamSubscription? _headingSubscription;
   StreamSubscription? _positionSubscription;
-  Timer? _sensorTimeout;
-  bool _hasCompassData = false;
-  double _smoothedHeading = -1;
-  static const double _filterAlpha = 0.85;
 
   @override
-void onInit() {
-  super.onInit();
-  WidgetsBinding.instance.addObserver(this);
-}
-
-  @override
-void onClose() {
-  WidgetsBinding.instance.removeObserver(this);
-
-  _headingSubscription?.cancel();
-  _positionSubscription?.cancel();
-  _sensorTimeout?.cancel();
-
-  super.onClose();
-}
-@override
-void didChangeAppLifecycleState(AppLifecycleState state) {
-  if (state == AppLifecycleState.resumed) {
-    _recheckLocation();
+  void onInit() {
+    super.onInit();
+    startLocation();
   }
-}
-Future<void> _recheckLocation() async {
-  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  final permission = await Geolocator.checkPermission();
 
-  if (serviceEnabled &&
-      (permission == LocationPermission.whileInUse ||
-       permission == LocationPermission.always)) {
-
-    hasPermission.value = true;
-    isDeniedForever.value = false;
-    errorMessage.value = '';
-
-    await _startCompass();
-    await getCurrentLocation();
-  } else {
-    _headingSubscription?.cancel();
+  @override
+  void onClose() {
     _positionSubscription?.cancel();
-    hasPermission.value = false;
-
-    if (permission == LocationPermission.deniedForever) {
-      isDeniedForever.value = true;
-    } else {
-      errorMessage.value = 'Izin lokasi ditolak';
-    }
-  }
-}
-  Future<void> requestPermissionsAndLocate() async {
-    isLoading.value = true;
-    errorMessage.value = '';
-
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      errorMessage.value = 'GPS belum aktif';
-      isLoading.value = false;
-      await Geolocator.openLocationSettings();
-      return;
-    }
-
-    LocationPermission perm = await Geolocator.checkPermission();
-
-    if (perm == LocationPermission.deniedForever) {
-      isDeniedForever.value = true;
-      isLoading.value = false;
-      return;
-    }
-
-    if (perm == LocationPermission.denied) {
-      perm = await Geolocator.requestPermission();
-    }
-
-    if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) {
-      if (perm == LocationPermission.deniedForever) {
-        isDeniedForever.value = true;
-      } else {
-        errorMessage.value = 'Izin lokasi ditolak';
-      }
-      isLoading.value = false;
-      return;
-    }
-
-    hasPermission.value = true;
-
-    try {
-      await _startCompass();
-    } catch (_) {
-      compassAvailable.value = false;
-    }
-
-    try {
-      await getCurrentLocation();
-    } catch (e) {
-      if (e is SocketException || e is HttpException) {
-        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
-      } else if (e is FormatException) {
-        errorMessage.value = 'Data lokasi tidak valid';
-      } else {
-        errorMessage.value = 'Gagal mendapatkan lokasi. Periksa izin lokasi dan koneksi.';
-      }
-    }
-
-    isLoading.value = false;
+    super.onClose();
   }
 
   Future<void> openAppSettings() async {
     await Geolocator.openAppSettings();
   }
 
+  void startLocation() {
+    getCurrentLocation();
+  }
+
   Future<void> getCurrentLocation() async {
     try {
       _positionSubscription?.cancel();
 
+      final perm = await Geolocator.checkPermission();
+      if (perm != LocationPermission.whileInUse &&
+          perm != LocationPermission.always) {
+        errorMessage.value = 'Izin lokasi belum diberikan';
+        isLoading.value = false;
+        return;
+      }
+
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        errorMessage.value = 'GPS belum aktif';
+        isLoading.value = false;
+        return;
+      }
+
       final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
-      latitude.value = position.latitude;
-      longitude.value = position.longitude;
-      calculateQibla();
+      _updateLocation(position);
+
       if (isLoading.value) isLoading.value = false;
 
       _positionSubscription =
@@ -157,110 +68,26 @@ Future<void> _recheckLocation() async {
               distanceFilter: 100,
             ),
           ).listen((Position position) {
-            latitude.value = position.latitude;
-            longitude.value = position.longitude;
-            calculateQibla();
+            _updateLocation(position);
           });
     } catch (e) {
-      if (e is SocketException || e is HttpException) {
-        errorMessage.value = 'Periksa Koneksi Jaringan Anda';
-      } else {
-        errorMessage.value = 'Gagal mendapatkan lokasi. Periksa izin lokasi dan koneksi.';
-      }
+      errorMessage.value =
+          'Gagal mendapatkan lokasi. Periksa izin lokasi dan koneksi.';
       isLoading.value = false;
     }
   }
 
-  Future<void> _startCompass() async {
-    _headingSubscription?.cancel();
-    _sensorTimeout?.cancel();
-
-    _hasCompassData = false;
-    _smoothedHeading = -1;
-    hasHeadingData.value = false;
-    errorMessage.value = '';
-    compassAvailable.value = true;
-
-    final hasSensor = await DeviceSensorChecker.hasMagnetometer();
-    if (!hasSensor) {
-      compassAvailable.value = false;
-      isLoading.value = false;
-      return;
-    }
-
-    final stream = FlutterCompass.events;
-    if (stream == null) {
-      compassAvailable.value = false;
-      isLoading.value = false;
-      return;
-    }
-
-    _headingSubscription = stream.listen((CompassEvent event) {
-      final h = event.heading;
-
-      if (h == null || h < 0) {
-        hasHeadingData.value = false;
-        return;
-      }
-
-      _hasCompassData = true;
-      hasHeadingData.value = true;
-
-      if (_smoothedHeading < 0) {
-        _smoothedHeading = h;
-      } else {
-        double diff = h - _smoothedHeading;
-        if (diff > 180) {
-          diff -= 360;
-        } else if (diff < -180) {
-          diff += 360;
-        }
-        _smoothedHeading = _smoothedHeading + diff * (1 - _filterAlpha);
-        if (_smoothedHeading < 0) {
-          _smoothedHeading += 360;
-        } else if (_smoothedHeading >= 360) {
-          _smoothedHeading -= 360;
-        }
-      }
-
-      heading.value = _smoothedHeading;
-    });
-
-    _sensorTimeout = Timer(const Duration(seconds: 15), () {
-      final noData = !_hasCompassData;
-      final staleData = hasHeadingData.value == false;
-
-      if (noData || staleData) {
-        if (compassAvailable.value && errorMessage.value.isEmpty) {
-          errorMessage.value =
-              'Kompas tidak merespon. Gerakkan HP membentuk angka 8 dan jauhkan dari magnet.';
-        }
-
-        hasHeadingData.value = false;
-        isLoading.value = false;
-      }
-    });
+  void _updateLocation(Position position) {
+    latitude.value = position.latitude;
+    longitude.value = position.longitude;
+    qiblaDirection.value =
+        QiblaCalculator.calculateDirection(position.latitude, position.longitude);
+    qiblaDistance.value =
+        QiblaCalculator.calculateDistance(position.latitude, position.longitude);
   }
-
-  void calculateQibla() {
-    qiblaDirection.value = QiblaCalculator.calculateDirection(
-      latitude.value,
-      longitude.value,
-    );
-    qiblaDistance.value = QiblaCalculator.calculateDistance(
-      latitude.value,
-      longitude.value,
-    );
-  }
-
-  double get qiblaAngleFromHeading =>
-      (qiblaDirection.value - heading.value + 360) % 360;
 
   String get qiblaDirectionName =>
       QiblaCalculator.getDirectionName(qiblaDirection.value);
-
-  String get headingDirectionName =>
-      QiblaCalculator.getDirectionName(heading.value);
 
   String get qiblaDistanceText {
     final d = qiblaDistance.value;

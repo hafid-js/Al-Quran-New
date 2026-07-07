@@ -38,18 +38,24 @@ class _AdzanScreenState extends State<AdzanScreen>
     super.dispose();
   }
 
-  void _dismiss() {
-    controller.stopAdzan();
+  Future<void> _dismiss() async {
+    await controller.stopAdzan();
+    HomeScreen.markAdzanDismissed();
+    await Future.delayed(const Duration(milliseconds: 500));
     Get.delete<AdzanController>();
     if (!mounted) return;
     final box = GetStorage();
     final hasConsented = box.read('has_consented') ?? false;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) =>
-            hasConsented ? const HomeScreen() : const ConsentScreen(),
-      ),
-    );
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) =>
+              hasConsented ? const HomeScreen() : const ConsentScreen(),
+        ),
+      );
+    }
   }
 
   @override

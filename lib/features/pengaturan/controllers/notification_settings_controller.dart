@@ -11,7 +11,7 @@ class NotificationSettingsController extends GetxController {
   NotificationSettings settings = NotificationSettings();
 
   var notificationMode = 0.obs;
-  var soundType = 'default'.obs;
+  var soundType = 'adzan'.obs;
 
   var imsak = true.obs;
   var subuh = true.obs;
