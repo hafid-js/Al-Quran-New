@@ -24,7 +24,11 @@ class AdzanAlarmReceiver : BroadcastReceiver() {
         showAlertNotification(context)
 
         val serviceIntent = Intent(context, AdzanService::class.java)
-        context.startForegroundService(serviceIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent)
+        } else {
+            context.startService(serviceIntent)
+        }
     }
 
     private fun createAlertChannel(context: Context) {

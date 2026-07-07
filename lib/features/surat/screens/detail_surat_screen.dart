@@ -131,8 +131,8 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
         }
 
         final headerHeight =
-            Responsive.boxSize(context, phone: isLandscape ? 265 : 260) *
-            (MediaQuery.of(context).size.width > 600 ? 1.1 : 1);
+            Responsive.boxSize(context, phone: isLandscape ? 265 : 255) *
+            (MediaQuery.of(context).size.width > 600 ? 1.0 : 1);
         return Column(
           children: [
             Padding(
