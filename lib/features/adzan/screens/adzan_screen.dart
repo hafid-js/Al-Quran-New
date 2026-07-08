@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:alquran_new/features/adzan/controllers/adzan_controller.dart';
@@ -18,6 +19,7 @@ class _AdzanScreenState extends State<AdzanScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _waveAnimController;
   late final AdzanController controller;
+  StreamSubscription? _adzanFinishedListener;
 
   @override
   void initState() {
@@ -30,16 +32,24 @@ class _AdzanScreenState extends State<AdzanScreen>
       vsync: this,
       duration: const Duration(seconds: 3),
     )..repeat();
+
+    _adzanFinishedListener = controller.playerFinished.listen((finished) {
+      if (finished) {
+        _dismiss();
+      }
+    });
   }
 
   @override
   void dispose() {
+    _adzanFinishedListener?.cancel();
     _waveAnimController.dispose();
     super.dispose();
   }
 
   Future<void> _dismiss() async {
     await controller.stopAdzan();
+    _adzanFinishedListener?.cancel();
     HomeScreen.markAdzanDismissed();
     await Future.delayed(const Duration(milliseconds: 500));
     Get.delete<AdzanController>();
@@ -177,62 +187,19 @@ class _AdzanScreenState extends State<AdzanScreen>
                   ),
                 ),
                 const SizedBox(height: 48),
-                Obx(() {
-                  if (controller.isLoading.value) return const SizedBox.shrink();
-                  return GestureDetector(
-                    onTap: _dismiss,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 14,
-                      ),
-                      decoration: BoxDecoration(
-                        color: primary.withAlpha(30),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: primary.withAlpha(100),
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            controller.isPlaying.value
-                                ? Icons.stop_circle_outlined
-                                : Icons.play_circle_filled_outlined,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            controller.isPlaying.value
-                                ? "Matikan & Lanjutkan"
-                                : "Lanjutkan",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-                if (controller.isLoading.value)
-                  GestureDetector(
-                    onTap: _dismiss,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Text(
-                        "Lewati",
-                        style: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 14,
-                        ),
+                GestureDetector(
+                  onTap: _dismiss,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      "Lewati",
+                      style: TextStyle(
+                        color: Colors.white38,
+                        fontSize: 14,
                       ),
                     ),
                   ),
+                ),
               ],
             ),
           ),

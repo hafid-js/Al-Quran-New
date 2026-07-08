@@ -1,11 +1,13 @@
 package com.hafidtech.alquran
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Build
+import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -13,9 +15,18 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private val VOLUME_CHANNEL = "com.hafidtech.alquran/volume"
     private val ADZAN_CHANNEL = "com.hafidtech.alquran/adzan"
+    private val NAVIGATE_CHANNEL = "com.hafidtech.alquran/navigate"
+
+    private var pendingNavigateToAdzan = false
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+
+        // Force recreate notification channel so sound works
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.deleteNotificationChannel("prayer_notification")
+        }
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, VOLUME_CHANNEL).setMethodCallHandler { call, result ->
             if (call.method == "setMediaVolume") {
@@ -63,8 +74,45 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
                 "isAdzanPlaying" -> result.success(AdzanService.isPlaying)
+                "playAdzan" -> {
+                    try {
+                        val intent = Intent(this, AdzanService::class.java)
+                        startService(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        Log.e("MainActivity", "Failed to start AdzanService", e)
+                        result.error("PLAY_ERROR", e.message, null)
+                    }
+                }
                 else -> result.notImplemented()
             }
+        }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, NAVIGATE_CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "checkNavigateIntent" -> {
+                    result.success(pendingNavigateToAdzan)
+                }
+                "consumeNavigateIntent" -> {
+                    pendingNavigateToAdzan = false
+                    result.success(true)
+                }
+                else -> result.notImplemented()
+            }
+        }
+
+        checkIntentForNavigate(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        checkIntentForNavigate(intent)
+    }
+
+    private fun checkIntentForNavigate(intent: Intent) {
+        if (intent.getBooleanExtra(AdzanAlarmReceiver.EXTRA_NAVIGATE, false)) {
+            Log.d("MainActivity", "EXTRA_NAVIGATE received, will navigate to AdzanScreen")
+            pendingNavigateToAdzan = true
         }
     }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:alquran_new/core/services/adzan_scheduler_service.dart';
@@ -14,6 +15,8 @@ class AdzanController extends GetxController {
   var isLoading = true.obs;
   var errorMessage = RxnString();
   var isNativePlaying = false.obs;
+  var playerFinished = false.obs;
+  StreamSubscription? _processingSubscription;
 
   @override
   void onInit() {
@@ -47,6 +50,13 @@ class AdzanController extends GetxController {
       await player.setFilePath(path);
       await player.play();
       isPlaying.value = true;
+
+      _processingSubscription = player.processingStateStream.listen((state) {
+        if (state == ProcessingState.completed) {
+          playerFinished.value = true;
+          isPlaying.value = false;
+        }
+      });
     } catch (e) {
       errorMessage.value = 'Gagal memainkan adzan';
       debugPrint('AdzanController error: $e');
@@ -56,6 +66,8 @@ class AdzanController extends GetxController {
   }
 
   Future<void> stopAdzan() async {
+    await _processingSubscription?.cancel();
+    _processingSubscription = null;
     await AdzanSchedulerService.stopAdzan();
     player.stop();
     isPlaying.value = false;
@@ -64,6 +76,7 @@ class AdzanController extends GetxController {
 
   @override
   void onClose() {
+    _processingSubscription?.cancel();
     player.stop();
     player.dispose();
     super.onClose();

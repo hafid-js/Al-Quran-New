@@ -7,10 +7,14 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -41,7 +45,15 @@ class AdzanService : Service() {
                 return START_NOT_STICKY
             }
             else -> {
-                startForeground(NOTIFICATION_ID, createNotification())
+                try {
+                    val notification = createNotification()
+                    startForeground(NOTIFICATION_ID, notification)
+                    Log.d(TAG, "Foreground service started")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to start foreground service", e)
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
                 playAdzan()
             }
         }
@@ -60,8 +72,12 @@ class AdzanService : Service() {
                 description = "Adzan playback service"
                 setSound(null, null)
             }
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
+            try {
+                val manager = getSystemService(NotificationManager::class.java)
+                manager.createNotificationChannel(channel)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to create notification channel", e)
+            }
         }
     }
 
@@ -76,7 +92,9 @@ class AdzanService : Service() {
             else PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val openIntent = packageManager.getLaunchIntentForPackage(packageName)
+        val openIntent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
+            putExtra(AdzanAlarmReceiver.EXTRA_NAVIGATE, true)
+        }
         val openPendingIntent = PendingIntent.getActivity(
             this, 1, openIntent,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -94,68 +112,120 @@ class AdzanService : Service() {
             .build()
     }
 
-    private fun playAdzan() {
-        try {
-            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-            val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            val targetVolume = (maxVolume * 0.7).toInt().coerceIn(0, maxVolume)
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, targetVolume, 0)
-
-            wakeLock = (getSystemService(POWER_SERVICE) as PowerManager)
-                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AdzanService:AudioLock")
-            wakeLock?.acquire(10 * 60 * 1000L)
-
-            mediaPlayer?.release()
-            mediaPlayer = MediaPlayer().apply {
-                setAudioStreamType(AudioManager.STREAM_MUSIC)
-                setDataSource(applicationContext,
-                    android.net.Uri.parse("android.resource://${packageName}/raw/adzan_makkah"))
-                setOnPreparedListener {
-                    start()
-                    AdzanService.isPlaying = true
-                    Log.d(TAG, "Adzan started playing")
-                }
-                setOnCompletionListener {
-                    Log.d(TAG, "Adzan finished playing")
-                    AdzanService.isPlaying = false
-                    releaseWakeLock()
-                    stopSelf()
-                }
-                setOnErrorListener { _, what, extra ->
-                    Log.e(TAG, "MediaPlayer error: what=$what extra=$extra")
-                    AdzanService.isPlaying = false
-                    releaseWakeLock()
-                    stopSelf()
-                    true
-                }
-                prepareAsync()
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to play adzan", e)
-            isPlaying = false
-            releaseWakeLock()
-            stopSelf()
+    private fun getAdzanUri(): Uri {
+        val resId = resources.getIdentifier("adzan_makkah", "raw", packageName)
+        return if (resId != 0) {
+            Uri.parse("android.resource://$packageName/$resId")
+        } else {
+            Log.w(TAG, "adzan_makkah resource not found")
+            Uri.EMPTY
         }
     }
 
+    private fun playAdzan() {
+        isPlaying = true
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+                val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                val targetVolume = (maxVolume * 0.7).toInt().coerceIn(0, maxVolume)
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, targetVolume, 0)
+
+                wakeLock = (getSystemService(POWER_SERVICE) as PowerManager)
+                    .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AdzanService:AudioLock")
+                wakeLock?.acquire(10 * 60 * 1000L)
+
+                val adzanUri = getAdzanUri()
+                if (adzanUri == Uri.EMPTY) {
+                    Log.e(TAG, "Adzan audio resource not found")
+                    isPlaying = false
+                    releaseWakeLock()
+                    stopSelf()
+                    return@postDelayed
+                }
+
+                mediaPlayer?.release()
+                mediaPlayer = MediaPlayer().apply {
+                    setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build()
+                    )
+                    setDataSource(applicationContext, adzanUri)
+                    setOnPreparedListener {
+                        start()
+                        AdzanService.isPlaying = true
+                        Log.d(TAG, "Adzan started playing")
+                    }
+                    setOnCompletionListener {
+                        Log.d(TAG, "Adzan finished playing")
+                        AdzanService.isPlaying = false
+                        val manager = getSystemService(NotificationManager::class.java)
+                        manager.cancel(AdzanAlarmReceiver.ALERT_NOTIFICATION_ID)
+                        releaseWakeLock()
+                        stopSelf()
+                    }
+                    setOnErrorListener { mp, what, extra ->
+                        Log.e(TAG, "MediaPlayer error: what=$what extra=$extra")
+                        AdzanService.isPlaying = false
+                        releaseWakeLock()
+                        stopSelf()
+                        true
+                    }
+                    prepareAsync()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to play adzan", e)
+                isPlaying = false
+                releaseWakeLock()
+                stopSelf()
+            }
+        }, 2000)
+    }
+
     private fun releaseWakeLock() {
-        wakeLock?.let {
-            if (it.isHeld) it.release()
+        try {
+            wakeLock?.let {
+                if (it.isHeld) {
+                    it.release()
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error releasing wake lock", e)
         }
         wakeLock = null
     }
 
     private fun stopAdzan() {
-        mediaPlayer?.apply {
-            if (isPlaying) {
-                stop()
+        mediaPlayer?.let { mp ->
+            try {
+                if (mp.isPlaying) {
+                    mp.stop()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error stopping media player", e)
             }
-            release()
+            try {
+                mp.release()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error releasing media player", e)
+            }
         }
         mediaPlayer = null
         isPlaying = false
         releaseWakeLock()
-        stopForeground(STOP_FOREGROUND_REMOVE)
+        try {
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.cancel(AdzanAlarmReceiver.ALERT_NOTIFICATION_ID)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error cancelling alert notification", e)
+        }
+        try {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error stopping foreground", e)
+        }
         stopSelf()
     }
 

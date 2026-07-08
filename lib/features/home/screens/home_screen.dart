@@ -145,8 +145,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       final playing = await AdzanSchedulerService.isAdzanPlaying();
       if (playing && mounted) {
         Get.to(() => const AdzanScreen());
+        return;
       }
     } catch (_) {}
+    try {
+      final shouldNavigate = await AdzanSchedulerService.checkNavigateIntent();
+      if (shouldNavigate && mounted) {
+        await AdzanSchedulerService.consumeNavigateIntent();
+        return;
+      }
+    } catch (_) {}
+    if (mounted) {
+      await controller.checkAndTriggerMissedPrayer();
+    }
   }
 
   @override
@@ -552,7 +563,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       ],
     );
   }
-}
+
 
 Widget _buildMenuItem(BuildContext context, Map menu) {
   return InkWell(
@@ -606,4 +617,5 @@ Widget _buildMenuItem(BuildContext context, Map menu) {
       ),
     ),
   );
+}
 }

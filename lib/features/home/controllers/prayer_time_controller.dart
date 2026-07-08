@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:alquran_new/features/adzan/screens/adzan_screen.dart';
 import 'package:alquran_new/features/home/domain/entities/prayer_time.dart';
 import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
@@ -37,7 +36,6 @@ class PrayerTimeController extends GetxController {
   bool _disposed = false;
 
   Timer? _prayerTimer;
-  Timer? _adzanTimer;
   Timer? _countdownTimer;
   LocationCache? _cachedLocation;
   var locationStatus = "Sedang memuat data...".obs;
@@ -62,8 +60,6 @@ class PrayerTimeController extends GetxController {
     });
   }
 
-  DateTime? _lastAdzanTriggered;
-
   void _schedulePrayerTimer() {
     _prayerTimer?.cancel();
     final next = nextPrayerTime.value;
@@ -77,26 +73,45 @@ class PrayerTimeController extends GetxController {
     });
   }
 
-  void _scheduleAdzanTimer() {
-    final next = nextPrayerTime.value;
-    if (next == null) return;
+  Future<void> checkAndTriggerMissedPrayer() async {
+    final item = todayPrayer.value;
+    if (item == null) return;
 
-    final diff = next.difference(DateTime.now());
-    if (diff.isNegative) return;
+    final now = DateTime.now();
+    final prayers = {
+      "Subuh": testOverrides["Subuh"] ?? item.subuh,
+      "Dzuhur": testOverrides["Dzuhur"] ?? item.dzuhur,
+      "Ashar": testOverrides["Ashar"] ?? item.ashar,
+      "Maghrib": testOverrides["Maghrib"] ?? item.maghrib,
+      "Isya": testOverrides["Isya"] ?? item.isya,
+    };
 
-    _adzanTimer = Timer(diff + const Duration(seconds: 4), () {
-      if (!_disposed) _triggerAdzan();
-    });
-  }
+    String? latestMissed;
+    DateTime? latestMissedTime;
 
-  void _triggerAdzan() {
-    if (_lastAdzanTriggered != null &&
-        DateTime.now().difference(_lastAdzanTriggered!) <
-            const Duration(minutes: 1)) {
-      return;
+    for (final entry in prayers.entries) {
+      final dt = _parseTime(entry.value, now);
+      if (dt.isBefore(now) && now.difference(dt).inMinutes < 3) {
+        if (latestMissed == null || dt.isAfter(latestMissedTime!)) {
+          latestMissed = entry.key;
+          latestMissedTime = dt;
+        }
+      }
     }
-    _lastAdzanTriggered = DateTime.now();
-    Get.to(() => const AdzanScreen());
+
+    if (latestMissed != null) {
+      const prayerIds = {
+        "Imsak": 6, "Subuh": 1, "Dzuhur": 2,
+        "Ashar": 3, "Maghrib": 4, "Isya": 5,
+      };
+      final id = prayerIds[latestMissed] ?? 1;
+      await NotificationService().showNotification(
+        id: id,
+        title: "Al-Barokah: Quran & Sholat",
+        body: "Saatnya sholat $latestMissed",
+        notificationMode: 0,
+      );
+    }
   }
 
   Future<void> detectLocation() async {
@@ -239,7 +254,6 @@ class PrayerTimeController extends GetxController {
         nextPrayerName.value = entry.key;
         nextPrayerTime.value = dt;
         _schedulePrayerTimer();
-        _scheduleAdzanTimer();
         return;
       }
     }
@@ -248,7 +262,6 @@ class PrayerTimeController extends GetxController {
     nextPrayerName.value = "Subuh";
     nextPrayerTime.value = _parseTime(item.subuh, tomorrow);
     _schedulePrayerTimer();
-    _scheduleAdzanTimer();
   }
 
   DateTime _parseTime(String time, DateTime base) {
@@ -356,10 +369,50 @@ class PrayerTimeController extends GetxController {
     await _schedulePrayerNotifications(item);
   }
 
+  final testOverrides = <String, String>{};
+
+  String getEffectiveTime(String prayer, String original) {
+    return testOverrides[prayer] ?? original;
+  }
+
+  Future<void> setTestOverride(String prayer, String time) async {
+    testOverrides[prayer] = time;
+    await _recalculateWithOverrides();
+  }
+
+  Future<void> _recalculateWithOverrides() async {
+    final item = todayPrayer.value;
+    if (item == null) return;
+
+    await AdzanSchedulerService.cancelAllAlarms();
+
+    final now = DateTime.now();
+    final prayers = {
+      "Subuh": testOverrides["Subuh"] ?? item.subuh,
+      "Dzuhur": testOverrides["Dzuhur"] ?? item.dzuhur,
+      "Ashar": testOverrides["Ashar"] ?? item.ashar,
+      "Maghrib": testOverrides["Maghrib"] ?? item.maghrib,
+      "Isya": testOverrides["Isya"] ?? item.isya,
+    };
+
+    for (final entry in prayers.entries) {
+      final dt = _parseTime(entry.value, now);
+      if (dt.isAfter(now)) {
+        nextPrayerName.value = entry.key;
+        nextPrayerTime.value = dt;
+        return;
+      }
+    }
+
+    final first = prayers.entries.first;
+    final dt = _parseTime(first.value, now.add(const Duration(days: 1)));
+    nextPrayerName.value = first.key;
+    nextPrayerTime.value = dt;
+  }
+
   @override
   void onClose() {
     _prayerTimer?.cancel();
-    _adzanTimer?.cancel();
     _countdownTimer?.cancel();
     _isRefreshing = false;
     _disposed = true;
