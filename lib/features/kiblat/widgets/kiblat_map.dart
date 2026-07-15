@@ -14,6 +14,14 @@ class KiblatMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<KiblatController>();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.latitude.value == 0.0 &&
+          controller.longitude.value == 0.0 &&
+          !controller.isLoading.value) {
+        controller.startLocation();
+      }
+    });
+
     return Obx(() {
       if (controller.errorMessage.value.isNotEmpty) {
         return _buildErrorView(context, controller);

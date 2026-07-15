@@ -118,7 +118,7 @@ class _DzikirCardState extends State<DzikirCard> {
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: widget.isBold ? FontWeight.bold : FontWeight.w200,
                 fontFamily: fontFamily,
-                height: 2,
+                height: 2.5,
                 fontSize: widget.ukuranTeksArab,
               ),
             ),

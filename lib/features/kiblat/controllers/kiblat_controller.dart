@@ -36,8 +36,13 @@ class KiblatController extends GetxController {
   Future<void> getCurrentLocation() async {
     try {
       _positionSubscription?.cancel();
+      errorMessage.value = '';
 
-      final perm = await Geolocator.checkPermission();
+      var perm = await Geolocator.checkPermission();
+      if (perm == LocationPermission.denied) {
+        perm = await Geolocator.requestPermission();
+      }
+
       if (perm != LocationPermission.whileInUse &&
           perm != LocationPermission.always) {
         errorMessage.value = 'Izin lokasi belum diberikan';

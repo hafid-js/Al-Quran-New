@@ -180,7 +180,7 @@ class DetailPerasaanCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: isBold ? FontWeight.bold : FontWeight.w200,
                     fontFamily: fontFamily,
-                    height: 2,
+                    height: 2.5,
                     fontSize: ukuranTeksArab,
                   ),
                 ),

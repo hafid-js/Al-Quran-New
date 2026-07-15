@@ -33,6 +33,8 @@ class AdzanController extends GetxController {
     return file.path;
   }
 
+  Timer? _nativePollTimer;
+
   Future<void> _initPlayer() async {
     try {
       isLoading.value = true;
@@ -42,6 +44,7 @@ class AdzanController extends GetxController {
         isNativePlaying.value = true;
         isPlaying.value = true;
         isLoading.value = false;
+        _pollNativeAdzan();
         return;
       }
 
@@ -65,7 +68,22 @@ class AdzanController extends GetxController {
     }
   }
 
+  void _pollNativeAdzan() {
+    _nativePollTimer = Timer.periodic(const Duration(seconds: 1), (_) async {
+      final playing = await AdzanSchedulerService.isAdzanPlaying();
+      if (!playing) {
+        _nativePollTimer?.cancel();
+        _nativePollTimer = null;
+        playerFinished.value = true;
+        isPlaying.value = false;
+        isNativePlaying.value = false;
+      }
+    });
+  }
+
   Future<void> stopAdzan() async {
+    _nativePollTimer?.cancel();
+    _nativePollTimer = null;
     await _processingSubscription?.cancel();
     _processingSubscription = null;
     await AdzanSchedulerService.stopAdzan();
@@ -76,6 +94,7 @@ class AdzanController extends GetxController {
 
   @override
   void onClose() {
+    _nativePollTimer?.cancel();
     _processingSubscription?.cancel();
     player.stop();
     player.dispose();

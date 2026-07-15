@@ -867,6 +867,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                                     .ukuranTeksArab
                                                     .value,
                                               ),
+                                              height: 2.5
                                             ),
                                           ),
                                         );

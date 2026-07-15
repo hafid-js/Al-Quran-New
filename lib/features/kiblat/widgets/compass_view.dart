@@ -15,12 +15,16 @@ class CompassView extends StatefulWidget {
   State<CompassView> createState() => _CompassViewState();
 }
 
-class _CompassViewState extends State<CompassView> {
+class _CompassViewState extends State<CompassView>
+    with AutomaticKeepAliveClientMixin {
   final _locationStreamController =
       StreamController<LocationStatus>.broadcast();
 
   Stream<LocationStatus> get stream => _locationStreamController.stream;
   bool? _hasCompassSensor;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -58,6 +62,7 @@ class _CompassViewState extends State<CompassView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (_hasCompassSensor == false) {
       return _buildNoCompassView(context);
     }
