@@ -38,6 +38,8 @@ class AdzanService : Service() {
         createNotificationChannel()
     }
 
+    private var currentSoundType: String = "adzan"
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_STOP -> {
@@ -45,6 +47,7 @@ class AdzanService : Service() {
                 return START_NOT_STICKY
             }
             else -> {
+                currentSoundType = intent?.getStringExtra("soundType") ?: "adzan"
                 try {
                     val notification = createNotification()
                     startForeground(NOTIFICATION_ID, notification)
@@ -112,12 +115,13 @@ class AdzanService : Service() {
             .build()
     }
 
-    private fun getAdzanUri(): Uri {
-        val resId = resources.getIdentifier("adzan_makkah", "raw", packageName)
+    private fun getAudioUri(soundType: String): Uri {
+        val resName = if (soundType == "default") "alarmbeep" else "adzan_makkah"
+        val resId = resources.getIdentifier(resName, "raw", packageName)
         return if (resId != 0) {
             Uri.parse("android.resource://$packageName/$resId")
         } else {
-            Log.w(TAG, "adzan_makkah resource not found")
+            Log.w(TAG, "$resName resource not found")
             Uri.EMPTY
         }
     }
@@ -127,17 +131,14 @@ class AdzanService : Service() {
         Handler(Looper.getMainLooper()).postDelayed({
             try {
                 val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-                val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-                val targetVolume = (maxVolume * 0.7).toInt().coerceIn(0, maxVolume)
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, targetVolume, 0)
 
                 wakeLock = (getSystemService(POWER_SERVICE) as PowerManager)
                     .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AdzanService:AudioLock")
                 wakeLock?.acquire(10 * 60 * 1000L)
 
-                val adzanUri = getAdzanUri()
-                if (adzanUri == Uri.EMPTY) {
-                    Log.e(TAG, "Adzan audio resource not found")
+                val audioUri = getAudioUri(currentSoundType)
+                if (audioUri == Uri.EMPTY) {
+                    Log.e(TAG, "Audio resource not found for soundType=$currentSoundType")
                     isPlaying = false
                     releaseWakeLock()
                     stopSelf()
@@ -152,7 +153,7 @@ class AdzanService : Service() {
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .build()
                     )
-                    setDataSource(applicationContext, adzanUri)
+                    setDataSource(applicationContext, audioUri)
                     setOnPreparedListener {
                         start()
                         AdzanService.isPlaying = true

@@ -30,8 +30,18 @@ class BootReceiver : BroadcastReceiver() {
                 continue
             }
 
+            if (!AlarmPreferences.isPrayerEnabled(context, prayerId)) {
+                Log.d("BootReceiver", "Skipping disabled alarm: prayerId=$prayerId")
+                continue
+            }
+
+            val notificationMode = AlarmPreferences.getNotificationMode(context)
+            val soundType = AlarmPreferences.getSoundType(context)
+
             val alarmIntent = Intent(context, AdzanAlarmReceiver::class.java).apply {
                 putExtra("prayerId", prayerId)
+                putExtra("notificationMode", notificationMode)
+                putExtra("soundType", soundType)
             }
             val pendingIntent = PendingIntent.getBroadcast(
                 context,

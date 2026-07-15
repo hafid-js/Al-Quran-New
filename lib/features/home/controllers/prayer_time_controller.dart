@@ -143,7 +143,7 @@ class PrayerTimeController extends GetxController {
       isLoading.value = false;
 
       Future.delayed(const Duration(seconds: 2), () {
-        locationStatus.value = "Idle";
+        locationStatus.value = "Sedang memuat data...";
       });
     }
   }
@@ -352,6 +352,8 @@ class PrayerTimeController extends GetxController {
           await AdzanSchedulerService.scheduleAlarm(
             prayerId: prayerIds[entry.key]!,
             dateTime: prayerTime,
+            notificationMode: settingsController.notificationMode.value,
+            soundType: settingsController.soundType.value,
           );
         }
       } else {

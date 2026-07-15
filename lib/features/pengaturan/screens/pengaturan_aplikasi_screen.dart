@@ -249,9 +249,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                       trailing: Text(
                         "الله",
                         style: TextStyle(
-                          color: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.color,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                           fontFamily: fontFamily,
                           fontSize: Responsive.fontSize(context, phone: 25),
                         ),
@@ -492,8 +490,9 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (ctx) => AlertDialog(
-                                          backgroundColor:
-                                              HexColor.fromHex("#132D3B"),
+                                          backgroundColor: HexColor.fromHex(
+                                            "#132D3B",
+                                          ),
                                           title: Text(
                                             'Tentukan Warna',
                                             style: TextStyle(
@@ -514,12 +513,16 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                     WidgetStatePropertyAll(0),
                                                 foregroundColor:
                                                     WidgetStatePropertyAll(
-                                                  HexColor.fromHex("#2EC4B6"),
-                                                ),
+                                                      HexColor.fromHex(
+                                                        "#2EC4B6",
+                                                      ),
+                                                    ),
                                                 backgroundColor:
                                                     WidgetStatePropertyAll(
-                                                  HexColor.fromHex("#153945"),
-                                                ),
+                                                      HexColor.fromHex(
+                                                        "#153945",
+                                                      ),
+                                                    ),
                                               ),
                                               child: const Text('Simpan'),
                                               onPressed: () async {
@@ -548,16 +551,18 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? Theme.of(context).colorScheme.surface
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.surface
                                           : Theme.of(context).cardColor,
                                       borderRadius: BorderRadius.circular(
                                         16 * scale,
                                       ),
                                       border: Border.all(
                                         color: isSelected
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .primary
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
                                             : Colors.transparent,
                                         width: 1.5,
                                       ),
@@ -589,13 +594,13 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                   fontSize: 9 * scale,
                                                   fontWeight: FontWeight.w500,
                                                   color: isSelected
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
+                                                      ? Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary
                                                       : Theme.of(context)
-                                                          .textTheme
-                                                          .titleLarge
-                                                          ?.color,
+                                                            .textTheme
+                                                            .titleLarge
+                                                            ?.color,
                                                 ),
                                               ),
                                             ],
@@ -615,13 +620,13 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                                                   fontSize: 11 * scale,
                                                   fontWeight: FontWeight.w500,
                                                   color: isSelected
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
+                                                      ? Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary
                                                       : Theme.of(context)
-                                                          .textTheme
-                                                          .titleLarge
-                                                          ?.color,
+                                                            .textTheme
+                                                            .titleLarge
+                                                            ?.color,
                                                 ),
                                               ),
                                             ],
@@ -681,7 +686,7 @@ class _PengaturanAplikasiScreenState extends State<PengaturanAplikasiScreen> {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             subtitle: Text(
-                              "Versi 1.0.5",
+                              "Versi 1.0.6",
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                           ),
@@ -704,9 +709,25 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               SizedBox(width: 10),
-                              Text(
-                                "Kontak: admin@hafidtech.com",
-                                style: Theme.of(context).textTheme.labelMedium,
+                              Text.rich(
+                                TextSpan(
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
+                                  children: [
+                                    const TextSpan(text: 'Kontak: '),
+                                    TextSpan(
+                                      text: '@hafidtechcom',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const TextSpan(text: ' (Instagram)'),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

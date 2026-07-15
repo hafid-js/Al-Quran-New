@@ -155,10 +155,8 @@ class _PengaturanNotifikasiScreenState
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: isSelected
-                                            ? Theme.of(
-                                                context,
-                                              ).colorScheme.primary
-                                            : null,
+                                            ? Colors.white
+                                          : HexColor.fromHex("#5A7A8A"),
                                       ),
                                     ),
 
@@ -249,8 +247,10 @@ class _PengaturanNotifikasiScreenState
                                     color:
                                         notifController.soundType.value ==
                                             'default'
-                                        ? Theme.of(context).colorScheme.primary
-                                        : HexColor.fromHex("#2F4C5B"),
+                                        ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : HexColor.fromHex("#5A7A8A"),
                                   ),
                                   title: Text(
                                     "Suara Default",
@@ -258,22 +258,22 @@ class _PengaturanNotifikasiScreenState
                                       color:
                                           notifController.soundType.value ==
                                               'default'
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : HexColor.fromHex("#61737C"),
+                                          ? Colors.white
+                                          : HexColor.fromHex("#5A7A8A"),
                                     ),
                                   ),
                                   trailing:
-                                      notifController.soundType.value ==
-                                          'default'
+                                      notifController.soundType.value == 'default'
                                       ? Icon(
                                           Icons.check_circle,
                                           color: Theme.of(
                                             context,
                                           ).colorScheme.primary,
                                         )
-                                      : null,
+                                      : Icon(
+                                          Icons.check_circle,
+                                          color: HexColor.fromHex("#5A7A8A"),
+                                        ),
                                 ),
                               ),
                             ),
@@ -307,8 +307,10 @@ class _PengaturanNotifikasiScreenState
                                     color:
                                         notifController.soundType.value ==
                                             'adzan'
-                                        ? Theme.of(context).colorScheme.primary
-                                        : HexColor.fromHex("#5A7A8A"),
+                                        ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : HexColor.fromHex("#5A7A8A"),
                                   ),
                                   title: Text(
                                     "Suara Adzan",
@@ -318,6 +320,7 @@ class _PengaturanNotifikasiScreenState
                                               'adzan'
                                           ? Colors.white
                                           : HexColor.fromHex("#5A7A8A"),
+                                         
                                     ),
                                   ),
                                   trailing:

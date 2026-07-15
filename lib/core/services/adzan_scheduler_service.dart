@@ -11,12 +11,16 @@ class AdzanSchedulerService {
   static Future<void> scheduleAlarm({
     required int prayerId,
     required DateTime dateTime,
+    required int notificationMode,
+    required String soundType,
   }) async {
     if (!_isAndroid) return;
     try {
       await _channel.invokeMethod('scheduleAlarm', {
         'prayerId': prayerId,
         'timestampMillis': dateTime.millisecondsSinceEpoch,
+        'notificationMode': notificationMode,
+        'soundType': soundType,
       });
     } on MissingPluginException {
       // ignore on iOS

@@ -108,13 +108,14 @@ class _AdzanScreenState extends State<AdzanScreen>
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(24),
                     color: primary.withAlpha(30),
-                  ),
-                  child: Icon(
-                    Icons.mosque_rounded,
-                    size: 60,
-                    color: primary,
+                    image: DecorationImage(
+                image: AssetImage(
+                  "assets/icon/albarokah.png",
+                ),
+                fit: BoxFit.cover,
+              ),
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -141,20 +142,8 @@ class _AdzanScreenState extends State<AdzanScreen>
                     );
                   },
                 ),
-                const SizedBox(height: 32),
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white70,
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }),
+                const SizedBox(height: 20),
+                
                 Obx(() {
                   final err = controller.errorMessage.value;
                   if (err == null) return const SizedBox.shrink();

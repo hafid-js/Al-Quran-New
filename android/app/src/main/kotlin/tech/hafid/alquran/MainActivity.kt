@@ -46,8 +46,10 @@ class MainActivity : FlutterActivity() {
                 "scheduleAlarm" -> {
                     val prayerId = call.argument<Int>("prayerId")
                     val timestampMillis = call.argument<Long>("timestampMillis")
+                    val notificationMode = call.argument<Int>("notificationMode") ?: 0
+                    val soundType = call.argument<String>("soundType") ?: "adzan"
                     if (prayerId != null && timestampMillis != null) {
-                        scheduleAlarm(prayerId, timestampMillis)
+                        scheduleAlarm(prayerId, timestampMillis, notificationMode, soundType)
                         result.success(true)
                     } else {
                         result.error("INVALID_ARG", "Missing required arguments", null)
@@ -116,11 +118,14 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun scheduleAlarm(prayerId: Int, timestampMillis: Long) {
+    private fun scheduleAlarm(prayerId: Int, timestampMillis: Long, notificationMode: Int = 0, soundType: String = "adzan") {
         AlarmPreferences.saveAlarm(this, prayerId, timestampMillis)
+        AlarmPreferences.saveSettings(this, notificationMode, soundType)
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AdzanAlarmReceiver::class.java).apply {
             putExtra("prayerId", prayerId)
+            putExtra("notificationMode", notificationMode)
+            putExtra("soundType", soundType)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             this,

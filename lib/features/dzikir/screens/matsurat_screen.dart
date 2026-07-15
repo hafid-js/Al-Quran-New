@@ -29,7 +29,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    
+
     super.dispose();
   }
 
@@ -40,7 +40,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_sugro')),
           child: Container(
-                          width: double.infinity,
+            width: double.infinity,
             padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -77,7 +77,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_sugro')),
           child: Container(
-                  width: double.infinity,
+            width: double.infinity,
             padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -120,7 +120,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'pagi_kubro')),
           child: Container(
-                    width: double.infinity,
+            width: double.infinity,
             padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -157,7 +157,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         GestureDetector(
           onTap: () => Get.to(DetailMatsuratScreen(type: 'petang_kubro')),
           child: Container(
-                    width: double.infinity,
+            width: double.infinity,
             padding: EdgeInsets.only(right: 10, left: 10, bottom: 16, top: 35),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -196,12 +196,12 @@ class _MatsuratScreenState extends State<MatsuratScreen>
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-        final isLandscape =
-    MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -231,60 +231,56 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                 ),
               ],
             ),
-            
           ],
         ),
         actionsPadding: EdgeInsets.only(right: 10),
         actions: [
           Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      height: 33,
-                      width: 120,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Theme.of(context).cardColor,
-                        border: BoxBorder.all(  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 3,
-                          vertical: 3,
-                        ),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          dividerColor: Colors.transparent,
-                          indicator: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.titleLarge!.color,
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-
-                          labelPadding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                          ),
-
-                          labelColor: isDark ? Colors.black : Colors.white,
-                          labelStyle: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                          ),
-
-                          tabs: const [
-                            TabItem(title: "Sugro"),
-                            TabItem(title: "Kubro"),
-                          ],
-                        ),
-                      ),
-                    ),
+            alignment: Alignment.centerRight,
+            child: Container(
+              height: 33,
+              width: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                color: Theme.of(context).cardColor,
+                border: BoxBorder.all(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.15),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    color: Theme.of(context).textTheme.titleLarge!.color,
+                    borderRadius: BorderRadius.circular(18),
                   ),
-                            const SizedBox(height: 10),
+
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+
+                  labelColor: isDark ? Colors.black : Colors.white,
+                  labelStyle: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+
+                  tabs: const [
+                    TabItem(title: "Sugro"),
+                    TabItem(title: "Kubro"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
         ],
       ),
       body: SingleChildScrollView(
@@ -295,12 +291,14 @@ class _MatsuratScreenState extends State<MatsuratScreen>
             children: [
               const SizedBox(height: 10),
               SizedBox(
-                height: Responsive.boxSize(
-  context,
-  phone: isLandscape
-    ? 160
-    : Responsive.boxSize(context, phone: 222),
-) * (MediaQuery.of(context).size.height > 600 ? 1 : 1),
+                height:
+                    Responsive.boxSize(
+                      context,
+                      phone: isLandscape
+                          ? 160
+                          : Responsive.boxSize(context, phone: 222),
+                    ) *
+                    (MediaQuery.of(context).size.height > 600 ? 1 : 1),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: AnimatedSwitcher(
@@ -326,7 +324,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                 ),
               ),
               SizedBox(height: 10),
-      Text(
+              Text(
                 "Bagaimana Perasaanmu Saat Ini?",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: Theme.of(context).colorScheme.primary,
@@ -339,81 +337,91 @@ class _MatsuratScreenState extends State<MatsuratScreen>
                     height: 120,
                     width: double.infinity,
                     child: LayoutBuilder(
-  builder: (context, constraints) {
-    final itemHeight = (constraints.maxHeight - 0.2) / 1.5;
+                      builder: (context, constraints) {
+                        final itemHeight = (constraints.maxHeight - 0.2) / 1.5;
 
-    return GridView.count(
-      scrollDirection: Axis.horizontal,
-      crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      padding: EdgeInsets.zero,
-      childAspectRatio: itemHeight / 220,
-      children: [
-                        PerasaanCard(
-                          title: "Marah",
-                          color: "#F4B8C1",
-                          onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "marah",)),
-                        ),
-                        PerasaanCard(
-                          title: "Cemas/Gelisah",
-                          color: "#B8D4F4",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "cemas_gelisah",)),
-                        ),
-                          PerasaanCard(
-                          title: "Bosan",
-                          color: "#D4D4D4",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "bosan",)),
-                        ),
-                        PerasaanCard(
-                          title: "Percaya Diri",
-                          color: "#B8E8D4",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "percaya_diri",)),
-                        ),
-                        PerasaanCard(
-                          title: "Bingung",
-                          color: "#E8DDB8",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "bingung",)),
-                        ),
-                        PerasaanCard(
-                          title: "Puas/Tenang",
-                          color: "#F4C8E8",
-                       onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "puas_tenang",)),
-                        ),
-                        PerasaanCard(
-                          title: "Depresi/Sedih Mendalam",
-                          color: "#C8B4D4",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "depresi_sedih_mendalam",)),
-                        ),
-                        PerasaanCard(
-                          title: "Ragu-Ragu",
-                          color: "#D4B8E8",
-                          onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "ragu_ragu",)),
-                        ),
-                        PerasaanCard(
-                          title: "Bersyukur",
-                          color: "#B8E8C8",
-                          onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "bersyukur",)),
-                        ),
-                        PerasaanCard(
-                          title: "Serakah/Tamak",
-                          color: "#E8D4B8",
-                         onTap: () =>
-                              Get.to(DetailPerasaanScreen(type: "serakah_tamak",)),
-                        ),
-                      ],
-                    );
-  }
-                  ))
+                        return GridView.count(
+                          scrollDirection: Axis.horizontal,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          padding: EdgeInsets.zero,
+                          childAspectRatio: itemHeight / 220,
+                          children: [
+                            PerasaanCard(
+                              title: "Marah",
+                              color: "#F4B8C1",
+                              onTap: () =>
+                                  Get.to(DetailPerasaanScreen(type: "marah")),
+                            ),
+                            PerasaanCard(
+                              title: "Cemas/Gelisah",
+                              color: "#B8D4F4",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "cemas_gelisah"),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Bosan",
+                              color: "#D4D4D4",
+                              onTap: () =>
+                                  Get.to(DetailPerasaanScreen(type: "bosan")),
+                            ),
+                            PerasaanCard(
+                              title: "Percaya Diri",
+                              color: "#B8E8D4",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "percaya_diri"),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Bingung",
+                              color: "#E8DDB8",
+                              onTap: () =>
+                                  Get.to(DetailPerasaanScreen(type: "bingung")),
+                            ),
+                            PerasaanCard(
+                              title: "Puas/Tenang",
+                              color: "#F4C8E8",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "puas_tenang"),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Depresi/Sedih Mendalam",
+                              color: "#C8B4D4",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(
+                                  type: "depresi_sedih_mendalam",
+                                ),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Ragu-Ragu",
+                              color: "#D4B8E8",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "ragu_ragu"),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Bersyukur",
+                              color: "#B8E8C8",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "bersyukur"),
+                              ),
+                            ),
+                            PerasaanCard(
+                              title: "Serakah/Tamak",
+                              color: "#E8D4B8",
+                              onTap: () => Get.to(
+                                DetailPerasaanScreen(type: "serakah_tamak"),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 10),

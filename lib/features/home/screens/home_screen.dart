@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     {
       "title": "Kiblat",
       "icon": Icons.my_location_rounded,
-      "page": () => KiblatScreen(),
+      "page": () => KiblatScreen()
     },
     {
       "title": "Tasbih",
@@ -303,6 +303,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
+      //  image: DecorationImage(
+      //   opacity: 0.2,
+      //   fit: BoxFit.cover,
+        
+      //           image: AssetImage(
+      //             "assets/icon/image.png",
+      //           ),),
         gradient: LinearGradient(
           colors: [
             Theme.of(context).colorScheme.primary.withAlpha(160),
