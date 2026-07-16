@@ -29,8 +29,8 @@ class KiblatController extends GetxController {
     await Geolocator.openAppSettings();
   }
 
-  void startLocation() {
-    getCurrentLocation();
+  Future<void> startLocation() async {
+    await getCurrentLocation();
   }
 
   Future<void> getCurrentLocation() async {

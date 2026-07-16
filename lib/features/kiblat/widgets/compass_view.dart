@@ -16,7 +16,7 @@ class CompassView extends StatefulWidget {
 }
 
 class _CompassViewState extends State<CompassView>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final _locationStreamController =
       StreamController<LocationStatus>.broadcast();
 
@@ -29,14 +29,23 @@ class _CompassViewState extends State<CompassView>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _checkDeviceSupport();
     _checkLocationStatus();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _locationStreamController.close();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkLocationStatus();
+    }
   }
 
   Future<void> _checkDeviceSupport() async {
@@ -92,22 +101,24 @@ class _CompassViewState extends State<CompassView>
             case LocationPermission.denied:
               return _LocationErrorWidget(
                 error: "Izin lokasi ditolak",
-                callback: () {
-                  Get.find<KiblatController>().startLocation();
+                callback: () async {
+                  await Get.find<KiblatController>().startLocation();
+                  _checkLocationStatus();
                 },
               );
             case LocationPermission.deniedForever:
               return _LocationErrorWidget(
                 error: "Izin lokasi ditolak permanen",
-                callback: () {
-                  Get.find<KiblatController>().openAppSettings();
+                callback: () async {
+                  await Get.find<KiblatController>().openAppSettings();
                 },
               );
             case LocationPermission.unableToDetermine:
               return _LocationErrorWidget(
                 error: "Tidak dapat menentukan izin lokasi",
-                callback: () {
-                  Get.find<KiblatController>().startLocation();
+                callback: () async {
+                  await Get.find<KiblatController>().startLocation();
+                  _checkLocationStatus();
                 },
               );
           }
