@@ -50,14 +50,7 @@ class _CompassViewState extends State<CompassView>
 
   Future<void> _checkLocationStatus() async {
     final locationStatus = await FlutterQiblah.checkLocationStatus();
-    if (locationStatus.enabled &&
-        locationStatus.status == LocationPermission.denied) {
-      await FlutterQiblah.requestPermissions();
-      final s = await FlutterQiblah.checkLocationStatus();
-      _locationStreamController.sink.add(s);
-    } else {
-      _locationStreamController.sink.add(locationStatus);
-    }
+    _locationStreamController.sink.add(locationStatus);
   }
 
   @override
@@ -99,7 +92,9 @@ class _CompassViewState extends State<CompassView>
             case LocationPermission.denied:
               return _LocationErrorWidget(
                 error: "Izin lokasi ditolak",
-                callback: _checkLocationStatus,
+                callback: () {
+                  Get.find<KiblatController>().startLocation();
+                },
               );
             case LocationPermission.deniedForever:
               return _LocationErrorWidget(
@@ -111,7 +106,9 @@ class _CompassViewState extends State<CompassView>
             case LocationPermission.unableToDetermine:
               return _LocationErrorWidget(
                 error: "Tidak dapat menentukan izin lokasi",
-                callback: _checkLocationStatus,
+                callback: () {
+                  Get.find<KiblatController>().startLocation();
+                },
               );
           }
         },

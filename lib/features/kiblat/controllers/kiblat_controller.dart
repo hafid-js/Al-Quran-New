@@ -36,11 +36,22 @@ class KiblatController extends GetxController {
   Future<void> getCurrentLocation() async {
     try {
       _positionSubscription?.cancel();
+      isLoading.value = true;
       errorMessage.value = '';
 
       var perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
-        perm = await Geolocator.requestPermission();
+        perm = await Geolocator.requestPermission().timeout(
+              const Duration(seconds: 5),
+              onTimeout: () => LocationPermission.denied,
+            );
+      }
+
+      if (perm == LocationPermission.deniedForever) {
+        errorMessage.value =
+            'Izin lokasi ditolak permanen. Buka Pengaturan untuk mengaktifkannya.';
+        isLoading.value = false;
+        return;
       }
 
       if (perm != LocationPermission.whileInUse &&
@@ -57,11 +68,25 @@ class KiblatController extends GetxController {
         return;
       }
 
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
-      );
+      Position? position;
+
+      try {
+        position = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+          ),
+        ).timeout(const Duration(seconds: 10));
+      } catch (_) {
+        position = await Geolocator.getLastKnownPosition();
+      }
+
+      if (position == null) {
+        errorMessage.value =
+            'Gagal mendapatkan lokasi. Pastikan GPS aktif dan berada di area terbuka.';
+        isLoading.value = false;
+        return;
+      }
+
       _updateLocation(position);
 
       if (isLoading.value) isLoading.value = false;

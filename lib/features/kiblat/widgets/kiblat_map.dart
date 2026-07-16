@@ -14,14 +14,6 @@ class KiblatMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<KiblatController>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.latitude.value == 0.0 &&
-          controller.longitude.value == 0.0 &&
-          !controller.isLoading.value) {
-        controller.startLocation();
-      }
-    });
-
     return Obx(() {
       if (controller.errorMessage.value.isNotEmpty) {
         return _buildErrorView(context, controller);
@@ -35,7 +27,7 @@ class KiblatMap extends StatelessWidget {
 
       if (controller.latitude.value == 0.0 &&
           controller.longitude.value == 0.0) {
-        return _buildNoLocationView(context);
+        return _buildNoLocationView(context, controller);
       }
 
       final userPoint =
@@ -165,7 +157,7 @@ class KiblatMap extends StatelessWidget {
     });
   }
 
-  Widget _buildNoLocationView(BuildContext context) {
+  Widget _buildNoLocationView(BuildContext context, KiblatController controller) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -176,15 +168,21 @@ class KiblatMap extends StatelessWidget {
                 size: 64, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
             Text(
-              'Buka tab Kompas untuk mengaktifkan lokasi',
+              'Lokasi belum tersedia',
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Arah kiblat akan muncul setelah lokasi terdeteksi',
+              'Buka tab Kompas untuk mengaktifkan lokasi, atau tekan tombol di bawah.',
               style: Theme.of(context).textTheme.labelSmall,
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () => controller.startLocation(),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Coba Lagi'),
             ),
           ],
         ),
@@ -194,6 +192,8 @@ class KiblatMap extends StatelessWidget {
 
   Widget _buildErrorView(
       BuildContext context, KiblatController controller) {
+    final isPermanent = controller.errorMessage.value.contains('permanen');
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -207,6 +207,18 @@ class KiblatMap extends StatelessWidget {
               controller.errorMessage.value,
               style: Theme.of(context).textTheme.labelMedium,
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (isPermanent) {
+                  controller.openAppSettings();
+                } else {
+                  controller.startLocation();
+                }
+              },
+              icon: Icon(isPermanent ? Icons.settings : Icons.refresh),
+              label: Text(isPermanent ? 'Buka Pengaturan' : 'Coba Lagi'),
             ),
           ],
         ),

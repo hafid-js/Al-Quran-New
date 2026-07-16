@@ -20,10 +20,23 @@ class _KiblatScreenState extends State<KiblatScreen>
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     Get.put(KiblatController());
+    tabController.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    if (tabController.indexIsChanging) return;
+    if (tabController.index == 1) {
+      final controller = Get.find<KiblatController>();
+      if (controller.latitude.value == 0.0 &&
+          controller.longitude.value == 0.0) {
+        controller.startLocation();
+      }
+    }
   }
 
   @override
   void dispose() {
+    tabController.removeListener(_onTabChanged);
     tabController.dispose();
     Get.delete<KiblatController>();
     super.dispose();
