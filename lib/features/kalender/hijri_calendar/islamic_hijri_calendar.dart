@@ -184,7 +184,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
             defaultBorder: widget.defaultBorder,
             backgroundColor: Theme.of(context).cardColor,
             deActiveDateBorderColor: widget.defaultBorder,
-            eventBackgroundColor: Theme.of(context).colorScheme.primary.withAlpha(40),
+            eventBackgroundColor: HexColor.fromHex("#256980").withAlpha(40),
             style: textStyle,
             onSelectedEnglishDate: (selectedDate) {
               if (widget.getSelectedEnglishDate != null) {
@@ -252,8 +252,8 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                   borderRadius: BorderRadius.circular(24),
                   gradient: LinearGradient(
                     colors: [
-          Theme.of(context).colorScheme.primary.withAlpha(160),
-                        Theme.of(context).colorScheme.primary.withAlpha(190),
+          HexColor.fromHex("#256980"),
+                        HexColor.fromHex("#256980")
                     ],
                   ),
                 ),
@@ -297,7 +297,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                     child: Icon(
                       Icons.arrow_circle_left_rounded,
                       size: 20,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: HexColor.fromHex("#256980"),
                     ),
                   ),
                 ),
@@ -348,7 +348,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                     child: Icon(
                       Icons.arrow_circle_right_rounded,
                       size: 20,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: HexColor.fromHex("#256980"),
                     ),
                   ),
                 ),
@@ -392,7 +392,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                           color:
                                               (DateTime.now().weekday - 1 ==
                                                   index)
-                                              ? Theme.of(context).colorScheme.primary
+                                              ? HexColor.fromHex("#256980")
                                               : Theme.of(context).textTheme.titleLarge?.color
                                         ),
                                       ),
@@ -454,7 +454,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                 child: Icon(
                                   Icons.star_rate_rounded,
                                   size: 30,
-                                  color: Theme.of(context).colorScheme.primary
+                                  color: HexColor.fromHex("#256980")
                                 ),
                               ),
                               SizedBox(width: 10),
@@ -485,7 +485,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                 "Lihat Semua",
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: HexColor.fromHex("#256980"),
                                 ),
                               ),
                             ),
@@ -527,7 +527,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                             event['hijriDay'].toString(),
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Theme.of(context).colorScheme.primary,
+                                              color: HexColor.fromHex("#256980"),
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -535,7 +535,7 @@ String dateNow = DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.now());
                                           event['gregorianDay'].toString(),
                                             style: TextStyle(
                                               fontSize: 10,
-                                              color: Theme.of(context).colorScheme.primary,
+                                              color: HexColor.fromHex("#256980"),
                                             ),
                                           ),
                                         ],

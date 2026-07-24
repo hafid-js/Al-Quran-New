@@ -68,6 +68,10 @@ dependencies:
   permission_handler: ^12.0.3
   flutter_islamic_icons: ^1.0.2
   share_plus: ^12.0.2
+  showcaseview: ^5.1.0
+  iconsax: ^0.0.8
+  step_progress_indicator: ^1.0.2
+  lottie: ^3.3.3
 dependency_overrides:
   device_info_plus: ^10.1.0
   flutter_plugin_android_lifecycle: 2.0.33
@@ -124,6 +128,10 @@ flutter:
     - assets/
     - assets/sound/
     - assets/icon/
+    - assets/fonts/
+    - assets/svg_arab_kaligrafi/
+    - assets/svg_perasaan/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -149,6 +157,12 @@ flutter:
     - family: Uthmanic
       fonts:
         - asset: assets/fonts/KFGQPC-Uthmanic-Script-HAFS-Regular.otf
+    - family: Quran Islamic
+      fonts:
+        - asset: assets/fonts/ArabQuranIslamic140-K7n4W.ttf
+    - family: Quran Islamic 2
+      fonts:
+        - asset: assets/fonts/ArabQuranIslamic140-vnmnZ.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

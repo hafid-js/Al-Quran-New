@@ -206,7 +206,7 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                                     ),
                                                     const SizedBox(height: 5),
                                                     SettingsSwitchTile(
-                                                      title: "Font Arab Bold",
+                                                      title: "Font Arab Tebal",
                                                       value: controller
                                                           .arabBold
                                                           .value,

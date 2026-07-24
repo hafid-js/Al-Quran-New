@@ -26,8 +26,10 @@ import 'package:alquran_new/core/services/adzan_scheduler_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -61,6 +63,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final controller = Get.put(PrayerTimeController());
 
+  final GlobalKey _manualLocationKey = GlobalKey();
+  final GlobalKey _locationDetectKey = GlobalKey();
+  final GlobalKey _notificationKey = GlobalKey();
+  final GlobalKey _menuSectionKey = GlobalKey();
+
   final List<Map<String, dynamic>> menus = [
     {
       "title": "Quran",
@@ -77,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     {
       "title": "Kiblat",
       "icon": Icons.my_location_rounded,
-      "page": () => KiblatScreen()
+      "page": () => KiblatScreen(),
     },
     {
       "title": "Tasbih",
@@ -117,9 +124,67 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
     SurahBinding().dependencies();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAdzanOnOpen());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ShowcaseView.register(
+        autoPlayDelay: const Duration(seconds: 3),
+        globalTooltipActionConfig: const TooltipActionConfig(
+          position: TooltipActionPosition.inside,
+          alignment: MainAxisAlignment.spaceBetween,
+          actionGap: 20,
+        ),
+        globalTooltipActions: [
+          TooltipActionButton(
+            type: TooltipDefaultActionType.previous,
+            name: 'Sebelumnya',
+            textStyle: TextStyle(color: Colors.white),
+            hideActionWidgetForShowcase: [_manualLocationKey],
+          ),
+          TooltipActionButton(
+            type: TooltipDefaultActionType.next,
+            name: 'Selanjutnya',
+            backgroundColor: Colors.transparent,
+            textStyle: TextStyle(color: Colors.white),
+            hideActionWidgetForShowcase: [_locationDetectKey, _manualLocationKey, _notificationKey],
+          ),
+
+          TooltipActionButton(
+            type: TooltipDefaultActionType.next,
+            name: 'Selanjutnya',
+            textStyle: const TextStyle(color: Colors.white),
+            hideActionWidgetForShowcase: [_menuSectionKey],
+          ),
+        ],
+      );
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAdzanOnOpen();
+    });
+  }
+
+  bool _showcaseStarted = false;
+
+  void _startShowcaseIfNeeded() {
+    if (_showcaseStarted) return;
+    final hasSeenShowcase = GetStorage().read('home_showcase_seen') ?? false;
+    if (!hasSeenShowcase) {
+      _showcaseStarted = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ShowcaseView.get().startShowCase([
+            _manualLocationKey,
+            _locationDetectKey,
+            _notificationKey,
+            _menuSectionKey,
+          ]);
+          GetStorage().write('home_showcase_seen', true);
+        }
+      });
+    }
   }
 
   @override
@@ -140,7 +205,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _checkAdzanOnOpen() async {
-    if (DateTime.now().difference(HomeScreen._lastAdzanDismissed).inSeconds < 3) return;
+    if (DateTime.now().difference(HomeScreen._lastAdzanDismissed).inSeconds < 3)
+      return;
     try {
       final playing = await AdzanSchedulerService.isAdzanPlaying();
       if (playing && mounted) {
@@ -194,6 +260,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               if (controller.todayPrayer.value == null) {
                 return const Scaffold(body: Center(child: Text("Data kosong")));
               }
+              // Mulai showcase setelah content ter-render
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _startShowcaseIfNeeded();
+              });
               return SafeArea(child: _buildContent(context));
             }),
             const Positioned(bottom: 0, left: 0, right: 0, child: PlayerBar()),
@@ -249,15 +319,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               const SizedBox(width: 12),
               Text(city, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(width: 6),
-              GestureDetector(
-                onTap: () => Get.to(() => LokasiScreen()),
-                child: AnimatedRotation(
-                  turns: 1.75,
-                  duration: Duration(milliseconds: 300),
-                  child: Icon(
-                    Icons.arrow_circle_left_rounded,
-                    color: Theme.of(context).textTheme.labelLarge?.color,
-                    size: 22,
+              Showcase(
+                descriptionTextAlign: .start,
+                tooltipPadding: EdgeInsets.all(16),
+                descriptionPadding: EdgeInsets.symmetric(vertical: 8),
+                key: _manualLocationKey,
+                title: 'Pilih Lokasi Manual',
+                tooltipActionConfig: TooltipActionConfig(alignment: .end),
+                description:
+                    'Tekan ikon ini untuk memilih lokasi jadwal sholat.',
+                titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                descTextStyle: Theme.of(context).textTheme.labelMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
+                targetShapeBorder: const CircleBorder(),
+                tooltipBackgroundColor: Theme.of(context).cardColor,
+                textColor: Colors.white,
+                child: GestureDetector(
+                  onTap: () => Get.to(() => LokasiScreen()),
+                  child: AnimatedRotation(
+                    turns: 1.75,
+                    duration: Duration(milliseconds: 300),
+                    child: Icon(
+                      Icons.arrow_circle_left_rounded,
+                      color: Theme.of(context).textTheme.labelLarge?.color,
+                      size: 22,
+                    ),
                   ),
                 ),
               ),
@@ -266,30 +352,46 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           Obx(() {
             final isLoading = controller.isLoading.value;
 
-            return GestureDetector(
-              onTap: isLoading
-                  ? null
-                  : () async {
-                      await controller.detectLocation();
-                    },
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).cardColor,
-                  boxShadow: context.shadow.small,
+            return Showcase(
+              descriptionTextAlign: .start,
+              tooltipPadding: EdgeInsets.all(16),
+              descriptionPadding: EdgeInsets.symmetric(vertical: 8),
+              key: _locationDetectKey,
+              title: 'Deteksi Lokasi',
+              description:
+                  'Tekan ikon ini untuk memperbarui lokasi dan menyesuaikan jadwal sholat secara otomatis.',
+              titleTextStyle: Theme.of(context).textTheme.titleMedium,
+              descTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              targetShapeBorder: const CircleBorder(),
+              tooltipBackgroundColor: Theme.of(context).cardColor,
+              textColor: Colors.white,
+              child: GestureDetector(
+                onTap: isLoading
+                    ? null
+                    : () async {
+                        await controller.detectLocation();
+                      },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Theme.of(context).cardColor,
+                    boxShadow: context.shadow.small,
+                  ),
+                  child: isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Icon(
+                          Icons.location_on,
+                          size: 25,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                 ),
-                child: isLoading
-                    ? const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Icon(
-                        Icons.location_on,
-                        size: 25,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
               ),
             );
           }),
@@ -303,13 +405,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-      //  image: DecorationImage(
-      //   opacity: 0.2,
-      //   fit: BoxFit.cover,
-        
-      //           image: AssetImage(
-      //             "assets/icon/image.png",
-      //           ),),
+        //  image: DecorationImage(
+        //   opacity: 0.2,
+        //   fit: BoxFit.cover,
+
+        //           image: AssetImage(
+        //             "assets/icon/image.png",
+        //           ),),
         gradient: LinearGradient(
           colors: [
             Theme.of(context).colorScheme.primary.withAlpha(160),
@@ -430,19 +532,35 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return SectionHeader(
       icon: Icons.access_time_filled_outlined,
       title: "Jadwal Sholat",
-      trailing: GestureDetector(
-        onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
-        child: Container(
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Icon(
-            Icons.notifications,
-            color: Theme.of(context).colorScheme.primary,
-            size: 20,
+      trailing: Showcase(
+        descriptionTextAlign: .start,
+        tooltipPadding: EdgeInsets.all(16),
+        descriptionPadding: EdgeInsets.symmetric(vertical: 8),
+        key: _notificationKey,
+        title: 'Pengaturan Notifikasi',
+        description:
+            'Tekan ikon lonceng ini untuk mengatur notifikasi pengingat sholat.',
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
+        descTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        targetShapeBorder: const CircleBorder(),
+        tooltipBackgroundColor: Theme.of(context).cardColor,
+        textColor: Colors.white,
+        child: GestureDetector(
+          onTap: () => Get.to(() => PengaturanNotifikasiScreen()),
+          child: Container(
+            height: 35,
+            width: 35,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Icon(
+              Icons.notifications,
+              color: Theme.of(context).colorScheme.primary,
+              size: 20,
+            ),
           ),
         ),
       ),
@@ -541,7 +659,46 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget _buildMenuSection(BuildContext context) {
     return Column(
       children: [
-        SectionHeader(icon: Icons.grid_view_rounded, title: "Menu"),
+        Showcase(
+          targetBorderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8),
+            bottomLeft: Radius.circular(8),
+          ),
+          key: _menuSectionKey,
+          descriptionTextAlign: .start,
+          tooltipPadding: EdgeInsets.all(16),
+          descriptionPadding: EdgeInsets.symmetric(vertical: 8),
+          title: 'Menu Fitur',
+          description:
+              'Ketuk ikon di bawah untuk membuka fitur seperti Al-Quran, Doa, Kiblat, dan lainnya.',
+          titleTextStyle: Theme.of(context).textTheme.titleMedium,
+          descTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          tooltipBackgroundColor: Theme.of(context).cardColor,
+          textColor: Colors.white,
+          tooltipActionConfig: const TooltipActionConfig(
+            alignment: MainAxisAlignment.end,
+            position: TooltipActionPosition.outside,
+          ),
+          tooltipActions: [
+            TooltipActionButton.custom(
+              button: GestureDetector(
+                onTap: () {
+                  ShowcaseView.get().dismiss();
+                },
+                child: Row(
+                  children: [
+                    Text("Tutup", style: TextStyle(color: Colors.white)),
+                    SizedBox(width: 5),
+                    const Icon(Icons.close, color: Colors.white, size: 18),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          child: SectionHeader(icon: Icons.grid_view_rounded, title: "Menu"),
+        ),
         const SizedBox(height: 20),
         AnimatedSize(
           duration: Duration(milliseconds: 300),
@@ -571,58 +728,57 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
+  Widget _buildMenuItem(BuildContext context, Map menu) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        if (menu["page"] != null) {
+          final binding = menu["binding"];
 
-Widget _buildMenuItem(BuildContext context, Map menu) {
-  return InkWell(
-    borderRadius: BorderRadius.circular(16),
-    onTap: () {
-      if (menu["page"] != null) {
-        final binding = menu["binding"];
-
-        if (binding != null) {
-          Get.to(menu["page"], binding: binding);
-        } else {
-          Get.to(menu["page"]);
+          if (binding != null) {
+            Get.to(menu["page"], binding: binding);
+          } else {
+            Get.to(menu["page"]);
+          }
         }
-      }
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: 55,
-            width: 55,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            child: Icon(
-              menu["icon"],
-              size: 30,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6),
-            child: Text(
-              menu["title"],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: HexColor.fromHex("#5a7b8a"),
-                fontWeight: FontWeight.w500,
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 55,
+              width: 55,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              child: Icon(
+                menu["icon"],
+                size: 30,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Text(
+                menu["title"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: HexColor.fromHex("#5a7b8a"),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

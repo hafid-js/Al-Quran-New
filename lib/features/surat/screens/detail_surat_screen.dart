@@ -278,7 +278,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                                         ),
                                                         SettingsSwitchTile(
                                                           title:
-                                                              "Font Arab Bold",
+                                                              "Font Arab Tebal",
                                                           value: controller
                                                               .arabBold
                                                               .value,

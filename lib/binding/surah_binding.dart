@@ -1,5 +1,7 @@
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
+import 'package:alquran_new/development/alquran_controller.dart';
+import 'package:alquran_new/development/hizb_controller.dart';
 import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_source.dart';
 import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
@@ -14,26 +16,30 @@ class SurahBinding extends Bindings {
   @override
   void dependencies() {
 
-    Get.lazyPut<DioClient>(() => DioClient());
+    Get.lazyPut<DioClient>(() => DioClient(), fenix: true);
 
     Get.lazyPut<SurahRemoteDataSource>(
       () => SurahRemoteDataSourceImpl(
         Get.find<DioClient>(),
       ),
+      fenix: true,
     );
 
     Get.lazyPut<SurahRepository>(
       () => SurahRepositoryImpl(
         Get.find<SurahRemoteDataSource>(),
       ),
+      fenix: true,
     );
 
-    Get.lazyPut(() => GetAllSurah(Get.find()));
-    Get.lazyPut(() => GetDetailSurah(Get.find()));
-    Get.lazyPut(() => GetTafsir(Get.find()));
+    Get.lazyPut(() => GetAllSurah(Get.find()), fenix: true);
+    Get.lazyPut(() => GetDetailSurah(Get.find()), fenix: true);
+    Get.lazyPut(() => GetTafsir(Get.find()), fenix: true);
 
-    Get.lazyPut(() => SurahController());
-    Get.lazyPut(() => DetailSurahController());
-    Get.lazyPut(()=>NetworkController());
+    Get.lazyPut(() => SurahController(), fenix: true);
+    Get.lazyPut(() => DetailSurahController(), fenix: true);
+    Get.lazyPut(() => JuzController(), fenix: true);
+    Get.lazyPut(() => HizbController(), fenix: true);
+    Get.lazyPut(() => NetworkController(), fenix: true);
   }
 }

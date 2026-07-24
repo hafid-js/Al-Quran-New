@@ -186,7 +186,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen> {
                                                     ),
                                                     const SizedBox(height: 5),
                                                     SettingsSwitchTile(
-                                                      title: "Font Arab Bold",
+                                                      title: "Font Arab Tebal",
                                                       value: controller
                                                           .arabBold
                                                           .value,

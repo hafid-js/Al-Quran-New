@@ -31,11 +31,7 @@ void main() async {
 
   _configureSystemUI();
 
-  try {
-    await HiveService.init().timeout(const Duration(seconds: 10));
-  } catch (e) {
-    debugPrint('HiveService.init error: $e');
-  }
+  await HiveService.init().timeout(const Duration(seconds: 10));
 
   try {
     await GetStorage.init();
