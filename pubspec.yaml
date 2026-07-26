@@ -72,6 +72,9 @@ dependencies:
   iconsax: ^0.0.8
   step_progress_indicator: ^1.0.2
   lottie: ^3.3.3
+  just_audio_media_kit: ^2.1.0
+  smooth_page_indicator: ^2.0.1
+  carousel_slider: ^5.1.2
 dependency_overrides:
   device_info_plus: ^10.1.0
   flutter_plugin_android_lifecycle: 2.0.33
@@ -125,6 +128,7 @@ flutter:
     - assets/images/
     - assets/images/qari/
     - assets/images/logo/
+    - assets/images/banners/
     - assets/
     - assets/sound/
     - assets/icon/

@@ -310,19 +310,21 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                     children: [
                       Text(
                         "Hizb ${hizb.number}",
-                        style: TextStyle(
-                          color: HexColor.fromHex("#151419"),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: HexColor.fromHex("#1E4355"),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                       Text(
                         "${hizb.startSurah}: ${hizb.startAyah} - ${hizb.endSurah}: ${hizb.endAyah}",
                         style: TextStyle(
-                          color: HexColor.fromHex("#676767"),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
+                              color: HexColor.fromHex("#676767"),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                            ),
                       ),
                     ],
                   ),
@@ -386,19 +388,21 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                     children: [
                       Text(
                         "Juz ${juz.number}",
-                        style: TextStyle(
-                          color: HexColor.fromHex("#151419"),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: HexColor.fromHex("#1E4355"),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                       Text(
                         "${juz.startSurah}: ${juz.startAyah} - ${juz.endSurah}: ${juz.endAyah}",
                         style: TextStyle(
-                          color: HexColor.fromHex("#676767"),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
+                              color: HexColor.fromHex("#676767"),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                            ),
                       ),
                     ],
                   ),

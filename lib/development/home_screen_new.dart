@@ -2,12 +2,18 @@ import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
+import 'package:alquran_new/development/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa_screen.dart';
+import 'package:alquran_new/development/just_audio/detail_murrotal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:alquran_new/binding/doa_binding.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreenNew extends StatefulWidget {
   const HomeScreenNew({super.key});
@@ -31,29 +37,54 @@ final List<Map<String, dynamic>> menus = [
     "page": () => const AlquranScreenNew(),
     "binding": SurahBinding(),
   },
-  {"title": "Doa", "icon": Iconsax.note_1, "page": () => const DoaScreen(),       "binding": DoaBinding(),},
+  {
+    "title": "Doa",
+    "icon": Iconsax.note_1,
+    "page": () => const DoaScreen(),
+    "binding": DoaBinding(),
+  },
   {"title": "Kiblat", "icon": Iconsax.gps, "page": () => const Placeholder()},
   {
     "title": "Tasbih",
     "icon": Iconsax.more_2,
-    "page": () => const Placeholder(),
+    "page": () => const Placeholder()
   },
   {
     "title": "Hijriah",
     "icon": Iconsax.calendar,
-    "page": () => const Placeholder(),
+    "page": () => Placeholder()
   },
   {
     "title": "Murrotal",
     "icon": Iconsax.music_square,
-    "page": () => const Placeholder(),
+    "onTap": _showMurrotalScreen,
   },
   {
     "title": "Bookmark",
     "icon": Iconsax.save_2,
-    "page": () => const Placeholder(),
+    "onTap": () => const Placeholder(),
   },
   {"title": "Dzikir", "icon": Iconsax.flash, "page": () => const Placeholder()},
+];
+
+int _currentIndex = 0;
+
+final List<Map<String, String>> sliderItems = [
+  {"image": "assets/images/banners/Yasser-Al-Dosari.png", "name": "Yasser Al Dosari"},
+  {"image": "assets/images/banners/Mishary-Rasyid-Al-Afasi.png", "name": "Mishary Rasyid Al Afasi"},
+  {"image": "assets/images/banners/Ibrahim-Al-Dossari.png", "name": "Ibrahim Al Dossari"},
+  {"image": "assets/images/banners/Abdurrahman-as-Sudais.png", "name": "Abdurrahman As Sudais"},
+  {"image": "assets/images/banners/Abdul-Muhsin-Al-Qasim.png", "name": "Abdul Muhsin Al Qasim"},
+  {"image": "assets/images/banners/Abdullah-Al-Juhany.png", "name": "Abdullah Al Juhany"},
+];
+
+final List<Map<String, String>> qariList = [
+  {"image": "assets/images/banners/Yasser-Al-Dosari.jpg", "name": "Yasser Al Dosari"},
+  {"image": "assets/images/banners/Mishary-Rasyid-Al-Afasi.jpg", "name": "Mishary Rasyid Al Afasi"},
+  {"image": "assets/images/banners/Ibrahim-Al-Dossari.jpg", "name": "Ibrahim Al Dossari"},
+  {"image": "assets/images/banners/Abdurrahman-as-Sudais.jpg", "name": "Abdurrahman As Sudais"},
+  {"image": "assets/images/banners/Abdul-Muhsin-Al-Qasim.jpg", "name": "Abdul Muhsin Al Qasim"},
+  {"image": "assets/images/banners/Abdullah-Al-Juhany.jpg", "name": "Abdullah Al Juhany"},
 ];
 
 class TopNotchClipper extends CustomClipper<Path> {
@@ -289,7 +320,7 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                           ),
                           padding: EdgeInsets.zero,
                           children: menus
-                              .map((menu) => _buildMenuItem(context, menu))
+                              .map((menu) => _MenuItemWidget(menu: menu))
                               .toList(),
                         ),
                       ),
@@ -430,34 +461,359 @@ Widget _buildPrayerTimeItem(BuildContext context, Map prayerTime) {
   );
 }
 
-Widget _buildMenuItem(BuildContext context, Map menu) {
-  return GestureDetector(
-    onTap: () {
+class _MenuItemWidget extends StatefulWidget {
+  final Map menu;
+  const _MenuItemWidget({required this.menu});
+
+  @override
+  State<_MenuItemWidget> createState() => _MenuItemWidgetState();
+}
+
+class _MenuItemWidgetState extends State<_MenuItemWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.4,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails _) {
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails _) {
+    _controller.reverse();
+  }
+
+  void _onTapCancel() {
+    _controller.reverse();
+  }
+
+  void _onTap() {
+    _controller.reverse().then((_) {
+      final menu = widget.menu;
+
+      if (menu["onTap"] != null) {
+        menu["onTap"](context);
+        return;
+      }
+
       if (menu["page"] != null) {
         final binding = menu["binding"];
-
         if (binding != null) {
           Get.to(menu["page"], binding: binding);
         } else {
           Get.to(menu["page"]);
         }
       }
-    },
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(menu["icon"], size: 30, color: HexColor.fromHex("#D39D52")),
-        SizedBox(height: 5),
-        Text(
-          menu["title"],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: HexColor.fromHex("#5a7b8a"),
-            fontWeight: FontWeight.w500,
-          ),
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      onTap: _onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              widget.menu["icon"],
+              size: 30,
+              color: HexColor.fromHex("#D39D52"),
+            ),
+            SizedBox(height: 5),
+            Text(
+              widget.menu["title"],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: HexColor.fromHex("#5a7b8a"),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
+      ),
+    );
+  }
+}
+
+void _showMurrotalScreen(BuildContext context) {
+  WoltModalSheet.show(
+    context: context,
+    pageListBuilder: (bottomSheetContext) => [
+      SliverWoltModalSheetPage(
+        backgroundColor: HexColor.fromHex("#F9F5EF"),
+        surfaceTintColor: HexColor.fromHex("#F9F5EF"),
+        hasTopBarLayer: false,
+        mainContentSliversBuilder: (context) => const [
+          SliverToBoxAdapter(child: MurrotalContent()),
+        ],
+      ),
+    ],
   );
+}
+
+class MurrotalContent extends StatefulWidget {
+  const MurrotalContent({super.key});
+
+  @override
+  State<MurrotalContent> createState() => _MurrotalContentState();
+}
+
+class _MurrotalContentState extends State<MurrotalContent> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Popular",
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: HexColor.fromHex("#256980"),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: 20),
+          SizedBox(
+            height: 210,
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        HexColor.fromHex("#F9F5EF"),
+                        HexColor.fromHex("#256980"),
+                      ],
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: -50,
+                        bottom: 30,
+                        left: 0,
+                        right: -250,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: HexColor.fromHex("#256980"),
+                              width: 30,
+                            ),
+                          ),
+                        ),
+                      ),
+                      CarouselSlider(
+                        items: sliderItems
+                            .map(
+                              (item) => Container(
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: 20,
+                                      bottom: 60,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "067-Al-Mulk",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            item["name"]!,
+                                            style: TextStyle(
+                                              color: Colors.amber,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Icon(Iconsax.play_circle5, size: 30),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 12,
+                                      bottom: 0,
+                                      left: 0,
+                                      right: -250,
+                                      child: ColorFiltered(
+                                        colorFilter: const ColorFilter.matrix([
+                                          0.26,
+                                          0.72,
+                                          0.02,
+                                          0,
+                                          0,
+                                          0.26,
+                                          0.72,
+                                          0.02,
+                                          0,
+                                          0,
+                                          0.26,
+                                          0.72,
+                                          0.02,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                        ]),
+                                        child: Image.asset(item["image"]!),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        options: CarouselOptions(
+                          height: 185,
+                          viewportFraction: 1.0,
+                          autoPlay: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SmoothPageIndicator(
+                  count: sliderItems.length,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    spacing: 8,
+                    expansionFactor: 4,
+                    activeDotColor: HexColor.fromHex("#256980"),
+                    dotColor: Colors.white,
+                  ),
+                  controller: PageController(initialPage: _currentIndex),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 10),
+          Text(
+            "Qori Terfavorit",
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: HexColor.fromHex("#256980"),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: 10),
+          GestureDetector(
+            onTap: () => Get.to(() => DetailQariScreen()),
+            child: SizedBox(
+            height: 120,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: qariList.length,
+              itemBuilder: (context, index) {
+                final qari = qariList[index];
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ClipOval(
+                        child: ColorFiltered(
+                          colorFilter: const ColorFilter.matrix([
+                            0.26,
+                            0.72,
+                            0.02,
+                            0,
+                            0,
+                            0.26,
+                            0.72,
+                            0.02,
+                            0,
+                            0,
+                            0.26,
+                            0.72,
+                            0.02,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            1,
+                            0,
+                          ]),
+                          child: Image.asset(
+                            qari["image"]!,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: 80,
+                      child: Text(
+                        qari["name"]!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: HexColor.fromHex("#1E4355"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          )
+        ],
+      ),
+    );
+  }
 }

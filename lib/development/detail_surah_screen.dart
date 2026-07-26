@@ -129,15 +129,15 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
               _toggle();
 
               await WoltModalSheet.show(
-  // modalDecorator: (child) {
-  //   return BackdropFilter(
-  //     filter: ImageFilter.blur(
-  //       sigmaX: 3,
-  //       sigmaY: 3,
-  //     ),
-  //     child: child,
-  //   );
-  // },
+                // modalDecorator: (child) {
+                //   return BackdropFilter(
+                //     filter: ImageFilter.blur(
+                //       sigmaX: 3,
+                //       sigmaY: 3,
+                //     ),
+                //     child: child,
+                //   );
+                // },
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
@@ -247,22 +247,49 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
           ),
         ],
         actionsPadding: EdgeInsets.all(16),
-      ), 
+      ),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return Center(
-  child: Image.asset(
-    'assets/animations/bar_loader.gif',
-    width: 120,
-    height: 120,
-  ),
-);
-        }
-
         final data = controller.detailSurah.value;
 
+        if (controller.isLoading.value) {
+          return Container(
+              color: Colors.white,
+              child: Center(
+                child: Image.asset('assets/animations/bar_loader.gif', height:100),
+              )
+            );
+        }
         if (data == null) {
-          return Center(child: Text("Data kosong"));
+          return Center(
+            child: Container(
+              color: Colors.white,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: -100,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/animations/empty.json',
+                          width: 180,
+                          height: 180,
+                        ),
+
+                        Text(
+                          "Data Tidak Ditemukan",
+                          style: TextStyle(color: HexColor.fromHex("#246177")),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
 
         return ScrollablePositionedList.builder(
@@ -452,7 +479,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                             fontWeight: controller.arabBold.value
                                 ? FontWeight.w600
                                 : null,
-                            height: 2.5,
+                            height: 2,
                           ),
                         ),
                       );
@@ -471,7 +498,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                       );
                     }),
 
-                    SizedBox(height: 5),
+                    SizedBox(height: 10),
                     Obx(() {
                       return Text(
                         ayat.teksIndonesia,

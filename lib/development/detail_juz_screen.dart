@@ -1,9 +1,9 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/development/alquran_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DetailJuzScreen extends StatefulWidget {
@@ -46,6 +46,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen> {
           onTap: () => Get.back(),
           child: Icon(Icons.arrow_back_ios, color: Colors.black),
         ),
+          surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Text(
           "Juz $juzNumber",
@@ -62,14 +63,47 @@ class _DetailJuzScreenState extends State<DetailJuzScreen> {
         actionsPadding: EdgeInsets.all(16),
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return Loading();
+         if (controller.isLoading.value) {
+          return Container(
+              color: Colors.white,
+              child: Center(
+                child: Image.asset('assets/animations/bar_loader.gif', height:100),
+              )
+            );
         }
 
         final ayatList = controller.juzAyatList;
 
         if (ayatList.isEmpty) {
-          return Center(child: Text("Data kosong"));
+          return Center(
+            child: Container(
+              color: Colors.white,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: -100,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/animations/empty.json',
+                          width: 180,
+                          height: 180,
+                        ),
+                        Text(
+                          "Data Tidak Ditemukan",
+                          style: TextStyle(color: HexColor.fromHex("#246177")),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
 
         final firstSurah = ayatList.first.surahNamaLatin;
@@ -215,31 +249,37 @@ class _DetailJuzScreenState extends State<DetailJuzScreen> {
                    ),
                     SizedBox(height: 10),
                     Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        ayat.teksArab,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          ayat.teksArab,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+
+                            height: 2,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            ayat.teksLatin,
-                            style: TextStyle(color: Colors.black),
+                      
+                           SizedBox(height: 30),
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          ayat.teksLatin,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            ayat.teksIndonesia,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    SizedBox(height: 10),
+                    Text(
+                        ayat.teksIndonesia,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14
+                        ),
+                      ),
                   ],
                 ),
               ),
