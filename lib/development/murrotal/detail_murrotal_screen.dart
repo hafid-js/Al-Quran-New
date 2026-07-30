@@ -1,150 +1,132 @@
-// This example demonstrates how to play a playlist with a mix of URI and asset
-// audio sources, and the ability to add/remove/reorder playlist items.
-//
-// To run:
-//
-// flutter run -t lib/example_playlist.dart
-
 import 'dart:async';
 
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/just_audio/common.dart' hide ambiguate;
+import 'package:alquran_new/development/murrotal/common.dart' hide ambiguate;
+import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
+import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
 import 'package:get/get.dart' hide Rx;
-import 'package:get/get_core/get_core.dart' hide ambiguate;
 import 'package:iconsax/iconsax.dart';
-
-import 'media_kit_stub.dart' if (dart.library.io) 'media_kit_impl.dart';
-import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DetailMurrotalScreen extends StatefulWidget {
-  const DetailMurrotalScreen({Key? key}) : super(key: key);
+  final int qariIndex;
+  final int surahNomor;
+  final String surahNama;
+  final String surahArti;
+  final String qariNama;
+  final String qariImage;
+
+  const DetailMurrotalScreen({
+    super.key,
+    required this.qariIndex,
+    required this.surahNomor,
+    required this.surahNama,
+    required this.surahArti,
+    required this.qariNama,
+    required this.qariImage,
+  });
 
   @override
   DetailMurrotalScreenState createState() => DetailMurrotalScreenState();
 }
 
-class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
-    with WidgetsBindingObserver {
-  late AudioPlayer _player;
-  static final _playlist = [
-    ClippingAudioSource(
-      start: const Duration(seconds: 60),
-      end: const Duration(seconds: 90),
-      child: AudioSource.uri(
-        Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
-        ),
-      ),
-      tag: AudioMetadata(
-        album: "Al-Baqarah",
-        title: "Mishary Rasyid",
-        artwork:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRudO-FlgLK_mrwkKT9NCn_CGwPJ4KPM2-Prm1nCIHtBUoQKdo589DsU9Y&s=10",
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse(
-        "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
-      ),
-      tag: AudioMetadata(
-        album: "Science Friday",
-        title: "A Salute To Head-Scratching Science",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse("https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3"),
-      tag: AudioMetadata(
-        album: "Science Friday",
-        title: "From Cat Rheology To Operatic Incompetence",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse("asset:///audio/nature.mp3"),
-      tag: AudioMetadata(
-        album: "Public Domain",
-        title: "Nature Sounds",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-      ),
-    ),
-  ];
-  int _addedCount = 0;
+class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
+  late final AudioPlayer _player;
+  final surahController = Get.find<SurahController>();
+  final murrotalController = Get.find<MurrotalController>();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  StreamSubscription? _playingSub;
+
+  List<AudioSource> _buildPlaylist() {
+    return surahController.surahList.map((surah) {
+      final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
+      final url = surah.audioFull[qariKey] ?? "";
+      if (url.isEmpty) {
+        return AudioSource.uri(
+          Uri.parse(
+              "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
+          tag: AudioMetadata(
+            album: surah.namaLatin,
+            title: widget.qariNama,
+            artwork: widget.qariImage,
+          ),
+        );
+      }
+      return AudioSource.uri(
+        Uri.parse(url),
+        tag: AudioMetadata(
+          album: surah.namaLatin,
+          title: widget.qariNama,
+          artwork: widget.qariImage,
+        ),
+      );
+    }).toList();
+  }
 
   @override
   void initState() {
     super.initState();
-    ambiguate(WidgetsBinding.instance)!.addObserver(this);
-    _player = AudioPlayer(maxSkipsOnError: 3);
+    _player = murrotalController.player;
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.black),
     );
-    _init();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _init());
   }
 
   Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
-    // Listen to errors during playback.
     _player.errorStream.listen((e) {
       print('A stream error occurred: $e');
     });
+    murrotalController.setMurrotalAudio(widget.qariIndex,
+        surahController.surahList[widget.surahNomor - 1]);
+
     try {
-      await _player.setAudioSources(_playlist);
+      final playlist = _buildPlaylist();
+      await _player.setAudioSources(
+        playlist,
+        initialIndex: widget.surahNomor - 1,
+      );
+      await _player.play();
     } on PlayerException catch (e) {
-      // Catch load errors: 404, invalid url...
       print("Error loading playlist: $e");
     }
-    // Show a snackbar whenever reaching the end of an item in the playlist.
     _player.positionDiscontinuityStream.listen((discontinuity) {
-      if (discontinuity.reason == PositionDiscontinuityReason.autoAdvance) {
-        _showItemFinished(discontinuity.previousEvent.currentIndex);
-      }
+      _onTrackChanged(_player.currentIndex);
     });
     _player.processingStateStream.listen((state) {
       if (state == ProcessingState.completed) {
-        _showItemFinished(_player.currentIndex);
+        _onTrackChanged(_player.currentIndex);
+      }
+    });
+    _player.playingStream.listen((playing) {
+      if (mounted) {
+        murrotalController.isMurrotalPlaying.value = playing;
       }
     });
   }
 
-  void _showItemFinished(int? index) {
+  void _onTrackChanged(int? index) {
     if (index == null) return;
     final sequence = _player.sequence;
     if (index >= sequence.length) return;
     final source = sequence[index];
     final metadata = source.tag as AudioMetadata;
-    _scaffoldMessengerKey.currentState?.showSnackBar(
-      SnackBar(
-        content: Text('Finished playing ${metadata.title}'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    final surah = surahController.surahList
+        .where((s) => s.namaLatin == metadata.album)
+        .firstOrNull;
+    if (surah != null) {
+      murrotalController.murrotalSurahNomor.value = surah.nomor;
+      murrotalController.murrotalSurahName.value = surah.namaLatin;
+    }
   }
 
   @override
   void dispose() {
-    ambiguate(WidgetsBinding.instance)!.removeObserver(this);
-    _player.dispose();
+    _playingSub?.cancel();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      // Release the player's resources when not in use. We use "stop" so that
-      // if the app resumes later, it will still remember what position to
-      // resume from.
-      _player.stop();
-    }
   }
 
   Stream<PositionData> get _positionDataStream =>
@@ -162,7 +144,6 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: _scaffoldMessengerKey,
       home: Scaffold(
-        // backgroundColor: HexColor.fromHex("#256980"),
         appBar: AppBar(
           backgroundColor: HexColor.fromHex("#256980"),
           leading: GestureDetector(
@@ -170,7 +151,6 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
             child: Icon(Icons.arrow_back_ios, color: Colors.white),
           ),
         ),
-
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -208,10 +188,12 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                                 padding: const EdgeInsets.all(8.0),
                                 child: Center(
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.network(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.asset(
                                       metadata.artwork,
                                       fit: BoxFit.cover,
+                                      width: 220,
+                                      height: 220,
                                     ),
                                   ),
                                 ),
@@ -252,62 +234,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                   },
                 ),
                 ControlButtons(_player),
-
                 const SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    // StreamBuilder<LoopMode>(
-                    //   stream: _player.loopModeStream,
-                    //   builder: (context, snapshot) {
-                    //     final loopMode = snapshot.data ?? LoopMode.off;
-                    //     const icons = [
-                    //       Icon(Icons.repeat, color: Colors.grey),
-                    //       Icon(Icons.repeat, color: Colors.orange),
-                    //       Icon(Icons.repeat_one, color: Colors.orange),
-                    //     ];
-                    //     const cycleModes = [
-                    //       LoopMode.off,
-                    //       LoopMode.all,
-                    //       LoopMode.one,
-                    //     ];
-                    //     final index = cycleModes.indexOf(loopMode);
-                    //     return IconButton(
-                    //       icon: icons[index],
-                    //       onPressed: () {
-                    //         _player.setLoopMode(cycleModes[
-                    //             (cycleModes.indexOf(loopMode) + 1) %
-                    //                 cycleModes.length]);
-                    //       },
-                    //     );
-                    //   },
-                    // ),
-                    // Expanded(
-                    //   child: Text(
-                    //     "Playlist",
-                    //     style: Theme.of(context).textTheme.titleLarge,
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
-                    // StreamBuilder<bool>(
-                    //   stream: _player.shuffleModeEnabledStream,
-                    //   builder: (context, snapshot) {
-                    //     final shuffleModeEnabled = snapshot.data ?? false;
-                    //     return IconButton(
-                    //       icon: shuffleModeEnabled
-                    //           ? const Icon(Icons.shuffle, color: Colors.orange)
-                    //           : const Icon(Icons.shuffle, color: Colors.grey),
-                    //       onPressed: () async {
-                    //         final enable = !shuffleModeEnabled;
-                    //         if (enable) {
-                    //           await _player.shuffle();
-                    //         }
-                    //         await _player.setShuffleModeEnabled(enable);
-                    //       },
-                    //     );
-                    //   },
-                    // ),
-                  ],
-                ),
                 SizedBox(
                   height: 240.0,
                   child: StreamBuilder<SequenceState?>(
@@ -315,40 +242,6 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                     builder: (context, snapshot) {
                       final state = snapshot.data;
                       final sequence = state?.sequence ?? [];
-                      // return ReorderableListView(
-                      //   // ignore: deprecated_member_use
-                      //   onReorder: (int oldIndex, int newIndex) {
-                      //     if (oldIndex < newIndex) newIndex--;
-                      //     _player.moveAudioSource(oldIndex, newIndex);
-                      //   },
-                      //   children: [
-                      //     for (var i = 0; i < sequence.length; i++)
-                      //       Dismissible(
-                      //         key: ValueKey(sequence[i]),
-                      //         background: Container(
-                      //           color: Colors.redAccent,
-                      //           alignment: Alignment.centerRight,
-                      //           child: const Padding(
-                      //             padding: EdgeInsets.only(right: 8.0),
-                      //             child: Icon(Icons.delete, color: Colors.white),
-                      //           ),
-                      //         ),
-                      //         onDismissed: (dismissDirection) =>
-                      //             _player.removeAudioSourceAt(i),
-                      //         child: Material(
-                      //           color: i == state!.currentIndex
-                      //               ? Colors.grey.shade300
-                      //               : null,
-                      //           child: ListTile(
-                      //             title: Text(sequence[i].tag.title as String),
-                      //             onTap: () => _player
-                      //                 .seek(Duration.zero, index: i)
-                      //                 .catchError((e, st) {}),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //   ],
-                      // );
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12),
                         child: Column(
@@ -368,21 +261,36 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
                                 child: ListView.builder(
-                                  itemCount: 10,
+                                  itemCount: () {
+                                    final current = state?.currentIndex ?? 0;
+                                    final remaining =
+                                        sequence.length - (current + 1);
+                                    return remaining.clamp(0, 2);
+                                  }(),
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
+                                    final current = state?.currentIndex ?? 0;
+                                    final sourceIndex = current + 1 + index;
+                                    if (sourceIndex >= sequence.length) {
+                                      return SizedBox.shrink();
+                                    }
+                                    final source = sequence[sourceIndex];
+                                    final meta = source.tag as AudioMetadata;
                                     return Container(
-                                      margin: const EdgeInsets.only(bottom: 10),
+                                      margin:
+                                          const EdgeInsets.only(bottom: 10),
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 12,
                                       ),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12),
                                       ),
                                       child: ListTile(
-                                        visualDensity: const VisualDensity(
-                                          vertical: -1,
-                                        ),
+                                        visualDensity:
+                                            const VisualDensity(vertical: -1),
                                         contentPadding: EdgeInsets.zero,
                                         leading: Icon(
                                           Iconsax.play_circle5,
@@ -390,7 +298,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                                           color: HexColor.fromHex("#256980"),
                                         ),
                                         title: Text(
-                                          "Al-Kahfi",
+                                          meta.album,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -400,22 +308,21 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
                                           ),
                                         ),
                                         subtitle: Text(
-                                          "Mishary Rasyid",
+                                          meta.title,
                                           style: TextStyle(
-                                            color: HexColor.fromHex("#676767"),
+                                            color:
+                                                HexColor.fromHex("#676767"),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 12,
                                           ),
                                         ),
-                                        trailing: Text(
-                                          "24:17",
-                                          style: TextStyle(
-                                            color: HexColor.fromHex("#676767"),
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                        ),
                                         minVerticalPadding: 10,
+                                        onTap: () {
+                                          _player.seek(
+                                            Duration.zero,
+                                            index: sourceIndex,
+                                          );
+                                        },
                                       ),
                                     );
                                   },
@@ -432,20 +339,6 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            _player.addAudioSource(AudioSource.uri(
-              Uri.parse("asset:///audio/nature.mp3"),
-              tag: AudioMetadata(
-                album: "Public Domain",
-                title: "Nature Sounds ${++_addedCount}",
-                artwork:
-                    "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-              ),
-            ));
-          },
-        ),
       ),
     );
   }
@@ -454,28 +347,13 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen>
 class ControlButtons extends StatelessWidget {
   final AudioPlayer player;
 
-  const ControlButtons(this.player, {Key? key}) : super(key: key);
+  const ControlButtons(this.player, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // IconButton(
-        //   icon: const Icon(Icons.volume_up),
-        //   onPressed: () {
-        //     showSliderDialog(
-        //       context: context,
-        //       title: "Adjust volume",
-        //       divisions: 10,
-        //       min: 0.0,
-        //       max: 1.0,
-        //       value: player.volume,
-        //       stream: player.volumeStream,
-        //       onChanged: player.setVolume,
-        //     );
-        //   },
-        // ),
         StreamBuilder<bool>(
           stream: player.shuffleModeEnabledStream,
           builder: (context, snapshot) {
@@ -528,8 +406,8 @@ class ControlButtons extends StatelessWidget {
                 processingState == ProcessingState.buffering) {
               return Container(
                 margin: const EdgeInsets.all(8.0),
-                width: 64.0,
-                height: 64.0,
+                width: 55.0,
+                height: 55.0,
                 child: CircularProgressIndicator(
                   color: HexColor.fromHex("#D39D52"),
                 ),
@@ -537,19 +415,19 @@ class ControlButtons extends StatelessWidget {
             } else if (!playing) {
               return IconButton(
                 icon: const Icon(Iconsax.play_circle5, color: Colors.white),
-                iconSize: 64.0,
+                iconSize: 50.0,
                 onPressed: sequenceLength > 0 ? player.play : null,
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
                 icon: const Icon(Iconsax.pause5, color: Colors.white),
-                iconSize: 64.0,
+                iconSize: 50.0,
                 onPressed: player.pause,
               );
             } else {
               return IconButton(
                 icon: const Icon(Icons.replay),
-                iconSize: 64.0,
+                iconSize: 50.0,
                 onPressed: sequenceLength > 0
                     ? () => player.seek(
                         Duration.zero,
@@ -604,38 +482,9 @@ class ControlButtons extends StatelessWidget {
             );
           },
         ),
-        // StreamBuilder<double>(
-        //   stream: player.speedStream,
-        //   builder: (context, snapshot) => IconButton(
-        //     icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-        //         style: const TextStyle(fontWeight: FontWeight.bold)),
-        //     onPressed: () {
-        //       showSliderDialog(
-        //         context: context,
-        //         title: "Adjust speed",
-        //         divisions: 10,
-        //         min: 0.5,
-        //         max: 1.5,
-        //         value: player.speed,
-        //         stream: player.speedStream,
-        //         onChanged: player.setSpeed,
-        //       );
-        //     },
-        //   ),
-        // ),
       ],
     );
   }
 }
 
-class AudioMetadata {
-  final String album;
-  final String title;
-  final String artwork;
 
-  AudioMetadata({
-    required this.album,
-    required this.title,
-    required this.artwork,
-  });
-}

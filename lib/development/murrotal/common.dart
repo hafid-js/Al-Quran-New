@@ -40,7 +40,7 @@ class SeekBarState extends State<SeekBar> {
       children: [
         SliderTheme(
           data: _sliderThemeData.copyWith(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 19),
             thumbShape: HiddenThumbComponentShape(),
             activeTrackColor: const Color.fromARGB(132, 187, 222, 251),
             inactiveTrackColor: Colors.black,
@@ -73,7 +73,7 @@ class SeekBarState extends State<SeekBar> {
         ),
         SliderTheme(
           data: _sliderThemeData.copyWith(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: EdgeInsets.only(right: 12, left: 12, top: 12, bottom: 19),
             activeTrackColor: HexColor.fromHex("#D39D52"),
             thumbColor: HexColor.fromHex("#D39D52"),
             inactiveTrackColor: Colors.transparent,
@@ -102,7 +102,7 @@ class SeekBarState extends State<SeekBar> {
           ),
         ),
         Positioned(
-          right: 16.0,
+          right: 12.0,
           bottom: 0.0,
           child: Text(
             RegExp(
@@ -142,6 +142,18 @@ class HiddenThumbComponentShape extends SliderComponentShape {
     required double textScaleFactor,
     required Size sizeWithOverflow,
   }) {}
+}
+
+class AudioMetadata {
+  final String album;
+  final String title;
+  final String artwork;
+
+  AudioMetadata({
+    required this.album,
+    required this.title,
+    required this.artwork,
+  });
 }
 
 class PositionData {

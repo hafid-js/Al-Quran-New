@@ -4,14 +4,17 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/development/settings_slider.dart';
 import 'package:alquran_new/development/settings_switch.dart';
+import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DetailSurahScreen extends StatefulWidget {
@@ -24,6 +27,7 @@ class DetailSurahScreen extends StatefulWidget {
 class _DetailSurahScreenState extends State<DetailSurahScreen>
     with SingleTickerProviderStateMixin {
   final controller = Get.find<DetailSurahController>();
+  final bookmarkC = Get.find<BookmarkController>();
   final SettingsController setting = Get.find<SettingsController>();
   final ItemScrollController itemScrollController = ItemScrollController();
 
@@ -516,76 +520,221 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(37, 158, 158, 158),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Iconsax.copy,
-                              color: HexColor.fromHex("#504F52"),
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(37, 158, 158, 158),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Iconsax.save_2,
-                              color: HexColor.fromHex("#504F52"),
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(37, 158, 158, 158),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Iconsax.play_circle,
-                              color: HexColor.fromHex("#504F52"),
-                              size: 16,
+                          child: GestureDetector(
+                            onTap: () {
+                              final buffer = StringBuffer();
+                              buffer.writeln(ayat.teksArab);
+                              if (ayat.teksLatin.isNotEmpty) {
+                                buffer.writeln('');
+                                buffer.writeln(ayat.teksLatin);
+                              }
+                              buffer.writeln('');
+                              buffer.writeln(ayat.teksIndonesia);
+                              Clipboard.setData(
+                                ClipboardData(text: buffer.toString()),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Teks disalin'),
+                                  duration: Duration(seconds: 1),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(37, 158, 158, 158),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Icon(
+                                Iconsax.copy,
+                                color: HexColor.fromHex("#504F52"),
+                                size: 16,
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(width: 4),
                         Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(37, 158, 158, 158),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Iconsax.export_2,
-                              color: HexColor.fromHex("#504F52"),
-                              size: 16,
+                          child: GestureDetector(
+                            onTap: () {
+                              bookmarkC.toggle(
+                                nomor,
+                                data.nama,
+                                data.namaLatin,
+                                ayat.nomorAyat,
+                              );
+                            },
+                            child: Obx(() {
+                              final saved = bookmarkC.isBookmarked(
+                                nomor,
+                                ayat.nomorAyat,
+                              );
+                              return Container(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(37, 158, 158, 158),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Icon(
+                                  saved ? Iconsax.save_21 : Iconsax.save_2,
+                                  color: saved
+                                      ? HexColor.fromHex("#D39D52")
+                                      : HexColor.fromHex("#504F52"),
+                                  size: 16,
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: Obx(() {
+                            final kondisi = controller.getAyatAudioState(
+                              ayat.nomorAyat,
+                            );
+                            return GestureDetector(
+                              onTap: () {
+                                if (kondisi == "stop") {
+                                  controller.playAudio(ayat);
+                                } else if (kondisi == "playing") {
+                                  controller.pauseAudio(ayat);
+                                } else {
+                                  controller.resumeAudio(ayat);
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(37, 158, 158, 158),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Icon(
+                                  kondisi == "playing"
+                                      ? Iconsax.pause
+                                      : Iconsax.play_circle,
+                                  color: kondisi == "playing"
+                                      ? HexColor.fromHex("#256980")
+                                      : HexColor.fromHex("#504F52"),
+                                  size: 16,
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              final buffer = StringBuffer();
+                              buffer.writeln(data.namaLatin);
+                              buffer.writeln('');
+                              buffer.writeln('${ayat.nomorAyat}. ${ayat.teksArab}');
+                              if (ayat.teksLatin.isNotEmpty) {
+                                buffer.writeln('');
+                                buffer.writeln(ayat.teksLatin);
+                              }
+                              buffer.writeln('');
+                              buffer.writeln(ayat.teksIndonesia);
+                              SharePlus.instance.share(
+                                ShareParams(
+                                  title: data.namaLatin,
+                                  text: buffer.toString(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(37, 158, 158, 158),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Icon(
+                                Iconsax.export_2,
+                                color: HexColor.fromHex("#504F52"),
+                                size: 16,
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(width: 4),
                         Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(37, 158, 158, 158),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Iconsax.info_circle,
-                              color: HexColor.fromHex("#504F52"),
-                              size: 16,
+                          child: GestureDetector(
+                            onTap: () {
+                              final tafsir = controller.tafsirList.firstWhereOrNull(
+                                (t) => t.ayat == ayat.nomorAyat,
+                              );
+                              showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            width: 40,
+                                            height: 4,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[300],
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Iconsax.book_1,
+                                              color: HexColor.fromHex("#D39D52"),
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "Tafsir",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: HexColor.fromHex("#256980"),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          tafsir?.teks ?? "Tafsir tidak tersedia.",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black87,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(37, 158, 158, 158),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Icon(
+                                Iconsax.info_circle,
+                                color: HexColor.fromHex("#504F52"),
+                                size: 16,
+                              ),
                             ),
                           ),
                         ),

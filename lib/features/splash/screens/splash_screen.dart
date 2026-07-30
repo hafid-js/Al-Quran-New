@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
 import 'package:flutter/material.dart';

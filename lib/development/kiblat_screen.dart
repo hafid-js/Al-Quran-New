@@ -1,0 +1,82 @@
+import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/features/kiblat/controllers/kiblat_controller.dart';
+import 'package:alquran_new/features/kiblat/widgets/compass_view.dart';
+import 'package:alquran_new/features/kiblat/widgets/kiblat_map.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class KiblatScreenNew extends StatefulWidget {
+  const KiblatScreenNew({super.key});
+
+  @override
+  State<KiblatScreenNew> createState() => _KiblatScreenNewState();
+}
+
+class _KiblatScreenNewState extends State<KiblatScreenNew>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+    Get.put(KiblatController());
+    tabController.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    if (tabController.indexIsChanging) return;
+    if (tabController.index == 1) {
+      final controller = Get.find<KiblatController>();
+      if (controller.latitude.value == 0.0 &&
+          controller.longitude.value == 0.0) {
+        controller.startLocation();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    tabController.removeListener(_onTabChanged);
+    tabController.dispose();
+    Get.delete<KiblatController>();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
+        title: Text(
+          "Kiblat",
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(color: Colors.black),
+        ),
+        centerTitle: true,
+        bottom: TabBar(
+          controller: tabController,
+          indicatorColor: HexColor.fromHex("#D39D52"),
+          labelColor: HexColor.fromHex("#D39D52"),
+          unselectedLabelColor: HexColor.fromHex("#5a7b8a"),
+          tabs: const [
+            Tab(text: "Kompas"),
+            Tab(text: "Peta"),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: const [CompassView(), KiblatMap()],
+      ),
+    );
+  }
+}

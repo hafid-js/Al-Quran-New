@@ -1,8 +1,11 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/home_screen_new.dart';
+import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/perasaan_screen.dart';
+import 'package:alquran_new/development/play_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,6 +17,39 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  bool _showPlayBar = false;
+
+  late final MurrotalController _murrotalController;
+  late final Worker _playingWorker;
+  late final Worker _nomorWorker;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!GetInstance().isRegistered<MurrotalController>()) {
+      Get.put(MurrotalController(), permanent: true);
+    }
+    _murrotalController = Get.find<MurrotalController>();
+
+    _playingWorker = ever(_murrotalController.isMurrotalPlaying, (_) => _updatePlayBarVisibility());
+    _nomorWorker = ever(_murrotalController.murrotalSurahNomor, (_) => _updatePlayBarVisibility());
+  }
+
+  @override
+  void dispose() {
+    _playingWorker.dispose();
+    _nomorWorker.dispose();
+    super.dispose();
+  }
+
+  void _updatePlayBarVisibility() {
+    final show = _murrotalController.isMurrotalPlaying.value ||
+        _murrotalController.murrotalSurahNomor.value != 0;
+    if (show != _showPlayBar) {
+      _showPlayBar = show;
+    }
+    setState(() {});
+  }
 
   final List<Widget> _pages = [
     HomeScreenNew(),
@@ -30,8 +66,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#FF4158D0"),
-      body: _pages[_selectedIndex],
+      // backgroundColor: Colors.transparent,
+            backgroundColor: HexColor.fromHex("#F9F5EF"),
+      body: Column(
+        children: [
+          Expanded(child: _pages[_selectedIndex]),
+          if (_showPlayBar) const PlayBar(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

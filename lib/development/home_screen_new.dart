@@ -4,10 +4,16 @@ import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa_screen.dart';
-import 'package:alquran_new/development/just_audio/detail_murrotal_screen.dart';
+import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
+import 'package:alquran_new/development/murrotal/detail_murrotal_screen.dart';
+import 'package:alquran_new/development/bookmark_screen.dart';
+import 'package:alquran_new/development/hijriah_screen.dart';
+import 'package:alquran_new/development/kiblat_screen.dart';
+import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:alquran_new/binding/doa_binding.dart';
@@ -43,17 +49,13 @@ final List<Map<String, dynamic>> menus = [
     "page": () => const DoaScreen(),
     "binding": DoaBinding(),
   },
-  {"title": "Kiblat", "icon": Iconsax.gps, "page": () => const Placeholder()},
+  {"title": "Kiblat", "icon": Iconsax.gps, "page": () => const KiblatScreenNew()},
   {
     "title": "Tasbih",
     "icon": Iconsax.more_2,
-    "page": () => const Placeholder()
+    "page": () => const Placeholder(),
   },
-  {
-    "title": "Hijriah",
-    "icon": Iconsax.calendar,
-    "page": () => Placeholder()
-  },
+  {"title": "Hijriah", "icon": Iconsax.calendar, "page": () => const HijriahScreen()},
   {
     "title": "Murrotal",
     "icon": Iconsax.music_square,
@@ -62,29 +64,9 @@ final List<Map<String, dynamic>> menus = [
   {
     "title": "Bookmark",
     "icon": Iconsax.save_2,
-    "onTap": () => const Placeholder(),
+    "page": () => const BookmarkScreenNew(),
   },
   {"title": "Dzikir", "icon": Iconsax.flash, "page": () => const Placeholder()},
-];
-
-int _currentIndex = 0;
-
-final List<Map<String, String>> sliderItems = [
-  {"image": "assets/images/banners/Yasser-Al-Dosari.png", "name": "Yasser Al Dosari"},
-  {"image": "assets/images/banners/Mishary-Rasyid-Al-Afasi.png", "name": "Mishary Rasyid Al Afasi"},
-  {"image": "assets/images/banners/Ibrahim-Al-Dossari.png", "name": "Ibrahim Al Dossari"},
-  {"image": "assets/images/banners/Abdurrahman-as-Sudais.png", "name": "Abdurrahman As Sudais"},
-  {"image": "assets/images/banners/Abdul-Muhsin-Al-Qasim.png", "name": "Abdul Muhsin Al Qasim"},
-  {"image": "assets/images/banners/Abdullah-Al-Juhany.png", "name": "Abdullah Al Juhany"},
-];
-
-final List<Map<String, String>> qariList = [
-  {"image": "assets/images/banners/Yasser-Al-Dosari.jpg", "name": "Yasser Al Dosari"},
-  {"image": "assets/images/banners/Mishary-Rasyid-Al-Afasi.jpg", "name": "Mishary Rasyid Al Afasi"},
-  {"image": "assets/images/banners/Ibrahim-Al-Dossari.jpg", "name": "Ibrahim Al Dossari"},
-  {"image": "assets/images/banners/Abdurrahman-as-Sudais.jpg", "name": "Abdurrahman As Sudais"},
-  {"image": "assets/images/banners/Abdul-Muhsin-Al-Qasim.jpg", "name": "Abdul Muhsin Al Qasim"},
-  {"image": "assets/images/banners/Abdullah-Al-Juhany.jpg", "name": "Abdullah Al Juhany"},
 ];
 
 class TopNotchClipper extends CustomClipper<Path> {
@@ -275,7 +257,7 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
             left: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
                   ClipPath(
@@ -326,7 +308,6 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 13),
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -409,6 +390,8 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                       ],
                     ),
                   ),
+                  
+                  
                 ],
               ),
             ),
@@ -562,7 +545,14 @@ class _MenuItemWidgetState extends State<_MenuItemWidget>
   }
 }
 
+class _CarouselItem {
+  final Surah surah;
+  final int qariIndex;
+  const _CarouselItem({required this.surah, required this.qariIndex});
+}
+
 void _showMurrotalScreen(BuildContext context) {
+  SurahBinding().dependencies();
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (bottomSheetContext) => [
@@ -586,6 +576,9 @@ class MurrotalContent extends StatefulWidget {
 }
 
 class _MurrotalContentState extends State<MurrotalContent> {
+  final c = Get.find<MurrotalController>();
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -601,141 +594,188 @@ class _MurrotalContentState extends State<MurrotalContent> {
             ),
           ),
           SizedBox(height: 20),
-          SizedBox(
-            height: 210,
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        HexColor.fromHex("#F9F5EF"),
-                        HexColor.fromHex("#256980"),
-                      ],
+          Obx(() {
+            final surahList = c.surahList;
+            if (surahList.isEmpty) {
+              return SizedBox(
+                height: 210,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final random = Random();
+            final displayList = List.generate(
+              MurrotalController.qariData.length,
+              (qariIndex) {
+                final qariKey = (qariIndex + 1).toString().padLeft(2, '0');
+                final available = surahList
+                    .where((s) => s.audioFull.containsKey(qariKey))
+                    .toList();
+                if (available.isEmpty) return null;
+                final surah = available[random.nextInt(available.length)];
+                return _CarouselItem(surah: surah, qariIndex: qariIndex);
+              },
+            ).whereType<_CarouselItem>().toList();
+            return SizedBox(
+              height: 210,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          HexColor.fromHex("#F9F5EF"),
+                          HexColor.fromHex("#256980"),
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: -50,
-                        bottom: 30,
-                        left: 0,
-                        right: -250,
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: HexColor.fromHex("#256980"),
-                              width: 30,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: -50,
+                          bottom: 30,
+                          left: 0,
+                          right: -250,
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: HexColor.fromHex("#256980"),
+                                width: 30,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      CarouselSlider(
-                        items: sliderItems
-                            .map(
-                              (item) => Container(
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      left: 20,
-                                      bottom: 60,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "067-Al-Mulk",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
+                        CarouselSlider(
+                          items: displayList
+                              .map(
+                                (item) => GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      () => DetailMurrotalScreen(
+                                        qariIndex: item.qariIndex,
+                                        surahNomor: item.surah.nomor,
+                                        surahNama: item.surah.namaLatin,
+                                        surahArti: item.surah.arti,
+                                        qariNama: MurrotalController
+                                            .qariData[item.qariIndex]["title"]!,
+                                        qariImage: MurrotalController
+                                            .qariData[item.qariIndex]["image"]!,
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          left: 20,
+                                          bottom: 60,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${c.getSurahNumberLabel(item.surah.nomor)}-${item.surah.namaLatin}",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 23,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                MurrotalController.qariData[item
+                                                        .qariIndex]["title"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                  color: Colors.amber,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Icon(
+                                                Iconsax.play_circle5,
+                                                size: 30,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 12,
+                                          bottom: 0,
+                                          left: 0,
+                                          right: -250,
+                                          child: ColorFiltered(
+                                            colorFilter:
+                                                const ColorFilter.matrix([
+                                                  0.26,
+                                                  0.72,
+                                                  0.02,
+                                                  0,
+                                                  0,
+                                                  0.26,
+                                                  0.72,
+                                                  0.02,
+                                                  0,
+                                                  0,
+                                                  0.26,
+                                                  0.72,
+                                                  0.02,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  1,
+                                                  0,
+                                                ]),
+                                            child: Image.asset(
+                                              MurrotalController.qariData[item
+                                                      .qariIndex]["banner"] ??
+                                                  "",
                                             ),
                                           ),
-                                          Text(
-                                            item["name"]!,
-                                            style: TextStyle(
-                                              color: Colors.amber,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Icon(Iconsax.play_circle5, size: 30),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    Positioned(
-                                      top: 12,
-                                      bottom: 0,
-                                      left: 0,
-                                      right: -250,
-                                      child: ColorFiltered(
-                                        colorFilter: const ColorFilter.matrix([
-                                          0.26,
-                                          0.72,
-                                          0.02,
-                                          0,
-                                          0,
-                                          0.26,
-                                          0.72,
-                                          0.02,
-                                          0,
-                                          0,
-                                          0.26,
-                                          0.72,
-                                          0.02,
-                                          0,
-                                          0,
-                                          0,
-                                          0,
-                                          0,
-                                          1,
-                                          0,
-                                        ]),
-                                        child: Image.asset(item["image"]!),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        options: CarouselOptions(
-                          height: 185,
-                          viewportFraction: 1.0,
-                          autoPlay: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
+                              )
+                              .toList(),
+                          options: CarouselOptions(
+                            height: 185,
+                            viewportFraction: 1.0,
+                            autoPlay: true,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentIndex = index;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                SmoothPageIndicator(
-                  count: sliderItems.length,
-                  effect: ExpandingDotsEffect(
-                    dotHeight: 8,
-                    dotWidth: 8,
-                    spacing: 8,
-                    expansionFactor: 4,
-                    activeDotColor: HexColor.fromHex("#256980"),
-                    dotColor: Colors.white,
+                  const SizedBox(height: 10),
+                  SmoothPageIndicator(
+                    count: displayList.length,
+                    effect: ExpandingDotsEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      spacing: 8,
+                      expansionFactor: 4,
+                      activeDotColor: HexColor.fromHex("#256980"),
+                      dotColor: Colors.white,
+                    ),
+                    controller: PageController(initialPage: _currentIndex),
                   ),
-                  controller: PageController(initialPage: _currentIndex),
-                ),
-              ],
-            ),
-          ),
-
+                ],
+              ),
+            );
+          }),
           SizedBox(height: 10),
           Text(
             "Qori Terfavorit",
@@ -744,74 +784,56 @@ class _MurrotalContentState extends State<MurrotalContent> {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(height: 10),
-          GestureDetector(
-            onTap: () => Get.to(() => DetailQariScreen()),
-            child: SizedBox(
+          SizedBox(height: 15),
+          SizedBox(
             height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: qariList.length,
+              itemCount: MurrotalController.qariData.length,
               itemBuilder: (context, index) {
-                final qari = qariList[index];
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: ClipOval(
-                        child: ColorFiltered(
-                          colorFilter: const ColorFilter.matrix([
-                            0.26,
-                            0.72,
-                            0.02,
-                            0,
-                            0,
-                            0.26,
-                            0.72,
-                            0.02,
-                            0,
-                            0,
-                            0.26,
-                            0.72,
-                            0.02,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                          ]),
-                          child: Image.asset(
-                            qari["image"]!,
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
+                final qari = MurrotalController.qariData[index];
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => DetailQariScreen(qariIndex: index));
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Stack(
+                          children: [
+                            ClipOval(
+                              child: Image.asset(
+                                qari["image"]!,
+                                width: 65,
+                                height: 65,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          qari["title"]!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: HexColor.fromHex("#1E4355"),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: 80,
-                      child: Text(
-                        qari["name"]!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: HexColor.fromHex("#1E4355"),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             ),
           ),
-          )
         ],
       ),
     );

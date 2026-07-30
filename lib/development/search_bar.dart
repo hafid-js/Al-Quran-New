@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class AppSearchBar extends StatelessWidget {
   final ValueChanged<String> onChanged;
@@ -20,16 +21,13 @@ class AppSearchBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
       ),
-      child: Align(
+      child: Align( 
         alignment: Alignment.centerLeft,
         child: TextField(
           onChanged: onChanged,
           style: TextStyle(color: HexColor.fromHex("#1E4355")),
           decoration: InputDecoration(
-            icon: Icon(
-              Icons.search,
-              color: HexColor.fromHex("#1E4355"),
-            ),
+            icon:       Icon(Iconsax.search_normal_1, color: Colors.black),
             hintText: hintText,
             hintStyle: TextStyle(
               color: HexColor.fromHex("#676767"),

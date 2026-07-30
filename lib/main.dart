@@ -4,7 +4,7 @@ import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/constants/app_theme.dart';
-import 'package:alquran_new/development/just_audio/media_kit_stub.dart';
+import 'package:alquran_new/development/murrotal/media_kit_stub.dart';
 import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
 import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';

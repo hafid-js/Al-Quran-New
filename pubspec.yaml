@@ -129,6 +129,7 @@ flutter:
     - assets/images/qari/
     - assets/images/logo/
     - assets/images/banners/
+    - assets/images/qari/banners/
     - assets/
     - assets/sound/
     - assets/icon/
