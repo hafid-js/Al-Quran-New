@@ -13,13 +13,20 @@ class PerasaanScreen extends StatelessWidget {
       backgroundColor: HexColor.fromHex("#F9F5EF"),
       appBar: AppBar(
         backgroundColor: HexColor.fromHex("#F9F5EF"),
-        toolbarHeight: 0,
+        surfaceTintColor: HexColor.fromHex("#F9F5EF"),
+        title:               Text("Perasaan", style: Theme.of(context).textTheme.titleLarge!.copyWith(color: HexColor.fromHex("#1E4355"), fontFamily: "Poppins", fontWeight: FontWeight.bold),),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: EdgeInsets.all(16),
-          child: GridView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              Text("Apa yang Anda rasakan saat ini?", style: Theme.of(context).textTheme.titleLarge!.copyWith(color: HexColor.fromHex("#1E4355")),),
+                 SizedBox(height: 12),
+              Text("Pilih perasaan Anda untuk menemukan doa yang tepat", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: HexColor.fromHex("#1E4355")),textAlign: TextAlign.center,),
+              SizedBox(height: 18),
+              GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: _items.length,
@@ -39,6 +46,8 @@ class PerasaanScreen extends StatelessWidget {
               );
             },
           ),
+            ],
+          )
         ),
       ),
     );
@@ -149,7 +158,7 @@ Widget _buildPerasaanCard(_PerasaanItem item) {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: HexColor.fromHex("#1E4355")
             ),
           ),

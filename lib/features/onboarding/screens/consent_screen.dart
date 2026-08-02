@@ -1,4 +1,5 @@
 import 'package:alquran_new/features/home/screens/home_screen.dart';
+import 'package:alquran_new/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -20,7 +21,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
     final box = GetStorage();
     box.write('has_consented', true);
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      MaterialPageRoute(builder: (_) => const MainScreen()),
     );
   }
 

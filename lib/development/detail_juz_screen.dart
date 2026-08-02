@@ -256,7 +256,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen> {
                             color: Colors.black,
                             fontSize: 22,
 
-                            height: 2,
+                            height: 2.5,
                           ),
                         ),
                       ),

@@ -1,7 +1,7 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/kiblat/controllers/kiblat_controller.dart';
-import 'package:alquran_new/features/kiblat/widgets/compass_view.dart';
-import 'package:alquran_new/features/kiblat/widgets/kiblat_map.dart';
+import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
+import 'package:alquran_new/development/kiblat/widgets/compass_view.dart';
+import 'package:alquran_new/development/kiblat/widgets/kiblat_map.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -64,9 +64,12 @@ class _KiblatScreenNewState extends State<KiblatScreenNew>
         centerTitle: true,
         bottom: TabBar(
           controller: tabController,
-          indicatorColor: HexColor.fromHex("#D39D52"),
-          labelColor: HexColor.fromHex("#D39D52"),
+          indicatorColor: HexColor.fromHex("#256980"),
+          labelColor: HexColor.fromHex("#256980"),
           unselectedLabelColor: HexColor.fromHex("#5a7b8a"),
+           overlayColor: WidgetStateProperty.all(
+    Colors.transparent,
+  ),
           tabs: const [
             Tab(text: "Kompas"),
             Tab(text: "Peta"),

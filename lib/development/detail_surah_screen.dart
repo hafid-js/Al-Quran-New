@@ -483,7 +483,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                             fontWeight: controller.arabBold.value
                                 ? FontWeight.w600
                                 : null,
-                            height: 2,
+                           height: 2.5,
                           ),
                         ),
                       );

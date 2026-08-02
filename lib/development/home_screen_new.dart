@@ -9,6 +9,8 @@ import 'package:alquran_new/development/murrotal/detail_murrotal_screen.dart';
 import 'package:alquran_new/development/bookmark_screen.dart';
 import 'package:alquran_new/development/hijriah_screen.dart';
 import 'package:alquran_new/development/kiblat_screen.dart';
+import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
+import 'package:alquran_new/development/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -53,7 +55,7 @@ final List<Map<String, dynamic>> menus = [
   {
     "title": "Tasbih",
     "icon": Iconsax.more_2,
-    "page": () => const Placeholder(),
+    "page": () => const TasbihScreen(),
   },
   {"title": "Hijriah", "icon": Iconsax.calendar, "page": () => const HijriahScreen()},
   {
@@ -66,7 +68,7 @@ final List<Map<String, dynamic>> menus = [
     "icon": Iconsax.save_2,
     "page": () => const BookmarkScreenNew(),
   },
-  {"title": "Dzikir", "icon": Iconsax.flash, "page": () => const Placeholder()},
+  {"title": "Dzikir", "icon": Iconsax.flash, "page": () => const MatsuratScreen()},
 ];
 
 class TopNotchClipper extends CustomClipper<Path> {

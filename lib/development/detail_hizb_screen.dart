@@ -428,7 +428,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                             fontWeight: fontController.arabBold.value
                                 ? FontWeight.w600
                                 : null,
-                            height: 2,
+                        height: 2.5,
                           ),
                         ),
                       );

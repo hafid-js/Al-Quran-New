@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "kategori": "Dzikir Pagi",
+    "judul": "Dzikir Pagi 1 (Ta'awudz)",
+    "arab": "مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+    "latin": "A'uudzu billaahi minasy-syaithoonir-rojiim.",
+    "arti": "Aku berlindung kepada Allah dari godaan syaitan yang terkutuk.",
+    "penjelasan": "",
+    "sumber": "Hisnul Muslim",
+    "jumlah": 1
+  },
+  {
+    "id": 2,
+    "kategori": "Dzikir Pagi",
+    "judul": "Dzikir Pagi 2 (Ayat Kursi)",
+    "arab": "",
+    "latin": "A'uudzu billaahi minasy-syaithoonir-rojiim.",
+    "arti": "Aku berlindung kepada Allah dari godaan syaitan yang terkutuk.",
+    "penjelasan": "",
+    "sumber": "Hisnul Muslim",
+    "jumlah": 1
+  }
+]

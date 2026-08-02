@@ -1,6 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-import 'package:alquran_new/features/kalender/hijri_calendar/islamic_hijri_calendar.dart';
+import 'package:alquran_new/development/kalender/hijri_calendar/islamic_hijri_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
