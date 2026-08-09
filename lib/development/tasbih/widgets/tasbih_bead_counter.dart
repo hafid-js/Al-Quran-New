@@ -26,6 +26,7 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   double _dragOffset = 0;
+  Animation<double>? _anim;
 
   static const double _beadSize = 60;
   static const double _gap = 45;
@@ -52,6 +53,28 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
   void _dragStart(DragStartDetails details) {
     if (!widget.enabled) return;
     _controller.stop();
+    _clearAnim();
+    setState(() => _dragOffset = 0);
+  }
+
+  void _clearAnim() {
+    final anim = _anim;
+    if (anim == null) return;
+    anim.removeListener(_onUpdate);
+    anim.removeStatusListener(_onDone);
+    _anim = null;
+  }
+
+  void _onUpdate() => setState(() => _dragOffset = _anim!.value);
+
+  void _onDone(AnimationStatus status) {
+    if (status != AnimationStatus.completed) return;
+    final anim = _anim;
+    if (anim == null) return;
+    anim.removeListener(_onUpdate);
+    anim.removeStatusListener(_onDone);
+    _anim = null;
+    widget.onCount();
     setState(() => _dragOffset = 0);
   }
 
@@ -65,24 +88,14 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
   void _dragEnd(DragEndDetails details) {
     if (!widget.enabled) return;
     final drop = _dragOffset >= _step * 0.55;
-    final anim = Tween<double>(
+    _anim = Tween<double>(
       begin: _dragOffset,
       end: drop ? _step : 0.0,
     ).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
-
-    void onUpdate() => setState(() => _dragOffset = anim.value);
-
-    anim.addListener(onUpdate);
-    anim.addStatusListener((status) {
-      if (status != AnimationStatus.completed) return;
-      anim.removeListener(onUpdate);
-      if (drop) {
-        widget.onCount();
-        setState(() => _dragOffset = 0);
-      }
-    });
+    _anim!.addListener(_onUpdate);
+    _anim!.addStatusListener(_onDone);
     _controller.forward(from: 0);
   }
 
@@ -104,18 +117,6 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
               ]
             : null,
       ),
-      child: active
-          ? Center(
-              child: Text(
-                "$number",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            )
-          : null,
     );
   }
 

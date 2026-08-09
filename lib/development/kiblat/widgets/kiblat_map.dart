@@ -24,7 +24,7 @@ class KiblatMap extends StatelessWidget {
           controller.longitude.value == 0.0 &&
           controller.isLoading.value) {
         return Center(child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               child: Center(
                 child: Image.asset('assets/animations/bar_loader.gif', height:100),
               )

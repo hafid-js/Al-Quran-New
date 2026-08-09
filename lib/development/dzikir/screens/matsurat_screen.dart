@@ -198,96 +198,81 @@ class _MatsuratScreenState extends State<MatsuratScreen>
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       backgroundColor: HexColor.fromHex("#F9F5EF"),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_circle_left_rounded),
-          color: Theme.of(context).iconTheme.color,
+      appBar:  AppBar(
+        leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          "Dzikir",
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium!.copyWith(color: Colors.black),
         ),
 
         titleSpacing: 5,
-
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Al-Barokah",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: HexColor.fromHex("#256980"),
-                  ),
-                ),
-
-                Text(
-                  "Dzikir pagi & petang harian",
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ],
-            ),
-          ],
-        ),
         actionsPadding: EdgeInsets.only(right: 10),
         actions: [
           Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              height: 33,
-              width: 120,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: Colors.white,
-                border: BoxBorder.all(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.15),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    color: Theme.of(context).textTheme.titleLarge!.color,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-
-                  labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-
-                  labelColor: isDark ? Colors.black : Colors.white,
-                  labelStyle: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                  ),
-
-                  tabs: const [
-                    TabItem(title: "Sugro"),
-                    TabItem(title: "Kubro"),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
+    alignment: Alignment.centerRight,
+    child: Container(
+      height: 33,
+      width: 120,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+      
+        color:   HexColor.fromHex("#256980"),
+        border: Border.all(
+          color: Theme.of(context)
+              .colorScheme
+              .onSurface
+              .withValues(alpha: 0.15),
+        ),
       ),
-      body: SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(3),
+        child: TabBar(
+          controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color:    Colors.white,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+          labelColor: isDark ? HexColor.fromHex("#256980") : Colors.white,
+          labelStyle: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+          ),
+          tabs: const [
+            TabItem(title: "Sugro"),
+            TabItem(title: "Kubro"),
+          ],
+        ),
+      ),
+    ),
+  ),
+        ],
+
+      
+      ),
+      body:
+      Column(
+        children: [
+          
+       Expanded(child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          padding: EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
               const SizedBox(height: 10),
               SizedBox(
                 height:
@@ -377,7 +362,9 @@ class _MatsuratScreenState extends State<MatsuratScreen>
             ],
           ),
         ),
-      ),
+      ),)
+        ],
+      )
     );
   }
 }

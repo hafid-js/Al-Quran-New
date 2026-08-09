@@ -71,12 +71,14 @@ class _CompassViewState extends State<CompassView>
     }
 
     if (_hasCompassSensor == null) {
-      return Center(child: Container(
-              color: Colors.white,
-              child: Center(
-                child: Image.asset('assets/animations/bar_loader.gif', height:100),
-              )
-            ));
+      return Center(
+        child: Container(
+          color: Colors.transparent,
+          child: Center(
+            child: Image.asset('assets/animations/bar_loader.gif', height: 100),
+          ),
+        ),
+      );
     }
 
     return Container(
@@ -86,12 +88,17 @@ class _CompassViewState extends State<CompassView>
         stream: stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Container(
-              color: Colors.white,
-              child: Center(
-                child: Image.asset('assets/animations/bar_loader.gif', height:100),
-              )
-            ));
+            return Center(
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(
+                    'assets/animations/bar_loader.gif',
+                    height: 100,
+                  ),
+                ),
+              ),
+            );
           }
 
           if (!snapshot.hasData || !snapshot.data!.enabled) {
@@ -145,8 +152,11 @@ class _CompassViewState extends State<CompassView>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.explore_off,
-                size: 64, color: Theme.of(context).colorScheme.error),
+            Icon(
+              Icons.explore_off,
+              size: 64,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: 16),
             Text(
               'Perangkat Tidak Memiliki Kompas',
@@ -170,10 +180,7 @@ class _LocationErrorWidget extends StatelessWidget {
   final String error;
   final VoidCallback callback;
 
-  const _LocationErrorWidget({
-    required this.error,
-    required this.callback,
-  });
+  const _LocationErrorWidget({required this.error, required this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -183,24 +190,29 @@ class _LocationErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.location_off,
-                size: 64, color: Theme.of(context).colorScheme.error),
+            Icon(
+              Icons.location_off,
+              size: 64,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: 16),
             Text(
               error,
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: HexColor.fromHex("#256980")),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: HexColor.fromHex("#256980"),
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-  onPressed: callback,
-  style: ElevatedButton.styleFrom(
-    backgroundColor: HexColor.fromHex("#256980"),
-    foregroundColor: Colors.white,
-  ),
-  icon: const Icon(Icons.refresh),
-  label: const Text('Coba Lagi'),
-),
+              onPressed: callback,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HexColor.fromHex("#256980"),
+                foregroundColor: Colors.white,
+              ),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Coba Lagi'),
+            ),
           ],
         ),
       ),
@@ -225,11 +237,14 @@ class _QiblahCompassWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-              color: Colors.white,
-              child: Center(
-                child: Image.asset('assets/animations/bar_loader.gif', height:100),
-              )
-            ),
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/animations/bar_loader.gif',
+                      height: 100,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 16),
                 Text(
                   'Menunggu sensor kompas...',
@@ -294,8 +309,8 @@ class _QiblahCompassWidget extends StatelessWidget {
               Text(
                 '${data.offset.toStringAsFixed(1)}° dari arah hadap',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: HexColor.fromHex("#256980"),
-                    ),
+                  color: HexColor.fromHex("#256980"),
+                ),
               ),
               const SizedBox(height: 24),
               _buildLocationCard(context, controller),
@@ -308,46 +323,42 @@ class _QiblahCompassWidget extends StatelessWidget {
   }
 
   Widget _buildInfoCard(
-      BuildContext context, QiblahDirection data, KiblatController controller) {
+    BuildContext context,
+    QiblahDirection data,
+    KiblatController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: HexColor.fromHex("#256980").withAlpha(15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: HexColor.fromHex("#256980").withAlpha(40),
-        ),
+        border: Border.all(color: HexColor.fromHex("#256980").withAlpha(40)),
       ),
       child: Column(
         children: [
-          Text(
-            'Arah Kiblat',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+          Text('Arah Kiblat', style: Theme.of(context).textTheme.labelSmall),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.explore,
-                  size: 28,
-                  color: HexColor.fromHex("#256980")),
+              Icon(Icons.explore, size: 28, color: HexColor.fromHex("#256980")),
               const SizedBox(width: 8),
               Text(
                 '${data.qiblah.toStringAsFixed(1)}°',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: HexColor.fromHex("#256980"),
-                    ),
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: HexColor.fromHex("#256980"),
+                ),
               ),
               const SizedBox(width: 8),
               Text(
                 QiblaCalculator.getDirectionName(data.qiblah),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: HexColor.fromHex("#256980"),
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: HexColor.fromHex("#256980"),
+                ),
               ),
             ],
           ),
@@ -356,9 +367,11 @@ class _QiblahCompassWidget extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.straighten,
-                    size: 16,
-                    color: Theme.of(context).textTheme.labelSmall?.color),
+                Icon(
+                  Icons.straighten,
+                  size: 16,
+                  color: Theme.of(context).textTheme.labelSmall?.color,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'Jarak: ${controller.qiblaDistanceText}',
@@ -372,8 +385,7 @@ class _QiblahCompassWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationCard(
-      BuildContext context, KiblatController controller) {
+  Widget _buildLocationCard(BuildContext context, KiblatController controller) {
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -388,11 +400,17 @@ class _QiblahCompassWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Latitude',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(color:Colors.white)),
+                  Text(
+                    'Latitude',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelSmall!.copyWith(color: Colors.white),
+                  ),
                   Text(
                     controller.latitude.value.toStringAsFixed(4),
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color:HexColor.fromHex("#D39D52"))
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: HexColor.fromHex("#D39D52"),
+                    ),
                   ),
                 ],
               ),
@@ -400,11 +418,17 @@ class _QiblahCompassWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Longitude',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(color:Colors.white)),
+                  Text(
+                    'Longitude',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelSmall!.copyWith(color: Colors.white),
+                  ),
                   Text(
                     controller.longitude.value.toStringAsFixed(4),
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color:HexColor.fromHex("#D39D52"))
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: HexColor.fromHex("#D39D52"),
+                    ),
                   ),
                 ],
               ),
@@ -479,8 +503,14 @@ class _CompassRosePainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawLabel(Canvas canvas, String text, double angle, double radius,
-      bool isDark, bool isNorth) {
+  void _drawLabel(
+    Canvas canvas,
+    String text,
+    double angle,
+    double radius,
+    bool isDark,
+    bool isNorth,
+  ) {
     final tp = TextPainter(
       text: TextSpan(
         text: text,

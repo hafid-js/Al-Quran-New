@@ -1,9 +1,9 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
+import 'package:alquran_new/development/tasbih/screens/tasbih_chart_screen.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/tasbih/widgets/tasbih_bead_counter.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:vibration/vibration.dart';
 import 'package:get/get.dart';
@@ -30,6 +30,67 @@ class _TasbihScreenState extends State<TasbihScreen> {
   int astaghfirullah = 0;
   int allahumasholialamuhammad = 0;
   int selectedDzikir = 0;
+
+  final List<String> dzikirNames = [
+    "Subhanallah",
+    "Alhamdulillah",
+    "Allahuakbar",
+    "La ilaha illallah",
+    "Astaghfirullahal adzim",
+    "Allahuma sholli ala Muhammad",
+  ];
+
+  final List<String> dzikirArabics = [
+    "سُبْحَانَ اللَّهِ",
+    "الْحَمْدُ لِلَّهِ",
+    "اللَّهُ أَكْبَرُ",
+    "لَا إِلٰهَ إِلَّا اللَّهُ",
+    "أَسْتَغْفِرُ اللَّهَ",
+    "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+  ];
+
+  final List<String> dzikirArtis = [
+    "Maha Suci Allah",
+    "Segala puji bagi Allah",
+    "Allah Maha Besar",
+    "Tiada Tuhan selain Allah",
+    "Aku memohon ampun kepada Allah",
+    "Ya Allah, limpahkan sholawat kepada Nabi Muhammad",
+  ];
+
+  int dzikirCount(int index) {
+    switch (index) {
+      case 0:
+        return subhanallah;
+      case 1:
+        return alhamdulillah;
+      case 2:
+        return allahuakbar;
+      case 3:
+        return laillahailallah;
+      case 4:
+        return astaghfirullah;
+      default:
+        return allahumasholialamuhammad;
+    }
+  }
+
+  VoidCallback dzikirCounter(int index) {
+    switch (index) {
+      case 0:
+        return subhanallahCounter;
+      case 1:
+        return alhamdulillahCounter;
+      case 2:
+        return allahuakbarCounter;
+      case 3:
+        return laillahailallahCounter;
+      case 4:
+        return astaghfirullahCounter;
+      default:
+        return allahumaCounter;
+    }
+  }
 
   int dzikirSelesai() {
     int total = 0;
@@ -77,7 +138,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (subhanallah < target) {
       setState(() {
         subhanallah++;
-        box.write('subhanallah', subhanallah);
       });
     }
   }
@@ -86,7 +146,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (alhamdulillah < target) {
       setState(() {
         alhamdulillah++;
-        box.write('alhamdulillah', alhamdulillah);
       });
     }
   }
@@ -95,7 +154,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (allahuakbar < target) {
       setState(() {
         allahuakbar++;
-        box.write('allahuakbar', allahuakbar);
       });
     }
   }
@@ -104,7 +162,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (laillahailallah < target) {
       setState(() {
         laillahailallah++;
-        box.write('laillahailallah', laillahailallah);
       });
     }
   }
@@ -113,7 +170,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (astaghfirullah < target) {
       setState(() {
         astaghfirullah++;
-        box.write('astaghfirullah', astaghfirullah);
       });
     }
   }
@@ -122,9 +178,36 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (allahumasholialamuhammad < target) {
       setState(() {
         allahumasholialamuhammad++;
-        box.write('allahumasholialamuhammad', allahumasholialamuhammad);
       });
     }
+  }
+
+  void _countDzikir(int index) {
+    dzikirCounter(index)();
+    if (dzikirCount(index) >= target) {
+      setState(() {
+        selectedDzikir = (index + 1) % dzikirNames.length;
+      });
+    }
+  }
+
+  void resetSelectedDzikir() {
+    setState(() {
+      switch (selectedDzikir) {
+        case 0:
+          subhanallah = 0;
+        case 1:
+          alhamdulillah = 0;
+        case 2:
+          allahuakbar = 0;
+        case 3:
+          laillahailallah = 0;
+        case 4:
+          astaghfirullah = 0;
+        default:
+          allahumasholialamuhammad = 0;
+      }
+    });
   }
 
   void resetCounter() {
@@ -135,12 +218,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
       laillahailallah = 0;
       astaghfirullah = 0;
       allahumasholialamuhammad = 0;
-      box.write('subhanallah', 0);
-      box.write('alhamdulillah', 0);
-      box.write('allahuakbar', 0);
-      box.write('laillahailallah', 0);
-      box.write('astaghfirullah', 0);
-      box.write('allahumasholialamuhammad', 0);
+      selectedDzikir = 0;
     });
   }
 
@@ -154,35 +232,25 @@ class _TasbihScreenState extends State<TasbihScreen> {
       allahumasholialamuhammad = 0;
       freeTasbih = 0;
       endTasbih = 0;
-      box.write('subhanallah', 0);
-      box.write('alhamdulillah', 0);
-      box.write('allahuakbar', 0);
-      box.write('laillahailallah', 0);
-      box.write('astaghfirullah', 0);
-      box.write('allahumasholialamuhammad', 0);
-      box.write('freeTasbih', 0);
-      box.write('endTasbih', 0);
+      selectedDzikir = 0;
     });
   }
 
   void tasbihCounter() {
     setState(() {
       freeTasbih++;
-      box.write('freeTasbih', freeTasbih);
     });
   }
 
   void endTasbihIncrement() {
     setState(() {
       endTasbih++;
-      box.write('endTasbih', endTasbih);
     });
   }
 
   void endTasbihDecrement() {
     setState(() {
       endTasbih--;
-      box.write('endTasbih', endTasbih);
     });
   }
 
@@ -190,10 +258,96 @@ class _TasbihScreenState extends State<TasbihScreen> {
     setState(() {
       freeTasbih = 0;
       endTasbih = 0;
-
-      box.write('freeTasbih', 0);
-      box.write('endTasbih', 0);
     });
+  }
+
+  String _fmtDate(DateTime d) =>
+      '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  List<int> _currentCounts() => [
+        subhanallah,
+        alhamdulillah,
+        allahuakbar,
+        laillahailallah,
+        astaghfirullah,
+        allahumasholialamuhammad,
+      ];
+
+  void _saveDaily() {
+    final today = _fmtDate(DateTime.now());
+    final dailyMap = Map<String, dynamic>.from(box.read('tasbihHarian') ?? {});
+    final baseline =
+        List<int>.from(box.read('harianBaseline') ?? List.filled(6, 0));
+    final baselineDate = box.read('harianDate') as String?;
+    final cum = _currentCounts();
+
+    List<int> daily;
+    if (baselineDate == today) {
+      daily = List.generate(
+        6,
+        (i) => (cum[i] - baseline[i]).clamp(0, 1 << 31).toInt(),
+      );
+    } else {
+      daily = List.filled(6, 0);
+      box.write('harianBaseline', cum);
+      box.write('harianDate', today);
+    }
+    dailyMap[today] = daily;
+    box.write('tasbihHarian', dailyMap);
+  }
+
+  void _save() {
+    box.write('subhanallah', subhanallah);
+    box.write('alhamdulillah', alhamdulillah);
+    box.write('allahuakbar', allahuakbar);
+    box.write('laillahailallah', laillahailallah);
+    box.write('astaghfirullah', astaghfirullah);
+    box.write('allahumasholialamuhammad', allahumasholialamuhammad);
+    box.write('freeTasbih', freeTasbih);
+    box.write('endTasbih', endTasbih);
+    _saveDaily();
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          padding: EdgeInsets.zero,
+          content: Center(
+            child: Container(
+              height: 42,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.white24),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Data Tasbih Disimpan",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    Icons.check_circle_rounded,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+       
   }
 
   @override
@@ -231,15 +385,25 @@ class _TasbihScreenState extends State<TasbihScreen> {
             image: AssetImage("assets/images/image.png"),
           ),
         ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: _dzikirCard(
-              "سُبْحَانَ اللَّهِ",
-              "Maha Suci Allah",
-              subhanallah,
-              subhanallahCounter,
-            ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              _dzikirSelector(),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: _dzikirCard(
+                      dzikirArabics[selectedDzikir],
+                      dzikirArtis[selectedDzikir],
+                      dzikirCount(selectedDzikir),
+                      () => _countDzikir(selectedDzikir),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -249,11 +413,11 @@ class _TasbihScreenState extends State<TasbihScreen> {
           Text("usap ke kiri untuk berdzikir", style: TextStyle(fontSize: 12)),
              SizedBox(height: 10),
           TasbihBeadCounter(
-            count: 2,
-            enabled: 1 < 33,
+            count: dzikirCount(selectedDzikir),
+            enabled: dzikirCount(selectedDzikir) < target,
             onCount: () {
               _vibrate();
-              // increment();
+              _countDzikir(selectedDzikir);
             },
           ),
           SizedBox(height: 30),
@@ -268,26 +432,35 @@ class _TasbihScreenState extends State<TasbihScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Iconsax.refresh5,
-                    color: HexColor.fromHex("#D39D52"),
-                    size: 30,
+                  GestureDetector(
+                    onTap: resetSelectedDzikir,
+                    child: Icon(
+                      Iconsax.refresh5,
+                      color: HexColor.fromHex("#D39D52"),
+                      size: 30,
+                    ),
                   ),
-                  Icon(
-                    Icons.save,
-                    color: HexColor.fromHex("#D39D52"),
-                    size: 30,
+                  GestureDetector(
+                    onTap: _save,
+                    child: Icon(
+                      Icons.save,
+                      color: HexColor.fromHex("#D39D52"),
+                      size: 30,
+                    ),
                   ),
                   Icon(
                     Icons.history,
                     color: HexColor.fromHex("#D39D52"),
                     size: 35,
                   ),
-                  Icon(
-                    Iconsax.moon,
+                 GestureDetector(
+                  onTap: () => Get.to(() => TasbihChartScreen()),
+                  child:  Icon(
+                    Icons.bar_chart_rounded,
                     color: HexColor.fromHex("#D39D52"),
                     size: 30,
                   ),
+                 )
                 ],
               ),
             ),
@@ -297,46 +470,148 @@ class _TasbihScreenState extends State<TasbihScreen> {
     );
   }
 
+  Widget _dzikirSelector() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+ padding: EdgeInsets.only(right: 12, left: 12, bottom: 12),
+      child: Row(
+        children: [
+          for (int i = 0; i < dzikirNames.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _dzikirButton(i),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dzikirButton(int index) {
+    final isActive = selectedDzikir == index;
+    final isComplete = dzikirCount(index) >= target;
+    final unlocked = _isUnlocked(index);
+
+    return GestureDetector(
+      onTap: unlocked
+          ? () {
+              setState(() {
+                selectedDzikir = index;
+              });
+            }
+          : null,
+      child: Opacity(
+        opacity: unlocked ? 1 : 0.45,
+        child: Container(
+          height: 42,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: isActive
+                ? HexColor.fromHex("#D39D52")
+                : Colors.white.withAlpha(35),
+            borderRadius: BorderRadius.circular(30),
+            border: isActive ? null : Border.all(color: Colors.white24),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isComplete) ...[
+                const Icon(
+                  Icons.check_circle_rounded,
+                  size: 16,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 5),
+              ],
+              if (!unlocked) ...[
+                const Icon(
+                  Icons.lock_rounded,
+                  size: 14,
+                  color: Colors.white70,
+                ),
+                const SizedBox(width: 5),
+              ],
+              Text(
+                dzikirNames[index],
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                "${dzikirCount(index)}/33",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isActive
+                      ? Colors.white.withAlpha(220)
+                      : HexColor.fromHex("#D39D52"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _isUnlocked(int index) {
+    for (int i = 0; i < index; i++) {
+      if (dzikirCount(i) < target) return false;
+    }
+    return true;
+  }
+
   Widget _dzikirCard(
     String arabic,
     String arti,
     int count,
     VoidCallback increment,
   ) {
-    return Stack(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              arabic,
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.white,
-                fontFamily: "Tajawal",
-                fontWeight: FontWeight.bold,
+    final isComplete = count >= target;
+
+    return GestureDetector(
+      onTap: isComplete
+          ? null
+          : () {
+              _vibrate();
+              increment();
+            },
+      child: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                arabic,
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.white,
+                  fontFamily: "Tajawal",
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 40),
-            Text(
-              "Tasbih Counter",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w500,
+              SizedBox(height: 40),
+              Text(
+                arti,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              "033",
-              style: TextStyle(
-                color: HexColor.fromHex("#D39D52"),
-                fontSize: 70,
-                fontWeight: FontWeight.bold,
+              Text(
+                count.toString().padLeft(3, '0'),
+                style: TextStyle(
+                  color: HexColor.fromHex("#D39D52"),
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
