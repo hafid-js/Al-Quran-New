@@ -1,10 +1,12 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/home_screen_new.dart';
+import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/perasaan_screen.dart';
 import 'package:alquran_new/development/play_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -54,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     HomeScreenNew(),
     PerasaanScreen(),
-    const _ProfilPlaceholder(),
+    IbadahScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -101,38 +103,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Iconsax.profile_circle5, size: 30),
-            icon: Icon(Iconsax.profile_circle, size: 23),
-            label: 'Akun',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfilPlaceholder extends StatelessWidget {
-  const _ProfilPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.person_outline, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            'Profil',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Coming Soon',
-            style: TextStyle(fontSize: 14, color: Colors.grey[400]),
+            icon: Icon(FlutterIslamicIcons.muslim2, size: 23),
+            label: 'Ibadah',
           ),
         ],
       ),
