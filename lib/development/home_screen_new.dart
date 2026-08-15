@@ -4,6 +4,7 @@ import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa_screen.dart';
+import 'package:alquran_new/development/ibadah_tracker_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/detail_murrotal_screen.dart';
 import 'package:alquran_new/development/bookmark_screen.dart';
@@ -12,10 +13,14 @@ import 'package:alquran_new/development/kiblat_screen.dart';
 import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
+import 'package:alquran_new/features/home/controllers/prayer_time_controller.dart';
+import 'package:alquran_new/features/lokasi/screens/lokasi_screen.dart';
+import 'package:alquran_new/features/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hijri/hijri_calendar.dart';
+import 'package:intl/intl.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:alquran_new/binding/doa_binding.dart';
@@ -51,13 +56,21 @@ final List<Map<String, dynamic>> menus = [
     "page": () => const DoaScreen(),
     "binding": DoaBinding(),
   },
-  {"title": "Kiblat", "icon": Iconsax.gps, "page": () => const KiblatScreenNew()},
+  {
+    "title": "Kiblat",
+    "icon": Iconsax.gps,
+    "page": () => const KiblatScreenNew(),
+  },
   {
     "title": "Tasbih",
     "icon": Iconsax.more_2,
     "page": () => const TasbihScreen(),
   },
-  {"title": "Hijriah", "icon": Iconsax.calendar, "page": () => const HijriahScreen()},
+  {
+    "title": "Hijriah",
+    "icon": Iconsax.calendar,
+    "page": () => const HijriahScreen(),
+  },
   {
     "title": "Murrotal",
     "icon": Iconsax.music_square,
@@ -68,7 +81,11 @@ final List<Map<String, dynamic>> menus = [
     "icon": Iconsax.save_2,
     "page": () => const BookmarkScreenNew(),
   },
-  {"title": "Dzikir", "icon": Iconsax.flash, "page": () => const MatsuratScreen()},
+  {
+    "title": "Dzikir",
+    "icon": Iconsax.flash,
+    "page": () => const MatsuratScreen(),
+  },
 ];
 
 class TopNotchClipper extends CustomClipper<Path> {
@@ -105,7 +122,57 @@ class TopNotchClipper extends CustomClipper<Path> {
   }
 }
 
-class _HomeScreenNewState extends State<HomeScreenNew> {
+class _HomeScreenNewState extends State<HomeScreenNew>
+    with WidgetsBindingObserver {
+  late final PrayerTimeController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!GetInstance().isRegistered<PrayerTimeController>()) {
+      Get.put(PrayerTimeController());
+    }
+    controller = Get.find<PrayerTimeController>();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      controller.resumeCountdown();
+      controller.fetchPrayerTimes();
+    } else if (state == AppLifecycleState.paused) {
+      controller.pauseCountdown();
+    }
+  }
+
+  DateTime _parseDate(String tanggalLengkap) {
+    try {
+      return DateTime.parse(tanggalLengkap);
+    } catch (_) {
+      return DateTime.now();
+    }
+  }
+
+  List<Map<String, dynamic>> _prayerList() {
+    final item = controller.todayPrayer.value;
+    if (item == null) return prayerTimes;
+    return [
+      {"title": "Imsak", "icon": Iconsax.moon, "time": item.imsak},
+      {"title": "Subuh", "icon": Iconsax.moon, "time": item.subuh},
+      {"title": "Dzuhur", "icon": Iconsax.sun_1, "time": item.dzuhur},
+      {"title": "Ashar", "icon": Icons.sunny_snowing, "time": item.ashar},
+      {"title": "Maghrib", "icon": Iconsax.sun_fog, "time": item.maghrib},
+      {"title": "Isya", "icon": Iconsax.moon, "time": item.isya},
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,125 +198,169 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                   ),
                   color: HexColor.fromHex("#256980"),
                 ),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(30),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Iconsax.location,
-                                color: Colors.white,
-                                size: 15,
+                child: Obx(() {
+                  final item = controller.todayPrayer.value;
+                  final nextTime = controller.nextPrayerTime.value;
+                  final jam = nextTime != null
+                      ? DateFormat('HH:mm').format(nextTime)
+                      : "--:--";
+                  final hijri = item != null
+                      ? HijriCalendar.fromDate(_parseDate(item.tanggalLengkap))
+                      : null;
+                  return Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Get.to(() => LokasiScreen()),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
                               ),
-                              SizedBox(width: 3),
-                              Text(
-                                "Jakarta, Indonesia",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(30),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.location,
+                                    color: Colors.white,
+                                    size: 15,
+                                  ),
+                                  SizedBox(width: 3),
+                                  Text(
+                                    controller.currentCity.value,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Row(
+                            children: [
+                              Obx(() {
+                                final loading = controller.isLoading.value;
+                                return GestureDetector(
+                                  onTap: loading
+                                      ? null
+                                      : () => controller.detectLocation(),
+                                  child: loading
+                                      ? const Padding(
+                                          padding: EdgeInsets.all(2),
+                                          child: SizedBox(
+                                            width: 14,
+                                            height: 14,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      : const Icon(Iconsax.location_add),
+                                );
+                              }),
+                              SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () =>
+                                    Get.to(() => PengaturanNotifikasiScreen()),
+                                child: Icon(Iconsax.notification),
                               ),
                             ],
                           ),
-                        ),
-
-                        Row(
-                          children: [
-                            Icon(Iconsax.search_normal_1),
-                            SizedBox(width: 10),
-                            Icon(Iconsax.notification),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-
-                    Column(
-                      children: [
-                        Text(
-                          "Jumada Al Akhira 15, 1446 AH",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "14:54",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 35,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Maghrib akan tiba dalam ",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              TextSpan(
-                                text: "27 Minutes",
-                                style: TextStyle(
-                                  color: HexColor.fromHex("#D39D52"),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(height: 50, thickness: 0.5, color: Colors.white60),
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: GridView.count(
-                        crossAxisCount: Responsive.gridColumns(
-                          context,
-                          phone: 6,
-                          tablet: 6,
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisSpacing: Responsive.value(
-                          context,
-                          phone: 6,
-                          tablet: 16,
-                        ),
-                        mainAxisSpacing: Responsive.value(
-                          context,
-                          phone: 6,
-                          tablet: 16,
-                        ),
-                        childAspectRatio: Responsive.value(
-                          context,
-                          phone: 0.7,
-                          tablet: 1.0,
-                        ),
-                        padding: EdgeInsets.zero,
-                        children: prayerTimes
-                            .map(
-                              (prayerTime) =>
-                                  _buildPrayerTimeItem(context, prayerTime),
-                            )
-                            .toList(),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(height: 30),
+
+                      Column(
+                        children: [
+                          Text(
+                            hijri != null
+                                ? "${hijri.longMonthName} ${hijri.hDay}, ${hijri.hYear} H"
+                                : "Sedang memuat...",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            jam,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 35,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:
+                                      "${controller.nextPrayerName.value} akan tiba dalam ",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                TextSpan(
+                                  text: controller.remainingText,
+                                  style: TextStyle(
+                                    color: HexColor.fromHex("#D39D52"),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        height: 50,
+                        thickness: 0.5,
+                        color: Colors.white60,
+                      ),
+                      AnimatedSize(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: GridView.count(
+                          crossAxisCount: Responsive.gridColumns(
+                            context,
+                            phone: 6,
+                            tablet: 6,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisSpacing: Responsive.value(
+                            context,
+                            phone: 6,
+                            tablet: 16,
+                          ),
+                          mainAxisSpacing: Responsive.value(
+                            context,
+                            phone: 6,
+                            tablet: 16,
+                          ),
+                          childAspectRatio: Responsive.value(
+                            context,
+                            phone: 0.7,
+                            tablet: 1.0,
+                          ),
+                          padding: EdgeInsets.zero,
+                          children: _prayerList()
+                              .map(
+                                (prayerTime) =>
+                                    _buildPrayerTimeItem(context, prayerTime),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
             ],
           ),
@@ -310,6 +421,7 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 10),
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -372,18 +484,23 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                               roundedEdges: const Radius.circular(5),
                             ),
                             SizedBox(height: 12),
-                            Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: HexColor.fromHex("#D39D52"),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                            GestureDetector(
+                              onTap: () => Get.to(() => IbadahTrackerScreen()),
+                              child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: HexColor.fromHex("#D39D52"),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
 
-                              child: Center(
-                                child: Text(
-                                  "Buka Daftar Checklist",
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                child: Center(
+                                  child: Text(
+                                    "Buka Daftar Checklist",
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall,
+                                  ),
                                 ),
                               ),
                             ),
@@ -392,8 +509,6 @@ class _HomeScreenNewState extends State<HomeScreenNew> {
                       ],
                     ),
                   ),
-                  
-                  
                 ],
               ),
             ),

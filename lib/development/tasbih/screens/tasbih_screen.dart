@@ -30,6 +30,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
   int astaghfirullah = 0;
   int allahumasholialamuhammad = 0;
   int selectedDzikir = 0;
+  late List<int> todayCounts;
 
   final List<String> dzikirNames = [
     "Subhanallah",
@@ -126,6 +127,18 @@ class _TasbihScreenState extends State<TasbihScreen> {
 
     freeTasbih = box.read('freeTasbih') ?? 0;
     endTasbih = box.read('endTasbih') ?? 0;
+
+    todayCounts = List.filled(6, 0);
+    final raw = box.read('tasbihHarian');
+    if (raw is Map) {
+      final entry = raw[_fmtDate(DateTime.now())];
+      if (entry is List) {
+        todayCounts = entry.map((e) => (e as num).toInt()).toList();
+        while (todayCounts.length < 6) {
+          todayCounts.add(0);
+        }
+      }
+    }
   }
 
   Future<void> _vibrate() async {
@@ -138,6 +151,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (subhanallah < target) {
       setState(() {
         subhanallah++;
+        todayCounts[0]++;
       });
     }
   }
@@ -146,6 +160,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (alhamdulillah < target) {
       setState(() {
         alhamdulillah++;
+        todayCounts[1]++;
       });
     }
   }
@@ -154,6 +169,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (allahuakbar < target) {
       setState(() {
         allahuakbar++;
+        todayCounts[2]++;
       });
     }
   }
@@ -162,6 +178,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (laillahailallah < target) {
       setState(() {
         laillahailallah++;
+        todayCounts[3]++;
       });
     }
   }
@@ -170,6 +187,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (astaghfirullah < target) {
       setState(() {
         astaghfirullah++;
+        todayCounts[4]++;
       });
     }
   }
@@ -178,6 +196,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
     if (allahumasholialamuhammad < target) {
       setState(() {
         allahumasholialamuhammad++;
+        todayCounts[5]++;
       });
     }
   }
@@ -264,35 +283,10 @@ class _TasbihScreenState extends State<TasbihScreen> {
   String _fmtDate(DateTime d) =>
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-  List<int> _currentCounts() => [
-        subhanallah,
-        alhamdulillah,
-        allahuakbar,
-        laillahailallah,
-        astaghfirullah,
-        allahumasholialamuhammad,
-      ];
-
   void _saveDaily() {
     final today = _fmtDate(DateTime.now());
     final dailyMap = Map<String, dynamic>.from(box.read('tasbihHarian') ?? {});
-    final baseline =
-        List<int>.from(box.read('harianBaseline') ?? List.filled(6, 0));
-    final baselineDate = box.read('harianDate') as String?;
-    final cum = _currentCounts();
-
-    List<int> daily;
-    if (baselineDate == today) {
-      daily = List.generate(
-        6,
-        (i) => (cum[i] - baseline[i]).clamp(0, 1 << 31).toInt(),
-      );
-    } else {
-      daily = List.filled(6, 0);
-      box.write('harianBaseline', cum);
-      box.write('harianDate', today);
-    }
-    dailyMap[today] = daily;
+    dailyMap[today] = List<int>.from(todayCounts);
     box.write('tasbihHarian', dailyMap);
   }
 

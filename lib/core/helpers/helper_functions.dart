@@ -16,3 +16,15 @@ extension HexColor on Color {
     {"title": "Uthmanic"},
 
   ];
+
+
+  String formatRupiah(int nominal) {
+    final s = nominal.toString();
+    final buffer = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      buffer.write(s[i]);
+      final remaining = s.length - i - 1;
+      if (remaining > 0 && remaining % 3 == 0) buffer.write('.');
+    }
+    return 'Rp $buffer';
+  }

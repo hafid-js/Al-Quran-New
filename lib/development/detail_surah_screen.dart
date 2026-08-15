@@ -666,60 +666,62 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                 (t) => t.ayat == ayat.nomorAyat,
                               );
                               showModalBottomSheet(
+                                backgroundColor: Colors.white,
                                 context: context,
+                                isScrollControlled: true,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(16),
                                   ),
                                 ),
                                 builder: (context) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            width: 40,
-                                            height: 4,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[300],
-                                              borderRadius: BorderRadius.circular(2),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 16),
-                                        Row(
+                                  return DraggableScrollableSheet(
+                                    expand: false,
+                                    initialChildSize: 0.5,
+                                    minChildSize: 0.3,
+                                    maxChildSize: 1.0,
+                                    builder: (context, scrollController) {
+                                      return SingleChildScrollView(
+                                        controller: scrollController,
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Icon(
-                                              Iconsax.book_1,
-                                              color: HexColor.fromHex("#D39D52"),
-                                              size: 20,
+                                            
+                                            SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Iconsax.book_1,
+                                                  color: HexColor.fromHex("#D39D52"),
+                                                  size: 20,
+                                                ),
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  "Tafsir",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: HexColor.fromHex("#256980"),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(width: 8),
+                                            SizedBox(height: 16),
                                             Text(
-                                              "Tafsir",
+                                              tafsir?.teks ?? "Tafsir tidak tersedia.",
                                               style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                color: HexColor.fromHex("#256980"),
+                                                fontSize: 14,
+                                                color: Colors.black87,
+                                                height: 1.5,
                                               ),
                                             ),
+                                            SizedBox(height: 20),
                                           ],
                                         ),
-                                        SizedBox(height: 16),
-                                        Text(
-                                          tafsir?.teks ?? "Tafsir tidak tersedia.",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                            height: 1.5,
-                                          ),
-                                        ),
-                                        SizedBox(height: 20),
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   );
                                 },
                               );
