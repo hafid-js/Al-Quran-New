@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/home_screen_new.dart';
 import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
@@ -20,6 +19,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   bool _showPlayBar = false;
+  int _ibadahKey = 0;
 
   late final MurrotalController _murrotalController;
   late final Worker _playingWorker;
@@ -54,13 +54,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   final List<Widget> _pages = [
-    HomeScreenNew(),
-    PerasaanScreen(),
-    IbadahScreen(),
+    const HomeScreenNew(),
+    const PerasaanScreen(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
+      if (index == 2) _ibadahKey++;
       _selectedIndex = index;
     });
   }
@@ -72,7 +72,11 @@ class _MainScreenState extends State<MainScreen> {
             backgroundColor: HexColor.fromHex("#F9F5EF"),
       body: Column(
         children: [
-          Expanded(child: _pages[_selectedIndex]),
+          Expanded(
+            child: _selectedIndex == 2
+                ? IbadahScreen(key: ValueKey(_ibadahKey))
+                : _pages[_selectedIndex],
+          ),
           if (_showPlayBar) const PlayBar(),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/development/ibadah/calendar_picker_modal.dart';
 import 'package:alquran_new/development/ibadah/statistik_ibadah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'dart:math';
 
 class IbadahScreen extends StatefulWidget {
   const IbadahScreen({super.key});
@@ -18,29 +19,36 @@ class IbadahScreen extends StatefulWidget {
 class _IbadahScreenState extends State<IbadahScreen> {
   final GetStorage _storage = GetStorage();
 
+  int _quoteIndex = 0;
+
+  final List<String> _quotes = [
+    "Barangsiapa yang mengerjakan amal yang saleh maka (pahalanya) untuk dirinya sendiri. (Q.S. Fussilat: 46)",
+    "Setiap amalan anak adam untuknya, kecuali puasa. Maka sesungguhnya, ia (puasa) untuk-Ku yang akan membalasnya. (HR. Bukhari & Muslim)",
+  ];
+
   late DateTime _selectedDate;
 
-  final List<Map<String, dynamic>> _sholatWajib = [
-    {'name': 'Subuh', 'done': true},
-    {'name': 'Dzuhur', 'done': true},
+  List<Map<String, dynamic>> _sholatWajib = [
+    {'name': 'Subuh', 'done': false},
+    {'name': 'Dzuhur', 'done': false},
     {'name': 'Ashar', 'done': false},
     {'name': 'Maghrib', 'done': false},
     {'name': 'Isya', 'done': false},
   ];
 
-  final List<Map<String, dynamic>> _sholatSunnah = [
-    {'name': 'Dhuha', 'done': true},
+  List<Map<String, dynamic>> _sholatSunnah = [
+    {'name': 'Dhuha', 'done': false},
     {'name': 'Tahajud', 'done': false},
     {'name': 'Rawatib', 'done': false},
     {'name': 'Witir', 'done': false},
   ];
 
-  final List<Map<String, dynamic>> _dzikirList = [
+  List<Map<String, dynamic>> _dzikirList = [
     {'name': 'Dzikir Pagi', 'done': false, 'icon': Iconsax.sun_1},
     {'name': 'Dzikir Petang', 'done': false, 'icon': Iconsax.moon},
   ];
 
-  final List<Map<String, dynamic>> _puasaList = [
+  List<Map<String, dynamic>> _puasaList = [
     {
       'name': 'Senin-Kamis',
       'done': false,
@@ -61,14 +69,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
     },
   ];
 
-  final List<Map<String, String>> _tilawahList = [
-    {'surah': 'Al-Fatihah', 'halaman': '1'},
-    {'surah': 'Al-Baqarah', 'halaman': '12'},
-    {'surah': 'Al-Kahfi', 'halaman': '7'},
-    {'surah': 'Al-Ikhlas', 'halaman': '1'},
-  ];
+  List<Map<String, String>> _tilawahList = [];
 
-  final List<int> _sedekahList = [];
+  List<int> _sedekahList = [];
 
   int get _totalSedekah => _sedekahList.fold(0, (a, b) => a + b);
 
@@ -87,8 +90,57 @@ class _IbadahScreenState extends State<IbadahScreen> {
   @override
   void initState() {
     super.initState();
+
     _selectedDate = DateTime.now();
+
+    _repairStoredData();
+
     _loadData();
+
+    _quoteIndex = Random().nextInt(_quotes.length);
+  }
+
+  void _repairStoredData() {
+    for (final key in _storage.getKeys()) {
+      if (!key.toString().startsWith('ibadah_')) continue;
+
+      final data = _storage.read(key.toString());
+
+      if (data is! Map) continue;
+
+      var changed = false;
+
+      final wajib = data['sholatWajib'];
+
+      if (wajib is List && wajib.isEmpty) {
+        data['sholatWajib'] = [
+          {'name': 'Subuh', 'done': false},
+          {'name': 'Dzuhur', 'done': false},
+          {'name': 'Ashar', 'done': false},
+          {'name': 'Maghrib', 'done': false},
+          {'name': 'Isya', 'done': false},
+        ];
+
+        changed = true;
+      }
+
+      final sunnah = data['sholatSunnah'];
+
+      if (sunnah is List && sunnah.isEmpty) {
+        data['sholatSunnah'] = [
+          {'name': 'Dhuha', 'done': false},
+          {'name': 'Tahajud', 'done': false},
+          {'name': 'Rawatib', 'done': false},
+          {'name': 'Witir', 'done': false},
+        ];
+
+        changed = true;
+      }
+
+      if (changed) {
+        _storage.write(key.toString(), data);
+      }
+    }
   }
 
   String get _dateKey =>
@@ -111,6 +163,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
       'November',
       'Desember',
     ];
+
     const hari = [
       'Senin',
       'Selasa',
@@ -120,6 +173,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
       'Sabtu',
       'Minggu',
     ];
+
     return '${hari[_selectedDate.weekday - 1]}, '
         '${_selectedDate.day} ${bulan[_selectedDate.month - 1]} '
         '${_selectedDate.year}';
@@ -127,111 +181,204 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
   void _saveData() {
     _storage.write(_storageKey, {
-      'sholatWajib': _sholatWajib,
-      'sholatSunnah': _sholatSunnah,
+      'sholatWajib': _sholatWajib.isEmpty
+          ? const [
+              {'name': 'Subuh', 'done': false},
+              {'name': 'Dzuhur', 'done': false},
+              {'name': 'Ashar', 'done': false},
+              {'name': 'Maghrib', 'done': false},
+              {'name': 'Isya', 'done': false},
+            ]
+          : [for (final s in _sholatWajib) Map<String, dynamic>.from(s)],
+
+      'sholatSunnah': _sholatSunnah.isEmpty
+          ? const [
+              {'name': 'Dhuha', 'done': false},
+              {'name': 'Tahajud', 'done': false},
+              {'name': 'Rawatib', 'done': false},
+              {'name': 'Witir', 'done': false},
+            ]
+          : [for (final s in _sholatSunnah) Map<String, dynamic>.from(s)],
+
       'dzikir': [
-        for (final d in _dzikirList) {'name': d['name'], 'done': d['done']},
+        for (final d in _dzikirList)
+          {
+            'name': d['name'],
+            'done': d['done'],
+          },
       ],
+
       'puasa': [
-        for (final p in _puasaList) {'name': p['name'], 'done': p['done']},
+        for (final p in _puasaList)
+          {
+            'name': p['name'],
+            'done': p['done'],
+          },
       ],
-      'tilawah': _tilawahList,
-      'sedekah': _sedekahList,
+
+      'tilawah': [for (final t in _tilawahList) Map<String, String>.from(t)],
+
+      'sedekah': List<int>.of(_sedekahList),
     });
   }
 
-  void _loadData() {
+  void _loadData({bool notify = false}) {
     final data = _storage.read(_storageKey);
-    if (data is! Map) return;
 
-    final wajib = (data['sholatWajib'] as List).cast<Map<String, dynamic>>();
-    final sunnah = (data['sholatSunnah'] as List).cast<Map<String, dynamic>>();
-    final dzikir = (data['dzikir'] as List).cast<Map<String, dynamic>>();
-    final puasa = (data['puasa'] as List).cast<Map<String, dynamic>>();
-    final tilawah = data['tilawah'] as List;
-    final sedekah = (data['sedekah'] as List).cast<int>();
+    final wajib = data is Map ? data['sholatWajib'] as List? : null;
 
-    _sholatWajib
-      ..clear()
-      ..addAll(wajib);
-    _sholatSunnah
-      ..clear()
-      ..addAll(sunnah);
+    final sunnah = data is Map ? data['sholatSunnah'] as List? : null;
 
-    _dzikirList
-      ..clear()
-      ..addAll([
-        {'name': 'Dzikir Pagi', 'done': false, 'icon': Iconsax.sun_1},
-        {'name': 'Dzikir Petang', 'done': false, 'icon': Iconsax.moon},
-      ]);
-    for (var i = 0; i < _dzikirList.length && i < dzikir.length; i++) {
-      _dzikirList[i]['done'] = dzikir[i]['done'];
-    }
+    final dzikir =
+        data is Map ? (data['dzikir'] as List?) ?? [] : [];
 
-    _puasaList
-      ..clear()
-      ..addAll([
+    final puasa =
+        data is Map ? (data['puasa'] as List?) ?? [] : [];
+
+    final tilawah =
+        data is Map ? data['tilawah'] as List? ?? [] : [];
+
+    final sedekah =
+        data is Map ? (data['sedekah'] as List?) ?? [] : [];
+
+    void load() {
+      _sholatWajib = (wajib != null && wajib.isNotEmpty)
+          ? [for (final e in wajib) Map<String, dynamic>.from(e as Map)]
+          : [
+              {'name': 'Subuh', 'done': false},
+              {'name': 'Dzuhur', 'done': false},
+              {'name': 'Ashar', 'done': false},
+              {'name': 'Maghrib', 'done': false},
+              {'name': 'Isya', 'done': false},
+            ];
+
+      _sholatSunnah = (sunnah != null && sunnah.isNotEmpty)
+          ? [for (final e in sunnah) Map<String, dynamic>.from(e as Map)]
+          : [
+              {'name': 'Dhuha', 'done': false},
+              {'name': 'Tahajud', 'done': false},
+              {'name': 'Rawatib', 'done': false},
+              {'name': 'Witir', 'done': false},
+            ];
+
+      _dzikirList = [
+        {
+          'name': 'Dzikir Pagi',
+          'done': false,
+          'icon': Iconsax.sun_1,
+        },
+        {
+          'name': 'Dzikir Petang',
+          'done': false,
+          'icon': Iconsax.moon,
+        },
+      ];
+
+      for (var i = 0;
+          i < _dzikirList.length && i < dzikir.length;
+          i++) {
+        final done = (dzikir[i] as Map)['done'];
+
+        if (done is bool) {
+          _dzikirList[i]['done'] = done;
+        }
+      }
+
+      _puasaList = [
         {
           'name': 'Senin-Kamis',
           'done': false,
           'icon': Iconsax.calendar_tick,
-          'question': "Apakah kamu sudah berpuasa Senin-Kamis hari ini?",
+          'question':
+              "Apakah kamu sudah berpuasa Senin-Kamis hari ini?",
         },
         {
           'name': 'Ayyamul-Bidh',
           'done': false,
           'icon': Iconsax.moon,
-          'question': "Apakah kamu sudah berpuasa Ayyamul-Bidh hari ini?",
+          'question':
+              "Apakah kamu sudah berpuasa Ayyamul-Bidh hari ini?",
         },
         {
           'name': 'Daud',
           'done': false,
           'icon': Iconsax.medal,
-          'question': "Apakah kamu sudah berpuasa Daud hari ini?",
+          'question':
+              "Apakah kamu sudah berpuasa Daud hari ini?",
         },
-      ]);
-    for (var i = 0; i < _puasaList.length && i < puasa.length; i++) {
-      _puasaList[i]['done'] = puasa[i]['done'];
+      ];
+
+      for (var i = 0;
+          i < _puasaList.length && i < puasa.length;
+          i++) {
+        final done = (puasa[i] as Map)['done'];
+
+        if (done is bool) {
+          _puasaList[i]['done'] = done;
+        }
+      }
+
+      _tilawahList = [
+        for (final t in tilawah)
+          if (t is Map)
+            {
+              'surah': t['surah']?.toString() ?? '',
+              'halaman': t['halaman']?.toString() ?? '',
+            },
+      ];
+
+      _sedekahList = sedekah.whereType<int>().toList();
     }
 
-    _tilawahList.clear();
-    for (final t in tilawah) {
-      final m = Map<String, dynamic>.from(t as Map);
-      _tilawahList.add({
-        'surah': m['surah'] as String,
-        'halaman': m['halaman'] as String,
+    if (notify) {
+      setState(() {
+        load();
       });
+    } else {
+      load();
     }
-
-    _sedekahList
-      ..clear()
-      ..addAll(sedekah);
   }
 
   Future<void> _showCalendarModal() async {
-    final picked = await showModalBottomSheet<DateTime>(
+    final picked = await showDialog<DateTime>(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => _CalendarPickerModal(initialDate: _selectedDate),
+      barrierColor: Colors.black54,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+          child: CalendarPickerModal(
+            initialDate: _selectedDate,
+          ),
+        );
+      },
     );
+
     if (picked != null) {
       setState(() {
-        _saveData();
         _selectedDate = picked;
-        _loadData();
       });
+
+      _loadData(notify: true);
     }
   }
 
   String formatRupiah(int nominal) {
     final s = nominal.toString();
+
     final buffer = StringBuffer();
+
     for (var i = 0; i < s.length; i++) {
       buffer.write(s[i]);
+
       final remaining = s.length - i - 1;
-      if (remaining > 0 && remaining % 3 == 0) buffer.write('.');
+
+      if (remaining > 0 && remaining % 3 == 0) {
+        buffer.write('.');
+      }
     }
+
     return 'Rp $buffer';
   }
 
@@ -242,10 +389,12 @@ class _IbadahScreenState extends State<IbadahScreen> {
       isScrollControlled: true,
       builder: (context) => const _CatatSedekahModal(),
     );
+
     if (result != null) {
       setState(() {
         _sedekahList.add(result);
       });
+
       _saveData();
     }
   }
@@ -257,6 +406,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
       isScrollControlled: true,
       builder: (context) => const _CatatTilawahModal(),
     );
+
     if (result != null) {
       setState(() {
         _tilawahList.add({
@@ -264,6 +414,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
           'halaman': result['halaman']!,
         });
       });
+
       _saveData();
     }
   }
@@ -271,6 +422,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
   void _showSholatModal(
     String name,
     VoidCallback onConfirm, {
+    VoidCallback? onUndo,
     String? title,
     String? question,
   }) {
@@ -279,10 +431,12 @@ class _IbadahScreenState extends State<IbadahScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25),
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -292,7 +446,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 size: 45,
                 color: HexColor.fromHex("#D39D52"),
               ),
+
               const SizedBox(height: 10),
+
               Text(
                 title ?? "Shalat $name",
                 style: const TextStyle(
@@ -300,34 +456,69 @@ class _IbadahScreenState extends State<IbadahScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+
               const SizedBox(height: 8),
+
               Text(
-                question ?? "Apakah kamu sudah melaksanakan shalat $name?",
+                question ??
+                    "Apakah kamu sudah melaksanakan shalat $name?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
                   color: HexColor.fromHex("#5a7b8a"),
                 ),
               ),
+
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 42,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    onConfirm();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#D39D52"),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+
+              Row(
+                children: [
+                  if (onUndo != null) ...[
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          onUndo();
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor:
+                              HexColor.fromHex("#256980"),
+                          side: BorderSide(
+                            color: HexColor.fromHex("#256980"),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text("Batalkan"),
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+                  ],
+
+                  Expanded(
+                    child: SizedBox(
+                      height: 42,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          onConfirm();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              HexColor.fromHex("#D39D52"),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text("Sudah"),
+                      ),
                     ),
                   ),
-                  child: const Text("Sudah"),
-                ),
+                ],
               ),
             ],
           ),
@@ -338,22 +529,48 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
   Widget _buildSunnahItem(String name, bool done) {
     final color = HexColor.fromHex("#256980");
+
     return GestureDetector(
       onTap: () {
-        _showSholatModal(name, () {
-          setState(() {
-            final index = _sholatSunnah.indexWhere((e) => e['name'] == name);
-            if (index != -1) _sholatSunnah[index]['done'] = true;
-          });
-          _saveData();
-        });
+        _showSholatModal(
+          name,
+          () {
+            setState(() {
+              final index =
+                  _sholatSunnah.indexWhere((e) => e['name'] == name);
+
+              if (index != -1) {
+                _sholatSunnah[index]['done'] = true;
+              }
+            });
+
+            _saveData();
+          },
+          onUndo: done
+              ? () {
+                  setState(() {
+                    final index = _sholatSunnah
+                        .indexWhere((e) => e['name'] == name);
+
+                    if (index != -1) {
+                      _sholatSunnah[index]['done'] = false;
+                    }
+                  });
+
+                  _saveData();
+                }
+              : null,
+        );
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: done ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color, width: 1.5),
+          border: Border.all(
+            color: color,
+            width: 1.5,
+          ),
         ),
         child: Column(
           children: [
@@ -362,7 +579,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
               size: 24,
               color: done ? Colors.white : color,
             ),
+
             SizedBox(height: 6),
+
             Text(
               name,
               textAlign: TextAlign.center,
@@ -385,21 +604,38 @@ class _IbadahScreenState extends State<IbadahScreen> {
     IconData icon,
   ) {
     final color = HexColor.fromHex("#256980");
+
     final index = list.indexWhere((e) => e['name'] == name);
+
     final question = index != -1
         ? (list[index]['question'] as String? ??
             "Apakah kamu sudah mengerjakan $name?")
         : "Apakah kamu sudah mengerjakan $name?";
+
     return GestureDetector(
       onTap: () {
         _showSholatModal(
           name,
           () {
             setState(() {
-              if (index != -1) list[index]['done'] = true;
+              if (index != -1) {
+                list[index]['done'] = true;
+              }
             });
+
             _saveData();
           },
+          onUndo: done
+              ? () {
+                  setState(() {
+                    if (index != -1) {
+                      list[index]['done'] = false;
+                    }
+                  });
+
+                  _saveData();
+                }
+              : null,
           title: name,
           question: question,
         );
@@ -409,7 +645,10 @@ class _IbadahScreenState extends State<IbadahScreen> {
         decoration: BoxDecoration(
           color: done ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color, width: 1.5),
+          border: Border.all(
+            color: color,
+            width: 1.5,
+          ),
         ),
         child: Column(
           children: [
@@ -418,7 +657,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
               size: 24,
               color: done ? Colors.white : color,
             ),
+
             SizedBox(height: 6),
+
             Text(
               name,
               textAlign: TextAlign.center,
@@ -437,24 +678,50 @@ class _IbadahScreenState extends State<IbadahScreen> {
   Widget _buildSholatItem(String name, bool done) {
     return GestureDetector(
       onTap: () {
-        _showSholatModal(name, () {
-          setState(() {
-            final index = _sholatWajib.indexWhere((e) => e['name'] == name);
-            if (index != -1) _sholatWajib[index]['done'] = true;
-          });
-          _saveData();
-        });
+        _showSholatModal(
+          name,
+          () {
+            setState(() {
+              final index =
+                  _sholatWajib.indexWhere((e) => e['name'] == name);
+
+              if (index != -1) {
+                _sholatWajib[index]['done'] = true;
+              }
+            });
+
+            _saveData();
+          },
+          onUndo: done
+              ? () {
+                  setState(() {
+                    final index = _sholatWajib
+                        .indexWhere((e) => e['name'] == name);
+
+                    if (index != -1) {
+                      _sholatWajib[index]['done'] = false;
+                    }
+                  });
+
+                  _saveData();
+                }
+              : null,
+        );
       },
       child: Column(
         children: [
           Icon(
-            done ? Icons.check_circle_rounded : Iconsax.tick_circle,
+            done
+                ? Icons.check_circle_rounded
+                : Iconsax.tick_circle,
             size: 45,
             color: done
                 ? HexColor.fromHex("#D39D52")
                 : HexColor.fromHex("#C9CFD4"),
           ),
+
           const SizedBox(height: 4),
+
           Text(
             name,
             textAlign: TextAlign.center,
@@ -473,6 +740,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HexColor.fromHex("#F9F5EF"),
+
       appBar: AppBar(
         toolbarHeight: 0,
         surfaceTintColor: HexColor.fromHex("#F9F5EF"),
@@ -480,6 +748,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
         foregroundColor: HexColor.fromHex("#F9F5EF"),
         actionsPadding: EdgeInsets.symmetric(horizontal: 12),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
@@ -490,13 +759,16 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "Progress Harian",
@@ -506,6 +778,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+
                         Row(
                           children: [
                             GestureDetector(
@@ -516,43 +789,58 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                 size: 30,
                               ),
                             ),
+
                             SizedBox(width: 10),
-                           GestureDetector(
-                            onTap: () => Get.to(()=> StatistikIbadah()),
-                            child:  Icon(
-                              Iconsax.chart_21,
-                              color: HexColor.fromHex("#256980"),
-                              size: 30,
+
+                            GestureDetector(
+                              onTap: () =>
+                                  Get.to(() => StatistikIbadah()),
+                              child: Icon(
+                                Iconsax.chart_21,
+                                color: HexColor.fromHex("#256980"),
+                                size: 30,
+                              ),
                             ),
-                           )
                           ],
                         ),
                       ],
                     ),
+
                     SizedBox(height: 10),
+
                     Text(
                       _formattedDate,
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: HexColor.fromHex("#256980"),
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.titleSmall!.copyWith(
+                                color: HexColor.fromHex("#256980"),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
                     ),
+
                     SizedBox(height: 4),
+
                     Text(
                       "Selesaikan checklist ibadah hari ini.",
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.labelSmall!.copyWith(
+                                fontWeight: FontWeight.w400,
+                              ),
                     ),
+
                     SizedBox(height: 6),
+
                     Text(
                       "$_totalChecklistDone dari $_totalChecklist Selesai",
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: HexColor.fromHex("#256980"),
-                        fontSize: 12,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.titleSmall!.copyWith(
+                                color: HexColor.fromHex("#256980"),
+                                fontSize: 12,
+                              ),
                     ),
+
                     SizedBox(height: 6),
+
                     StepProgressIndicator(
                       totalSteps: _totalChecklist * 2 + 10,
                       currentStep: _totalChecklistDone * 2 + 10,
@@ -562,7 +850,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                       unselectedColor: Colors.grey,
                       roundedEdges: const Radius.circular(5),
                     ),
+
                     SizedBox(height: 8),
+
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -571,8 +861,10 @@ class _IbadahScreenState extends State<IbadahScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "Barangsiapa yang mengerjakan amal yang saleh maka (pahalanya) untuk dirinya sendiri. (Q.S. Fussilat: 46)",
-                          style: TextStyle(color: Colors.white),
+                          _quotes[_quoteIndex],
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -582,11 +874,14 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -599,12 +894,18 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+
                     SizedBox(height: 12),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         for (final sholat in _sholatWajib)
-                          _buildSholatItem(sholat['name'], sholat['done']),
+                          _buildSholatItem(
+                            sholat['name'],
+                            sholat['done'],
+                          ),
                       ],
                     ),
                   ],
@@ -612,11 +913,14 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -629,12 +933,24 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+
                     SizedBox(height: 12),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         for (final sunnah in _sholatSunnah)
-                         Expanded(child: Padding(padding: EdgeInsets.symmetric(horizontal:4), child:  _buildSunnahItem(sunnah['name'], sunnah['done']),))
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 4),
+                              child: _buildSunnahItem(
+                                sunnah['name'],
+                                sunnah['done'],
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ],
@@ -642,11 +958,14 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -659,17 +978,26 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+
                     SizedBox(height: 12),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         for (final dzikir in _dzikirList)
-                          Expanded(child: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: _buildDzikirItem(
-                            _dzikirList,
-                            dzikir['name'],
-                            dzikir['done'],
-                            dzikir['icon'],
-                          ),))
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 4),
+                              child: _buildDzikirItem(
+                                _dzikirList,
+                                dzikir['name'],
+                                dzikir['done'],
+                                dzikir['icon'],
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ],
@@ -677,11 +1005,14 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -694,17 +1025,26 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+
                     SizedBox(height: 12),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         for (final puasa in _puasaList)
-                          Expanded(child: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: _buildDzikirItem(
-                            _puasaList,
-                            puasa['name'],
-                            puasa['done'],
-                            puasa['icon'],
-                          ),))
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 4),
+                              child: _buildDzikirItem(
+                                _puasaList,
+                                puasa['name'],
+                                puasa['done'],
+                                puasa['icon'],
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ],
@@ -712,17 +1052,21 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -730,7 +1074,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               Icons.menu_book_rounded,
                               color: HexColor.fromHex("#256980"),
                             ),
+
                             SizedBox(width: 8),
+
                             Text(
                               "Tilawah Hari Ini",
                               style: TextStyle(
@@ -745,14 +1091,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showCatatModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor.fromHex("#256980"),
+                            backgroundColor:
+                                HexColor.fromHex("#256980"),
                             foregroundColor: Colors.white,
-                            // minimumSize: const Size(0, 38),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
                               vertical: 6,
                             ),
-
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -766,7 +1111,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
+
                               SizedBox(width: 4),
+
                               Icon(Iconsax.add_circle5),
                             ],
                           ),
@@ -775,40 +1122,50 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     ),
 
                     SizedBox(height: 10),
+
                     for (var i = 0; i < _tilawahList.length; i++) ...[
-                      if (i > 0) const SizedBox(height: 16),
+                      if (i > 0)
+                        const SizedBox(height: 16),
+
                       Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     _tilawahList[i]['surah']!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: HexColor.fromHex("#D39D52"),
+                                      color:
+                                          HexColor.fromHex("#D39D52"),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
+
                                   Text(
                                     "${_tilawahList[i]['halaman']} Halaman",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#256980"),
+                                      color:
+                                          HexColor.fromHex("#256980"),
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
                                   ),
                                 ],
                               ),
+
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     _tilawahList.removeAt(i);
                                   });
+
                                   _saveData();
                                 },
                                 child: Icon(
@@ -826,26 +1183,32 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
 
               SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
                             Icon(
                               Iconsax.card_coin,
                               color: HexColor.fromHex("#256980"),
-                                size: 20,
+                              size: 20,
                             ),
+
                             SizedBox(width: 8),
+
                             Text(
                               "Sedekah Hari Ini",
                               style: TextStyle(
@@ -860,7 +1223,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showSedekahModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor.fromHex("#256980"),
+                            backgroundColor:
+                                HexColor.fromHex("#256980"),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
@@ -879,7 +1243,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
+
                               SizedBox(width: 4),
+
                               Icon(Iconsax.add_circle5),
                             ],
                           ),
@@ -888,6 +1254,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     ),
 
                     SizedBox(height: 10),
+
                     if (_sedekahList.isEmpty)
                       Text(
                         "Belum ada catatan sedekah hari ini.",
@@ -897,24 +1264,32 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ),
                       )
                     else
-                      for (var i = 0; i < _sedekahList.length; i++) ...[
-                        if (i > 0) const SizedBox(height: 12),
+                      for (var i = 0;
+                          i < _sedekahList.length;
+                          i++) ...[
+                        if (i > 0)
+                          const SizedBox(height: 12),
+
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               formatRupiah(_sedekahList[i]),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: HexColor.fromHex("#D39D52"),
+                                color:
+                                    HexColor.fromHex("#D39D52"),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+
                             GestureDetector(
                               onTap: () {
                                 setState(() {
                                   _sedekahList.removeAt(i);
                                 });
+
                                 _saveData();
                               },
                               child: Icon(
@@ -925,7 +1300,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
                           ],
                         ),
                       ],
+
                     SizedBox(height: 16),
+
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(16),
@@ -934,7 +1311,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Total Sedekah Hari Ini",
@@ -944,6 +1322,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+
                           Text(
                             formatRupiah(_totalSedekah),
                             style: TextStyle(
@@ -970,7 +1349,8 @@ class _CatatTilawahModal extends StatefulWidget {
   const _CatatTilawahModal();
 
   @override
-  State<_CatatTilawahModal> createState() => _CatatTilawahModalState();
+  State<_CatatTilawahModal> createState() =>
+      _CatatTilawahModalState();
 }
 
 class _CatatTilawahModalState extends State<_CatatTilawahModal> {
@@ -990,7 +1370,9 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -999,17 +1381,26 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           Center(
             child: Text(
               "Catat Tilawah",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
+
           const SizedBox(height: 20),
+
           TextField(
             controller: _surahController,
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: HexColor.fromHex("#256980")),
+            style: TextStyle(
+              color: HexColor.fromHex("#256980"),
+            ),
             decoration: InputDecoration(
               hintText: "Surah & Ayat",
-              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
+              hintStyle: TextStyle(
+                color: HexColor.fromHex("#5a7b8a"),
+              ),
               filled: true,
               fillColor: HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
@@ -1018,14 +1409,20 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
               ),
             ),
           ),
+
           const SizedBox(height: 12),
+
           TextField(
             controller: _halamanController,
             keyboardType: TextInputType.number,
-            style: TextStyle(color: HexColor.fromHex("#256980")),
+            style: TextStyle(
+              color: HexColor.fromHex("#256980"),
+            ),
             decoration: InputDecoration(
               hintText: "Jumlah Halaman",
-              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
+              hintStyle: TextStyle(
+                color: HexColor.fromHex("#5a7b8a"),
+              ),
               filled: true,
               fillColor: HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
@@ -1034,15 +1431,20 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
               ),
             ),
           ),
+
           const SizedBox(height: 20),
+
           Row(
             children: [
               Expanded(
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
+                    foregroundColor:
+                        HexColor.fromHex("#256980"),
+                    side: BorderSide(
+                      color: HexColor.fromHex("#256980"),
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -1050,7 +1452,9 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                   child: const Text("Batal"),
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -1058,13 +1462,15 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                         _halamanController.text.trim().isEmpty) {
                       return;
                     }
+
                     Navigator.pop(context, {
                       'surah': _surahController.text.trim(),
                       'halaman': _halamanController.text.trim(),
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
+                    backgroundColor:
+                        HexColor.fromHex("#256980"),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -1086,7 +1492,8 @@ class _CatatSedekahModal extends StatefulWidget {
   const _CatatSedekahModal();
 
   @override
-  State<_CatatSedekahModal> createState() => _CatatSedekahModalState();
+  State<_CatatSedekahModal> createState() =>
+      _CatatSedekahModalState();
 }
 
 class _CatatSedekahModalState extends State<_CatatSedekahModal> {
@@ -1104,7 +1511,9 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1113,18 +1522,29 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           Center(
             child: Text(
               "Catat Sedekah",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
+
           const SizedBox(height: 20),
+
           TextField(
             controller: _nominalController,
             keyboardType: TextInputType.number,
-            style: TextStyle(color: HexColor.fromHex("#256980")),
-            inputFormatters: [_RupiahInputFormatter()],
+            style: TextStyle(
+              color: HexColor.fromHex("#256980"),
+            ),
+            inputFormatters: [
+              _RupiahInputFormatter(),
+            ],
             decoration: InputDecoration(
               hintText: "Nominal (Rp)",
-              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
+              hintStyle: TextStyle(
+                color: HexColor.fromHex("#5a7b8a"),
+              ),
               prefixText: "Rp ",
               prefixStyle: TextStyle(
                 color: HexColor.fromHex("#256980"),
@@ -1143,15 +1563,20 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
               ),
             ),
           ),
+
           const SizedBox(height: 20),
+
           Row(
             children: [
               Expanded(
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
+                    foregroundColor:
+                        HexColor.fromHex("#256980"),
+                    side: BorderSide(
+                      color: HexColor.fromHex("#256980"),
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -1159,20 +1584,25 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
                   child: const Text("Batal"),
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
                     final nominal = int.tryParse(
                       _nominalController.text.replaceAll('.', ''),
                     );
+
                     if (nominal == null || nominal <= 0) {
                       return;
                     }
+
                     Navigator.pop(context, nominal);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
+                    backgroundColor:
+                        HexColor.fromHex("#256980"),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -1196,137 +1626,36 @@ class _RupiahInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final digits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final digits =
+        newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
     if (digits.isEmpty) {
       return const TextEditingValue(
         text: '',
-        selection: TextSelection.collapsed(offset: 0),
+        selection: TextSelection.collapsed(
+          offset: 0,
+        ),
       );
     }
+
     final buffer = StringBuffer();
+
     for (var i = 0; i < digits.length; i++) {
       buffer.write(digits[i]);
+
       final remaining = digits.length - i - 1;
-      if (remaining > 0 && remaining % 3 == 0) buffer.write('.');
+
+      if (remaining > 0 && remaining % 3 == 0) {
+        buffer.write('.');
+      }
     }
+
     final formatted = buffer.toString();
+
     return TextEditingValue(
       text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
-}
-
-class _CalendarPickerModal extends StatefulWidget {
-  final DateTime initialDate;
-  const _CalendarPickerModal({required this.initialDate});
-
-  @override
-  State<_CalendarPickerModal> createState() => _CalendarPickerModalState();
-}
-
-class _CalendarPickerModalState extends State<_CalendarPickerModal> {
-  late DateTime _focusedDay;
-  late DateTime _selectedDay;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusedDay = widget.initialDate;
-    _selectedDay = widget.initialDate;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Center(
-            child: Text(
-              "Pilih Tanggal",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-            ),
-          ),
-          SizedBox(
-            height: 390,
-            child: TableCalendar(
-              firstDay: DateTime(2020, 1, 1),
-              lastDay: DateTime(2100, 12, 31),
-              focusedDay: _focusedDay,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              onPageChanged: (focusedDay) => _focusedDay = focusedDay,
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-                leftChevronIcon: Icon(
-                  Icons.chevron_left,
-                  color: HexColor.fromHex("#256980"),
-                ),
-                rightChevronIcon: Icon(
-                  Icons.chevron_right,
-                  color: HexColor.fromHex("#256980"),
-                ),
-              ),
-              calendarStyle: CalendarStyle(
-                todayDecoration: BoxDecoration(
-                  color: HexColor.fromHex("#256980"),
-                  shape: BoxShape.circle,
-                ),
-                selectedDecoration: BoxDecoration(
-                  color: HexColor.fromHex("#D39D52"),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text("Batal"),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context, _selectedDay),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text("Pilih"),
-                ),
-              ),
-            ],
-          ),
-        ],
+      selection: TextSelection.collapsed(
+        offset: formatted.length,
       ),
     );
   }

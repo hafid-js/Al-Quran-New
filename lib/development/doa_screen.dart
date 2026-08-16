@@ -39,11 +39,6 @@ class _DoaScreenState extends State<DoaScreen> {
           ).textTheme.titleMedium!.copyWith(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          Icon(Iconsax.search_normal_1, color: Colors.black),
-          SizedBox(width: 15),
-        ],
-        actionsPadding: EdgeInsets.all(16),
 
       ),
       body: Stack(
