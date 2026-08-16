@@ -59,7 +59,11 @@ class _TasbihScreenState extends State<TasbihScreen> {
     subhanallah = box.read('subhanallah') ?? 0;
     alhamdulillah = box.read('alhamdulillah') ?? 0;
     allahuakbar = box.read('allahuakbar') ?? 0;
-    laillahailallah = box.read('laillahailallah ') ?? 0;
+    if (!box.hasData('laillahailallah') && box.hasData('laillahailallah ')) {
+      box.write('laillahailallah', box.read('laillahailallah '));
+      box.remove('laillahailallah ');
+    }
+    laillahailallah = box.read('laillahailallah') ?? 0;
     astaghfirullah = box.read('astaghfirullah') ?? 0;
     allahumasholialamuhammad = box.read('allahumasholialamuhammad') ?? 0;
 

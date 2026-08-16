@@ -1,6 +1,7 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_chart_screen.dart';
+import 'package:alquran_new/development/tasbih/screens/tasbih_history_screen.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/tasbih/widgets/tasbih_bead_counter.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,11 @@ class _TasbihScreenState extends State<TasbihScreen> {
     subhanallah = box.read('subhanallah') ?? 0;
     alhamdulillah = box.read('alhamdulillah') ?? 0;
     allahuakbar = box.read('allahuakbar') ?? 0;
-    laillahailallah = box.read('laillahailallah ') ?? 0;
+    if (!box.hasData('laillahailallah') && box.hasData('laillahailallah ')) {
+      box.write('laillahailallah', box.read('laillahailallah '));
+      box.remove('laillahailallah ');
+    }
+    laillahailallah = box.read('laillahailallah') ?? 0;
     astaghfirullah = box.read('astaghfirullah') ?? 0;
     allahumasholialamuhammad = box.read('allahumasholialamuhammad') ?? 0;
 
@@ -442,10 +447,13 @@ class _TasbihScreenState extends State<TasbihScreen> {
                       size: 30,
                     ),
                   ),
-                  Icon(
-                    Icons.history,
-                    color: HexColor.fromHex("#D39D52"),
-                    size: 35,
+                  GestureDetector(
+                    onTap: () => Get.to(() => TasbihHistoryScreen()),
+                    child: Icon(
+                      Icons.history,
+                      color: HexColor.fromHex("#D39D52"),
+                      size: 35,
+                    ),
                   ),
                  GestureDetector(
                   onTap: () => Get.to(() => TasbihChartScreen()),

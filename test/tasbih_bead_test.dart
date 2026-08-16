@@ -19,7 +19,7 @@ void main() {
       ),
     );
 
-    expect(find.text('5'), findsOneWidget);
+    expect(find.byType(TasbihBeadCounter), findsOneWidget);
 
     final bead = find.byType(GestureDetector).first;
     final center = tester.getCenter(bead);

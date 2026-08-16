@@ -4,7 +4,9 @@ import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/alquran_screen_new.dart';
 import 'package:alquran_new/development/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa_screen.dart';
-import 'package:alquran_new/development/ibadah_tracker_screen.dart';
+import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/detail_murrotal_screen.dart';
 import 'package:alquran_new/development/bookmark_screen.dart';
@@ -82,9 +84,19 @@ final List<Map<String, dynamic>> menus = [
     "page": () => const BookmarkScreenNew(),
   },
   {
+    "title": "Semua",
+    "icon": Iconsax.menu,
+    "page": () => {},
+  },
+  {
     "title": "Dzikir",
     "icon": Iconsax.flash,
     "page": () => const MatsuratScreen(),
+  },
+  {
+    "title": "Ibadah",
+    "icon": FlutterIslamicIcons.muslim2,
+    "page": () => const IbadahScreen(),
   },
 ];
 
@@ -125,6 +137,7 @@ class TopNotchClipper extends CustomClipper<Path> {
 class _HomeScreenNewState extends State<HomeScreenNew>
     with WidgetsBindingObserver {
   late final PrayerTimeController controller;
+  bool _showAllMenus = false;
 
   @override
   void initState() {
@@ -158,6 +171,45 @@ class _HomeScreenNewState extends State<HomeScreenNew>
     } catch (_) {
       return DateTime.now();
     }
+  }
+
+  final GetStorage _storage = GetStorage();
+
+  int _ibadahChecklistDone(dynamic list) {
+    if (list is! List) return 0;
+    return list.where((e) => e is Map && e['done'] == true).length;
+  }
+
+  (int, int) get _ibadahProgress {
+    final now = DateTime.now();
+    final key = 'ibadah_${now.year}-${now.month.toString().padLeft(2, '0')}-'
+        '${now.day.toString().padLeft(2, '0')}';
+    final data = _storage.read(key);
+    final map = data is Map ? data : null;
+
+    final checklistDone =
+        _ibadahChecklistDone(map?['sholatWajib']) +
+        _ibadahChecklistDone(map?['sholatSunnah']) +
+        _ibadahChecklistDone(map?['dzikir']) +
+        _ibadahChecklistDone(map?['puasa']);
+
+    int tilawahPages = 0;
+    final tilawah = map?['tilawah'];
+    if (tilawah is List) {
+      for (final t in tilawah) {
+        if (t is Map) {
+          tilawahPages += int.tryParse(t['halaman'].toString()) ?? 0;
+        }
+      }
+    }
+
+    final sedekah = map?['sedekah'] is List
+        ? (map?['sedekah'] as List).whereType<int>().length
+        : 0;
+
+    final all = 14 + tilawahPages + sedekah;
+    final done = checklistDone + tilawahPages + sedekah;
+    return (done, all);
   }
 
   List<Map<String, dynamic>> _prayerList() {
@@ -415,7 +467,19 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                           ),
                           padding: EdgeInsets.zero,
                           children: menus
-                              .map((menu) => _MenuItemWidget(menu: menu))
+                              .where((menu) =>
+                                  _showAllMenus ||
+                                  (menu["title"] != "Dzikir" &&
+                                      menu["title"] != "Ibadah"))
+                              .map((menu) => _MenuItemWidget(
+                                    menu: menu,
+                                    onTap: menu["title"] == "Semua"
+                                        ? () => setState(
+                                            () => _showAllMenus =
+                                                !_showAllMenus,
+                                          )
+                                        : null,
+                                  ))
                               .toList(),
                         ),
                       ),
@@ -449,7 +513,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                "35%",
+                                "${_ibadahProgress.$2 == 0 ? 0 : (_ibadahProgress.$1 * 100 / _ibadahProgress.$2).round()}%",
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -466,7 +530,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                             ),
                             SizedBox(height: 10),
                             Text(
-                              "8 dari 24 Selesai",
+                              "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
                               style: Theme.of(context).textTheme.titleSmall!
                                   .copyWith(
                                     color: HexColor.fromHex("#256980"),
@@ -475,8 +539,8 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                             ),
                             SizedBox(height: 6),
                             StepProgressIndicator(
-                              totalSteps: 38,
-                              currentStep: 10,
+                              totalSteps: max(2, _ibadahProgress.$2 * 2),
+                              currentStep: _ibadahProgress.$1 * 2,
                               selectedColor: HexColor.fromHex("#256980"),
                               size: 28,
                               padding: 3,
@@ -485,7 +549,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                             ),
                             SizedBox(height: 12),
                             GestureDetector(
-                              onTap: () => Get.to(() => IbadahTrackerScreen()),
+                              onTap: () => Get.to(() => IbadahScreen()),
                               child: Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(8),
@@ -563,7 +627,8 @@ Widget _buildPrayerTimeItem(BuildContext context, Map prayerTime) {
 
 class _MenuItemWidget extends StatefulWidget {
   final Map menu;
-  const _MenuItemWidget({required this.menu});
+  final VoidCallback? onTap;
+  const _MenuItemWidget({required this.menu, this.onTap});
 
   @override
   State<_MenuItemWidget> createState() => _MenuItemWidgetState();
@@ -608,6 +673,11 @@ class _MenuItemWidgetState extends State<_MenuItemWidget>
   void _onTap() {
     _controller.reverse().then((_) {
       final menu = widget.menu;
+
+      if (widget.onTap != null) {
+        widget.onTap!();
+        return;
+      }
 
       if (menu["onTap"] != null) {
         menu["onTap"](context);

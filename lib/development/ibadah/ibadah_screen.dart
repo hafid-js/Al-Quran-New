@@ -87,6 +87,18 @@ class _IbadahScreenState extends State<IbadahScreen> {
       _dzikirList.length +
       _puasaList.length;
 
+  int get _tilawahPagesDone =>
+      _tilawahList.fold(
+        0,
+        (a, t) => a + (int.tryParse(t['halaman'] ?? '') ?? 0),
+      );
+
+  int get _totalDone =>
+      _totalChecklistDone + _tilawahPagesDone + _sedekahList.length;
+
+  int get _totalAll =>
+      _totalChecklist + _tilawahPagesDone + _sedekahList.length;
+
   @override
   void initState() {
     super.initState();
@@ -777,6 +789,19 @@ class _IbadahScreenState extends State<IbadahScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
+
+          if (done && mode != null) ...[
+            const SizedBox(height: 2),
+
+            Text(
+              mode == 'berjamaah' ? 'Berjamaah' : 'Sendiri',
+              style: TextStyle(
+                fontSize: 10,
+                color: HexColor.fromHex("#D39D52"),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -788,7 +813,17 @@ class _IbadahScreenState extends State<IbadahScreen> {
       backgroundColor: HexColor.fromHex("#F9F5EF"),
 
       appBar: AppBar(
-        toolbarHeight: 0,
+           leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
+        title: Text(
+          "Ibadah",
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium!.copyWith(color: Colors.black),
+        ),
+        // toolbarHeight: 0,
         surfaceTintColor: HexColor.fromHex("#F9F5EF"),
         backgroundColor: HexColor.fromHex("#F9F5EF"),
         foregroundColor: HexColor.fromHex("#F9F5EF"),
@@ -871,7 +906,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 6),
 
                     Text(
-                      "$_totalChecklistDone dari $_totalChecklist Selesai",
+                      "$_totalDone dari $_totalAll Selesai",
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
                         color: HexColor.fromHex("#256980"),
                         fontSize: 12,
@@ -881,8 +916,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 6),
 
                     StepProgressIndicator(
-                      totalSteps: _totalChecklist * 2 + 10,
-                      currentStep: _totalChecklistDone * 2 + 10,
+                      totalSteps: _totalAll * 2 + 10,
+                      currentStep: _totalDone * 2 + 10,
                       selectedColor: HexColor.fromHex("#256980"),
                       size: 28,
                       padding: 3,

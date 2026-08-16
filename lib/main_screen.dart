@@ -106,9 +106,9 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Perasaan',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Iconsax.profile_circle5, size: 30),
-            icon: Icon(FlutterIslamicIcons.muslim2, size: 23),
-            label: 'Ibadah',
+            activeIcon: Icon(Icons.settings, size: 30),
+            icon: Icon(Iconsax.setting_2, size: 23),
+            label: 'Pengaturan',
           ),
         ],
       ),

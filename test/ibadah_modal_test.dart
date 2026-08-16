@@ -36,6 +36,8 @@ void main() {
     await tester.tap(find.text('Berjamaah'));
     await tester.pumpAndSettle();
 
+    expect(find.text('Sendiri'), findsNothing,
+        reason: 'Modal tertutup setelah memilih Berjamaah');
     expect(find.text('Berjamaah'), findsOneWidget,
         reason: 'Subuh tertandai Berjamaah setelah diklik');
 
@@ -45,6 +47,8 @@ void main() {
     await tester.tap(find.text('Sendiri'));
     await tester.pumpAndSettle();
 
+    expect(find.text('Berjamaah'), findsNothing,
+        reason: 'Modal tertutup setelah memilih Sendiri');
     expect(find.text('Sendiri'), findsOneWidget,
         reason: 'Mode berhasil diubah ke Sendiri');
   });
