@@ -2,6 +2,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lottie/lottie.dart';
 
 class TasbihHistoryScreen extends StatefulWidget {
   const TasbihHistoryScreen({super.key});
@@ -103,28 +104,31 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: HexColor.fromHex("#256980"),
-        title: const Text(
+         shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(16),
+  ),
+backgroundColor: HexColor.fromHex("#F9F5EF"),
+        title:  Text(
           "Konfirmasi",
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(color: HexColor.fromHex("#256980"), fontSize: 16, fontWeight: FontWeight.w600),
         ),
         content: Text(
           message,
-          style: const TextStyle(color: Colors.white70),
+          style: TextStyle(color: HexColor.fromHex("#256980")),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text(
+            child: Text(
               "Batal",
-              style: TextStyle(color: Colors.white70),
+              style: TextStyle(fontSize: 14,color: HexColor.fromHex("#D39D52")),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
             child: Text(
               "Hapus",
-              style: TextStyle(color: HexColor.fromHex("#D39D52")),
+              style: TextStyle(fontSize: 14,color: Colors.red),
             ),
           ),
         ],
@@ -173,34 +177,65 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
               onPressed: _confirmDeleteAll,
               child: Text(
                 "Hapus Semua",
-                style: TextStyle(color: HexColor.fromHex("#D39D52")),
+                style: TextStyle(fontSize: 14,color: HexColor.fromHex("#D39D52")),
               ),
             ),
         ],
       ),
       body: entries.isEmpty
           ? _emptyState()
-          : ListView.builder(
+          : Container(
+             decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              HexColor.fromHex("#256980").withAlpha(210),
+              BlendMode.srcATop,
+            ),
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/image.png"),
+          ),
+        ),
+            child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               itemCount: entries.length,
               itemBuilder: (context, index) =>
                   _historyCard(entries[index]),
             ),
+          )
     );
   }
 
   Widget _emptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.history,
-            size: 70,
-            color: Colors.white38,
+
+    return Container(
+       decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              HexColor.fromHex("#256980").withAlpha(210),
+              BlendMode.srcATop,
+            ),
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/image.png"),
           ),
-          const SizedBox(height: 16),
-          const Text(
+        ),
+      child: Center(
+                child: Padding(padding: EdgeInsets.all(8), child: Stack(
+                    children: [
+                      Positioned(
+                        top: -100,
+                        right: 0,
+                        left: 0,
+                        bottom: 0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/animations/empty.json',
+                              width: 180,
+                              height: 180,
+                            ),
+
+                            const Text(
             "Belum ada riwayat",
             style: TextStyle(
               color: Colors.white,
@@ -214,8 +249,12 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
             style: TextStyle(color: Colors.white.withAlpha(180), fontSize: 13),
             textAlign: TextAlign.center,
           ),
-        ],
-      ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),)
+              ),
     );
   }
 

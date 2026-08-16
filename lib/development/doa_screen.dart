@@ -1,12 +1,10 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/development/search_bar.dart';
 import 'package:alquran_new/features/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/development/category_filter.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 
 class DoaScreen extends StatefulWidget {
@@ -141,13 +139,7 @@ class _DoaScreenState extends State<DoaScreen> {
               ],
             ),
         ),
-         
-          Obx(() {
-            if (!controller.isLoading.value) {
-              return const SizedBox.shrink();
-            }
-            return const Positioned.fill(child: Loading());
-          }),
+        
         ],
       ),
     );

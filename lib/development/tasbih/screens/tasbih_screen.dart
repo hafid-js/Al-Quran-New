@@ -534,10 +534,10 @@ class _TasbihScreenState extends State<TasbihScreen> {
               ],
               Text(
                 dzikirNames[index],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   color: Colors.white,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),
               const SizedBox(width: 6),
