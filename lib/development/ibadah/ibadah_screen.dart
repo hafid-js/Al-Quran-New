@@ -201,19 +201,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
           : [for (final s in _sholatSunnah) Map<String, dynamic>.from(s)],
 
       'dzikir': [
-        for (final d in _dzikirList)
-          {
-            'name': d['name'],
-            'done': d['done'],
-          },
+        for (final d in _dzikirList) {'name': d['name'], 'done': d['done']},
       ],
 
       'puasa': [
-        for (final p in _puasaList)
-          {
-            'name': p['name'],
-            'done': p['done'],
-          },
+        for (final p in _puasaList) {'name': p['name'], 'done': p['done']},
       ],
 
       'tilawah': [for (final t in _tilawahList) Map<String, String>.from(t)],
@@ -229,17 +221,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
     final sunnah = data is Map ? data['sholatSunnah'] as List? : null;
 
-    final dzikir =
-        data is Map ? (data['dzikir'] as List?) ?? [] : [];
+    final dzikir = data is Map ? (data['dzikir'] as List?) ?? [] : [];
 
-    final puasa =
-        data is Map ? (data['puasa'] as List?) ?? [] : [];
+    final puasa = data is Map ? (data['puasa'] as List?) ?? [] : [];
 
-    final tilawah =
-        data is Map ? data['tilawah'] as List? ?? [] : [];
+    final tilawah = data is Map ? data['tilawah'] as List? ?? [] : [];
 
-    final sedekah =
-        data is Map ? (data['sedekah'] as List?) ?? [] : [];
+    final sedekah = data is Map ? (data['sedekah'] as List?) ?? [] : [];
 
     void load() {
       _sholatWajib = (wajib != null && wajib.isNotEmpty)
@@ -262,21 +250,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
             ];
 
       _dzikirList = [
-        {
-          'name': 'Dzikir Pagi',
-          'done': false,
-          'icon': Iconsax.sun_1,
-        },
-        {
-          'name': 'Dzikir Petang',
-          'done': false,
-          'icon': Iconsax.moon,
-        },
+        {'name': 'Dzikir Pagi', 'done': false, 'icon': Iconsax.sun_1},
+        {'name': 'Dzikir Petang', 'done': false, 'icon': Iconsax.moon},
       ];
 
-      for (var i = 0;
-          i < _dzikirList.length && i < dzikir.length;
-          i++) {
+      for (var i = 0; i < _dzikirList.length && i < dzikir.length; i++) {
         final done = (dzikir[i] as Map)['done'];
 
         if (done is bool) {
@@ -289,28 +267,23 @@ class _IbadahScreenState extends State<IbadahScreen> {
           'name': 'Senin-Kamis',
           'done': false,
           'icon': Iconsax.calendar_tick,
-          'question':
-              "Apakah kamu sudah berpuasa Senin-Kamis hari ini?",
+          'question': "Apakah kamu sudah berpuasa Senin-Kamis hari ini?",
         },
         {
           'name': 'Ayyamul-Bidh',
           'done': false,
           'icon': Iconsax.moon,
-          'question':
-              "Apakah kamu sudah berpuasa Ayyamul-Bidh hari ini?",
+          'question': "Apakah kamu sudah berpuasa Ayyamul-Bidh hari ini?",
         },
         {
           'name': 'Daud',
           'done': false,
           'icon': Iconsax.medal,
-          'question':
-              "Apakah kamu sudah berpuasa Daud hari ini?",
+          'question': "Apakah kamu sudah berpuasa Daud hari ini?",
         },
       ];
 
-      for (var i = 0;
-          i < _puasaList.length && i < puasa.length;
-          i++) {
+      for (var i = 0; i < _puasaList.length && i < puasa.length; i++) {
         final done = (puasa[i] as Map)['done'];
 
         if (done is bool) {
@@ -348,9 +321,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-          child: CalendarPickerModal(
-            initialDate: _selectedDate,
-          ),
+          child: CalendarPickerModal(initialDate: _selectedDate),
         );
       },
     );
@@ -421,8 +392,10 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
   void _showSholatModal(
     String name,
-    VoidCallback onConfirm, {
+    VoidCallback? onConfirm, {
     VoidCallback? onUndo,
+    void Function(String mode)? onConfirmMode,
+    String? currentMode,
     String? title,
     String? question,
   }) {
@@ -434,9 +407,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
           padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -460,8 +431,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               const SizedBox(height: 8),
 
               Text(
-                question ??
-                    "Apakah kamu sudah melaksanakan shalat $name?",
+                question ?? "Apakah kamu sudah melaksanakan shalat $name?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -471,55 +441,143 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
               const SizedBox(height: 20),
 
-              Row(
-                children: [
-                  if (onUndo != null) ...[
+              if (onConfirmMode != null) ...[
+                Row(
+                  children: [
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          onUndo();
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor:
-                              HexColor.fromHex("#256980"),
-                          side: BorderSide(
-                            color: HexColor.fromHex("#256980"),
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            onConfirmMode('berjamaah');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: currentMode == 'berjamaah'
+                                ? HexColor.fromHex("#D39D52")
+                                : Colors.white,
+                            foregroundColor: currentMode == 'berjamaah'
+                                ? Colors.white
+                                : HexColor.fromHex("#256980"),
+                            elevation: 0,
+                            side: currentMode == 'berjamaah'
+                                ? null
+                                : BorderSide(
+                                    color: HexColor.fromHex("#256980"),
+                                  ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                          child: const Text("Berjamaah"),
                         ),
-                        child: const Text("Batalkan"),
                       ),
                     ),
 
                     const SizedBox(width: 12),
-                  ],
 
-                  Expanded(
-                    child: SizedBox(
-                      height: 42,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          onConfirm();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              HexColor.fromHex("#D39D52"),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            onConfirmMode('sendiri');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: currentMode == 'sendiri'
+                                ? HexColor.fromHex("#D39D52")
+                                : Colors.white,
+                            foregroundColor: currentMode == 'sendiri'
+                                ? Colors.white
+                                : HexColor.fromHex("#256980"),
+                            elevation: 0,
+                            side: currentMode == 'sendiri'
+                                ? null
+                                : BorderSide(
+                                    color: HexColor.fromHex("#256980"),
+                                  ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
+                          child: const Text("Sendiri"),
                         ),
-                        child: const Text("Sudah"),
                       ),
+                    ),
+                  ],
+                ),
+
+                if (onUndo != null) ...[
+                  const SizedBox(height: 12),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onUndo();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: HexColor.fromHex("#256980"),
+                        side: BorderSide(color: HexColor.fromHex("#256980")),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text("Batalkan"),
                     ),
                   ),
                 ],
-              ),
+              ] else ...[
+                Row(
+                  children: [
+                    if (onUndo != null) ...[
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            onUndo();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: HexColor.fromHex("#256980"),
+                            side: BorderSide(
+                              color: HexColor.fromHex("#256980"),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text("Batalkan"),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+                    ],
+
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            onConfirm?.call();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: HexColor.fromHex("#D39D52"),
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text("Sudah"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         );
@@ -536,8 +594,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
           name,
           () {
             setState(() {
-              final index =
-                  _sholatSunnah.indexWhere((e) => e['name'] == name);
+              final index = _sholatSunnah.indexWhere((e) => e['name'] == name);
 
               if (index != -1) {
                 _sholatSunnah[index]['done'] = true;
@@ -549,8 +606,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
           onUndo: done
               ? () {
                   setState(() {
-                    final index = _sholatSunnah
-                        .indexWhere((e) => e['name'] == name);
+                    final index = _sholatSunnah.indexWhere(
+                      (e) => e['name'] == name,
+                    );
 
                     if (index != -1) {
                       _sholatSunnah[index]['done'] = false;
@@ -567,18 +625,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
         decoration: BoxDecoration(
           color: done ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color,
-            width: 1.5,
-          ),
+          border: Border.all(color: color, width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(
-              Iconsax.sun_1,
-              size: 24,
-              color: done ? Colors.white : color,
-            ),
+            Icon(Iconsax.sun_1, size: 24, color: done ? Colors.white : color),
 
             SizedBox(height: 6),
 
@@ -609,7 +660,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
     final question = index != -1
         ? (list[index]['question'] as String? ??
-            "Apakah kamu sudah mengerjakan $name?")
+              "Apakah kamu sudah mengerjakan $name?")
         : "Apakah kamu sudah mengerjakan $name?";
 
     return GestureDetector(
@@ -645,18 +696,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
         decoration: BoxDecoration(
           color: done ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color,
-            width: 1.5,
-          ),
+          border: Border.all(color: color, width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: done ? Colors.white : color,
-            ),
+            Icon(icon, size: 24, color: done ? Colors.white : color),
 
             SizedBox(height: 6),
 
@@ -675,45 +719,47 @@ class _IbadahScreenState extends State<IbadahScreen> {
     );
   }
 
-  Widget _buildSholatItem(String name, bool done) {
+  Widget _buildSholatItem(String name, bool done, String? mode) {
     return GestureDetector(
       onTap: () {
         _showSholatModal(
           name,
-          () {
-            setState(() {
-              final index =
-                  _sholatWajib.indexWhere((e) => e['name'] == name);
-
-              if (index != -1) {
-                _sholatWajib[index]['done'] = true;
-              }
-            });
-
-            _saveData();
-          },
+          null,
           onUndo: done
               ? () {
                   setState(() {
-                    final index = _sholatWajib
-                        .indexWhere((e) => e['name'] == name);
+                    final index = _sholatWajib.indexWhere(
+                      (e) => e['name'] == name,
+                    );
 
                     if (index != -1) {
                       _sholatWajib[index]['done'] = false;
+                      _sholatWajib[index]['mode'] = null;
                     }
                   });
 
                   _saveData();
                 }
               : null,
+          currentMode: mode,
+          onConfirmMode: (mode) {
+            setState(() {
+              final index = _sholatWajib.indexWhere((e) => e['name'] == name);
+
+              if (index != -1) {
+                _sholatWajib[index]['done'] = true;
+                _sholatWajib[index]['mode'] = mode;
+              }
+            });
+
+            _saveData();
+          },
         );
       },
       child: Column(
         children: [
           Icon(
-            done
-                ? Icons.check_circle_rounded
-                : Iconsax.tick_circle,
+            done ? Icons.check_circle_rounded : Iconsax.tick_circle,
             size: 45,
             color: done
                 ? HexColor.fromHex("#D39D52")
@@ -759,16 +805,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "Progress Harian",
@@ -793,8 +836,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             SizedBox(width: 10),
 
                             GestureDetector(
-                              onTap: () =>
-                                  Get.to(() => StatistikIbadah()),
+                              onTap: () => Get.to(() => StatistikIbadah()),
                               child: Icon(
                                 Iconsax.chart_21,
                                 color: HexColor.fromHex("#256980"),
@@ -810,33 +852,30 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
                     Text(
                       _formattedDate,
-                      style:
-                          Theme.of(context).textTheme.titleSmall!.copyWith(
-                                color: HexColor.fromHex("#256980"),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: HexColor.fromHex("#256980"),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                     ),
 
                     SizedBox(height: 4),
 
                     Text(
                       "Selesaikan checklist ibadah hari ini.",
-                      style:
-                          Theme.of(context).textTheme.labelSmall!.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
 
                     SizedBox(height: 6),
 
                     Text(
                       "$_totalChecklistDone dari $_totalChecklist Selesai",
-                      style:
-                          Theme.of(context).textTheme.titleSmall!.copyWith(
-                                color: HexColor.fromHex("#256980"),
-                                fontSize: 12,
-                              ),
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: HexColor.fromHex("#256980"),
+                        fontSize: 12,
+                      ),
                     ),
 
                     SizedBox(height: 6),
@@ -862,9 +901,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                       child: Center(
                         child: Text(
                           _quotes[_quoteIndex],
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -879,9 +916,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -898,13 +933,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 12),
 
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (final sholat in _sholatWajib)
                           _buildSholatItem(
                             sholat['name'],
                             sholat['done'],
+                            sholat['mode'],
                           ),
                       ],
                     ),
@@ -918,9 +953,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -937,14 +970,12 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 12),
 
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (final sunnah in _sholatSunnah)
                           Expanded(
                             child: Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
                               child: _buildSunnahItem(
                                 sunnah['name'],
                                 sunnah['done'],
@@ -963,9 +994,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -982,14 +1011,12 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 12),
 
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (final dzikir in _dzikirList)
                           Expanded(
                             child: Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
                               child: _buildDzikirItem(
                                 _dzikirList,
                                 dzikir['name'],
@@ -1010,9 +1037,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1029,14 +1054,12 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 12),
 
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (final puasa in _puasaList)
                           Expanded(
                             child: Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 4),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
                               child: _buildDzikirItem(
                                 _puasaList,
                                 puasa['name'],
@@ -1057,16 +1080,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -1091,8 +1111,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showCatatModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                HexColor.fromHex("#256980"),
+                            backgroundColor: HexColor.fromHex("#256980"),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
@@ -1124,26 +1143,22 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 10),
 
                     for (var i = 0; i < _tilawahList.length; i++) ...[
-                      if (i > 0)
-                        const SizedBox(height: 16),
+                      if (i > 0) const SizedBox(height: 16),
 
                       Column(
                         children: [
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     _tilawahList[i]['surah']!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color:
-                                          HexColor.fromHex("#D39D52"),
+                                      color: HexColor.fromHex("#D39D52"),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -1151,8 +1166,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                   Text(
                                     "${_tilawahList[i]['halaman']} Halaman",
                                     style: TextStyle(
-                                      color:
-                                          HexColor.fromHex("#256980"),
+                                      color: HexColor.fromHex("#256980"),
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
@@ -1188,16 +1202,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -1223,8 +1234,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showSedekahModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                HexColor.fromHex("#256980"),
+                            backgroundColor: HexColor.fromHex("#256980"),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
@@ -1264,22 +1274,17 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ),
                       )
                     else
-                      for (var i = 0;
-                          i < _sedekahList.length;
-                          i++) ...[
-                        if (i > 0)
-                          const SizedBox(height: 12),
+                      for (var i = 0; i < _sedekahList.length; i++) ...[
+                        if (i > 0) const SizedBox(height: 12),
 
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               formatRupiah(_sedekahList[i]),
                               style: TextStyle(
                                 fontSize: 14,
-                                color:
-                                    HexColor.fromHex("#D39D52"),
+                                color: HexColor.fromHex("#D39D52"),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -1311,8 +1316,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Total Sedekah Hari Ini",
@@ -1349,8 +1353,7 @@ class _CatatTilawahModal extends StatefulWidget {
   const _CatatTilawahModal();
 
   @override
-  State<_CatatTilawahModal> createState() =>
-      _CatatTilawahModalState();
+  State<_CatatTilawahModal> createState() => _CatatTilawahModalState();
 }
 
 class _CatatTilawahModalState extends State<_CatatTilawahModal> {
@@ -1370,9 +1373,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1381,10 +1382,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           Center(
             child: Text(
               "Catat Tilawah",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
           ),
 
@@ -1393,14 +1391,10 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _surahController,
             textInputAction: TextInputAction.next,
-            style: TextStyle(
-              color: HexColor.fromHex("#256980"),
-            ),
+            style: TextStyle(color: HexColor.fromHex("#256980")),
             decoration: InputDecoration(
               hintText: "Surah & Ayat",
-              hintStyle: TextStyle(
-                color: HexColor.fromHex("#5a7b8a"),
-              ),
+              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
               fillColor: HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
@@ -1415,14 +1409,10 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _halamanController,
             keyboardType: TextInputType.number,
-            style: TextStyle(
-              color: HexColor.fromHex("#256980"),
-            ),
+            style: TextStyle(color: HexColor.fromHex("#256980")),
             decoration: InputDecoration(
               hintText: "Jumlah Halaman",
-              hintStyle: TextStyle(
-                color: HexColor.fromHex("#5a7b8a"),
-              ),
+              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
               fillColor: HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
@@ -1440,11 +1430,8 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor:
-                        HexColor.fromHex("#256980"),
-                    side: BorderSide(
-                      color: HexColor.fromHex("#256980"),
-                    ),
+                    foregroundColor: HexColor.fromHex("#256980"),
+                    side: BorderSide(color: HexColor.fromHex("#256980")),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -1469,8 +1456,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        HexColor.fromHex("#256980"),
+                    backgroundColor: HexColor.fromHex("#256980"),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -1492,8 +1478,7 @@ class _CatatSedekahModal extends StatefulWidget {
   const _CatatSedekahModal();
 
   @override
-  State<_CatatSedekahModal> createState() =>
-      _CatatSedekahModalState();
+  State<_CatatSedekahModal> createState() => _CatatSedekahModalState();
 }
 
 class _CatatSedekahModalState extends State<_CatatSedekahModal> {
@@ -1511,9 +1496,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1522,10 +1505,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           Center(
             child: Text(
               "Catat Sedekah",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
           ),
 
@@ -1534,17 +1514,11 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           TextField(
             controller: _nominalController,
             keyboardType: TextInputType.number,
-            style: TextStyle(
-              color: HexColor.fromHex("#256980"),
-            ),
-            inputFormatters: [
-              _RupiahInputFormatter(),
-            ],
+            style: TextStyle(color: HexColor.fromHex("#256980")),
+            inputFormatters: [_RupiahInputFormatter()],
             decoration: InputDecoration(
               hintText: "Nominal (Rp)",
-              hintStyle: TextStyle(
-                color: HexColor.fromHex("#5a7b8a"),
-              ),
+              hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               prefixText: "Rp ",
               prefixStyle: TextStyle(
                 color: HexColor.fromHex("#256980"),
@@ -1572,11 +1546,8 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor:
-                        HexColor.fromHex("#256980"),
-                    side: BorderSide(
-                      color: HexColor.fromHex("#256980"),
-                    ),
+                    foregroundColor: HexColor.fromHex("#256980"),
+                    side: BorderSide(color: HexColor.fromHex("#256980")),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -1601,8 +1572,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
                     Navigator.pop(context, nominal);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        HexColor.fromHex("#256980"),
+                    backgroundColor: HexColor.fromHex("#256980"),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -1626,15 +1596,12 @@ class _RupiahInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final digits =
-        newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final digits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
     if (digits.isEmpty) {
       return const TextEditingValue(
         text: '',
-        selection: TextSelection.collapsed(
-          offset: 0,
-        ),
+        selection: TextSelection.collapsed(offset: 0),
       );
     }
 
@@ -1654,9 +1621,7 @@ class _RupiahInputFormatter extends TextInputFormatter {
 
     return TextEditingValue(
       text: formatted,
-      selection: TextSelection.collapsed(
-        offset: formatted.length,
-      ),
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

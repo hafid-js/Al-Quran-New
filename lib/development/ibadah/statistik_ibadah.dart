@@ -48,6 +48,11 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
       return list.where((e) => e is Map && e['done'] == true).length;
     }
 
+    int countMode(dynamic list, String mode) {
+      if (list is! List) return 0;
+      return list.where((e) => e is Map && e['mode'] == mode).length;
+    }
+
     int tilawahPages = 0;
     final tilawah = data['tilawah'];
     if (tilawah is List) {
@@ -66,6 +71,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
       dzikirDone: countDone(data['dzikir']),
       puasaDone: countDone(data['puasa']),
       tilawahPages: tilawahPages,
+      wajibBerjamaah: countMode(data['sholatWajib'], 'berjamaah'),
       sedekah: sedekah,
     );
   }
@@ -971,7 +977,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                           ),
 
                                           Text(
-                                            "0 Berjamaah",
+                                            "${_readDay(_selectedDate).wajibBerjamaah} Berjamaah",
                                             style: TextStyle(
                                               color: HexColor.fromHex(
                                                 "#256980",
@@ -1525,8 +1531,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   itemBuilder: (context, index) {
     final item = _ringkasanBulanan[index];
     return Container(
-
-      padding: const EdgeInsets.all(20),
+      padding: item['label'] == 'Sholat Wajib' ? const EdgeInsets.only(top: 18, right: 18, left: 16, bottom: 0) : const EdgeInsets.all(18),
       decoration: BoxDecoration(
         border: BoxBorder.all(
           width: 1.5,
@@ -1586,6 +1591,15 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             style: TextStyle(
               fontSize: 12,
               color: HexColor.fromHex("#256980"),
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          if(index == 0) 
+          Text(
+            "${_monthData.fold(0, (a, d) => a + d.wajibBerjamaah)} Berjamaah",
+            style: TextStyle(
+              fontSize: 10,
+              color: HexColor.fromHex("#D39D52"),
               fontWeight: FontWeight.w500
             ),
           ),
@@ -1695,6 +1709,7 @@ class _DailyData {
   final int dzikirDone;
   final int puasaDone;
   final int tilawahPages;
+  final int wajibBerjamaah;
   final List<int> sedekah;
 
   const _DailyData({
@@ -1703,6 +1718,7 @@ class _DailyData {
     required this.dzikirDone,
     required this.puasaDone,
     required this.tilawahPages,
+    required this.wajibBerjamaah,
     required this.sedekah,
   });
 
@@ -1712,6 +1728,7 @@ class _DailyData {
         dzikirDone = 0,
         puasaDone = 0,
         tilawahPages = 0,
+        wajibBerjamaah = 0,
         sedekah = const [];
 
   int get checklistDone => wajibDone + sunnahDone + dzikirDone + puasaDone;
