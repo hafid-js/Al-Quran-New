@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LocalWebViewPage extends StatefulWidget {
@@ -30,8 +32,16 @@ class _LocalWebViewPageState extends State<LocalWebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: WebViewWidget(controller: controller),
+        appBar: AppBar(
+          leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
+          title: Text(widget.title, style: Theme.of(
+            context,
+          ).textTheme.titleMedium!.copyWith(color: Colors.black),),         surfaceTintColor: HexColor.fromHex("#F9F5EF"), foregroundColor: HexColor.fromHex("#F9F5EF"), backgroundColor: HexColor.fromHex("#F9F5EF"),),
+        backgroundColor: HexColor.fromHex("#F9F5EF"),
+        body: WebViewWidget(controller: controller),
     );
   }
 }
