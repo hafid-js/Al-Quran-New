@@ -138,6 +138,7 @@ flutter:
     - assets/svg_arab_kaligrafi/
     - assets/svg_perasaan/
     - assets/animations/
+    - assets/development/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

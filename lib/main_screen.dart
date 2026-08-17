@@ -2,6 +2,8 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/home_screen_new.dart';
 import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
+import 'package:alquran_new/development/pengaturan/pengaturan_notifikasi.dart';
+import 'package:alquran_new/development/pengaturan/pengaturan_screen.dart';
 import 'package:alquran_new/development/perasaan_screen.dart';
 import 'package:alquran_new/development/play_bar.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomeScreenNew(),
     const PerasaanScreen(),
+    const PengaturanScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -74,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           Expanded(
             child: _selectedIndex == 2
-                ? IbadahScreen(key: ValueKey(_ibadahKey))
+                ? PengaturanScreen(key: ValueKey(_ibadahKey))
                 : _pages[_selectedIndex],
           ),
           if (_showPlayBar) const PlayBar(),
