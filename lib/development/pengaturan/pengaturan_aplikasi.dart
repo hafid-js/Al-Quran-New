@@ -1,6 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-import 'package:alquran_new/development/pengaturan/webview_page.dart';
 import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -96,14 +95,38 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                             scale: 0.7,
                             child: Switch(
                               value: controller.modeSelected.value == 0,
-                              thumbColor: WidgetStatePropertyAll(Colors.white),
-                              trackColor: WidgetStatePropertyAll(
-                                HexColor.fromHex("#256980"),
+                              thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                                (states) {
+                                  return const Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.white,
+                                  );
+                                },
                               ),
-                              activeThumbColor: HexColor.fromHex("#256980"),
-                              inactiveThumbColor: HexColor.fromHex(
-                                "#256980",
-                              ).withAlpha(20),
+
+                              thumbColor: const WidgetStatePropertyAll(
+                                Colors.white,
+                              ),
+
+                              trackColor:
+                                  WidgetStateProperty.resolveWith<Color>((
+                                    states,
+                                  ) {
+                                    if (states.contains(WidgetState.selected)) {
+                                      return HexColor.fromHex("#256980");
+                                    }
+
+                                    return Colors.black.withAlpha(60);
+                                  }),
+
+                              trackOutlineColor:
+                                  WidgetStateProperty.resolveWith<Color>((
+                                    states,
+                                  ) {
+                                    return Colors.white;
+                                  }),
+
                               onChanged: (bool value) {
                                 controller.changeMode(value ? 0 : 1);
                               },
@@ -148,7 +171,8 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                       SizedBox(height: 10),
                       ...List.generate(fontArabs.length, (index) {
                         final item = fontArabs[index];
-                        final isSelected = controller.fontSelected.value == index;
+                        final isSelected =
+                            controller.fontSelected.value == index;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 10),
                           child: GestureDetector(
@@ -160,11 +184,12 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? HexColor.fromHex("#256980").withAlpha(25)
+                                    ? Colors.white
                                     : HexColor.fromHex("#256980").withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
                                         color: HexColor.fromHex("#256980"),
+                                        width: 1.5,
                                       )
                                     : null,
                                 borderRadius: BorderRadius.circular(16),
@@ -254,11 +279,12 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? HexColor.fromHex("#256980").withAlpha(25)
+                                    ? Colors.white
                                     : HexColor.fromHex("#256980").withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
                                         color: HexColor.fromHex("#256980"),
+                                        width: 1.5,
                                       )
                                     : null,
                                 borderRadius: BorderRadius.circular(16),
@@ -274,7 +300,9 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                           10,
                                         ),
                                         child: Icon(
-                                          Iconsax.microphone_2,
+                                          isSelected
+                                              ? Iconsax.microphone_25
+                                              : Iconsax.microphone_2,
                                           color: isSelected
                                               ? HexColor.fromHex("#256980")
                                               : HexColor.fromHex(
@@ -377,9 +405,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           SizedBox(width: 10),
                           Text.rich(
                             TextSpan(
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelMedium,
+                              style: Theme.of(context).textTheme.labelMedium,
                               children: [
                                 TextSpan(
                                   text: 'Kontak : ',
@@ -408,7 +434,6 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           ),
                         ],
                       ),
-                      
                     ],
                   ),
                 ),

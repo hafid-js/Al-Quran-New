@@ -151,14 +151,29 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
             scale: 0.7,
             child: Switch(
               value: active,
-              thumbColor: WidgetStatePropertyAll(Colors.white),
-              trackColor: WidgetStatePropertyAll(
-                HexColor.fromHex("#256980"),
+              thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                (states) {
+                  return const Icon(
+                    Icons.check,
+                    size: 14,
+                    color: Colors.white,
+                  );
+                },
               ),
-              activeThumbColor: HexColor.fromHex("#256980"),
-              inactiveThumbColor: HexColor.fromHex(
-                "#256980",
-              ).withAlpha(20),
+              thumbColor: const WidgetStatePropertyAll(Colors.white),
+              trackColor: WidgetStateProperty.resolveWith<Color>(
+                (states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return HexColor.fromHex("#256980");
+                  }
+                  return Colors.black.withAlpha(60);
+                },
+              ),
+              trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+                (states) {
+                  return Colors.white;
+                },
+              ),
               onChanged: (bool value) => onTap(),
             ),
           ),
@@ -194,11 +209,14 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? HexColor.fromHex("#256980").withAlpha(25)
-                      : HexColor.fromHex("#256980").withAlpha(10),
-                  border: isSelected
-                      ? BoxBorder.all(color: HexColor.fromHex("#256980"))
-                      : null,
+                                    ? Colors.white
+                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                border: isSelected
+                                    ? BoxBorder.all(
+                                        color: HexColor.fromHex("#256980"),
+                                        width: 1.5,
+                                      )
+                                    : null,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -247,11 +265,14 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? HexColor.fromHex("#256980").withAlpha(25)
-                      : HexColor.fromHex("#256980").withAlpha(10),
-                  border: isSelected
-                      ? BoxBorder.all(color: HexColor.fromHex("#256980"))
-                      : null,
+                                    ? Colors.white
+                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                border: isSelected
+                                    ? BoxBorder.all(
+                                        color: HexColor.fromHex("#256980"),
+                                        width: 1.5,
+                                      )
+                                    : null,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -333,12 +354,15 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? HexColor.fromHex("#256980").withAlpha(25)
-                          : HexColor.fromHex("#256980").withAlpha(10),
-                      border: isSelected
-                          ? BoxBorder.all(color: HexColor.fromHex("#256980"))
-                          : null,
+                     color: isSelected
+                                    ? Colors.white
+                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                border: isSelected
+                                    ? BoxBorder.all(
+                                        color: HexColor.fromHex("#256980"),
+                                        width: 1.5,
+                                      )
+                                    : null,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
