@@ -34,10 +34,10 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Center(
+         Center(
             child: Text(
               "Pilih Tanggal",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: HexColor.fromHex("#5a7b8a"),),
             ),
           ),
           SizedBox(
@@ -58,6 +58,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
+                titleTextStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
                 leftChevronIcon: Icon(
                   Iconsax.arrow_circle_left,
                   color: HexColor.fromHex("#256980"),

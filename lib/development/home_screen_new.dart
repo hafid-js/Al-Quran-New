@@ -89,10 +89,10 @@ final List<Map<String, dynamic>> menus = [
     "page": () => {},
   },
   {
-    "title": "Dzikir",
-    "icon": Iconsax.flash,
-    "page": () => const MatsuratScreen(),
-  },
+  "title": "Dzikir",
+  "icon": Iconsax.flash,
+  "page": () => null,
+},
   {
     "title": "Ibadah",
     "icon": FlutterIslamicIcons.muslim2,
@@ -298,9 +298,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                             ),
                           ),
 
-                          Row(
-                            children: [
-                              Obx(() {
+                           Obx(() {
                                 final loading = controller.isLoading.value;
                                 return GestureDetector(
                                   onTap: loading
@@ -321,14 +319,6 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                       : const Icon(Iconsax.location_add),
                                 );
                               }),
-                              SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.to(() => PengaturanNotifikasiScreen()),
-                                child: Icon(Iconsax.notification),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                       SizedBox(height: 30),
@@ -467,20 +457,70 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                           ),
                           padding: EdgeInsets.zero,
                           children: menus
-                              .where((menu) =>
-                                  _showAllMenus ||
-                                  (menu["title"] != "Dzikir" &&
-                                      menu["title"] != "Ibadah"))
-                              .map((menu) => _MenuItemWidget(
-                                    menu: menu,
-                                    onTap: menu["title"] == "Semua"
-                                        ? () => setState(
-                                            () => _showAllMenus =
-                                                !_showAllMenus,
-                                          )
-                                        : null,
-                                  ))
-                              .toList(),
+    .where(
+      (menu) =>
+          _showAllMenus ||
+          (menu["title"] != "Dzikir" &&
+              menu["title"] != "Ibadah"),
+    )
+    .map(
+      (menu) => _MenuItemWidget(
+  menu: menu,
+  onTap: menu["title"] == "Semua"
+      ? () {
+          setState(() {
+            _showAllMenus = !_showAllMenus;
+          });
+        }
+      : () async {
+          if (menu["title"] == "Dzikir") {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  backgroundColor: HexColor.fromHex("#F9F5EF"),
+                  title: Text(
+                    "Masih Dalam Pengembangan",
+                    style: TextStyle(
+                      color: HexColor.fromHex("#256980"),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  content: const Text(
+                    "Fitur Dzikir masih dalam tahap pengembangan. "
+                    "Silakan coba lagi pada pembaruan berikutnya.",
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        "Mengerti",
+                        style: TextStyle(
+                          color: HexColor.fromHex("#256980"),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+
+            return;
+          }
+
+          await Get.to(
+            menu["page"](),
+          );
+
+          if (mounted) {
+            setState(() {});
+          }
+        },
+),
+    )
+    .toList(),
+                              
                         ),
                       ),
                     ),
@@ -521,55 +561,71 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                         ),
 
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Selesaikan checklist ibadah hari ini.",
-                              style: Theme.of(context).textTheme.labelSmall!
-                                  .copyWith(fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
-                              style: Theme.of(context).textTheme.titleSmall!
-                                  .copyWith(
-                                    color: HexColor.fromHex("#256980"),
-                                    fontSize: 12,
-                                  ),
-                            ),
-                            SizedBox(height: 6),
-                            StepProgressIndicator(
-                              totalSteps: max(2, _ibadahProgress.$2 * 2),
-                              currentStep: _ibadahProgress.$1 * 2,
-                              selectedColor: HexColor.fromHex("#256980"),
-                              size: 28,
-                              padding: 3,
-                              unselectedColor: Colors.grey,
-                              roundedEdges: const Radius.circular(5),
-                            ),
-                            SizedBox(height: 12),
-                            GestureDetector(
-                              onTap: () => Get.to(() => IbadahScreen()),
-                              child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#D39D52"),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      "Selesaikan checklist ibadah hari ini.",
+      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+        fontWeight: FontWeight.w400,
+      ),
+    ),
 
-                                child: Center(
-                                  child: Text(
-                                    "Buka Daftar Checklist",
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleSmall,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+    const SizedBox(height: 10),
+
+    Text(
+      "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
+      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+        color: HexColor.fromHex("#256980"),
+        fontSize: 12,
+      ),
+    ),
+
+    const SizedBox(height: 6),
+
+    StepProgressIndicator(
+      totalSteps: max(
+        2,
+        _ibadahProgress.$2 * 2 + 10,
+      ),
+      currentStep: _ibadahProgress.$1 > 0
+          ? _ibadahProgress.$1 * 2 + 10
+          : 0,
+      selectedColor: HexColor.fromHex("#256980"),
+      size: 28,
+      padding: 3,
+      unselectedColor: Colors.grey.withAlpha(120),
+      roundedEdges: const Radius.circular(5),
+    ),
+
+    const SizedBox(height: 12),
+
+    GestureDetector(
+      onTap: () async {
+        await Get.to(() => const IbadahScreen());
+
+        if (mounted) {
+          setState(() {});
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: HexColor.fromHex("#D39D52"),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            "Buka Daftar Checklist",
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ],
+)
                       ],
                     ),
                   ),

@@ -76,6 +76,7 @@ dependencies:
   smooth_page_indicator: ^2.0.1
   carousel_slider: ^5.1.2
   fl_chart: ^1.2.0
+  in_app_review: ^2.0.12
 dependency_overrides:
   device_info_plus: ^10.1.0
   flutter_plugin_android_lifecycle: 2.0.33

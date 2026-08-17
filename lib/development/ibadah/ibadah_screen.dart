@@ -434,8 +434,9 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
               Text(
                 title ?? "Shalat $name",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
+                  color: HexColor.fromHex("#5a7b8a"),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -815,6 +816,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
       appBar: AppBar(
            leading: GestureDetector(
           onTap: () => Get.back(),
+          
           child: Icon(Icons.arrow_back_ios, color: Colors.black),
         ),
         title: Text(
@@ -917,7 +919,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
                     StepProgressIndicator(
                       totalSteps: _totalAll * 2 + 10,
-                      currentStep: _totalDone * 2 + 10,
+                      currentStep: _totalDone > 0 ? _totalDone * 2 + 10 : 0 ,
                       selectedColor: HexColor.fromHex("#256980"),
                       size: 28,
                       padding: 3,

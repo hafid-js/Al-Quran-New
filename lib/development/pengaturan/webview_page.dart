@@ -39,8 +39,8 @@ class _LocalWebViewPageState extends State<LocalWebViewPage> {
         ),
           title: Text(widget.title, style: Theme.of(
             context,
-          ).textTheme.titleMedium!.copyWith(color: Colors.black),),         surfaceTintColor: HexColor.fromHex("#F9F5EF"), foregroundColor: HexColor.fromHex("#F9F5EF"), backgroundColor: HexColor.fromHex("#F9F5EF"),),
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
+          ).textTheme.titleMedium!.copyWith(color: Colors.black),),         surfaceTintColor: Colors.white, foregroundColor: Colors.white, backgroundColor: Colors.white,),
+        backgroundColor: Colors.white,
         body: WebViewWidget(controller: controller),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
@@ -49,20 +50,29 @@ class _SplashScreenState extends State<SplashScreen>
     final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A1E2C),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/images/logo/hafidtechlogo_rounded.png',
-                width: 150,
-                height: 150,
-                fit: BoxFit.contain,
-              ),
-            ),
+            Container(
+  width: 150,
+  height: 150,
+  padding: const EdgeInsets.all(2),
+  decoration: BoxDecoration(
+    
+    borderRadius: BorderRadius.circular(16),
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(14),
+    child: Image.asset(
+      'assets/images/logo/hafidtechlogo.png',
+      width: 150,
+      height: 150,
+      fit: BoxFit.contain,
+    ),
+  ),
+),
             const SizedBox(height: 32),
             AnimatedBuilder(
               animation: _animController,
@@ -78,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen>
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: primary.withAlpha(
+                        color: HexColor.fromHex("#256980").withAlpha(
                           (opacity * 255).toInt(),
                         ),
                         shape: BoxShape.circle,

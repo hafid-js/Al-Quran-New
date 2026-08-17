@@ -10,11 +10,18 @@ class PerasaanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
-        surfaceTintColor: HexColor.fromHex("#F9F5EF"),
-        title:               Text("Perasaan", style: Theme.of(context).textTheme.titleLarge!.copyWith(color: HexColor.fromHex("#1E4355"), fontFamily: "Poppins", fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: Text(
+          "Perasaan",
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: HexColor.fromHex("#1E4355"),
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -22,32 +29,42 @@ class PerasaanScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
-              Text("Apa yang Anda rasakan saat ini?", style: Theme.of(context).textTheme.titleLarge!.copyWith(color: HexColor.fromHex("#1E4355")),),
-                 SizedBox(height: 12),
-              Text("Pilih perasaan Anda untuk menemukan doa yang tepat", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: HexColor.fromHex("#1E4355")),textAlign: TextAlign.center,),
+              Text(
+                "Apa yang Anda rasakan saat ini?",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: HexColor.fromHex("#1E4355"),
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                "Pilih perasaan Anda untuk menemukan doa yang tepat",
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: HexColor.fromHex("#1E4355"),
+                ),
+                textAlign: TextAlign.center,
+              ),
               SizedBox(height: 18),
               GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _items.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: 1.3,
-            ),
-            itemBuilder: (context, index) {
-              final item = _items[index];
-              return GestureDetector(
-                onTap: () => Get.to(
-                  () => DetailPerasaanScreen(type: item.type),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _items.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1.3,
                 ),
-                child: _buildPerasaanCard(item),
-              );
-            },
-          ),
+                itemBuilder: (context, index) {
+                  final item = _items[index];
+                  return GestureDetector(
+                    onTap: () =>
+                        Get.to(() => DetailPerasaanScreen(type: item.type)),
+                    child: _buildPerasaanCard(item),
+                  );
+                },
+              ),
             ],
-          )
+          ),
         ),
       ),
     );
@@ -159,7 +176,7 @@ Widget _buildPerasaanCard(_PerasaanItem item) {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: HexColor.fromHex("#1E4355")
+              color: HexColor.fromHex("#1E4355"),
             ),
           ),
         ),

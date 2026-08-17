@@ -95,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         unselectedLabelStyle: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         items: const [
           BottomNavigationBarItem(
