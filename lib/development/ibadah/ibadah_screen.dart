@@ -106,10 +106,30 @@ class _IbadahScreenState extends State<IbadahScreen> {
     _selectedDate = DateTime.now();
 
     _repairStoredData();
+    _cleanupOldMonths();
 
     _loadData();
 
     _quoteIndex = Random().nextInt(_quotes.length);
+  }
+
+  void _cleanupOldMonths() {
+    final now = DateTime.now();
+    final currentMonth = '${now.year}-${now.month.toString().padLeft(2, '0')}';
+
+    for (final key in _storage.getKeys()) {
+      final keyStr = key.toString();
+      if (!keyStr.startsWith('ibadah_')) continue;
+
+      final datePart = keyStr.replaceFirst('ibadah_', '');
+      final parts = datePart.split('-');
+      if (parts.length == 3) {
+        final keyMonth = '${parts[0]}-${parts[1]}';
+        if (keyMonth != currentMonth) {
+          _storage.remove(keyStr);
+        }
+      }
+    }
   }
 
   void _repairStoredData() {

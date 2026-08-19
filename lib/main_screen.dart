@@ -1,11 +1,12 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/home_screen_new.dart';
+import 'package:alquran_new/development/adzan/screens/adzan_screen.dart';
+import 'package:alquran_new/development/home/screens/home_screen_new.dart';
 import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_notifikasi.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_screen.dart';
-import 'package:alquran_new/development/perasaan_screen.dart';
-import 'package:alquran_new/development/play_bar.dart';
+import 'package:alquran_new/development/perasaan/screens/perasaan_screen.dart';
+import 'package:alquran_new/development/murrotal/widgets/play_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';

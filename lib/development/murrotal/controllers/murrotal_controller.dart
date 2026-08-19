@@ -1,7 +1,7 @@
-import 'package:alquran_new/development/murrotal/common.dart';
-import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/features/alquran/domain/entities/surah.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/murrotal/widgets/common.dart';
+import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
+import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';

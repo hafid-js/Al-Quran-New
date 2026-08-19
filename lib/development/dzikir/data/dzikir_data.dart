@@ -1,4 +1,4 @@
-import 'package:alquran_new/features/dzikir/models/dzikir_item.dart';
+import 'package:alquran_new/development/dzikir/models/dzikir_item.dart';
 
 final List<DzikirItem> dzikirList = [
   DzikirItem(

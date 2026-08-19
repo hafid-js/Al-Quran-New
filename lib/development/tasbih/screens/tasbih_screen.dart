@@ -2,7 +2,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_chart_screen.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_history_screen.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/tasbih/widgets/tasbih_bead_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -119,20 +119,39 @@ class _TasbihScreenState extends State<TasbihScreen> {
   @override
   void initState() {
     super.initState();
-    subhanallah = box.read('subhanallah') ?? 0;
-    alhamdulillah = box.read('alhamdulillah') ?? 0;
-    allahuakbar = box.read('allahuakbar') ?? 0;
-    if (!box.hasData('laillahailallah') && box.hasData('laillahailallah ')) {
-      box.write('laillahailallah', box.read('laillahailallah '));
-      box.remove('laillahailallah ');
+    _cleanupOldMonths();
+    _loadTodayData();
+  }
+
+  void _cleanupOldMonths() {
+    final now = DateTime.now();
+    final currentMonth = '${now.year}-${now.month.toString().padLeft(2, '0')}';
+
+    final raw = box.read('tasbihHarian');
+    if (raw is Map) {
+      final dailyMap = Map<String, dynamic>.from(raw);
+      final keysToRemove = <String>[];
+      for (final key in dailyMap.keys) {
+        final parts = key.split('-');
+        if (parts.length == 3) {
+          final keyMonth = '${parts[0]}-${parts[1]}';
+          if (keyMonth != currentMonth) {
+            keysToRemove.add(key);
+          }
+        }
+      }
+      for (final key in keysToRemove) {
+        dailyMap.remove(key);
+        box.remove('tasbihFree_$key');
+        box.remove('tasbihEnd_$key');
+      }
+      if (keysToRemove.isNotEmpty) {
+        box.write('tasbihHarian', dailyMap);
+      }
     }
-    laillahailallah = box.read('laillahailallah') ?? 0;
-    astaghfirullah = box.read('astaghfirullah') ?? 0;
-    allahumasholialamuhammad = box.read('allahumasholialamuhammad') ?? 0;
+  }
 
-    freeTasbih = box.read('freeTasbih') ?? 0;
-    endTasbih = box.read('endTasbih') ?? 0;
-
+  void _loadTodayData() {
     todayCounts = List.filled(6, 0);
     final raw = box.read('tasbihHarian');
     if (raw is Map) {
@@ -144,6 +163,17 @@ class _TasbihScreenState extends State<TasbihScreen> {
         }
       }
     }
+    subhanallah = todayCounts[0];
+    alhamdulillah = todayCounts[1];
+    allahuakbar = todayCounts[2];
+    laillahailallah = todayCounts[3];
+    astaghfirullah = todayCounts[4];
+    allahumasholialamuhammad = todayCounts[5];
+
+    final freeRaw = box.read('tasbihFree_${_fmtDate(DateTime.now())}');
+    freeTasbih = (freeRaw is num) ? freeRaw.toInt() : 0;
+    final endRaw = box.read('tasbihEnd_${_fmtDate(DateTime.now())}');
+    endTasbih = (endRaw is num) ? endRaw.toInt() : 0;
   }
 
   Future<void> _vibrate() async {
@@ -220,16 +250,22 @@ class _TasbihScreenState extends State<TasbihScreen> {
       switch (selectedDzikir) {
         case 0:
           subhanallah = 0;
+          todayCounts[0] = 0;
         case 1:
           alhamdulillah = 0;
+          todayCounts[1] = 0;
         case 2:
           allahuakbar = 0;
+          todayCounts[2] = 0;
         case 3:
           laillahailallah = 0;
+          todayCounts[3] = 0;
         case 4:
           astaghfirullah = 0;
+          todayCounts[4] = 0;
         default:
           allahumasholialamuhammad = 0;
+          todayCounts[5] = 0;
       }
     });
   }
@@ -242,6 +278,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
       laillahailallah = 0;
       astaghfirullah = 0;
       allahumasholialamuhammad = 0;
+      todayCounts = List.filled(6, 0);
       selectedDzikir = 0;
     });
   }
@@ -256,6 +293,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
       allahumasholialamuhammad = 0;
       freeTasbih = 0;
       endTasbih = 0;
+      todayCounts = List.filled(6, 0);
       selectedDzikir = 0;
     });
   }
@@ -293,17 +331,11 @@ class _TasbihScreenState extends State<TasbihScreen> {
     final dailyMap = Map<String, dynamic>.from(box.read('tasbihHarian') ?? {});
     dailyMap[today] = List<int>.from(todayCounts);
     box.write('tasbihHarian', dailyMap);
+    box.write('tasbihFree_$today', freeTasbih);
+    box.write('tasbihEnd_$today', endTasbih);
   }
 
   void _save() {
-    box.write('subhanallah', subhanallah);
-    box.write('alhamdulillah', alhamdulillah);
-    box.write('allahuakbar', allahuakbar);
-    box.write('laillahailallah', laillahailallah);
-    box.write('astaghfirullah', astaghfirullah);
-    box.write('allahumasholialamuhammad', allahumasholialamuhammad);
-    box.write('freeTasbih', freeTasbih);
-    box.write('endTasbih', endTasbih);
     _saveDaily();
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -346,7 +378,6 @@ class _TasbihScreenState extends State<TasbihScreen> {
           ),
         ),
       );
-       
   }
 
   @override
@@ -448,7 +479,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(() => TasbihHistoryScreen()),
+                    onTap: () => Get.to(() => TasbihHistoryScreen())?.then((_) => setState(() => _loadTodayData())),
                     child: Icon(
                       Icons.history,
                       color: HexColor.fromHex("#D39D52"),
@@ -456,7 +487,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                     ),
                   ),
                  GestureDetector(
-                  onTap: () => Get.to(() => TasbihChartScreen()),
+                  onTap: () => Get.to(() => TasbihChartScreen())?.then((_) => setState(() => _loadTodayData())),
                   child:  Icon(
                     Icons.bar_chart_rounded,
                     color: HexColor.fromHex("#D39D52"),

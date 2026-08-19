@@ -1,5 +1,6 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
+import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
+import 'package:alquran_new/development/pengaturan/controllers/notification_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
@@ -19,19 +20,9 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HexColor.fromHex("#F9F5EF"),
-      appBar: AppBar(
+      appBar: CommonAppBar(
+        title: "Pengaturan Notifikasi",
         surfaceTintColor: HexColor.fromHex("#F9F5EF"),
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios, color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          "Pengaturan Notifikasi",
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium!.copyWith(color: Colors.black),
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

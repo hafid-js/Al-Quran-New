@@ -1,6 +1,7 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -32,19 +33,9 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
       final fontFamily = fontArabs[fontIndex]["title"];
       return Scaffold(
         backgroundColor: HexColor.fromHex("#F9F5EF"),
-        appBar: AppBar(
+        appBar: CommonAppBar(
+          title: "Pengaturan Aplikasi",
           surfaceTintColor: HexColor.fromHex("#F9F5EF"),
-          leading: GestureDetector(
-            onTap: () => Get.back(),
-            child: Icon(Icons.arrow_back_ios, color: Colors.black),
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            "Pengaturan Aplikasi",
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium!.copyWith(color: Colors.black),
-          ),
         ),
         body: SingleChildScrollView(
           child: Padding(

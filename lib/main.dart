@@ -1,19 +1,19 @@
-import 'package:alquran_new/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/services/notification_service.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/constants/app_theme.dart';
-import 'package:alquran_new/development/murrotal/media_kit_stub.dart';
-import 'package:alquran_new/features/bookmark/controllers/bookmark_controller.dart';
-import 'package:alquran_new/features/home/data/datasources/prayer_time_remote_data_source.dart';
-import 'package:alquran_new/features/home/data/repositories/prayer_time_repository_impl.dart';
-import 'package:alquran_new/features/home/domain/repositories/prayer_time_repository.dart';
-import 'package:alquran_new/features/home/domain/usecases/get_prayer_times.dart';
-import 'package:alquran_new/features/pengaturan/controllers/notification_settings_controller.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
-import 'package:alquran_new/features/pengaturan/services/notification_settings_service.dart';
-import 'package:alquran_new/features/pengaturan/services/settings_service.dart';
+import 'package:alquran_new/development/core/db/hive_service.dart';
+import 'package:alquran_new/development/murrotal/services/media_kit_stub.dart';
+import 'package:alquran_new/development/bookmark/controllers/bookmark_controller.dart';
+import 'package:alquran_new/development/home/data/datasources/prayer_time_remote_data_source.dart';
+import 'package:alquran_new/development/home/data/repositories/prayer_time_repository_impl.dart';
+import 'package:alquran_new/development/home/domain/repositories/prayer_time_repository.dart';
+import 'package:alquran_new/development/home/domain/usecases/get_prayer_times.dart';
+import 'package:alquran_new/development/pengaturan/controllers/notification_settings_controller.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/pengaturan/services/notification_settings_service.dart';
+import 'package:alquran_new/development/pengaturan/services/settings_service.dart';
 import 'package:alquran_new/features/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +33,7 @@ void main() async {
 
   _configureSystemUI();
 
-  await HiveService.init().timeout(const Duration(seconds: 10));
+  await DevHiveService.init().timeout(const Duration(seconds: 10));
 
   try {
     await GetStorage.init();

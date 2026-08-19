@@ -1,15 +1,15 @@
 import 'package:alquran_new/core/network/dio_client.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
-import 'package:alquran_new/development/alquran_controller.dart';
-import 'package:alquran_new/development/hizb_controller.dart';
-import 'package:alquran_new/features/alquran/controllers/surah_controller.dart';
-import 'package:alquran_new/features/alquran/data/datasources/surah_remote_data_source.dart';
-import 'package:alquran_new/features/alquran/data/repositories/surah_repository_impl.dart';
-import 'package:alquran_new/features/alquran/domain/repositories/surah_repository.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_all_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_detail_surah.dart';
-import 'package:alquran_new/features/alquran/domain/usecases/get_tafsir.dart';
-import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/juz_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/hizb_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
+import 'package:alquran_new/development/alquran/data/datasources/surah_remote_data_source.dart';
+import 'package:alquran_new/development/alquran/data/repositories/surah_repository_impl.dart';
+import 'package:alquran_new/development/alquran/domain/repositories/surah_repository.dart';
+import 'package:alquran_new/development/alquran/domain/usecases/get_all_surah.dart';
+import 'package:alquran_new/development/alquran/domain/usecases/get_detail_surah.dart';
+import 'package:alquran_new/development/alquran/domain/usecases/get_tafsir.dart';
+import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:get/get.dart';
 
 class SurahBinding extends Bindings {

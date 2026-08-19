@@ -1,5 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/home/screens/home_screen.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +49,20 @@ class _SplashScreenState extends State<SplashScreen>
     final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      backgroundColor: HexColor.fromHex("#256980"),
+      body: Container(
+         decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                      HexColor.fromHex("#256980").withAlpha(210),
+                      BlendMode.srcATop,
+                    ),
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/images/image.png"),
+                  ),
+                  color: HexColor.fromHex("#256980"),
+                ),
+        child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -88,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: HexColor.fromHex("#256980").withAlpha(
+                        color: Colors.white.withAlpha(
                           (opacity * 255).toInt(),
                         ),
                         shape: BoxShape.circle,
@@ -101,6 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
           ],
         ),
       ),
+      )
     );
   }
 }

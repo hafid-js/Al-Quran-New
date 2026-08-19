@@ -1,5 +1,5 @@
-import 'package:alquran_new/development/hizb_ayat_cache.dart';
-import 'package:alquran_new/development/juz_ayat_cache.dart';
+import 'package:alquran_new/development/alquran/data/hizb_ayat_cache.dart';
+import 'package:alquran_new/development/alquran/data/juz_ayat_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
 import 'package:alquran_new/features/alquran/data/local/tafsir_cache.dart';

@@ -29,22 +29,28 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
       "Astaghfirullahal adzim",
       "Allahuma sholli ala Muhammad",
     ];
-    dzikirCounts = [
-      box.read('subhanallah') ?? 0,
-      box.read('alhamdulillah') ?? 0,
-      box.read('allahuakbar') ?? 0,
-      box.read('laillahailallah') ?? 0,
-      box.read('astaghfirullah') ?? 0,
-      box.read('allahumasholialamuhammad') ?? 0,
-    ];
+
     final raw = box.read('tasbihHarian');
     final map = <String, List<int>>{};
     if (raw is Map) {
       raw.forEach((k, v) {
-        map[k.toString()] = (v as List).map((e) => (e as num).toInt()).toList();
+        if (v is List) {
+          final counts = v.map((e) => (e as num).toInt()).toList();
+          while (counts.length < 6) {
+            counts.add(0);
+          }
+          map[k.toString()] = counts;
+        }
       });
     }
     dailyMap = map;
+
+    dzikirCounts = List.filled(6, 0);
+    for (final entry in dailyMap.values) {
+      for (int i = 0; i < 6; i++) {
+        dzikirCounts[i] += entry[i];
+      }
+    }
   }
 
   String _fmtDate(DateTime d) =>

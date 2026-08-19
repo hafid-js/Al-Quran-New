@@ -6,7 +6,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/error_view.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/core/widgets/section_header.dart';
-import 'package:alquran_new/features/adzan/screens/adzan_screen.dart';
+import 'package:alquran_new/development/adzan/screens/adzan_screen.dart';
 import 'package:alquran_new/features/alquran/screens/alquran_screen.dart';
 import 'package:alquran_new/features/bookmark/screens/bookmark.dart';
 import 'package:alquran_new/features/doa/screens/doa_screen.dart';

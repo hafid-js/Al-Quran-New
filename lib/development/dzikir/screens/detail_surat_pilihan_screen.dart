@@ -3,7 +3,7 @@ import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/core/widgets/settings_slider.dart';
 import 'package:alquran_new/core/widgets/settings_switch.dart';
 import 'package:alquran_new/development/dzikir/widgets/surat_pilihan_card.dart';
-import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';

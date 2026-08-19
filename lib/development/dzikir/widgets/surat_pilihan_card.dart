@@ -1,10 +1,10 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-import 'package:alquran_new/features/pengaturan/controllers/settings_controller.dart';
-import 'package:alquran_new/features/surat/controllers/detail_surah_controller.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:alquran_new/features/alquran/domain/entities/ayat.dart';
+import 'package:alquran_new/development/alquran/domain/entities/ayat.dart';
 
 class SuratPilihanCard extends StatefulWidget {
   SuratPilihanCard({

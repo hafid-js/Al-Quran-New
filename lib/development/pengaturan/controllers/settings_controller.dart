@@ -1,0 +1,81 @@
+import 'dart:ui';
+
+import 'package:alquran_new/core/services/ukuran_controller.dart';
+import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
+import 'package:alquran_new/development/pengaturan/models/app_settings.dart';
+import 'package:alquran_new/development/pengaturan/services/settings_service.dart';
+import 'package:get/get.dart';
+
+class SettingsController extends GetxController {
+  final SettingsService service;
+
+  SettingsController(this.service);
+
+  AppSettings settings = AppSettings();
+
+  var qariSelected = 4.obs;
+  var fontSelected = 0.obs;
+  var modeSelected = 0.obs;
+  var colorSelected = 0.obs;
+     final _ukuran = Get.find<UkuranController>();
+     RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
+  RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
+
+  var currentColor = const Color(0xFF00AA5B).obs;
+
+  @override
+  void onInit() {
+    loadSettings();
+    super.onInit();
+  }
+
+  Future<void> loadSettings() async {
+    settings = await service.getSettings();
+
+    qariSelected.value = settings.qariSelected;
+    fontSelected.value = settings.fontSelected;
+    modeSelected.value = settings.modeSelected;
+    colorSelected.value = settings.colorSelected;
+
+    currentColor.value = Color(settings.customColor);
+  }
+
+  Future<void> changeQari(int index) async {
+    qariSelected.value = index;
+
+    settings.qariSelected = index;
+
+    await service.save(settings);
+
+    if (Get.isRegistered<SurahController>()) {
+      Get.find<SurahController>().refreshSurah();
+    }
+    
+  }
+
+  Future<void> changeFont(int index) async {
+    fontSelected.value = index;
+
+    settings.fontSelected = index;
+
+    await service.save(settings);
+  }
+
+  Future<void> changeMode(int index) async {
+    modeSelected.value = index;
+
+    settings.modeSelected = index;
+
+    await service.save(settings);
+  }
+
+  Future<void> changeColor(int index, Color color) async {
+    colorSelected.value = index;
+    currentColor.value = color;
+
+    settings.colorSelected = index;
+    settings.customColor = color.value;
+
+    await service.save(settings);
+  }
+}
