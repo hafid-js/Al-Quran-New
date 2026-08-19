@@ -41,20 +41,13 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
   StreamSubscription? _playingSub;
 
   List<AudioSource> _buildPlaylist() {
-    return surahController.surahList.map((surah) {
+    return surahController.surahList.where((surah) {
       final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
       final url = surah.audioFull[qariKey] ?? "";
-      if (url.isEmpty) {
-        return AudioSource.uri(
-          Uri.parse(
-              "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
-          tag: AudioMetadata(
-            album: surah.namaLatin,
-            title: widget.qariNama,
-            artwork: widget.qariImage,
-          ),
-        );
-      }
+      return url.isNotEmpty;
+    }).map((surah) {
+      final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
+      final url = surah.audioFull[qariKey]!;
       return AudioSource.uri(
         Uri.parse(url),
         tag: AudioMetadata(

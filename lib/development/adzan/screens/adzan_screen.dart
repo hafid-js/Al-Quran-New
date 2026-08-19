@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/features/adzan/controllers/adzan_controller.dart';
-import 'package:alquran_new/features/home/screens/home_screen.dart';
-import 'package:alquran_new/features/onboarding/screens/consent_screen.dart';
+import 'package:alquran_new/development/adzan/controllers/adzan_controller.dart';
+import 'package:alquran_new/development/home/screens/home_screen_new.dart';
+import 'package:alquran_new/development/onboarding/screens/consent_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -51,7 +51,7 @@ class _AdzanScreenState extends State<AdzanScreen>
   Future<void> _dismiss() async {
     await controller.stopAdzan();
     _adzanFinishedListener?.cancel();
-    HomeScreen.markAdzanDismissed();
+    HomeScreenNew.markAdzanDismissed();
     await Future.delayed(const Duration(milliseconds: 500));
     Get.delete<AdzanController>();
     if (!mounted) return;
@@ -63,7 +63,7 @@ class _AdzanScreenState extends State<AdzanScreen>
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) =>
-              hasConsented ? const HomeScreen() : const ConsentScreen(),
+              hasConsented ? const HomeScreenNew() : const ConsentScreen(),
         ),
       );
     }

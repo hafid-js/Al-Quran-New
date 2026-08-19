@@ -394,8 +394,12 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Berhasil Disalin'),
-                            duration: Duration(seconds: 1),
+                            content: Text(
+                              'Berhasil Disalin',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: HexColor.fromHex("#256980"),
+                            duration: Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -443,8 +447,12 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Berhasil Disalin'),
-                          duration: Duration(seconds: 1),
+                          content: Text(
+                            'Berhasil Disalin',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: HexColor.fromHex("#256980"),
+                          duration: Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );

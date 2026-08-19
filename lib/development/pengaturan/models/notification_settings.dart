@@ -30,7 +30,7 @@ class NotificationSettings extends HiveObject {
 
   NotificationSettings({
     this.notificationMode = 0,
-    this.soundType = 'adzan',
+    this.soundType = 'default',
     this.imsakEnabled = true,
     this.subuhEnabled = true,
     this.dzuhurEnabled = true,

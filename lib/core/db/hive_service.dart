@@ -1,14 +1,14 @@
 import 'package:alquran_new/development/alquran/data/hizb_ayat_cache.dart';
 import 'package:alquran_new/development/alquran/data/juz_ayat_cache.dart';
-import 'package:alquran_new/features/alquran/data/local/ayat_cache.dart';
-import 'package:alquran_new/features/alquran/data/local/surah_cache.dart';
-import 'package:alquran_new/features/alquran/data/local/tafsir_cache.dart';
-import 'package:alquran_new/features/bookmark/models/bookmark_model.dart';
-import 'package:alquran_new/features/doa/data/local/doa_cache.dart';
-import 'package:alquran_new/features/home/data/local/prayer_time_cache.dart';
-import 'package:alquran_new/features/lokasi/data/location_cache.dart';
-import 'package:alquran_new/features/pengaturan/models/app_settings.dart';
-import 'package:alquran_new/features/pengaturan/models/notification_settings.dart';
+import 'package:alquran_new/development/alquran/data/local/ayat_cache.dart';
+import 'package:alquran_new/development/alquran/data/local/surah_cache.dart';
+import 'package:alquran_new/development/alquran/data/local/tafsir_cache.dart';
+import 'package:alquran_new/development/bookmark/models/bookmark_model.dart';
+import 'package:alquran_new/development/doa/data/local/doa_cache.dart';
+import 'package:alquran_new/development/home/data/local/prayer_time_cache.dart';
+import 'package:alquran_new/development/lokasi/data/location_cache.dart';
+import 'package:alquran_new/development/pengaturan/models/app_settings.dart';
+import 'package:alquran_new/development/pengaturan/models/notification_settings.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';

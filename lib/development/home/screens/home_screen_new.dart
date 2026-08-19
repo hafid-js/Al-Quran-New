@@ -33,6 +33,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 class HomeScreenNew extends StatefulWidget {
   const HomeScreenNew({super.key});
 
+  static DateTime _lastAdzanDismissed = DateTime(2000);
+
+  static void markAdzanDismissed() {
+    _lastAdzanDismissed = DateTime.now();
+  }
+
   @override
   State<HomeScreenNew> createState() => _HomeScreenNewState();
 }

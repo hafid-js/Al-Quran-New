@@ -33,8 +33,8 @@ android {
         applicationId = "com.hafidtech.alquran"
         minSdk = 24
         targetSdk = 36
-        versionCode = 14 
-        versionName = "1.0.6"
+        versionCode = 15 
+        versionName = "2.0.0"
         multiDexEnabled = true
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")

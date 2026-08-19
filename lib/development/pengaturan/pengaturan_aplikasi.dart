@@ -119,7 +119,35 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                   }),
 
                               onChanged: (bool value) {
-                                controller.changeMode(value ? 0 : 1);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    backgroundColor: HexColor.fromHex("#F9F5EF"),
+                                    title: Text(
+                                      "Masih Dalam Pengembangan",
+                                      style: TextStyle(
+                                        color: HexColor.fromHex("#256980"),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    content: const Text(
+                                      "Fitur Tema Gelap masih dalam tahap pengembangan. "
+                                      "Silakan coba lagi pada pembaruan berikutnya.",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text(
+                                          "Mengerti",
+                                          style: TextStyle(
+                                            color: HexColor.fromHex("#256980"),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                             ),
                           ),

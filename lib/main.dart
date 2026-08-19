@@ -14,7 +14,7 @@ import 'package:alquran_new/development/pengaturan/controllers/notification_sett
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/pengaturan/services/notification_settings_service.dart';
 import 'package:alquran_new/development/pengaturan/services/settings_service.dart';
-import 'package:alquran_new/features/splash/screens/splash_screen.dart';
+import 'package:alquran_new/development/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
