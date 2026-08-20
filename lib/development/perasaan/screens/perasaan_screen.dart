@@ -1,17 +1,12 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/perasaan/screens/detail_perasaan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class PerasaanScreen extends StatefulWidget {
+class PerasaanScreen extends StatelessWidget {
   const PerasaanScreen({super.key});
-
-  @override
-  State<PerasaanScreen> createState() => _PerasaanScreenState();
-}
-
-class _PerasaanScreenState extends State<PerasaanScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +57,46 @@ class _PerasaanScreenState extends State<PerasaanScreen> {
                 ),
                 itemBuilder: (context, index) {
                   final item = _items[index];
-                  return _PerasaanCardWidget(item: item);
+                  return TapScaleWidget(
+                    onTap: () => Get.to(
+                      () => DetailPerasaanScreen(type: item.type),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: item.containerColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            width: 45,
+                            height: 45,
+                            item.icon,
+                            colorFilter: ColorFilter.mode(
+                              HexColor.fromHex("#256980"),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              item.title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: HexColor.fromHex("#1E4355"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
@@ -148,106 +182,3 @@ const List<_PerasaanItem> _items = [
     containerColor: Color(0xFFE8D4B8),
   ),
 ];
-
-class _PerasaanCardWidget extends StatefulWidget {
-  final _PerasaanItem item;
-  const _PerasaanCardWidget({required this.item});
-
-  @override
-  State<_PerasaanCardWidget> createState() => _PerasaanCardWidgetState();
-}
-
-class _PerasaanCardWidgetState extends State<_PerasaanCardWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.92,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onTapDown(TapDownDetails _) {
-    _controller.forward();
-  }
-
-  void _onTapUp(TapUpDetails _) {
-    _controller.reverse();
-  }
-
-  void _onTapCancel() {
-    _controller.reverse();
-  }
-
-  void _onTap() {
-    _controller.reverse().then((_) {
-      Get.to(() => DetailPerasaanScreen(type: widget.item.type));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final item = widget.item;
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      onTap: _onTap,
-      child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) {
-          return Transform.scale(scale: _scaleAnimation.value, child: child);
-        },
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: item.containerColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                width: 45,
-                height: 45,
-                item.icon,
-                colorFilter: ColorFilter.mode(
-                  HexColor.fromHex("#256980"),
-                  BlendMode.srcIn,
-                ),
-              ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  item.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: HexColor.fromHex("#1E4355"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

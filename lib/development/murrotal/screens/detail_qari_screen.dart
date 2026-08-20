@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/screens/detail_murrotal_screen.dart';
 
@@ -180,59 +181,55 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                     final surah = surahList[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child:
-                      GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => DetailMurrotalScreen(
-                                  qariIndex: widget.qariIndex,
-                                  surahNomor: surah.nomor,
-                                  surahNama: surah.namaLatin,
-                                  surahArti: surah.arti,
-                                  qariNama: qariData["title"]!,
-                                  qariImage: qariData["image"]!,
-                                ),
-                              );
-                            },
-                            child: 
-                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ListTile(
-                          visualDensity: const VisualDensity(vertical: -1),
-                          contentPadding: EdgeInsets.only(right: 4, left: 4),
-                          title: Text(
-                            surah.namaLatin,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: HexColor.fromHex("#256980"),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                      child: TapScaleWidget(
+                        scaleDown: 0.96,
+                        onTap: () {
+                          Get.to(
+                            () => DetailMurrotalScreen(
+                              qariIndex: widget.qariIndex,
+                              surahNomor: surah.nomor,
+                              surahNama: surah.namaLatin,
+                              surahArti: surah.arti,
+                              qariNama: qariData["title"]!,
+                              qariImage: qariData["image"]!,
                             ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          subtitle: Text(
-                            surah.arti,
-                            style: TextStyle(
-                              color: HexColor.fromHex("#676767"),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+                          child: ListTile(
+                            visualDensity: const VisualDensity(vertical: -1),
+                            contentPadding: EdgeInsets.only(right: 4, left: 4),
+                            title: Text(
+                              surah.namaLatin,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: HexColor.fromHex("#256980"),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          trailing: Icon(
+                            subtitle: Text(
+                              surah.arti,
+                              style: TextStyle(
+                                color: HexColor.fromHex("#676767"),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                            trailing: Icon(
                               Iconsax.play_circle5,
                               color: HexColor.fromHex("#256980"),
                               size: 30,
                             ),
-                          
+                          ),
                         ),
                       ),
-                      )
                     );
                   },
                 );
