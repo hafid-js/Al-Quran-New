@@ -881,24 +881,16 @@ class _IbadahScreenState extends State<IbadahScreen> {
 
                         Row(
                           children: [
-                            GestureDetector(
+                            _AnimatedIconButton(
+                              icon: Iconsax.calendar_1,
                               onTap: _showCalendarModal,
-                              child: Icon(
-                                Iconsax.calendar_1,
-                                color: HexColor.fromHex("#256980"),
-                                size: 30,
-                              ),
                             ),
 
                             SizedBox(width: 10),
 
-                            GestureDetector(
+                            _AnimatedIconButton(
+                              icon: Iconsax.chart_21,
                               onTap: () => Get.to(() => StatistikIbadah()),
-                              child: Icon(
-                                Iconsax.chart_21,
-                                color: HexColor.fromHex("#256980"),
-                                size: 30,
-                              ),
                             ),
                           ],
                         ),
@@ -1400,6 +1392,69 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AnimatedIconButton extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _AnimatedIconButton({required this.icon, required this.onTap});
+
+  @override
+  State<_AnimatedIconButton> createState() => _AnimatedIconButtonState();
+}
+
+class _AnimatedIconButtonState extends State<_AnimatedIconButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.8,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails _) => _controller.forward();
+  void _onTapUp(TapUpDetails _) => _controller.reverse();
+  void _onTapCancel() => _controller.reverse();
+
+  void _onTap() {
+    _controller.reverse().then((_) => widget.onTap());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      onTap: _onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
+        },
+        child: Icon(
+          widget.icon,
+          color: HexColor.fromHex("#256980"),
+          size: 30,
         ),
       ),
     );
