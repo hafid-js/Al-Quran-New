@@ -86,73 +86,72 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Iconsax.notification_bing,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: () => Get.to(() => PengaturanNotifikasi()),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Iconsax.notification_bing,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Pengaturan Notifikasi",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Pengaturan Notifikasi",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () => Get.to(() => PengaturanNotifikasi()),
-                  child: Icon(
+                    ],
+                  ),
+                  Icon(
                     Iconsax.arrow_right_3,
                     color: HexColor.fromHex("#256980"),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Divider(color: const Color.fromARGB(17, 0, 0, 0)),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Iconsax.setting_2,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: () => Get.to(() => PengaturanAplikasi()),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Iconsax.setting_2,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Pengaturan Aplikasi",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Pengaturan Aplikasi",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () => Get.to(() => PengaturanAplikasi()),
-                  child: Icon(
+                    ],
+                  ),
+                  Icon(
                     Iconsax.arrow_right_3,
                     color: HexColor.fromHex("#256980"),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Divider(color: const Color.fromARGB(17, 0, 0, 0)),
@@ -167,151 +166,151 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Icons.contact_support_outlined,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: _openWhatsApp,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Icons.contact_support_outlined,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Pusat Bantuan",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Pusat Bantuan",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: _openWhatsApp,
-                  child: Icon(
+                    ],
+                  ),
+                  Icon(
                     Iconsax.arrow_right_3,
                     color: HexColor.fromHex("#256980"),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Divider(color: const Color.fromARGB(17, 0, 0, 0)),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Iconsax.document_text,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: () {
+                Get.to(
+                  () => const LocalWebViewPage(
+                    title: "Syarat & Ketentuan",
+                    assetPath: "assets/development/terms.html",
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Iconsax.document_text,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Syarat & Ketentuan",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Syarat & Ketentuan",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(
-                      () => const LocalWebViewPage(
-                        title: "Syarat & Ketentuan",
-                        assetPath: "assets/development/terms.html",
-                      ),
-                    );
-                  },
-                  child: Icon(
+                    ],
+                  ),
+                  Icon(
                     Iconsax.arrow_right_3,
                     color: HexColor.fromHex("#256980"),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Divider(color: const Color.fromARGB(17, 0, 0, 0)),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Iconsax.shield,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: () {
+                Get.to(
+                  () => const LocalWebViewPage(
+                    title: "Kebijakan Privasi",
+                    assetPath: "assets/development/privacy_policy.html",
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Iconsax.shield,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Kebijakan Privasi",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Kebijakan Privasi",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(
-                      () => const LocalWebViewPage(
-                        title: "Kebijakan Privasi",
-                        assetPath: "assets/development/privacy_policy.html",
-                      ),
-                    );
-                  },
-                  child: Icon(
+                    ],
+                  ),
+                  Icon(
                     Iconsax.arrow_right_3,
                     color: HexColor.fromHex("#256980"),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Divider(color: const Color.fromARGB(17, 0, 0, 0)),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(10),
-                      child: Icon(
-                        Iconsax.star,
-                        color: HexColor.fromHex("#256980"),
+            GestureDetector(
+              onTap: _requestReview,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(10),
+                        child: Icon(
+                          Iconsax.star,
+                          color: HexColor.fromHex("#256980"),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 18),
-                    Text(
-                      "Rating Aplikasi",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 18),
+                      Text(
+                        "Rating Aplikasi",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: _requestReview,
-                  child: Row(
+                    ],
+                  ),
+                  Row(
                     children: [
                       Text(
                         "v2.0.0",
@@ -323,8 +322,8 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

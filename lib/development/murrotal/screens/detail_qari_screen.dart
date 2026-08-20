@@ -180,7 +180,22 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                     final surah = surahList[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: Container(
+                      child:
+                      GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => DetailMurrotalScreen(
+                                  qariIndex: widget.qariIndex,
+                                  surahNomor: surah.nomor,
+                                  surahNama: surah.namaLatin,
+                                  surahArti: surah.arti,
+                                  qariNama: qariData["title"]!,
+                                  qariImage: qariData["image"]!,
+                                ),
+                              );
+                            },
+                            child: 
+                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                         ),
@@ -209,27 +224,15 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                               fontSize: 12,
                             ),
                           ),
-                          trailing: GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => DetailMurrotalScreen(
-                                  qariIndex: widget.qariIndex,
-                                  surahNomor: surah.nomor,
-                                  surahNama: surah.namaLatin,
-                                  surahArti: surah.arti,
-                                  qariNama: qariData["title"]!,
-                                  qariImage: qariData["image"]!,
-                                ),
-                              );
-                            },
-                            child: Icon(
+                          trailing: Icon(
                               Iconsax.play_circle5,
                               color: HexColor.fromHex("#256980"),
                               size: 30,
                             ),
-                          ),
+                          
                         ),
                       ),
+                      )
                     );
                   },
                 );
