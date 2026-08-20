@@ -1266,10 +1266,16 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
 
   Color _consistencyColor(int count) {
     final base = HexColor.fromHex("#256980");
-    if (count == 0) return base.withAlpha(20);
-    if (count <= 2) return base.withAlpha(60);
-    if (count <= 4) return base.withAlpha(160);
-    if (count <= 6) return base.withAlpha(220);
+    if (count == 0) return base.withAlpha(15);
+    if (count == 1) return base.withAlpha(40);
+    if (count == 2) return base.withAlpha(70);
+    if (count == 3) return base.withAlpha(100);
+    if (count == 4) return base.withAlpha(130);
+    if (count == 5) return base.withAlpha(160);
+    if (count == 6) return base.withAlpha(190);
+    if (count == 7) return base.withAlpha(210);
+    if (count == 8) return base.withAlpha(225);
+    if (count == 9) return base.withAlpha(240);
     return base;
   }
 
