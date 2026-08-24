@@ -70,7 +70,7 @@ class _CompassViewState extends State<CompassView>
       return _buildNoCompassView(context);
     }
 
-    if (_hasCompassSensor == null) {
+    if (_hasCompassSensor == false) {
       return Center(
         child: Container(
           color: Colors.transparent,
@@ -160,7 +160,7 @@ class _CompassViewState extends State<CompassView>
             const SizedBox(height: 16),
             Text(
               'Perangkat Tidak Memiliki Kompas',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: TextStyle(color: HexColor.fromHex("#256980"), fontSize: 18, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),

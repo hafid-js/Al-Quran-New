@@ -76,12 +76,11 @@ class AppTheme {
     surface: AppColors.darkSurface,
   ),
 
-
   iconTheme: IconThemeData(
     color: AppColors.textPrimaryDark,
   ),
 
-  scaffoldBackgroundColor: HexColor.fromHex("#132D3B").withAlpha(120),
+  scaffoldBackgroundColor: AppColors.dark,
   cardColor: AppColors.darkCard,
   extensions: [
     AppShadow(

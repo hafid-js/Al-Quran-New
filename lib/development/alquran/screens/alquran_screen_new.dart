@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran/screens/detail_hizb_screen.dart';
 import 'package:alquran_new/development/alquran/screens/detail_juz_screen.dart';
@@ -804,6 +805,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildSurahItem(Surah surah) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => Get.to(
         () => DetailSurahScreen(),
@@ -814,7 +816,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -824,7 +826,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    OctagramBadge(number: "${surah.nomor}"),
+                    OctagramBadge(number: "${surah.nomor}", numberColor: isDark ? AppColors.light : AppColors.dark),
                     SizedBox(width: 15),
                     Flexible(
                       child: Column(
@@ -835,19 +837,11 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                             "${surah.namaLatin} (${surah.arti})",
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: HexColor.fromHex("#1E4355"),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
                           ),
                           Text(
                             "${surah.tempatTurun.name} - ${surah.jumlahAyat} Ayat",
-                            style: TextStyle(
-                              color: HexColor.fromHex("#676767"),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                            ),
+                            style: Theme.of(context).textTheme.labelSmall
                           ),
                         ],
                       ),
@@ -859,7 +853,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 width: 55,
                 height: 55,
                 "assets/svg_arab_kaligrafi/Surah_${surah.nomor}_of_114.svg",
-                colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(isDark ? AppColors.light : AppColors.dark, BlendMode.srcIn),
               ),
             ],
           ),
@@ -979,10 +973,15 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Quran",
+        backIconColor:  Theme.of(context).textTheme.titleSmall!.color,
+        titleColor: Theme.of(context).textTheme.titleSmall!.color,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         bottom: TabBar(
+          
           indicatorSize: TabBarIndicatorSize.tab,
           controller: tabController,
           indicatorColor: HexColor.fromHex("#256980"),

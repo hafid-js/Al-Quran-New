@@ -907,7 +907,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -935,7 +935,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: HexColor.fromHex("#256980"),
@@ -1001,7 +1001,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: HexColor.fromHex("#256980"),
@@ -1063,7 +1063,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: HexColor.fromHex("#256980"),
@@ -1112,7 +1112,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                             child: Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: HexColor.fromHex("#256980"),
@@ -1173,7 +1173,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           child: Column(
@@ -1624,22 +1624,22 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
-        surfaceTintColor: Colors.transparent,
+        backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         leadingWidth: 65,
         centerTitle: false,
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onSurface),
         ),
         titleSpacing: 0,
         title: Text(
           "Statistik Ibadah",
           style: Theme.of(
             context,
-          ).textTheme.titleMedium!.copyWith(color: Colors.black),
+          ).textTheme.titleMedium,
         ),
       ),
       body: SingleChildScrollView(
@@ -1668,11 +1668,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                       children: [
                         Text(
                           _formattedDate,
-                          style: TextStyle(
-                            color: HexColor.fromHex("#256980"),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         Icon(
                           Iconsax.calendar_1,

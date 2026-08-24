@@ -9,6 +9,7 @@ import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DoaScreen extends StatefulWidget {
   const DoaScreen({super.key});
@@ -225,8 +226,9 @@ class _DoaScreenState extends State<DoaScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       
-                      color: HexColor.fromHex("#FFFFFF"),
+                      color: HexColor.fromHex("#256980"),
                       borderRadius: BorderRadius.circular(12),
+                      
                       boxShadow: [
   BoxShadow(
     color: Colors.black.withAlpha(10),
@@ -241,7 +243,7 @@ class _DoaScreenState extends State<DoaScreen> {
                       child: Text(
                         doa.tentang,
                         style: TextStyle(
-                          color: const Color.fromARGB(255, 45, 45, 45),
+                          color: Colors.white,
                         ),
                         textAlign: TextAlign.start,
                       ),

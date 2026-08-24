@@ -87,7 +87,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         selectedItemColor: HexColor.fromHex("#256980"),
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: TextStyle(

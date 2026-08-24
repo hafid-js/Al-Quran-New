@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/pengaturan/controllers/notification_settings_controller.dart';
@@ -15,14 +16,18 @@ class PengaturanNotifikasi extends StatefulWidget {
 
 class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
   final notifController = Get.find<NotificationSettingsController>();
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
+        backIconColor:  Theme.of(context).textTheme.titleSmall!.color,
+        titleColor: Theme.of(context).textTheme.titleSmall!.color,
         title: "Pengaturan Notifikasi",
-        surfaceTintColor: HexColor.fromHex("#F9F5EF"),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -42,10 +47,11 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
   }
 
   Widget _buildPrayerSection() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -53,11 +59,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
         children: [
           Text(
             "Waktu Notifikasi",
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           SizedBox(height: 10),
           _buildPrayerToggle(
@@ -66,35 +68,35 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
             isActive: notifController.imsak,
             onTap: () => notifController.togglePrayer('imsak'),
           ),
-          Divider(color: const Color.fromARGB(17, 0, 0, 0)),
+          Divider(color: isDark ? Colors.white.withAlpha(15) : const Color.fromARGB(17, 0, 0, 0)),
           _buildPrayerToggle(
             title: "Subuh",
             icon: Iconsax.moon,
             isActive: notifController.subuh,
             onTap: () => notifController.togglePrayer('subuh'),
           ),
-          Divider(color: const Color.fromARGB(17, 0, 0, 0)),
+           Divider(color: isDark ? Colors.white.withAlpha(15) : const Color.fromARGB(17, 0, 0, 0)),
           _buildPrayerToggle(
             title: "Dzuhur",
             icon: Iconsax.sun_1,
             isActive: notifController.dzuhur,
             onTap: () => notifController.togglePrayer('dzuhur'),
           ),
-          Divider(color: const Color.fromARGB(17, 0, 0, 0)),
+           Divider(color: isDark ? Colors.white.withAlpha(15) : const Color.fromARGB(17, 0, 0, 0)),
           _buildPrayerToggle(
             title: "Ashar",
             icon: Icons.sunny_snowing,
             isActive: notifController.ashar,
             onTap: () => notifController.togglePrayer('ashar'),
           ),
-          Divider(color: const Color.fromARGB(17, 0, 0, 0)),
+           Divider(color: isDark ? Colors.white.withAlpha(15) : const Color.fromARGB(17, 0, 0, 0)),
           _buildPrayerToggle(
             title: "Maghrib",
             icon: Iconsax.sun_fog,
             isActive: notifController.maghrib,
             onTap: () => notifController.togglePrayer('maghrib'),
           ),
-          Divider(color: const Color.fromARGB(17, 0, 0, 0)),
+           Divider(color: isDark ? Colors.white.withAlpha(15) : const Color.fromARGB(17, 0, 0, 0)),
           _buildPrayerToggle(
             title: "Isya",
             icon: Iconsax.moon,
@@ -120,8 +122,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: Colors.black.withAlpha(10),
-                child: Icon(icon, color: Colors.black),
+                backgroundColor:Theme.of(context).textTheme.labelSmall?.color!.withAlpha(10),
+                child: Icon(icon, color: Theme.of(context).textTheme.labelSmall?.color),
               ),
               SizedBox(width: 18),
               Column(
@@ -129,10 +131,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Theme.of(context).textTheme.labelSmall
                   ),
                 ],
               ),
@@ -174,10 +173,11 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
   }
 
   Widget _buildSoundSection() {
+           final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -185,11 +185,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
         children: [
           Text(
             "Bunyi Notifikasi",
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(context).textTheme.titleSmall
           ),
           SizedBox(height: 10),
           Obx(() {
@@ -200,12 +196,12 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected
-                                    ? Colors.white
-                                    : HexColor.fromHex("#256980").withAlpha(10),
-                                border: isSelected
+                                    ? Theme.of(context).colorScheme.primary.withAlpha(70)
+                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
+                              border: isSelected
                                     ? BoxBorder.all(
-                                        color: HexColor.fromHex("#256980"),
-                                        width: 1.5,
+                                              color: Theme.of(context).colorScheme.secondary,
+                                        width: 0.8,
                                       )
                                     : null,
                   borderRadius: BorderRadius.circular(16),
@@ -216,12 +212,12 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: Colors.black.withAlpha(10),
+                         backgroundColor:Theme.of(context).textTheme.labelSmall?.color!.withAlpha(10),
                           child: Icon(
                             FlutterIslamicIcons.solidMosque,
                             color: isSelected
-                                ? HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
                           ),
                         ),
                         SizedBox(width: 18),
@@ -229,8 +225,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                           "Suara Adzan",
                           style: TextStyle(
                             color: isSelected
-                                ? HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -238,10 +234,10 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     ),
                     Icon(
                       Icons.check_circle,
-                      color: isSelected
-                          ? HexColor.fromHex("#256980")
-                          : HexColor.fromHex("#256980").withAlpha(130),
-                    ),
+                      color:isSelected
+                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
+                                : HexColor.fromHex("#256980").withAlpha(130),
+                          ),
                   ],
                 ),
               ),
@@ -256,12 +252,12 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected
-                                    ? Colors.white
-                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                    ? Theme.of(context).colorScheme.primary.withAlpha(90)
+                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                        color: HexColor.fromHex("#256980"),
-                                        width: 1.5,
+                                              color: Theme.of(context).colorScheme.secondary,
+                                        width: 0.8,
                                       )
                                     : null,
                   borderRadius: BorderRadius.circular(16),
@@ -272,21 +268,21 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: Colors.black.withAlpha(10),
+                   backgroundColor:Theme.of(context).textTheme.labelSmall?.color!.withAlpha(10),
                           child: Icon(
                             Icons.notifications_outlined,
-                            color: isSelected
-                                ? HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                             color: isSelected
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
                           ),
                         ),
                         SizedBox(width: 18),
                         Text(
                           "Suara Default",
-                          style: TextStyle(
+                            style: TextStyle(
                             color: isSelected
-                                ? HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -295,9 +291,9 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     Icon(
                       Icons.check_circle,
                       color: isSelected
-                          ? HexColor.fromHex("#256980")
-                          : HexColor.fromHex("#256980").withAlpha(130),
-                    ),
+                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
+                                : HexColor.fromHex("#256980").withAlpha(130),
+                          ),
                   ],
                 ),
               ),
@@ -315,11 +311,11 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
       {"title": "Getar Saja", "icon": Icons.vibration_outlined},
       {"title": "Senyap", "icon": Iconsax.volume_slash},
     ];
-
+           final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+  color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -327,11 +323,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
         children: [
           Text(
             "Jenis Notifikasi",
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+             style: Theme.of(context).textTheme.titleSmall
           ),
           SizedBox(height: 10),
           ...List.generate(notificationModes.length, (index) {
@@ -345,13 +337,13 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                     color: isSelected
-                                    ? Colors.white
-                                    : HexColor.fromHex("#256980").withAlpha(10),
+                    color: isSelected
+                                    ? Theme.of(context).colorScheme.primary.withAlpha(70)
+                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                        color: HexColor.fromHex("#256980"),
-                                        width: 1.5,
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        width: 0.8,
                                       )
                                     : null,
                       borderRadius: BorderRadius.circular(16),
@@ -365,31 +357,29 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                               backgroundColor: Colors.black.withAlpha(10),
                               child: Icon(
                                 item["icon"],
-                                color: isSelected
-                                    ? HexColor.fromHex("#256980")
-                                    : HexColor.fromHex("#256980")
-                                        .withAlpha(130),
-                              ),
+                                 color: isSelected
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                          ),
                             ),
                             SizedBox(width: 18),
                             Text(
                               item["title"],
                               style: TextStyle(
-                                color: isSelected
-                                    ? HexColor.fromHex("#256980")
-                                    : HexColor.fromHex("#256980")
-                                        .withAlpha(130),
-                                fontWeight: FontWeight.w500,
-                              ),
+                            color: isSelected
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                            fontWeight: FontWeight.w500,
+                          ),
                             ),
                           ],
                         ),
                         Icon(
                           Icons.check_circle,
-                          color: isSelected
-                              ? HexColor.fromHex("#256980")
-                              : HexColor.fromHex("#256980").withAlpha(130),
-                        ),
+                         color: isSelected
+                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
+                                : HexColor.fromHex("#256980").withAlpha(130),
+                          ),
                       ],
                     ),
                   ),

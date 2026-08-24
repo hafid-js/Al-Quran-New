@@ -620,7 +620,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
   }
 
   Widget _buildSunnahItem(String name, bool done) {
-    final color = HexColor.fromHex("#256980");
+    final inactiveColor = HexColor.fromHex("#256980");
+    final activeColor = HexColor.fromHex("#D39D52");
 
     return GestureDetector(
       onTap: () {
@@ -657,13 +658,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: done ? color : Colors.transparent,
+          color: done ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color, width: 1.5),
+          border: Border.all(color: done ? activeColor : inactiveColor, width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(Iconsax.sun_1, size: 24, color: done ? Colors.white : color),
+            Icon(Iconsax.sun_1, size: 24, color: done ? Colors.white : inactiveColor),
 
             SizedBox(height: 6),
 
@@ -672,7 +673,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: done ? Colors.white : color,
+                color: done ? Colors.white : inactiveColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -688,7 +689,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
     bool done,
     IconData icon,
   ) {
-    final color = HexColor.fromHex("#256980");
+    final inactiveColor = HexColor.fromHex("#256980");
+    final activeColor = HexColor.fromHex("#D39D52");
 
     final index = list.indexWhere((e) => e['name'] == name);
 
@@ -728,13 +730,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: done ? color : Colors.transparent,
+          color: done ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color, width: 1.5),
+          border: Border.all(color: done ? activeColor : inactiveColor, width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 24, color: done ? Colors.white : color),
+            Icon(icon, size: 24, color: done ? Colors.white : inactiveColor),
 
             SizedBox(height: 6),
 
@@ -743,7 +745,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: done ? Colors.white : color,
+                color: done ? Colors.white : inactiveColor,
                 fontWeight: FontWeight.w500,
               ),
             ),

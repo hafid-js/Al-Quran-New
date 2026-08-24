@@ -45,8 +45,8 @@ class AppTextTheme {
 
      labelSmall: TextStyle(
       fontSize: 12,
-         fontWeight: FontWeight.w300,
-      color: AppColors.textSecondaryLight,
+         fontWeight: FontWeight.w500,
+      color: AppColors.primary,
     ),
 
     labelMedium: TextStyle(
@@ -104,7 +104,7 @@ class AppTextTheme {
     /// LABEL
      labelSmall:  TextStyle(
       fontSize: 12,
-      color: AppColors.textSecondaryDark,
+      color: AppColors.textPrimaryDark,
     ),
 
 

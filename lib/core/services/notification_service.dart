@@ -49,7 +49,9 @@ class NotificationService {
 
   void _onNotificationResponse(NotificationResponse response) {
     final id = response.id;
+    final payload = response.payload;
     if (id != null && id >= 1 && id <= 5) {
+      if (payload == 'default') return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.to(() => const AdzanScreen());
       });
@@ -97,6 +99,7 @@ class NotificationService {
     String? soundType,
     int notificationMode = 0,
   }) async {
+    final payload = soundType == 'default' ? 'default' : null;
     final soundResource = _resolveSoundResource(soundType);
     final isSilent = notificationMode == 3;
     final playSound = notificationMode == 0 || notificationMode == 1;
@@ -140,6 +143,7 @@ class NotificationService {
       title: title,
       body: body,
       notificationDetails: notificationDetails,
+      payload: payload,
     );
   }
 
@@ -178,6 +182,7 @@ class NotificationService {
     String? soundType,
     int notificationMode = 0,
   }) async {
+    final payload = soundType == 'default' ? 'default' : null;
     final soundResource = _resolveSoundResource(soundType);
     final isSilent = notificationMode == 3;
     final playSound = notificationMode == 0 || notificationMode == 1;
@@ -222,6 +227,7 @@ class NotificationService {
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: notificationDetails,
       androidScheduleMode: _androidScheduleMode,
+      payload: payload,
     );
   }
 

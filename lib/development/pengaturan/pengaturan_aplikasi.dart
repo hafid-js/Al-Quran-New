@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
@@ -28,14 +29,18 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
   @override
   Widget build(BuildContext context) {
     final scale = Responsive.scale(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Obx(() {
       final fontIndex = controller.fontSelected.value;
       final fontFamily = fontArabs[fontIndex]["title"];
       return Scaffold(
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CommonAppBar(
+           backIconColor:  Theme.of(context).textTheme.titleSmall!.color,
+        titleColor: Theme.of(context).textTheme.titleSmall!.color,
           title: "Pengaturan Aplikasi",
-          surfaceTintColor: HexColor.fromHex("#F9F5EF"),
+          surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -45,7 +50,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -53,11 +58,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                     children: [
                       Text(
                         "Preferensi",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall
                       ),
                       SizedBox(height: 10),
                       Row(
@@ -66,19 +67,16 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                           Row(
                             children: [
                               CircleAvatar(
-                                backgroundColor: Colors.black.withAlpha(10),
+                                backgroundColor: Theme.of(context).textTheme.titleSmall!.color!.withAlpha(10),
                                 child: Icon(
                                   Icons.color_lens_outlined,
-                                  color: Colors.black,
+                                  color: Theme.of(context).textTheme.titleSmall!.color,
                                 ),
                               ),
                               SizedBox(width: 18),
                               Text(
                                 "Tema Gelap",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context).textTheme.labelSmall
                               ),
                             ],
                           ),
@@ -160,7 +158,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                              color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -171,16 +169,12 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                         children: [
                           Text(
                             "Font Arab",
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style:  Theme.of(context).textTheme.titleSmall
                           ),
                           Text(
                             "الله",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.titleSmall!.color,
                               fontFamily: fontFamily,
                               fontSize: Responsive.fontSize(context, phone: 25),
                             ),
@@ -203,12 +197,12 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? Colors.white
-                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                    ? Theme.of(context).colorScheme.primary.withAlpha(90)
+                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                        color: HexColor.fromHex("#256980"),
-                                        width: 1.5,
+                                              color: Theme.of(context).colorScheme.secondary,
+                                        width: 0.8,
                                       )
                                     : null,
                                 borderRadius: BorderRadius.circular(16),
@@ -220,40 +214,32 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor: Colors.black.withAlpha(
-                                          10,
-                                        ),
+                                        backgroundColor:Theme.of(context).textTheme.labelSmall?.color!.withAlpha(10),
                                         child: Icon(
                                           Icons.text_fields_rounded,
                                           color: isSelected
-                                              ? HexColor.fromHex("#256980")
-                                              : HexColor.fromHex(
-                                                  "#256980",
-                                                ).withAlpha(130),
-                                        ),
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                          ),
                                       ),
                                       SizedBox(width: 18),
                                       Text(
                                         item["title"],
                                         style: TextStyle(
                                           color: isSelected
-                                              ? HexColor.fromHex("#256980")
-                                              : HexColor.fromHex(
-                                                  "#256980",
-                                                ).withAlpha(130),
-                                          fontWeight: FontWeight.w500,
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                            fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ],
                                   ),
                                   Icon(
                                     Icons.check_circle,
-                                    color: isSelected
-                                        ? HexColor.fromHex("#256980")
-                                        : HexColor.fromHex(
-                                            "#256980",
-                                          ).withAlpha(130),
-                                  ),
+                                    color:isSelected
+                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
+                                : HexColor.fromHex("#256980").withAlpha(130),
+                          ),
                                 ],
                               ),
                             ),
@@ -268,7 +254,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                       color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -276,11 +262,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                     children: [
                       Text(
                         "Qari Default",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                       style:  Theme.of(context).textTheme.titleSmall
                       ),
                       SizedBox(height: 10),
                       ...List.generate(qoris.length, (index) {
@@ -298,12 +280,12 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? Colors.white
-                                    : HexColor.fromHex("#256980").withAlpha(10),
+                                    ? Theme.of(context).colorScheme.primary.withAlpha(90)
+                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                        color: HexColor.fromHex("#256980"),
-                                        width: 1.5,
+                                              color: Theme.of(context).colorScheme.secondary,
+                                        width: 0.8,
                                       )
                                     : null,
                                 borderRadius: BorderRadius.circular(16),
@@ -315,42 +297,36 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor: Colors.black.withAlpha(
-                                          10,
-                                        ),
+                                        backgroundColor: Theme.of(context).textTheme.titleSmall!.color!.withAlpha(10),
                                         child: Icon(
                                           isSelected
                                               ? Iconsax.microphone_25
                                               : Iconsax.microphone_2,
-                                          color: isSelected
-                                              ? HexColor.fromHex("#256980")
-                                              : HexColor.fromHex(
-                                                  "#256980",
-                                                ).withAlpha(130),
+                                         color: isSelected
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                          
                                         ),
                                       ),
                                       SizedBox(width: 18),
                                       Text(
                                         item["title"],
-                                        style: TextStyle(
+                                         style: TextStyle(
                                           color: isSelected
-                                              ? HexColor.fromHex("#256980")
-                                              : HexColor.fromHex(
-                                                  "#256980",
-                                                ).withAlpha(130),
-                                          fontWeight: FontWeight.w500,
+                                ? Theme.of(context).textTheme.titleSmall!.color
+                                : Theme.of(context).textTheme.titleSmall!.color!.withAlpha(130),
+                            fontWeight: FontWeight.w500,
                                         ),
+                                      
                                       ),
                                     ],
                                   ),
                                   Icon(
                                     Icons.check_circle,
-                                    color: isSelected
-                                        ? HexColor.fromHex("#256980")
-                                        : HexColor.fromHex(
-                                            "#256980",
-                                          ).withAlpha(130),
-                                  ),
+                                    color:isSelected
+                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
+                                : HexColor.fromHex("#256980").withAlpha(130),
+                          ),
                                 ],
                               ),
                             ),
@@ -365,7 +341,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -383,18 +359,14 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               SizedBox(width: 10),
                               Text(
                                 "Tentang Aplikasi",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style : Theme.of(context).textTheme.titleSmall
                               ),
                             ],
                           ),
                           Text(
                             "Versi 2.0.0",
                             style: TextStyle(
-                              color: HexColor.fromHex("#256980"),
+                              color: isDark ? AppColors.secondary : HexColor.fromHex("#256980"),
                               fontSize: 12,
                             ),
                           ),
@@ -408,7 +380,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 12,
-                          color: HexColor.fromHex("#5A7A8A"),
+                          color: isDark ? Colors.white : HexColor.fromHex("#5A7A8A"),
                         ),
                       ),
 
@@ -419,7 +391,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           Icon(
                             Iconsax.instagram,
                             size: 20 * scale,
-                            color: HexColor.fromHex("#256980"),
+                            color: isDark ? AppColors.light : HexColor.fromHex("#256980"),
                           ),
                           SizedBox(width: 10),
                           Text.rich(
@@ -430,14 +402,14 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                   text: 'Kontak : ',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: HexColor.fromHex("#5A7A8A"),
+                                    color: isDark ? AppColors.light : HexColor.fromHex("#5A7A8A"),
                                   ),
                                 ),
                                 TextSpan(
                                   text: '@hafidtechcom',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: HexColor.fromHex("#256980"),
+                                    color: isDark ? AppColors.secondary : HexColor.fromHex("#256980"),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -445,7 +417,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                   text: ' (Instagram)',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: HexColor.fromHex("#5A7A8A"),
+                                    color: isDark ? AppColors.light : HexColor.fromHex("#5A7A8A"),
                                   ),
                                 ),
                               ],

@@ -24,6 +24,7 @@ class AppSearchBar extends StatelessWidget {
       child: Align( 
         alignment: Alignment.centerLeft,
         child: TextField(
+          cursorColor: HexColor.fromHex("#256980"),
           onChanged: onChanged,
           style: TextStyle(color: HexColor.fromHex("#1E4355")),
           decoration: InputDecoration(

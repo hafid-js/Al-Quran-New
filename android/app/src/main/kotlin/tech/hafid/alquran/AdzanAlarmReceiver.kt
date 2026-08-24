@@ -44,9 +44,9 @@ class AdzanAlarmReceiver : BroadcastReceiver() {
         val playSound = notificationMode == 0 || notificationMode == 1
         val vibrate = notificationMode == 0 || notificationMode == 2
 
-        showAlertNotification(context, playSound, vibrate, prayerName)
+        showAlertNotification(context, playSound, vibrate, prayerName, soundType)
 
-        if (playSound) {
+        if (playSound && soundType != "default") {
             try {
                 val serviceIntent = Intent(context, AdzanService::class.java).apply {
                     putExtra("soundType", soundType)
@@ -92,11 +92,13 @@ class AdzanAlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showAlertNotification(context: Context, playSound: Boolean, vibrate: Boolean, prayerName: String? = null) {
+    private fun showAlertNotification(context: Context, playSound: Boolean, vibrate: Boolean, prayerName: String? = null, soundType: String = "adzan") {
         createAlertChannel(context, playSound, vibrate)
 
         val openIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
-            putExtra(EXTRA_NAVIGATE, true)
+            if (soundType != "default") {
+                putExtra(EXTRA_NAVIGATE, true)
+            }
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         val openPendingIntent = PendingIntent.getActivity(

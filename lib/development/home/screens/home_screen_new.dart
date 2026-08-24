@@ -1,4 +1,5 @@
 import 'package:alquran_new/binding/surah_binding.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
@@ -228,10 +229,11 @@ class _HomeScreenNewState extends State<HomeScreenNew>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#256980"),
+        backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
         toolbarHeight: 0,
       ),
       body: Stack(
@@ -241,6 +243,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
               Container(
                 padding: EdgeInsets.only(right: 16, left: 16, bottom: 60),
                 decoration: BoxDecoration(
+                  
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                       HexColor.fromHex("#256980").withAlpha(210),
@@ -249,7 +252,8 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                     fit: BoxFit.cover,
                     image: AssetImage("assets/images/image.png"),
                   ),
-                  color: HexColor.fromHex("#256980"),
+                
+                  color: isDark ? Theme.of(context).cardColor : AppColors.primary,
                 ),
                 child: Obx(() {
                   final item = controller.todayPrayer.value;
@@ -301,7 +305,8 @@ class _HomeScreenNewState extends State<HomeScreenNew>
 
                           Obx(() {
                             final loading = controller.isLoading.value;
-                            return GestureDetector(
+                            return TapScaleWidget(
+                              scaleDown: 0.8,
                               onTap: loading
                                   ? null
                                   : () => controller.detectLocation(),
@@ -429,7 +434,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                         top: 20,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
 
@@ -555,7 +560,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
@@ -566,8 +571,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                           children: [
                             Text(
                               "Progress Hari ini",
-                              style: Theme.of(context).textTheme.titleSmall!
-                                  .copyWith(color: HexColor.fromHex("#256980")),
+                              style: isDark ? Theme.of(context).textTheme.titleSmall : Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.primary),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
@@ -599,11 +603,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
 
                             Text(
                               "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
-                              style: Theme.of(context).textTheme.titleSmall!
-                                  .copyWith(
-                                    color: HexColor.fromHex("#256980"),
-                                    fontSize: 12,
-                                  ),
+                              style: Theme.of(context).textTheme.labelSmall
                             ),
 
                             const SizedBox(height: 6),
@@ -634,7 +634,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#D39D52"),
+                                  color: Theme.of(context).colorScheme.secondary,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Center(
@@ -727,11 +727,7 @@ class _MenuItemWidget extends StatelessWidget {
           Text(
             menu["title"],
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: HexColor.fromHex("#5a7b8a"),
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextTheme.of(context).labelSmall!.copyWith(color: AppColors.menuTitle)
           ),
         ],
       ),

@@ -175,7 +175,7 @@ class KiblatMap extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Lokasi belum tersedia',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: TextStyle(fontSize: 18, color: HexColor.fromHex("#256980"), fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),

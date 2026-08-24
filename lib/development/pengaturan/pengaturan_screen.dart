@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_aplikasi.dart';
 import 'package:alquran_new/development/pengaturan/webview_page.dart';
@@ -61,29 +62,28 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           "Pengaturan",
           style: Theme.of(
             context,
-          ).textTheme.titleMedium!.copyWith(color: Colors.black),
+          ).textTheme.titleMedium,
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Utama",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(
+            context,
+          ).textTheme.titleSmall,
             ),
             SizedBox(height: 20),
             GestureDetector(
@@ -97,23 +97,19 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Iconsax.notification_bing,
-                          color: HexColor.fromHex("#256980"),
+                         color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Pengaturan Notifikasi",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -132,23 +128,19 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Iconsax.setting_2,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Pengaturan Aplikasi",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -159,11 +151,7 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
 
             Text(
               "Lainnya",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.titleSmall
             ),
             SizedBox(height: 20),
             GestureDetector(
@@ -177,23 +165,19 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Icons.contact_support_outlined,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Pusat Bantuan",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -219,23 +203,19 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Iconsax.document_text,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Syarat & Ketentuan",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -261,23 +241,19 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Iconsax.shield,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Kebijakan Privasi",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -296,17 +272,13 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         backgroundColor: Colors.black.withAlpha(10),
                         child: Icon(
                           Iconsax.star,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 18),
                       Text(
                         "Rating Aplikasi",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                         style: Theme.of(context).textTheme.titleSmall
                       ),
                     ],
                   ),
@@ -314,20 +286,22 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                     children: [
                       Text(
                         "v2.0.0",
-                        style: TextStyle(color: HexColor.fromHex("#D39D52")),
+                        style: Theme.of(context).textTheme.labelMedium!.copyWith(color: AppColors.secondary),
                       ),
                       Icon(
                         Iconsax.arrow_right_3,
-                        color: HexColor.fromHex("#256980"),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ],
                   ),
                 ],
               ),
             ),
+            
           ],
         ),
       ),
+      )
     );
   }
 }
