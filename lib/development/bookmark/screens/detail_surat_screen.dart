@@ -1,4 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/development/shared/theme/app_colors.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
@@ -14,8 +15,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
-
-const _scrollDuration = Duration(seconds: 2);
 
 class DetailSuratScreen extends StatefulWidget {
   const DetailSuratScreen({super.key});
@@ -51,7 +50,12 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
       if (targetAyat <= 0) return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          scrollToAyat(targetAyat);
+          itemScrollController.scrollTo(
+            index: targetAyat + 1,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubic,
+            alignment: 0.2,
+          );
         });
       });
     }
@@ -96,44 +100,56 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
     super.dispose();
   }
 
-  void scrollToAyat(int nomorAyat) {
-    itemScrollController.scrollTo(
-      index: nomorAyat + 1,
-      duration: _scrollDuration,
-      curve: Curves.easeInOutCubic,
-      alignment: 0.2,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).textTheme.titleMedium!.color,
+          ),
         ),
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
+        surfaceTintColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
+        backgroundColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
         title: Obx(() {
           final data = controller.detailSurah.value;
           return Text(
             data?.namaLatin ?? "Quran",
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium!.copyWith(color: Colors.black),
+            style: Theme.of(context).textTheme.titleMedium,
           );
         }),
         centerTitle: true,
         actions: [
+          Icon(
+            Iconsax.book_1,
+            color: Theme.of(context).textTheme.titleMedium!.color,
+          ),
+          SizedBox(width: 15),
+
           GestureDetector(
             onTap: () async {
               _toggle();
 
               await WoltModalSheet.show(
+                // modalDecorator: (child) {
+                //   return BackdropFilter(
+                //     filter: ImageFilter.blur(
+                //       sigmaX: 3,
+                //       sigmaY: 3,
+                //     ),
+                //     child: child,
+                //   );
+                // },
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
@@ -172,6 +188,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                     },
                                   ),
                                   const SizedBox(height: 5),
+
                                   SettingsSwitchTile(
                                     title: "Latin",
                                     value: controller.latin.value,
@@ -182,6 +199,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                     },
                                   ),
                                   const SizedBox(height: 5),
+
                                   SettingsSwitchTile(
                                     title: "Font Arab Tebal",
                                     value: controller.arabBold.value,
@@ -191,6 +209,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                       });
                                     },
                                   ),
+
                                   const SizedBox(height: 18),
                                   SettingsSlider(
                                     label: "Ukuran Teks Arab",
@@ -233,7 +252,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.titleMedium!.color,
                 ),
               ),
             ),
@@ -263,7 +282,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: HexColor.fromHex("#256980"),
+                        color: isDark
+                            ? Theme.of(context).cardColor
+                            : HexColor.fromHex("#256980"),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -384,7 +405,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                         width: double.infinity,
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
@@ -394,7 +415,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                         child: Image.asset(
                           "assets/images/bismillah.png",
                           height: 90,
-                          color: Colors.black,
+                          color: isDark ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -411,7 +432,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                 padding: EdgeInsets.all(12),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -432,7 +453,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                         child: Text(
                           ayat.teksArab,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(
+                              context,
+                            ).textTheme.labelSmall!.color,
                             fontSize: controller.ukuranTeksArab.value,
                             fontFamily: fontFamily,
                             fontWeight: controller.arabBold.value
@@ -443,25 +466,34 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                         ),
                       );
                     }),
-                    SizedBox(height: 30),
                     Obx(() {
+                      if (!controller.latin.value && !controller.terjemah.value)
+                        return SizedBox.shrink();
+                      return SizedBox(height: 30);
+                    }),
+                    Obx(() {
+                      if (!controller.latin.value) return SizedBox.shrink();
                       return Align(
                         alignment: Alignment.centerRight,
                         child: Text(
                           ayat.teksLatin,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isDark
+                                ? HexColor.fromHex("#D39D52")
+                                : Colors.black,
                             fontSize: controller.ukuranLatinTerjemah.value,
                           ),
                         ),
                       );
                     }),
+
                     SizedBox(height: 10),
                     Obx(() {
+                      if (!controller.terjemah.value) return SizedBox.shrink();
                       return Text(
                         ayat.teksIndonesia,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: isDark ? Colors.white : Colors.black,
                           fontSize: controller.ukuranLatinTerjemah.value,
                         ),
                       );
@@ -470,6 +502,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                       thickness: 1,
                       color: const Color.fromARGB(81, 158, 158, 158),
                     ),
+
                     Row(
                       children: [
                         Expanded(
@@ -488,9 +521,13 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Teks disalin'),
+                                  content: Text(
+                                    'Teks disalin',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   duration: Duration(seconds: 1),
                                   behavior: SnackBarBehavior.floating,
+                                  backgroundColor: AppColors.primary,
                                 ),
                               );
                             },
@@ -502,7 +539,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               ),
                               child: Icon(
                                 Iconsax.copy,
-                                color: HexColor.fromHex("#504F52"),
+                                color: isDark
+                                    ? Colors.white
+                                    : HexColor.fromHex("#504F52"),
                                 size: 16,
                               ),
                             ),
@@ -525,15 +564,24 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                 ayat.nomorAyat,
                               );
                               return Container(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: const Color.fromARGB(37, 158, 158, 158),
+                                  color: const Color.fromARGB(
+                                    37,
+                                    158,
+                                    158,
+                                    158,
+                                  ),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Icon(
                                   saved ? Iconsax.save_21 : Iconsax.save_2,
                                   color: saved
                                       ? HexColor.fromHex("#D39D52")
+                                      : isDark
+                                      ? Colors.white
                                       : HexColor.fromHex("#504F52"),
                                   size: 16,
                                 ),
@@ -558,9 +606,16 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                 }
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: const Color.fromARGB(37, 158, 158, 158),
+                                  color: const Color.fromARGB(
+                                    37,
+                                    158,
+                                    158,
+                                    158,
+                                  ),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Icon(
@@ -568,7 +623,11 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                       ? Iconsax.pause
                                       : Iconsax.play_circle,
                                   color: kondisi == "playing"
-                                      ? HexColor.fromHex("#256980")
+                                      ? isDark
+                                            ? HexColor.fromHex("#D39D52")
+                                            : HexColor.fromHex("#256980")
+                                      : isDark
+                                      ? Colors.white
                                       : HexColor.fromHex("#504F52"),
                                   size: 16,
                                 ),
@@ -583,7 +642,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               final buffer = StringBuffer();
                               buffer.writeln(data.namaLatin);
                               buffer.writeln('');
-                              buffer.writeln('${ayat.nomorAyat}. ${ayat.teksArab}');
+                              buffer.writeln(
+                                '${ayat.nomorAyat}. ${ayat.teksArab}',
+                              );
                               if (ayat.teksLatin.isNotEmpty) {
                                 buffer.writeln('');
                                 buffer.writeln(ayat.teksLatin);
@@ -605,7 +666,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               ),
                               child: Icon(
                                 Iconsax.export_2,
-                                color: HexColor.fromHex("#504F52"),
+                                color: isDark
+                                    ? Colors.white
+                                    : HexColor.fromHex("#504F52"),
                                 size: 16,
                               ),
                             ),
@@ -615,9 +678,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              final tafsir = controller.tafsirList.firstWhereOrNull(
-                                (t) => t.ayat == ayat.nomorAyat,
-                              );
+                              final tafsir = controller.tafsirList
+                                  .firstWhereOrNull(
+                                    (t) => t.ayat == ayat.nomorAyat,
+                                  );
                               showModalBottomSheet(
                                 backgroundColor: Colors.white,
                                 context: context,
@@ -639,14 +703,17 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                         padding: const EdgeInsets.all(20),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
                                                 Icon(
                                                   Iconsax.book_1,
-                                                  color: HexColor.fromHex("#D39D52"),
+                                                  color: HexColor.fromHex(
+                                                    "#D39D52",
+                                                  ),
                                                   size: 20,
                                                 ),
                                                 SizedBox(width: 8),
@@ -655,14 +722,17 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
-                                                    color: HexColor.fromHex("#256980"),
+                                                    color: HexColor.fromHex(
+                                                      "#256980",
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             SizedBox(height: 16),
                                             Text(
-                                              tafsir?.teks ?? "Tafsir tidak tersedia.",
+                                              tafsir?.teks ??
+                                                  "Tafsir tidak tersedia.",
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.black87,
@@ -686,7 +756,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               ),
                               child: Icon(
                                 Iconsax.info_circle,
-                                color: HexColor.fromHex("#504F52"),
+                                color: isDark
+                                    ? Colors.white
+                                    : HexColor.fromHex("#504F52"),
                                 size: 16,
                               ),
                             ),

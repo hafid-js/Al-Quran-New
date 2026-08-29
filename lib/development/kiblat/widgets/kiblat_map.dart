@@ -99,7 +99,7 @@ class KiblatMap extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 10, vertical: 12),
               decoration: BoxDecoration(
-                color: HexColor.fromHex("#256980").withAlpha(230),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(

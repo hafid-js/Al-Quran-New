@@ -72,12 +72,17 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
 
   @override
   Widget build(BuildContext context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Juz $juzNumber",
+        titleColor: Theme.of(context).textTheme.titleMedium!.color,
+        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+        surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+        backIconColor: Theme.of(context).textTheme.titleMedium!.color,
         actions: [
-          Icon(Iconsax.book_1, color: Colors.black),
+          Icon(Iconsax.book_1, color: Theme.of(context).textTheme.titleMedium!.color),
           SizedBox(width: 15),
           GestureDetector(
             onTap: () async {
@@ -180,7 +185,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.titleMedium!.color,
                 ),
               ),
             ),
@@ -212,7 +217,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -313,7 +318,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 padding: EdgeInsets.all(12),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -347,7 +352,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                         child: Text(
                           ayat.teksArab,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).textTheme.titleSmall!.color,
                             fontSize: fontController.ukuranTeksArab.value,
                             fontWeight: fontController.arabBold.value
                                 ? FontWeight.w600
@@ -369,7 +374,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                         child: Text(
                           ayat.teksLatin,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isDark? HexColor.fromHex("#D39D52") : Colors.black,
                             fontSize: fontController.ukuranLatinTerjemah.value,
                           ),
                         ),
@@ -384,7 +389,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                       return Text(
                         ayat.teksIndonesia,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).textTheme.titleSmall!.color,
                           fontSize: fontController.ukuranLatinTerjemah.value,
                         ),
                       );

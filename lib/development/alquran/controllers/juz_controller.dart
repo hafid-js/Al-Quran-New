@@ -5,6 +5,7 @@ import 'package:alquran_new/development/alquran/data/juz_cache_datasource.dart';
 import 'package:alquran_new/development/alquran/models/juz_range.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/alquran/domain/usecases/get_detail_surah.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -43,6 +44,7 @@ class JuzController extends GetxController {
       Get.snackbar(
         "Tidak Ada Koneksi",
         "Periksa koneksi internet untuk memuat data juz.",
+          backgroundColor: Colors.red,
         snackPosition: SnackPosition.BOTTOM,
       );
       isLoading.value = false;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
@@ -62,28 +63,32 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
   @override
   Widget build(BuildContext context) {
     final qariData = MurrotalController.qariData[widget.qariIndex];
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#256980"),
+        backgroundColor: Theme.of(context).cardColor,
         surfaceTintColor: Colors.transparent,
         leading: GestureDetector(
           onTap: () => Get.back(),
           child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-              HexColor.fromHex("#256980").withAlpha(210),
-              BlendMode.srcATop,
-            ),
-            fit: BoxFit.cover,
-            image: AssetImage("assets/images/image.png"),
-          ),
-          color: HexColor.fromHex("#256980"),
-        ),
+      body:   Container(
+          
+                decoration: BoxDecoration(
+                  
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                      HexColor.fromHex("#256980").withAlpha(210),
+                      BlendMode.srcATop,
+                    ),
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/images/image.png"),
+                  ),
+                
+                  color: isDark ? Theme.of(context).cardColor : AppColors.primary,
+                ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -382,14 +382,17 @@ class _TasbihScreenState extends State<TasbihScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#256980"),
-
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+extendBodyBehindAppBar: true,
+extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         toolbarHeight: 70,
         leadingWidth: 65,
         centerTitle: false,
+        
 
         leading: GestureDetector(
           onTap: () => Get.back(),
@@ -406,6 +409,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
               HexColor.fromHex("#256980").withAlpha(210),
@@ -416,7 +420,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
           ),
         ),
         child: SafeArea(
-          bottom: false,
+          bottom: true,
           child: Column(
             children: [
               _dzikirSelector(),

@@ -152,7 +152,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#256980").withAlpha(200),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -264,7 +264,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: HexColor.fromHex("#256980"),
+             color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

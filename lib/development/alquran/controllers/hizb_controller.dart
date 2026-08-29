@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/development/alquran/data/hizb_cache_datasource.dart';
@@ -5,6 +6,7 @@ import 'package:alquran_new/development/alquran/models/hizb_range.dart';
 import 'package:alquran_new/development/alquran/models/juz_ayat.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/alquran/domain/usecases/get_detail_surah.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -43,6 +45,7 @@ class HizbController extends GetxController {
       Get.snackbar(
         "Tidak Ada Koneksi",
         "Periksa koneksi internet untuk memuat data hizb.",
+        backgroundColor: Colors.red,
         snackPosition: SnackPosition.BOTTOM,
       );
       isLoading.value = false;

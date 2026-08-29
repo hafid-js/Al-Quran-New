@@ -12,15 +12,15 @@ class CommonLoadingWidget extends StatelessWidget {
     this.bordered = false,
   });
 
-  Widget _buildInner() {
+  Widget _buildInner(context) {
     return Container(
       decoration: bordered
           ? BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(16),
             )
           : null,
-      color: bordered ? null : Colors.white,
+      color: bordered ? null : Theme.of(context).scaffoldBackgroundColor,
       child: Center(
         child: Image.asset(
           'assets/animations/bar_loader.gif',
@@ -32,12 +32,13 @@ class CommonLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     if (padded) {
       return Padding(
         padding: EdgeInsets.all(8),
-        child: _buildInner(),
+        child: _buildInner(context),
       );
     }
-    return _buildInner();
+    return _buildInner(context);
   }
 }

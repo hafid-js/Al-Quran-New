@@ -82,12 +82,16 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
   Widget build(BuildContext context) {
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Hizb $hizbNumber",
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        titleColor: Theme.of(context).textTheme.titleSmall!.color,
+        backIconColor: Theme.of(context).textTheme.titleSmall!.color,
         actions: [
-          Icon(Iconsax.book_1, color: Colors.black),
+          Icon(Iconsax.book_1, color: isDark ? Colors.white : Colors.black),
           SizedBox(width: 15),
           GestureDetector(
             onTap: () async {
@@ -97,8 +101,8 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: Colors.white,
-                    surfaceTintColor: Colors.white,
+                    backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+                    surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -200,7 +204,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                 ),
               ),
             ),
@@ -232,7 +236,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980"),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -333,7 +337,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 padding: EdgeInsets.all(12),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -367,7 +371,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                         child: Text(
                           ayat.teksArab,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isDark? Colors.white : Colors.black,
                             fontSize: fontController.ukuranTeksArab.value,
                             fontFamily: fontFamily,
                             fontWeight: fontController.arabBold.value
@@ -389,7 +393,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                         child: Text(
                           ayat.teksLatin,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isDark ? HexColor.fromHex("#D39D52") : Colors.black,
                             fontSize: fontController.ukuranLatinTerjemah.value,
                           ),
                         ),
@@ -405,7 +409,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                       return Text(
                         ayat.teksIndonesia,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: isDark ? Colors.white : Colors.black,
                           fontSize: fontController.ukuranLatinTerjemah.value,
                         ),
                       );

@@ -157,7 +157,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#256980").withAlpha(200),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -187,7 +187,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: HexColor.fromHex("#256980"),
+                color: Theme.of(context).cardColor,
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                     HexColor.fromHex("#256980").withAlpha(210),
@@ -371,7 +371,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                         child: Container(
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: HexColor.fromHex("#256980"),
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(

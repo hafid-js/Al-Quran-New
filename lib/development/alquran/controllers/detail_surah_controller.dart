@@ -72,6 +72,7 @@ class DetailSurahController extends GetxController {
           Get.snackbar(
             "Tidak Ada Koneksi",
             "Ayat surat ini belum tersimpan. Periksa koneksi internet.",
+              backgroundColor: Colors.red,
             snackPosition: SnackPosition.BOTTOM,
           );
           detailSurah.value = DetailSurah(

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
@@ -20,10 +21,15 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Bookmark",
+        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+        surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+        backIconColor: isDark ? Colors.white : Colors.black,
+        titleColor: isDark ? Colors.white : Colors.black,
       ),
       body: Obx(() {
         if (bookmarkController.bookmarks.isEmpty) {
@@ -73,7 +79,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -83,7 +89,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            OctagramBadge(number: "${bm.surahNumber}"),
+                            OctagramBadge(number: "${bm.surahNumber}", numberColor:  isDark ? AppColors.light : AppColors.dark,),
                             SizedBox(width: 15),
                             Flexible(
                               child: Column(
@@ -95,7 +101,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#1E4355"),
+                                      color: isDark ? Colors.white : HexColor.fromHex("#1E4355"),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -103,7 +109,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                                   Text(
                                     "Ayat ${bm.ayatNumber}",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#676767"),
+                                      color: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#676767"),
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
                                     ),
@@ -119,7 +125,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                         style: TextStyle(
                           fontFamily: fontFamily,
                           fontSize: 20,
-                          color: HexColor.fromHex("#1E4355"),
+                          color: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#1E4355"),
                         ),
                       ),
                     ],

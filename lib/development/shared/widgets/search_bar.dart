@@ -19,21 +19,18 @@ class AppSearchBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
       ),
       child: Align( 
         alignment: Alignment.centerLeft,
         child: TextField(
-          cursorColor: HexColor.fromHex("#256980"),
+          cursorColor:Theme.of(context).textTheme.labelSmall!.color,
           onChanged: onChanged,
-          style: TextStyle(color: HexColor.fromHex("#1E4355")),
+          style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),
           decoration: InputDecoration(
-            icon:       Icon(Iconsax.search_normal_1, color: Colors.black),
+            icon:       Icon(Iconsax.search_normal_1, color: Theme.of(context).textTheme.labelSmall!.color),
             hintText: hintText,
-            hintStyle: TextStyle(
-              color: HexColor.fromHex("#676767"),
-              fontSize: 14,
-            ),
+            hintStyle: Theme.of(context).textTheme.labelMedium,
             border: InputBorder.none,
           ),
         ),

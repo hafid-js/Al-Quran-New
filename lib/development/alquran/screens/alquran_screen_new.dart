@@ -784,6 +784,7 @@ class AlquranScreenNew extends StatefulWidget {
   State<AlquranScreenNew> createState() => _AlquranScreenNewState();
 }
 
+
 class _AlquranScreenNewState extends State<AlquranScreenNew>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
@@ -805,7 +806,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildSurahItem(Surah surah) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => Get.to(
         () => DetailSurahScreen(),
@@ -863,6 +864,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildHizbItem(HizbData hizb) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () =>
           Get.to(() => DetailHizbScreen(), arguments: {"hizb": hizb.number}),
@@ -871,7 +873,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -881,7 +883,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 children: [
                   OctagramBadge(
                     number: "${hizb.number}",
-                    numberColor: HexColor.fromHex("#151419"),
+                    numberColor: isDark ? AppColors.light : AppColors.dark,
                   ),
                   SizedBox(width: 15),
                   Column(
@@ -891,19 +893,11 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                         "Hizb ${hizb.number}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: HexColor.fromHex("#1E4355"),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
                       ),
                       Text(
                         "${hizb.startSurah}: ${hizb.startAyah} - ${hizb.endSurah}: ${hizb.endAyah}",
-                        style: TextStyle(
-                          color: HexColor.fromHex("#676767"),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall
                       ),
                     ],
                   ),
@@ -917,6 +911,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildJuzItem(JuzData juz) {
+       final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () =>
           Get.to(() => DetailJuzScreen(), arguments: {"juz": juz.number}),
@@ -925,7 +920,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -935,7 +930,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 children: [
                   OctagramBadge(
                     number: "${juz.number}",
-                    numberColor: HexColor.fromHex("#151419"),
+ numberColor: isDark ? AppColors.light : AppColors.dark,
                   ),
                   SizedBox(width: 15),
                   Column(
@@ -945,19 +940,11 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                         "Juz ${juz.number}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: HexColor.fromHex("#1E4355"),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
                       ),
                       Text(
                         "${juz.startSurah}: ${juz.startAyah} - ${juz.endSurah}: ${juz.endAyah}",
-                        style: TextStyle(
-                          color: HexColor.fromHex("#676767"),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
+                          style: Theme.of(context).textTheme.labelSmall
                       ),
                     ],
                   ),
@@ -993,19 +980,19 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [const Text("Surah")],
+                children: [Text("Surah", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),)],
               ),
             ),
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [const Text("Juz")],
+                children: [Text("Juz", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color))],
               ),
             ),
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [const Text("Hizb")],
+                children: [Text("Hizb", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color))],
               ),
             ),
           ],

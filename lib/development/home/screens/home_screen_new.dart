@@ -13,7 +13,7 @@ import 'package:alquran_new/development/murrotal/controllers/murrotal_controller
 import 'package:alquran_new/development/murrotal/screens/detail_murrotal_screen.dart';
 import 'package:alquran_new/development/bookmark/screens/bookmark_screen.dart';
 import 'package:alquran_new/development/kalender/screens/hijriah_screen.dart';
-import 'package:alquran_new/development/kiblat/screens/kiblat_screen_new.dart';
+import 'package:alquran_new/development/kiblat/screens/kiblat_screen.dart';
 import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
@@ -747,8 +747,8 @@ void _showMurrotalScreen(BuildContext context) {
     context: context,
     pageListBuilder: (bottomSheetContext) => [
       SliverWoltModalSheetPage(
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
-        surfaceTintColor: HexColor.fromHex("#F9F5EF"),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         hasTopBarLayer: false,
         mainContentSliversBuilder: (context) => const [
           SliverToBoxAdapter(child: MurrotalContent()),
@@ -771,6 +771,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       child: Column(
@@ -1010,7 +1011,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,
-                            color: HexColor.fromHex("#1E4355"),
+                            color: isDark? Colors.white : HexColor.fromHex("#1E4355"),
                             fontWeight: FontWeight.w600,
                           ),
                         ),

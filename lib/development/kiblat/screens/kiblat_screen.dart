@@ -1,114 +1,78 @@
-// import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
-// import 'package:alquran_new/development/kiblat/widgets/compass_view.dart';
-// import 'package:alquran_new/development/kiblat/widgets/kiblat_map.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
+import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
+import 'package:alquran_new/development/kiblat/widgets/compass_view.dart';
+import 'package:alquran_new/development/kiblat/widgets/kiblat_map.dart';
+import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// class KiblatScreen extends StatefulWidget {
-//   const KiblatScreen({super.key});
+class KiblatScreenNew extends StatefulWidget {
+  const KiblatScreenNew({super.key});
 
-//   @override
-//   State<KiblatScreen> createState() => _KiblatScreenState();
-// }
+  @override
+  State<KiblatScreenNew> createState() => _KiblatScreenNewState();
+}
 
-// class _KiblatScreenState extends State<KiblatScreen>
-//     with SingleTickerProviderStateMixin {
-//   late TabController tabController;
+class _KiblatScreenNewState extends State<KiblatScreenNew>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     tabController = TabController(length: 2, vsync: this);
-//     Get.put(KiblatController());
-//     tabController.addListener(_onTabChanged);
-//   }
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+    Get.put(KiblatController());
+    tabController.addListener(_onTabChanged);
+  }
 
-//   void _onTabChanged() {
-//     if (tabController.indexIsChanging) return;
-//     if (tabController.index == 1) {
-//       final controller = Get.find<KiblatController>();
-//       if (controller.latitude.value == 0.0 &&
-//           controller.longitude.value == 0.0) {
-//         controller.startLocation();
-//       }
-//     }
-//   }
+  void _onTabChanged() {
+    if (tabController.indexIsChanging) return;
+    if (tabController.index == 1) {
+      final controller = Get.find<KiblatController>();
+      if (controller.latitude.value == 0.0 &&
+          controller.longitude.value == 0.0) {
+        controller.startLocation();
+      }
+    }
+  }
 
-//   @override
-//   void dispose() {
-//     tabController.removeListener(_onTabChanged);
-//     tabController.dispose();
-//     Get.delete<KiblatController>();
-//     super.dispose();
-//   }
+  @override
+  void dispose() {
+    tabController.removeListener(_onTabChanged);
+    tabController.dispose();
+    Get.delete<KiblatController>();
+    super.dispose();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         surfaceTintColor: Colors.transparent,
-//         leading: IconButton(
-//           onPressed: () => Get.back(),
-//           icon: const Icon(Icons.arrow_circle_left_rounded),
-//           color: Theme.of(context).iconTheme.color,
-//         ),
-//         titleSpacing: 5,
-//         title: Row(
-//           children: [
-//             Container(
-//               height: 36,
-//               width: 36,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(10),
-//                 color: Theme.of(context).colorScheme.surface,
-//               ),
-//               child: Icon(
-//                 Icons.my_location_rounded,
-//                 size: 20,
-//                 color: Theme.of(context).colorScheme.primary,
-//               ),
-//             ),
-//             const SizedBox(width: 10),
-//             Text("Kiblat", style: Theme.of(context).textTheme.titleLarge),
-//           ],
-//         ),
-//         bottom: TabBar(
-//           controller: tabController,
-//           indicatorColor: Theme.of(context).colorScheme.primary,
-//           labelColor: Theme.of(context).colorScheme.primary,
-//           unselectedLabelColor: Theme.of(context).textTheme.labelSmall?.color,
-//           tabs: [
-//             Tab(
-//               child: Row(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Icon(Icons.navigation,
-//                       size: 18,
-//                       color: Theme.of(context).colorScheme.primary),
-//                   const SizedBox(width: 6),
-//                   const Text("Kompas"),
-//                 ],
-//               ),
-//             ),
-//             Tab(
-//               child: Row(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Icon(Icons.map, size: 18),
-//                   const SizedBox(width: 6),
-//                   const Text("Peta"),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//       body: TabBarView(
-//         controller: tabController,
-//         children: const [CompassView(), KiblatMap()],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: CommonAppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        title: "Kiblat",
+        backIconColor: isDark ? Colors.white : Colors.black,
+        titleColor: isDark ? Colors.white : Colors.black,
+        bottom: TabBar(
+          controller: tabController,
+          indicatorColor:  HexColor.fromHex("#256980"),
+          labelColor: isDark ? Colors.white : HexColor.fromHex("#256980"),
+          unselectedLabelColor: HexColor.fromHex("#5a7b8a"),
+           overlayColor: WidgetStateProperty.all(
+    Colors.transparent,
+  ),
+          tabs: const [
+            Tab(text: "Kompas"),
+            Tab(text: "Peta"),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: const [CompassView(), KiblatMap()],
+      ),
+    );
+  }
+}
