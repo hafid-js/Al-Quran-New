@@ -72,9 +72,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       // backgroundColor: Colors.transparent,
-            backgroundColor: HexColor.fromHex("#F9F5EF"),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Expanded(
@@ -89,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: TextStyle(
           fontSize: 14,

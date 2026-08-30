@@ -136,7 +136,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                   children: [
                     Text(
                       "Pilihan Surat",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const Spacer(),
                     SizedBox(
@@ -175,7 +175,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                   return Center(
                     child: Text(
                       _isSearching ? "Surat tidak ditemukan" : "Memuat...",
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(fontSize: 16,color: isDark ? AppColors.textPrimaryDark : Colors.white70),
                     ),
                   );
                 }
@@ -184,6 +184,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                   itemCount: surahList.length,
                   itemBuilder: (context, index) {
                     final surah = surahList[index];
+                    final isDark = Theme.of(context).brightness == Brightness.dark;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: TapScaleWidget(
@@ -203,8 +204,9 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(8),
+                            border: isDark ? Border.all(width: 1, color: AppColors.textPrimaryDark.withAlpha(80)) : null
                           ),
                           child: ListTile(
                             visualDensity: const VisualDensity(vertical: -1),
@@ -214,7 +216,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: AppColors.primary,
+                                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -222,14 +224,14 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                             subtitle: Text(
                               surah.arti,
                               style: TextStyle(
-                                color: HexColor.fromHex("#676767"),
+                                color: isDark ? AppColors.secondary : HexColor.fromHex("#676767"),
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),
                             ),
                             trailing: Icon(
                               Iconsax.play_circle5,
-                              color: AppColors.primary,
+                              color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                               size: 30,
                             ),
                           ),

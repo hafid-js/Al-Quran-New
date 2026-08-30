@@ -54,12 +54,12 @@ class _KiblatScreenNewState extends State<KiblatScreenNew>
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         title: "Kiblat",
-        backIconColor: isDark ? Colors.white : Colors.black,
-        titleColor: isDark ? Colors.white : Colors.black,
+        backIconColor: isDark ? AppColors.textPrimaryDark : Colors.black,
+        titleColor: isDark ? AppColors.textPrimaryDark : Colors.black,
         bottom: TabBar(
           controller: tabController,
           indicatorColor:  AppColors.primary,
-          labelColor: isDark ? Colors.white : AppColors.primary,
+          labelColor: isDark ? AppColors.textPrimaryDark : AppColors.primary,
           unselectedLabelColor: HexColor.fromHex("#5a7b8a"),
            overlayColor: WidgetStateProperty.all(
     Colors.transparent,

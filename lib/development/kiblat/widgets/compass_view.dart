@@ -476,7 +476,7 @@ class _CompassRosePainter extends CustomPainter {
         markPaint.strokeWidth = 1.5;
       } else {
         innerR = radius * 0.92;
-        markPaint.color = isDark ? Colors.white : Colors.black12;
+        markPaint.color = isDark ? AppColors.textPrimaryDark : Colors.black12;
         markPaint.strokeWidth = 1.0;
       }
 

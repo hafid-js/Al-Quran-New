@@ -41,6 +41,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -48,7 +49,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
           widget.label,
           style: TextStyle(
             fontSize: 16,
-            color: AppColors.primary,
+            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -78,7 +79,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
                 ),
               ),
             ),
-            Text("${_value.toInt()} px", style: TextStyle(color: AppColors.primary),),
+            Text("${_value.toInt()} px", style: TextStyle(color:  isDark ? AppColors.textPrimaryDark : AppColors.primary),),
           ],
         ),
 

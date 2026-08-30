@@ -28,8 +28,8 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
         title: "Bookmark",
         backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
         surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
-        backIconColor: isDark ? Colors.white : Colors.black,
-        titleColor: isDark ? Colors.white : Colors.black,
+        backIconColor: isDark ? AppColors.textPrimaryDark : Colors.black,
+        titleColor: isDark ? AppColors.textPrimaryDark : Colors.black,
       ),
       body: Obx(() {
         if (bookmarkController.bookmarks.isEmpty) {
@@ -101,7 +101,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: isDark ? Colors.white : HexColor.fromHex("#1E4355"),
+                                      color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#1E4355"),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     ),

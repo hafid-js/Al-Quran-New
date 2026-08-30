@@ -39,7 +39,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
          Center(
             child: Text(
               "Pilih Tanggal",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isDark ? Colors.white : HexColor.fromHex("#5a7b8a"),),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#5a7b8a"),),
             ),
           ),
           SizedBox(

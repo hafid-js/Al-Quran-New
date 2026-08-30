@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/murrotal/widgets/common.dart' hide ambiguate;
+import 'package:alquran_new/development/murrotal/widgets/common.dart'
+    hide ambiguate;
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
 import 'package:get/get.dart' hide Rx;
@@ -38,26 +39,28 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
   late final AudioPlayer _player;
   final surahController = Get.find<SurahController>();
   final murrotalController = Get.find<MurrotalController>();
-  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   StreamSubscription? _playingSub;
 
   List<AudioSource> _buildPlaylist() {
-    return surahController.surahList.where((surah) {
-      final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
-      final url = surah.audioFull[qariKey] ?? "";
-      return url.isNotEmpty;
-    }).map((surah) {
-      final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
-      final url = surah.audioFull[qariKey]!;
-      return AudioSource.uri(
-        Uri.parse(url),
-        tag: AudioMetadata(
-          album: surah.namaLatin,
-          title: widget.qariNama,
-          artwork: widget.qariImage,
-        ),
-      );
-    }).toList();
+    return surahController.surahList
+        .where((surah) {
+          final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
+          final url = surah.audioFull[qariKey] ?? "";
+          return url.isNotEmpty;
+        })
+        .map((surah) {
+          final qariKey = (widget.qariIndex + 1).toString().padLeft(2, '0');
+          final url = surah.audioFull[qariKey]!;
+          return AudioSource.uri(
+            Uri.parse(url),
+            tag: AudioMetadata(
+              album: surah.namaLatin,
+              title: widget.qariNama,
+              artwork: widget.qariImage,
+            ),
+          );
+        })
+        .toList();
   }
 
   @override
@@ -74,8 +77,10 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
     _player.errorStream.listen((e) {
       print('A stream error occurred: $e');
     });
-    murrotalController.setMurrotalAudio(widget.qariIndex,
-        surahController.surahList[widget.surahNomor - 1]);
+    murrotalController.setMurrotalAudio(
+      widget.qariIndex,
+      surahController.surahList[widget.surahNomor - 1],
+    );
 
     try {
       final playlist = _buildPlaylist();
@@ -134,203 +139,198 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: _scaffoldMessengerKey,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          leading: GestureDetector(
-            onTap: () => Get.back(),
-            child: Icon(Icons.arrow_back_ios, color: Colors.white),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        leading: GestureDetector(
+          onTap: () => Get.back(),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                AppColors.primary.withAlpha(210),
-                BlendMode.srcATop,
-              ),
-              fit: BoxFit.cover,
-              image: AssetImage("assets/images/image.png"),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              AppColors.primary.withAlpha(210),
+              BlendMode.srcATop,
             ),
-            color: AppColors.primary,
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/image.png"),
           ),
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: StreamBuilder<SequenceState?>(
-                    stream: _player.sequenceStateStream,
-                    builder: (context, snapshot) {
-                      final state = snapshot.data;
-                      if (state?.sequence.isEmpty ?? true) {
-                        return const SizedBox();
-                      }
-                      final metadata =
-                          state!.currentSource!.tag as AudioMetadata;
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      metadata.artwork,
-                                      fit: BoxFit.cover,
-                                      width: 220,
-                                      height: 220,
-                                    ),
+          color: Theme.of(context).cardColor,
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: StreamBuilder<SequenceState?>(
+                  stream: _player.sequenceStateStream,
+                  builder: (context, snapshot) {
+                    final state = snapshot.data;
+                    if (state?.sequence.isEmpty ?? true) {
+                      return const SizedBox();
+                    }
+                    final metadata = state!.currentSource!.tag as AudioMetadata;
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    metadata.artwork,
+                                    fit: BoxFit.cover,
+                                    width: 220,
+                                    height: 220,
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              metadata.album,
-                              style: Theme.of(context).textTheme.titleLarge!
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            Text(
-                              metadata.title,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                StreamBuilder<PositionData>(
-                  stream: _positionDataStream,
-                  builder: (context, snapshot) {
-                    final positionData = snapshot.data;
-                    return SeekBar(
-                      duration: positionData?.duration ?? Duration.zero,
-                      position: positionData?.position ?? Duration.zero,
-                      bufferedPosition:
-                          positionData?.bufferedPosition ?? Duration.zero,
-                      onChangeEnd: (newPosition) {
-                        _player.seek(newPosition);
-                      },
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            metadata.album,
+                            style: Theme.of(context).textTheme.titleLarge!
+                                .copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                          ),
+                          Text(
+                            metadata.title,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
-                ControlButtons(_player),
-                const SizedBox(height: 8.0),
-                SizedBox(
-                  height: 240.0,
-                  child: StreamBuilder<SequenceState?>(
-                    stream: _player.sequenceStateStream,
-                    builder: (context, snapshot) {
-                      final state = snapshot.data;
-                      final sequence = state?.sequence ?? [];
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Surah Berikutnya",
-                              style: Theme.of(context).textTheme.titleLarge!
-                                  .copyWith(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            SizedBox(height: 10),
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: ListView.builder(
-                                  itemCount: () {
-                                    final current = state?.currentIndex ?? 0;
-                                    final remaining =
-                                        sequence.length - (current + 1);
-                                    return remaining.clamp(0, 2);
-                                  }(),
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final current = state?.currentIndex ?? 0;
-                                    final sourceIndex = current + 1 + index;
-                                    if (sourceIndex >= sequence.length) {
-                                      return SizedBox.shrink();
-                                    }
-                                    final source = sequence[sourceIndex];
-                                    final meta = source.tag as AudioMetadata;
-                                    return Container(
-                                      margin:
-                                          const EdgeInsets.only(bottom: 10),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(12),
-                                      ),
-                                      child: ListTile(
-                                        visualDensity:
-                                            const VisualDensity(vertical: -1),
-                                        contentPadding: EdgeInsets.zero,
-                                        leading: Icon(
-                                          Iconsax.play_circle5,
-                                          size: 40,
-                                          color: AppColors.primary,
-                                        ),
-                                        title: Text(
-                                          meta.album,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            color: AppColors.primary,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          meta.title,
-                                          style: TextStyle(
-                                            color:
-                                                HexColor.fromHex("#676767"),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        minVerticalPadding: 10,
-                                        onTap: () {
-                                          _player.seek(
-                                            Duration.zero,
-                                            index: sourceIndex,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
+              ),
+              StreamBuilder<PositionData>(
+                stream: _positionDataStream,
+                builder: (context, snapshot) {
+                  final positionData = snapshot.data;
+                  return SeekBar(
+                    duration: positionData?.duration ?? Duration.zero,
+                    position: positionData?.position ?? Duration.zero,
+                    bufferedPosition:
+                        positionData?.bufferedPosition ?? Duration.zero,
+                    onChangeEnd: (newPosition) {
+                      _player.seek(newPosition);
+                    },
+                  );
+                },
+              ),
+              ControlButtons(_player),
+              const SizedBox(height: 8.0),
+              SizedBox(
+                height: 240.0,
+                child: StreamBuilder<SequenceState?>(
+                  stream: _player.sequenceStateStream,
+                  builder: (context, snapshot) {
+                    final state = snapshot.data;
+                    final sequence = state?.sequence ?? [];
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Surah Berikutnya",
+                            style: Theme.of(context).textTheme.titleLarge!
+                                .copyWith(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
                                 ),
+                          ),
+                          SizedBox(height: 10),
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: ListView.builder(
+                                itemCount: () {
+                                  final current = state?.currentIndex ?? 0;
+                                  final remaining =
+                                      sequence.length - (current + 1);
+                                   
+                                  return remaining.clamp(0, 2);
+                                }(),
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final current = state?.currentIndex ?? 0;
+                                  final sourceIndex = current + 1 + index;
+                                  if (sourceIndex >= sequence.length) {
+                                    return SizedBox.shrink();
+                                  }
+                                  final source = sequence[sourceIndex];
+                                  final meta = source.tag as AudioMetadata;
+                                     final isDark = Theme.of(context).brightness == Brightness.dark;
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: ListTile(
+                                      visualDensity: const VisualDensity(
+                                        vertical: -1,
+                                      ),
+                                      contentPadding: EdgeInsets.zero,
+                                      leading: Icon(
+                                        Iconsax.play_circle5,
+                                        size: 40,
+                                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                                      ),
+                                      title: Text(
+                                        meta.album,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        meta.title,
+                                        style: TextStyle(
+                                          color: isDark ? (AppColors.secondary) : HexColor.fromHex("#676767"),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      minVerticalPadding: 10,
+                                      onTap: () {
+                                        _player.seek(
+                                          Duration.zero,
+                                          index: sourceIndex,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -402,9 +402,7 @@ class ControlButtons extends StatelessWidget {
                 margin: const EdgeInsets.all(8.0),
                 width: 55.0,
                 height: 55.0,
-                child: CircularProgressIndicator(
-                  color: AppColors.secondary,
-                ),
+                child: CircularProgressIndicator(color: AppColors.secondary),
               );
             } else if (!playing) {
               return IconButton(
@@ -480,5 +478,3 @@ class ControlButtons extends StatelessWidget {
     );
   }
 }
-
-

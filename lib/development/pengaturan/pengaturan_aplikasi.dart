@@ -380,7 +380,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 12,
-                          color: isDark ? Colors.white : HexColor.fromHex("#5A7A8A"),
+                          color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#5A7A8A"),
                         ),
                       ),
 

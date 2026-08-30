@@ -70,10 +70,15 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: controller.title,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        titleColor: isDark ? AppColors.textPrimaryDark : null,
+        backIconColor: isDark ? AppColors.textPrimaryDark : null,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -83,8 +88,8 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: Colors.white,
-                    surfaceTintColor: Colors.white,
+                    backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+                    surfaceTintColor:  isDark ? Theme.of(context).scaffoldBackgroundColor :  Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -103,7 +108,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.primary,
+                                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -181,7 +186,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Colors.black,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                 ),
               ),
             ),
@@ -208,13 +213,13 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                 Icon(
                   Iconsax.note_2,
                   size: 64,
-                  color: HexColor.fromHex("#DBB893"),
+                  color: AppColors.secondary,
                 ),
                 SizedBox(height: 16),
                 Text(
                   "Tidak ada data",
                   style: TextStyle(
-                    color: HexColor.fromHex("#1E4355"),
+                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -252,6 +257,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
   }) {
     final selectedIndex = settings.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
@@ -259,7 +265,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
         padding: EdgeInsets.all(12),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -283,7 +289,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                   softWrap: true,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                     fontSize: ukuranArab,
                     fontFamily: fontFamily,
                     fontWeight: isBold ? FontWeight.w600 : null,
@@ -297,7 +303,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
               Text(
                 item.latin,
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.secondary : AppColors.primary,
                   fontSize: ukuranLatin,
                 ),
               ),
@@ -307,7 +313,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
               Text(
                 item.arti,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                   fontSize: ukuranLatin,
                 ),
               ),
@@ -337,7 +343,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: ukuranLatin,
-                          color: HexColor.fromHex("#1E4355"),
+                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                         ),
                       ),
                       SizedBox(height: 4),
@@ -345,7 +351,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                         item.keterangan!,
                         style: TextStyle(
                           fontSize: ukuranLatin,
-                          color: HexColor.fromHex("#1E4355"),
+                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                         ),
                       ),
                       SizedBox(height: 8),
@@ -355,7 +361,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: ukuranLatin,
-                        color: HexColor.fromHex("#1E4355"),
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                       ),
                     ),
                   ],
@@ -414,7 +420,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                       ),
                       child: Icon(
                         Iconsax.copy,
-                        color: HexColor.fromHex("#504F52"),
+                        color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#504F52"),
                         size: 16,
                       ),
                     ),
@@ -466,7 +472,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                       ),
                       child: Icon(
                         Iconsax.export_2,
-                        color: HexColor.fromHex("#504F52"),
+                        color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#504F52"),
                         size: 16,
                       ),
                     ),

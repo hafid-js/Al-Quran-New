@@ -415,7 +415,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                         child: Image.asset(
                           "assets/images/bismillah.png",
                           height: 90,
-                          color: isDark ? Colors.white : Colors.black,
+                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
                         ),
                       ),
                     ],
@@ -493,7 +493,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                       return Text(
                         ayat.teksIndonesia,
                         style: TextStyle(
-                          color: isDark ? Colors.white : Colors.black,
+                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
                           fontSize: controller.ukuranLatinTerjemah.value,
                         ),
                       );

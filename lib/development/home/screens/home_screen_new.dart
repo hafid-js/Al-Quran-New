@@ -780,7 +780,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
           Text(
             "Popular",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: AppColors.primary,
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -971,7 +971,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
           Text(
             "Qori Terfavorit",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: AppColors.primary,
+     color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
           ),

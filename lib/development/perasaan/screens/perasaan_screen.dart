@@ -11,15 +11,24 @@ class PerasaanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark
+          ? Theme.of(context).scaffoldBackgroundColor
+          : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
+        surfaceTintColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
         title: Text(
           "Perasaan",
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: HexColor.fromHex("#1E4355"),
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : HexColor.fromHex("#1E4355"),
             fontFamily: "Poppins",
             fontWeight: FontWeight.bold,
           ),
@@ -34,14 +43,18 @@ class PerasaanScreen extends StatelessWidget {
               Text(
                 "Apa yang Anda rasakan saat ini?",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: HexColor.fromHex("#1E4355"),
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : HexColor.fromHex("#1E4355"),
                 ),
               ),
               SizedBox(height: 12),
               Text(
                 "Pilih perasaan Anda untuk menemukan doa yang tepat",
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  color: HexColor.fromHex("#1E4355"),
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : HexColor.fromHex("#1E4355"),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -59,9 +72,8 @@ class PerasaanScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = _items[index];
                   return TapScaleWidget(
-                    onTap: () => Get.to(
-                      () => DetailPerasaanScreen(type: item.type),
-                    ),
+                    onTap: () =>
+                        Get.to(() => DetailPerasaanScreen(type: item.type)),
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(

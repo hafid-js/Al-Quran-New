@@ -16,6 +16,7 @@ class SettingsSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -23,7 +24,7 @@ class SettingsSwitchTile extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 16,
-            color: AppColors.primary,
+            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
             fontWeight: FontWeight.w500,
           ),
         ),

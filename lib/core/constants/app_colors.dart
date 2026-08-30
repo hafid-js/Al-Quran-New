@@ -36,6 +36,7 @@ final class AppColors {
   static Color textSecondaryDark = AppColors.primary;
 // static Color get textPrimaryLight  =>
 //       setting.currentColor.value;
+
 static const Color textPrimaryLight = Color(0xFF2D4A52);
 static Color menuTitle = HexColor.fromHex("#5a7b8a");
   static Color textSecondaryLight = HexColor.fromHex("#607D85");

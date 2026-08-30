@@ -23,7 +23,7 @@ class PlayBar extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(right: 12, left: 12, top: 0, bottom: 12),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

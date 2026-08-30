@@ -468,7 +468,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               Text(
                 question ?? "Apakah kamu sudah melaksanakan shalat $name?",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? Colors.white : AppColors.primary, fontWeight: FontWeight.w400)
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? AppColors.textPrimaryDark : AppColors.primary, fontWeight: FontWeight.w400)
               ),
 
               const SizedBox(height: 20),
@@ -886,7 +886,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         Text(
                           "Progress Harian",
                           style: TextStyle(
-                            color: isDark ? Colors.white : AppColors.primary,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -899,7 +899,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               onTap: _showCalendarModal,
                               child: Icon(
                                 Iconsax.calendar_1,
-                                color: isDark ? Colors.white : AppColors.primary,
+                                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                 size: 30,
                               ),
                             ),
@@ -911,7 +911,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               onTap: () => Get.to(() => StatistikIbadah()),
                               child: Icon(
                                 Iconsax.chart_21,
-                                color: isDark ? Colors.white : AppColors.primary,
+                                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                 size: 30,
                               ),
                             ),
@@ -925,7 +925,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       _formattedDate,
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
@@ -997,7 +997,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Sholat Wajib",
                       style: TextStyle(
-                        color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1034,7 +1034,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Sholat Sunnah",
                       style: TextStyle(
-                        color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1075,7 +1075,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Ibadah Lainnya",
                       style: TextStyle(
-                        color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1118,7 +1118,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Puasa Sunnah",
                       style: TextStyle(
-                        color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1173,7 +1173,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             Text(
                               "Tilawah Hari Ini",
                               style: TextStyle(
-                                color: isDark ? Colors.white : AppColors.primary,
+                                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -1293,7 +1293,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             Text(
                               "Sedekah Hari Ini",
                               style: TextStyle(
-                                color: isDark ? Colors.white : AppColors.primary,
+                                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -1456,12 +1456,12 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _surahController,
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
+            style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.primary),
             decoration: InputDecoration(
               hintText: "Surah & Ayat",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
-              fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
+              fillColor: isDark ? AppColors.textPrimaryDark.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -1474,12 +1474,12 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _halamanController,
             keyboardType: TextInputType.number,
-            style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
+            style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.primary),
             decoration: InputDecoration(
               hintText: "Jumlah Halaman",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
-              fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
+              fillColor: isDark ? AppColors.textPrimaryDark.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -1580,21 +1580,21 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           TextField(
             controller: _nominalController,
             keyboardType: TextInputType.number,
-                  style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
+                  style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.primary),
             inputFormatters: [_RupiahInputFormatter()],
             decoration: InputDecoration(
               hintText: "Nominal (Rp)",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               prefixText: "Rp ",
               prefixStyle: TextStyle(
-                color: isDark ? Colors.white : AppColors.primary,
+                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
               filled: true,
-              fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
+              fillColor: isDark ? AppColors.textPrimaryDark.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               prefixIcon: Icon(
                 Iconsax.card_coin,
-                color: isDark ? Colors.white : AppColors.primary,
+                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                 size: 20,
               ),
               border: OutlineInputBorder(

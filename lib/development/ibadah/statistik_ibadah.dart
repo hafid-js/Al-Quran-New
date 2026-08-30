@@ -78,14 +78,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   }
 
   List<_DailyData> get _weekData => [
-        for (var i = 0; i < 7; i++)
-          _readDay(_selectedWeekStart.add(Duration(days: i))),
-      ];
+    for (var i = 0; i < 7; i++)
+      _readDay(_selectedWeekStart.add(Duration(days: i))),
+  ];
 
   List<_DailyData> get _monthData => [
-        for (var day = 1; day <= _daysInMonth(_focusedMonth); day++)
-          _readDay(DateTime(_focusedMonth.year, _focusedMonth.month, day)),
-      ];
+    for (var day = 1; day <= _daysInMonth(_focusedMonth); day++)
+      _readDay(DateTime(_focusedMonth.year, _focusedMonth.month, day)),
+  ];
 
   int _daysInMonth(DateTime d) => DateTime(d.year, d.month + 1, 0).day;
 
@@ -184,11 +184,11 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   List<int> get _tilawahMingguan =>
       _weekData.map((d) => d.tilawahPages).toList();
 
-  List<int> get _bulanan =>
-      _monthData.map((d) => d.checklistDone + d.tilawahPages + d.sedekah.length).toList();
+  List<int> get _bulanan => _monthData
+      .map((d) => d.checklistDone + d.tilawahPages + d.sedekah.length)
+      .toList();
 
-  int get _weeklyPuasaTotal =>
-      _weekData.fold(0, (a, d) => a + d.puasaDone);
+  int get _weeklyPuasaTotal => _weekData.fold(0, (a, d) => a + d.puasaDone);
 
   int get _weeklySedekahTotal =>
       _weekData.fold(0, (a, d) => a + d.sedekahTotal);
@@ -245,8 +245,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
       case 1:
         return _weekData.fold(
           0,
-          (a, d) => a + d.wajibDone + d.sunnahDone + d.dzikirDone +
-              d.puasaDone + d.tilawahPages + d.sedekah.length,
+          (a, d) =>
+              a +
+              d.wajibDone +
+              d.sunnahDone +
+              d.dzikirDone +
+              d.puasaDone +
+              d.tilawahPages +
+              d.sedekah.length,
         );
       case 2:
         return _bulanan.fold(0, (a, b) => a + b);
@@ -259,15 +265,11 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   int get _totalAll {
     switch (_selectedPeriod) {
       case 1:
-        return 7 * 14 + _weekData.fold(
-          0,
-          (a, d) => a + d.tilawahPages + d.sedekah.length,
-        );
+        return 7 * 14 +
+            _weekData.fold(0, (a, d) => a + d.tilawahPages + d.sedekah.length);
       case 2:
-        return _daysInMonth(_focusedMonth) * 14 + _monthData.fold(
-          0,
-          (a, d) => a + d.tilawahPages + d.sedekah.length,
-        );
+        return _daysInMonth(_focusedMonth) * 14 +
+            _monthData.fold(0, (a, d) => a + d.tilawahPages + d.sedekah.length);
       default:
         final d = _readDay(_selectedDate);
         return 14 + d.tilawahPages + d.sedekah.length;
@@ -493,14 +495,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 onTap: _previousWeek,
                 child: Icon(
                   Iconsax.arrow_circle_left,
-                   color: isDark ? Colors.white : AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                 ),
               ),
               Text(
                 _weekRangeLabel,
                 style: TextStyle(
                   fontSize: 16,
-                   color: isDark ? Colors.white : AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -508,7 +510,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 onTap: _nextWeek,
                 child: Icon(
                   Iconsax.arrow_circle_right,
-                   color: isDark ? Colors.white : AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                 ),
               ),
             ],
@@ -526,7 +528,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Sholat Mingguan",
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -557,7 +559,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.primary,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
                           ),
                         ),
                       ],
@@ -574,7 +578,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.primary,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
                           ),
                         ),
                       ],
@@ -589,7 +595,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -598,7 +604,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Sholat Sunnah Mingguan",
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -640,7 +646,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                               value.toInt().toString(),
                               style: TextStyle(
                                 fontSize: 10,
-                                color: HexColor.fromHex("#5a7b8a"),
+                                color: isDark
+                                    ? AppColors.textPrimaryDark
+                                    : HexColor.fromHex("#5a7b8a"),
                               ),
                             );
                           },
@@ -676,7 +684,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 ][idx],
                                 style: TextStyle(
                                   fontSize: 9,
-                                  color: HexColor.fromHex("#5a7b8a"),
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : HexColor.fromHex("#5a7b8a"),
                                 ),
                               ),
                             );
@@ -715,7 +725,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -724,7 +734,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Tilawah Mingguan (Halaman)",
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -766,7 +776,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                               value.toInt().toString(),
                               style: TextStyle(
                                 fontSize: 10,
-                                color: HexColor.fromHex("#5a7b8a"),
+                                color: isDark
+                                    ? AppColors.textPrimaryDark
+                                    : HexColor.fromHex("#5a7b8a"),
                               ),
                             );
                           },
@@ -802,7 +814,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 ][idx],
                                 style: TextStyle(
                                   fontSize: 9,
-                                  color: HexColor.fromHex("#5a7b8a"),
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : HexColor.fromHex("#5a7b8a"),
                                 ),
                               ),
                             );
@@ -919,7 +933,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             children: [
               Text(
                 "Rincian Harian",
-                style: Theme.of(context).textTheme.titleSmall
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(height: 16),
               Row(
@@ -938,7 +952,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                               color: isDark ? Colors.white : AppColors.primary,
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -949,7 +965,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Sholat Wajib",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: isDark ? Colors.white : AppColors.primary,
+                                      color: isDark
+                                          ? AppColors.textPrimaryDark
+                                          : AppColors.primary,
                                     ),
                                   ),
 
@@ -973,13 +991,20 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                         children: [
                                           Text(
                                             "Terlaksana",
-                                            style: TextStyle(fontSize: 12, color : isDark ? Colors.white : AppColors.primary),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: isDark
+                                                  ? AppColors.textPrimaryDark
+                                                  : AppColors.primary,
+                                            ),
                                           ),
 
                                           Text(
                                             "${_readDay(_selectedDate).wajibBerjamaah} Berjamaah",
                                             style: TextStyle(
-                                                color: isDark ? Colors.white : AppColors.primary,
+                                              color: isDark
+                                                  ? AppColors.textPrimaryDark
+                                                  : AppColors.primary,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -1002,7 +1027,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                   color: isDark ? Colors.white : AppColors.primary,
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1013,7 +1040,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Sholat Sunnah",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                       color: isDark ? Colors.white : AppColors.primary,
+                                      color: isDark
+                                          ? AppColors.textPrimaryDark
+                                          : AppColors.primary,
                                     ),
                                   ),
 
@@ -1031,9 +1060,11 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                           color: AppColors.secondary,
                                         ),
                                       ),
-                                     Text(
+                                      Text(
                                         "Amal",
-                                        style: Theme.of(context).textTheme.labelSmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1064,7 +1095,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                    color: isDark ? Colors.white : AppColors.primary,
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1075,7 +1108,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Puasa Sunnah",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                        color: isDark ? Colors.white : AppColors.primary,
+                                      color: isDark
+                                          ? AppColors.textPrimaryDark
+                                          : AppColors.primary,
                                     ),
                                   ),
 
@@ -1095,7 +1130,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                       ),
                                       Text(
                                         "Hari Ini",
-                                        style: Theme.of(context).textTheme.labelSmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1113,7 +1150,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                   color: isDark ? Colors.white : AppColors.primary,
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1124,7 +1163,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Tilawah Hari Ini",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                       color: isDark ? Colors.white : AppColors.primary,
+                                      color: isDark
+                                          ? AppColors.textPrimaryDark
+                                          : AppColors.primary,
                                     ),
                                   ),
 
@@ -1144,7 +1185,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                       ),
                                       Text(
                                         "Halaman",
-                                        style: Theme.of(context).textTheme.labelSmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1184,14 +1227,18 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     children: [
                       Icon(
                         Iconsax.card_coin,
-                         color: isDark ? Colors.white : AppColors.primary,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.primary,
                         size: 20,
                       ),
                       SizedBox(width: 8),
                       Text(
                         "Sedekah Hari Ini",
                         style: TextStyle(
-                           color: isDark ? Colors.white : AppColors.primary,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.primary,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -1284,360 +1331,405 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   ) {
     final d = _readDay(day);
     final count = d.checklistDone + d.tilawahPages + d.sedekah.length;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: _consistencyColor(count),
         borderRadius: BorderRadius.circular(8),
+        border: isDark
+            ? Border.all(color: AppColors.textPrimaryDark.withAlpha(80))
+            : null,
       ),
     );
   }
 
   Widget _buildMonthlyDetail() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Konsistensi Ibadah (Bulan Ini)",
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
           ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
-            child: Column(
-              children: [
-                TableCalendar(
-                  rowHeight: 38,
-
-                  daysOfWeekVisible: false,
-                  firstDay: DateTime(2020, 1, 1),
-                  lastDay: DateTime(2100, 12, 31),
-                  focusedDay: _focusedMonth,
-                  onPageChanged: (focusedDay) {
-                    setState(() {
-                      _focusedMonth = DateTime(
-                        focusedDay.year,
-                        focusedDay.month,
-                        1,
-                      );
-                    });
-                  },
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  headerStyle: HeaderStyle(
-                    formatButtonVisible: false,
-                    titleCentered: true,
-                    leftChevronIcon: Icon(
-                      Iconsax.arrow_circle_left,
-                      color: AppColors.primary,
-                    ),
-                    titleTextStyle: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    rightChevronIcon: Icon(
-                      Iconsax.arrow_circle_right,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  calendarBuilders: CalendarBuilders(
-                    defaultBuilder: _consistencyCell,
-                  ),
-                  calendarStyle: CalendarStyle(
-                    cellMargin: const EdgeInsets.all(4),
-                    todayDecoration: BoxDecoration(
-                      color: AppColors.primary,
-                      // shape: BoxShape.circle,
-                    ),
-                    isTodayHighlighted: false,
-                    outsideDaysVisible: false,
-                    defaultTextStyle: TextStyle(fontSize: 0),
-                    weekendTextStyle: TextStyle(fontSize: 0),
-                    defaultDecoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    weekendDecoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Konsistensi Ibadah (Bulan Ini)",
+                style: TextStyle(
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(height: 4),
+              ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  children: [
+                    TableCalendar(
+                      rowHeight: 38,
+
+                      daysOfWeekVisible: false,
+                      firstDay: DateTime(2020, 1, 1),
+                      lastDay: DateTime(2100, 12, 31),
+                      focusedDay: _focusedMonth,
+                      onPageChanged: (focusedDay) {
+                        setState(() {
+                          _focusedMonth = DateTime(
+                            focusedDay.year,
+                            focusedDay.month,
+                            1,
+                          );
+                        });
+                      },
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      headerStyle: HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        leftChevronIcon: Icon(
+                          Iconsax.arrow_circle_left,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.primary,
+                          size: 24,
+                        ),
+                        titleTextStyle: TextStyle(
+                          fontSize: 16,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        rightChevronIcon: Icon(
+                          Iconsax.arrow_circle_right,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.primary,
+                          size: 24,
+                        ),
+                      ),
+                      calendarBuilders: CalendarBuilders(
+                        defaultBuilder: _consistencyCell,
+                      ),
+                      calendarStyle: CalendarStyle(
+                        cellMargin: const EdgeInsets.all(4),
+                        todayDecoration: BoxDecoration(
+                          color: AppColors.primary,
+                          // shape: BoxShape.circle,
+                        ),
+                        isTodayHighlighted: false,
+                        outsideDaysVisible: false,
+                        defaultTextStyle: TextStyle(fontSize: 0),
+                        weekendTextStyle: TextStyle(fontSize: 0),
+                        defaultDecoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        weekendDecoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          "Sen",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Sel",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Rab",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Kam",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Jum",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Sab",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Min",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Sen",
+                      "Sedikit",
                       style: TextStyle(
                         fontSize: 12,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.primary,
+                      ),
+                    ),
+                    Container(
+                      height: 15,
+                      width: 15,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withAlpha(60),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    Container(
+                      height: 15,
+                      width: 15,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withAlpha(160),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    Container(
+                      height: 15,
+                      width: 15,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withAlpha(220),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    Container(
+                      height: 15,
+                      width: 15,
+                      decoration: BoxDecoration(
                         color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     Text(
-                      "Sel",
+                      "Banyak",
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      "Rab",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      "Kam",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      "Jum",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      "Sab",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      "Min",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.primary,
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 90, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Sedikit",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.primary,
-                  ),
-                ),
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(60),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(160),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(220),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                Text(
-                  "Banyak",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    SizedBox(height: 16),
-    // Container(
-    //   padding: EdgeInsets.all(12),
-    //   decoration: BoxDecoration(
-    //       color: AppColors.primary,
-    //     borderRadius: BorderRadius.circular(16),
-    //   ),
-    //   child: 
-    // )
-    Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16)
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Ringkasan Bulan Ini",
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 16),
-        GridView.builder(
-          padding: EdgeInsets.zero,
-           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    crossAxisSpacing: 16,
-    mainAxisSpacing: 12,
-    childAspectRatio: 1.4,
-  ),
-  itemCount: _ringkasanBulanan.length,
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemBuilder: (context, index) {
-    final item = _ringkasanBulanan[index];
-    return Container(
-      padding: item['label'] == 'Sholat Wajib' ? const EdgeInsets.only(top: 18, right: 18, left: 16, bottom: 0) : const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        border: BoxBorder.all(
-          width: 1.5,
-          color: AppColors.primary,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-         Align(
-  alignment: Alignment.topRight,
-  child: Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: 6,
-      vertical: 2
-    ),
-    decoration: BoxDecoration(
-      color: AppColors.secondary,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          Iconsax.arrow_up_3,
-          color: Colors.white,
-          size: 12,
-        ),
-        const SizedBox(width: 3),
-        Text(
-          item['percent'] as String,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12
+              ),
+            ],
           ),
         ),
-      ],
-    ),
-  ),
-),
-
-          const SizedBox(height: 5),
-
-          Text(
-            item['value'] as String,
-            style: TextStyle(
-              fontSize: 18,
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
+        SizedBox(height: 16),
+        // Container(
+        //   padding: EdgeInsets.all(12),
+        //   decoration: BoxDecoration(
+        //       color: AppColors.primary,
+        //     borderRadius: BorderRadius.circular(16),
+        //   ),
+        //   child:
+        // )
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
           ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Ringkasan Bulan Ini",
+                style: TextStyle(
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 16),
+              GridView.builder(
+                padding: EdgeInsets.zero,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.4,
+                ),
+                itemCount: _ringkasanBulanan.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final item = _ringkasanBulanan[index];
+                  return Container(
+                    padding: item['label'] == 'Sholat Wajib'
+                        ? const EdgeInsets.only(
+                            top: 18,
+                            right: 18,
+                            left: 16,
+                            bottom: 0,
+                          )
+                        : const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      border: BoxBorder.all(
+                        width: 1.5,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.primary,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Iconsax.arrow_up_3,
+                                  color: Colors.white,
+                                  size: 12,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  item['percent'] as String,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
 
-          const SizedBox(height: 2),
+                        const SizedBox(height: 5),
 
-          Text(
-            item['label'] as String,
-            style: TextStyle(
-              fontSize: 12,
-              color: AppColors.primary,
-              fontWeight: FontWeight.w500
-            ),
+                        Text(
+                          item['value'] as String,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        const SizedBox(height: 2),
+
+                        Text(
+                          item['label'] as String,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        if (index == 0)
+                          Text(
+                            "${_monthData.fold(0, (a, d) => a + d.wajibBerjamaah)} Berjamaah",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.secondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-          if(index == 0) 
-          Text(
-            "${_monthData.fold(0, (a, d) => a + d.wajibBerjamaah)} Berjamaah",
-            style: TextStyle(
-              fontSize: 10,
-              color: AppColors.secondary,
-              fontWeight: FontWeight.w500
-            ),
-          ),
-        ],
-      ),
-    );
-  },
-)
-        ],
-      ),
-    )
+        ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         leadingWidth: 65,
         centerTitle: false,
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onSurface),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
         titleSpacing: 0,
         title: Text(
           "Statistik Ibadah",
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       body: SingleChildScrollView(
@@ -1691,7 +1783,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
-                    color: HexColor.fromHex("#5a7b8a"),
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : HexColor.fromHex("#5a7b8a"),
                   ),
                 ),
               ),
@@ -1723,13 +1817,13 @@ class _DailyData {
   });
 
   const _DailyData.empty()
-      : wajibDone = 0,
-        sunnahDone = 0,
-        dzikirDone = 0,
-        puasaDone = 0,
-        tilawahPages = 0,
-        wajibBerjamaah = 0,
-        sedekah = const [];
+    : wajibDone = 0,
+      sunnahDone = 0,
+      dzikirDone = 0,
+      puasaDone = 0,
+      tilawahPages = 0,
+      wajibBerjamaah = 0,
+      sedekah = const [];
 
   int get checklistDone => wajibDone + sunnahDone + dzikirDone + puasaDone;
 

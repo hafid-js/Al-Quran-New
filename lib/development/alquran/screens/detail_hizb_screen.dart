@@ -92,7 +92,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
         titleColor: Theme.of(context).textTheme.titleSmall!.color,
         backIconColor: Theme.of(context).textTheme.titleSmall!.color,
         actions: [
-          Icon(Iconsax.book_1, color: isDark ? Colors.white : Colors.black),
+          Icon(Iconsax.book_1, color: isDark ? AppColors.textPrimaryDark : Colors.black),
           SizedBox(width: 15),
           GestureDetector(
             onTap: () async {
@@ -205,7 +205,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: isDark ? Colors.white : Colors.black,
+                  color: isDark ? AppColors.textPrimaryDark : Colors.black,
                 ),
               ),
             ),
@@ -410,7 +410,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                       return Text(
                         ayat.teksIndonesia,
                         style: TextStyle(
-                          color: isDark ? Colors.white : Colors.black,
+                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
                           fontSize: fontController.ukuranLatinTerjemah.value,
                         ),
                       );
