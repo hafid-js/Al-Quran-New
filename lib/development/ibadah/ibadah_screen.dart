@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';

@@ -1,4 +1,3 @@
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 

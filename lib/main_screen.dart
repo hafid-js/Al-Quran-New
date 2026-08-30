@@ -1,15 +1,10 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/adzan/screens/adzan_screen.dart';
 import 'package:alquran_new/development/home/screens/home_screen_new.dart';
-import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
-import 'package:alquran_new/development/pengaturan/pengaturan_notifikasi.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_screen.dart';
 import 'package:alquran_new/development/perasaan/screens/perasaan_screen.dart';
 import 'package:alquran_new/development/murrotal/widgets/play_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -74,7 +69,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      // backgroundColor: Colors.transparent,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [

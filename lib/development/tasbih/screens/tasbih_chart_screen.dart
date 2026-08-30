@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';

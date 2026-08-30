@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/home/domain/entities/prayer_time.dart';
 import 'package:alquran_new/development/home/domain/repositories/prayer_time_repository.dart';
 import 'package:alquran_new/development/home/domain/usecases/get_prayer_times.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
@@ -135,7 +137,14 @@ class PrayerTimeController extends GetxController {
 
       locationStatus.value = "Selesai";
 
-      Get.snackbar("Sukses", "Lokasi diperbarui: ${location.city}");
+
+      Get.snackbar(
+        "Sukses", "Lokasi diperbarui: ${location.city}",
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 2),
+        backgroundColor: Get.theme.cardColor,
+        colorText: AppColors.textPrimaryDark,
+        );
     } catch (e) {
       locationStatus.value = "Gagal";
       Get.snackbar("Error", e.toString());

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/onboarding/screens/consent_screen.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +46,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
          decoration: BoxDecoration(
                   image: DecorationImage(

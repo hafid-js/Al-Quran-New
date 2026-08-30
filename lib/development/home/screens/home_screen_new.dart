@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
@@ -14,12 +16,10 @@ import 'package:alquran_new/development/murrotal/screens/detail_murrotal_screen.
 import 'package:alquran_new/development/bookmark/screens/bookmark_screen.dart';
 import 'package:alquran_new/development/kalender/screens/hijriah_screen.dart';
 import 'package:alquran_new/development/kiblat/screens/kiblat_screen.dart';
-import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/development/lokasi/screens/lokasi_screen.dart';
-import 'package:alquran_new/development/pengaturan/screens/pengaturan_notifikasi_screen.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -322,12 +322,12 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                         ),
                                       ),
                                     )
-                                  : const Icon(Iconsax.location_add),
+                                  : const Icon(Iconsax.location_add, color: AppColors.textPrimaryDark),
                             );
                           }),
                         ],
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: Platform.isAndroid ? 20 : 30),
 
                       Column(
                         children: [
@@ -367,7 +367,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                         ],
                       ),
                       Divider(
-                        height: 50,
+                        height: Platform.isAndroid ? 45 : 50,
                         thickness: 0.5,
                         color: Colors.white60,
                       ),
@@ -417,7 +417,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
           ),
 
           Positioned(
-            top: 310,
+            top: Platform.isAndroid ? 290 : 310,
             left: 0,
             right: 0,
             child: Padding(
@@ -669,9 +669,7 @@ Widget _buildPrayerTimeItem(
   String nextPrayerName,
 ) {
   final isNext = prayerTime["title"] == nextPrayerName;
-  return InkWell(
-    onTap: () {},
-    child: Column(
+  return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
@@ -679,6 +677,7 @@ Widget _buildPrayerTimeItem(
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12,
+            overflow: .ellipsis,
             color: isNext ? AppColors.secondary : Colors.white,
             fontWeight: FontWeight.w500,
           ),
@@ -700,8 +699,7 @@ Widget _buildPrayerTimeItem(
           ),
         ),
       ],
-    ),
-  );
+    );
 }
 
 class _MenuItemWidget extends StatelessWidget {
@@ -711,6 +709,7 @@ class _MenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TapScaleWidget(
       scaleDown: 1.4,
       duration: const Duration(milliseconds: 300),
@@ -727,7 +726,7 @@ class _MenuItemWidget extends StatelessWidget {
           Text(
             menu["title"],
             textAlign: TextAlign.center,
-            style: TextTheme.of(context).labelSmall!.copyWith(color: AppColors.menuTitle)
+            style: TextTheme.of(context).labelSmall!.copyWith(color:  isDark ? AppColors.textPrimaryDark : AppColors.menuTitle)
           ),
         ],
       ),

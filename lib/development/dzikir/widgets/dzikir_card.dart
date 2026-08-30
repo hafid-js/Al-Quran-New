@@ -1,10 +1,8 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
-import 'package:alquran_new/development/dzikir/controllers/matsurat_controller.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
 
 class DzikirCard extends StatefulWidget {

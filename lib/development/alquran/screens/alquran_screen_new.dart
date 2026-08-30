@@ -13,7 +13,6 @@ import 'package:alquran_new/development/shared/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 class HizbData {
   final int number;
@@ -842,7 +841,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                           ),
                           Text(
                             "${surah.tempatTurun.name} - ${surah.jumlahAyat} Ayat",
-                            style: Theme.of(context).textTheme.labelSmall
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(  color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : HexColor.fromHex("#676767"),)
                           ),
                         ],
                       ),

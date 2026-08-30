@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class SeekBar extends StatefulWidget {

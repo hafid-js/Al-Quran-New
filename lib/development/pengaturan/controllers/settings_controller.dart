@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/development/pengaturan/models/app_settings.dart';

@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/pengaturan/controllers/notification_settings_controller.dart';
 import 'package:flutter/material.dart';

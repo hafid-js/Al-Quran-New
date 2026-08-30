@@ -25,6 +25,7 @@ class CategoryFilter extends StatelessWidget {
         itemBuilder: (context, index) {
           final category = categories[index];
           final isActive = activeCategory != null && category == activeCategory;
+          final isDark = Theme.of(context).brightness == Brightness.dark;
           return Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: ElevatedButton(
@@ -39,7 +40,7 @@ class CategoryFilter extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: isActive
                     ? AppColors.primary
-                    : Colors.white,
+                    : Theme.of(context).cardColor,
                 foregroundColor: isActive
                     ? Colors.white
                     : HexColor.fromHex("#676767"),
@@ -56,7 +57,7 @@ class CategoryFilter extends StatelessWidget {
                 category,
                 style: TextStyle(
                   fontSize: 12,
-                  color: isActive ? Colors.white : HexColor.fromHex("#676767"),
+                  color: isActive ? AppColors.textPrimaryDark : (isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#676767")),
                   fontWeight: FontWeight.w500,
                 ),
               ),

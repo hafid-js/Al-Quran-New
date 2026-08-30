@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran/controllers/juz_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
@@ -22,7 +21,7 @@ class DetailJuzScreen extends StatefulWidget {
 
 class _DetailJuzScreenState extends State<DetailJuzScreen>
     with SingleTickerProviderStateMixin {
-  final controller = Get.put(JuzController(), permanent: false);
+  final jusController = Get.put(JuzController(), permanent: false);
   final fontController = Get.find<DetailSurahController>();
   final ItemScrollController itemScrollController = ItemScrollController();
   late AnimationController _animationController;
@@ -36,7 +35,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
     super.initState();
     final args = Get.arguments as Map;
     juzNumber = args["juz"];
-    controller.fetchJuz(juzNumber);
+    jusController.fetchJuz(juzNumber);
 
     _animationController = AnimationController(
       vsync: this,
@@ -64,8 +63,8 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    if (controller.juzAyatList.isNotEmpty) {
-      controller.stopAudio(controller.juzAyatList.first);
+    if (jusController.juzAyatList.isNotEmpty) {
+      jusController.stopAudio(jusController.juzAyatList.first);
     }
     Get.delete<JuzController>();
     super.dispose();
@@ -88,12 +87,13 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
           GestureDetector(
             onTap: () async {
               _toggle();
+
               await WoltModalSheet.show(
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: Colors.white,
-                    surfaceTintColor: Colors.white,
+                    backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+                    surfaceTintColor:  isDark ? Theme.of(context).scaffoldBackgroundColor :  Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -112,7 +112,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.primary,
+                                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -127,6 +127,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                     },
                                   ),
                                   const SizedBox(height: 5),
+
                                   SettingsSwitchTile(
                                     title: "Latin",
                                     value: fontController.latin.value,
@@ -137,6 +138,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                     },
                                   ),
                                   const SizedBox(height: 5),
+
                                   SettingsSwitchTile(
                                     title: "Font Arab Tebal",
                                     value: fontController.arabBold.value,
@@ -146,6 +148,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                       });
                                     },
                                   ),
+
                                   const SizedBox(height: 18),
                                   SettingsSlider(
                                     label: "Ukuran Teks Arab",
@@ -176,6 +179,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                   ),
                 ],
               );
+
               if (mounted) {
                 _toggle();
               }
@@ -186,20 +190,20 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Theme.of(context).textTheme.titleMedium!.color,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                 ),
               ),
             ),
-          ),
+          )
         ],
         actionsPadding: EdgeInsets.all(16),
       ),
       body: Obx(() {
-         if (controller.isLoading.value) {
+         if (jusController.isLoading.value) {
           return CommonLoadingWidget();
         }
 
-        final ayatList = controller.juzAyatList;
+        final ayatList = jusController.juzAyatList;
 
         if (ayatList.isEmpty) {
           return CommonEmptyWidget();

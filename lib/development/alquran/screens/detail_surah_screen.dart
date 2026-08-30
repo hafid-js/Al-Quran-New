@@ -141,20 +141,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
               _toggle();
 
               await WoltModalSheet.show(
-                // modalDecorator: (child) {
-                //   return BackdropFilter(
-                //     filter: ImageFilter.blur(
-                //       sigmaX: 3,
-                //       sigmaY: 3,
-                //     ),
-                //     child: child,
-                //   );
-                // },
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: Colors.white,
-                    surfaceTintColor: Colors.white,
+                    backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+                    surfaceTintColor:  isDark ? Theme.of(context).scaffoldBackgroundColor :  Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -173,7 +164,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.primary,
+                                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -226,8 +217,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     value: controller.ukuranLatinTerjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.ukuranLatinTerjemah.value =
-                                            v;
+                                        controller.ukuranLatinTerjemah.value = v;
                                       });
                                     },
                                   ),
@@ -252,7 +242,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Theme.of(context).textTheme.titleMedium!.color,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                 ),
               ),
             ),
@@ -453,9 +443,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                         child: Text(
                           ayat.teksArab,
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.labelSmall!.color,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                             fontSize: controller.ukuranTeksArab.value,
                             fontFamily: fontFamily,
                             fontWeight: controller.arabBold.value
@@ -683,7 +671,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     (t) => t.ayat == ayat.nomorAyat,
                                   );
                               showModalBottomSheet(
-                                backgroundColor: Colors.white,
+                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                 context: context,
                                 isScrollControlled: true,
                                 shape: RoundedRectangleBorder(
@@ -698,6 +686,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     minChildSize: 0.3,
                                     maxChildSize: 1.0,
                                     builder: (context, scrollController) {
+                                      final isDark = Theme.of(context).brightness == Brightness.dark;
                                       return SingleChildScrollView(
                                         controller: scrollController,
                                         padding: const EdgeInsets.all(20),
@@ -711,21 +700,13 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                               children: [
                                                 Icon(
                                                   Iconsax.book_1,
-                                                  color: HexColor.fromHex(
-                                                    "#D39D52",
-                                                  ),
+                                                  color: AppColors.secondary,
                                                   size: 20,
                                                 ),
                                                 SizedBox(width: 8),
                                                 Text(
                                                   "Tafsir",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: HexColor.fromHex(
-                                                      "#256980",
-                                                    ),
-                                                  ),
+                                                  style: Theme.of(context).textTheme.titleMedium
                                                 ),
                                               ],
                                             ),
@@ -735,7 +716,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                                   "Tafsir tidak tersedia.",
                                               style: TextStyle(
                                                 fontSize: 14,
-                                                color: Colors.black87,
+                                                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                                                 height: 1.5,
                                               ),
                                             ),

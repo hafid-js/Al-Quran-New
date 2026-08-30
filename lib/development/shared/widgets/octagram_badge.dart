@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class OctagramBadge extends StatelessWidget {
@@ -35,7 +36,7 @@ class OctagramBadge extends StatelessWidget {
             "assets/icon/octagram.png",
             height: size,
             width: size,
-            color: Color(0xFFDBB893),
+            color: AppColors.secondary,
           ),
         ],
       ),

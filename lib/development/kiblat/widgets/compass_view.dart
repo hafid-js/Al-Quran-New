@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
 import 'package:alquran_new/development/kiblat/services/qibla_calculator.dart';
 import 'package:flutter/material.dart';
@@ -302,7 +301,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                         color: AppColors.primary,
                         border: Border.all(color: Colors.white, width: 2),
                       ),
-                    ),
+                    ), 
                   ],
                 ),
               ),
@@ -310,7 +309,7 @@ class _QiblahCompassWidget extends StatelessWidget {
               Text(
                 '${data.offset.toStringAsFixed(1)}° dari arah hadap',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.secondary : AppColors.primary,
                 ),
               ),
               const SizedBox(height: 24),

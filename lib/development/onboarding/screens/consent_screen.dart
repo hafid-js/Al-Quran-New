@@ -30,11 +30,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        surfaceTintColor: AppColors.primary,
+        backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        surfaceTintColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
         toolbarHeight: 0,
       ),
       body: Column(
@@ -65,11 +66,19 @@ class _ConsentScreenState extends State<ConsentScreen> {
   }
 
   Widget _buildHeader() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        image: DecorationImage(      colorFilter: ColorFilter.mode(
+                      AppColors.primary.withAlpha(210),
+                      BlendMode.srcATop,
+                    ),
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/images/image.png"),
+                  )
       ),
       child: Column(
         children: [
@@ -109,10 +118,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
     required String title,
     required IconData icon,
     required Widget content,
+    
   }) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -126,22 +137,22 @@ class _ConsentScreenState extends State<ConsentScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          iconColor: AppColors.primary,
+          iconColor: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
           collapsedIconColor: AppColors.primary,
           leading: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withAlpha(20),
+              color: isDark ? AppColors.textPrimaryDark.withAlpha(20) :  AppColors.primary.withAlpha(20),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 20),
+            child: Icon(icon, color: isDark ? AppColors.textPrimaryDark :  AppColors.primary, size: 20),
           ),
           title: Text(
             title,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 15,
-              color: HexColor.fromHex("#2D4A52"),
+              color: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
             ),
           ),
           initiallyExpanded: true,
@@ -251,6 +262,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
   }
 
   Widget _pasal(int nomor, String judul, String isi) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -261,17 +273,13 @@ class _ConsentScreenState extends State<ConsentScreen> {
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
-              color: AppColors.secondary,
+              color:AppColors.secondary,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             isi,
-            style: TextStyle(
-              fontSize: 12,
-              color: HexColor.fromHex("#5a7b8a"),
-              height: 1.5,
-            ),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(height: 1.5, color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight)
           ),
         ],
       ),
@@ -279,15 +287,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
   }
 
   Widget _paragraf(String text) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 12,
-          color: HexColor.fromHex("#5a7b8a"),
-          height: 1.5,
-        ),
+        style: Theme.of(context).textTheme.labelSmall!.copyWith(height: 1.5, color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight)
       ),
     );
   }
@@ -296,7 +301,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         boxShadow: [
           BoxShadow(
@@ -316,10 +321,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
       title: Text(
         "Saya menyetujui Syarat & Ketentuan",
-        style: TextStyle(
-          fontSize: 13,
-          color: HexColor.fromHex("#2D4A52"),
-        ),
+         style: Theme.of(context).textTheme.labelSmall
       ),
 
       value: _syaratChecked,
@@ -352,10 +354,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
       title: Text(
         "Saya menyetujui Kebijakan Privasi",
-        style: TextStyle(
-          fontSize: 13,
-          color: HexColor.fromHex("#2D4A52"),
-        ),
+        style: Theme.of(context).textTheme.labelSmall
       ),
 
       value: _privasiChecked,
@@ -389,9 +388,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
       child: FilledButton(
         onPressed: _canProceed ? _lanjutkan : null,
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.secondary,
+          backgroundColor: AppColors.primary,
           disabledBackgroundColor:
-              AppColors.secondary.withAlpha(60),
+              AppColors.primary.withAlpha(60),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

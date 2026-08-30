@@ -10,7 +10,6 @@ import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class DoaScreen extends StatefulWidget {
   const DoaScreen({super.key});
@@ -26,9 +25,13 @@ class _DoaScreenState extends State<DoaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Doa",
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        titleColor: Theme.of(context).textTheme.titleSmall!.color,
+        backIconColor: Theme.of(context).textTheme.titleSmall!.color,
       ),
       body: Stack(
         children: [
@@ -87,6 +90,7 @@ class _DoaScreenState extends State<DoaScreen> {
   }
 
   Widget _buildDoaItem(doa) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         final selectedIndex = setting.fontSelected.value;
@@ -98,7 +102,7 @@ class _DoaScreenState extends State<DoaScreen> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -108,7 +112,10 @@ class _DoaScreenState extends State<DoaScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    OctagramBadge(number: "${doa.id}"),
+                    OctagramBadge(
+                      number: "${doa.id}",
+                      numberColor: isDark ? AppColors.light : AppColors.dark,
+                    ),
                     SizedBox(width: 15),
                     Flexible(
                       child: Column(
@@ -119,19 +126,14 @@ class _DoaScreenState extends State<DoaScreen> {
                             doa.nama,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: HexColor.fromHex("#1E4355"),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(fontSize: 14),
                           ),
                           Text(
                             doa.grup,
-                            style: TextStyle(
-                              color: HexColor.fromHex("#676767"),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                            ),
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : null),
                           ),
                         ],
                       ),
@@ -147,9 +149,10 @@ class _DoaScreenState extends State<DoaScreen> {
   }
 
   void _showDoaDetail(doa, String fontFamily) {
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: HexColor.fromHex("#FAFCFF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -161,6 +164,7 @@ class _DoaScreenState extends State<DoaScreen> {
           minChildSize: 0.3,
           maxChildSize: 1.0,
           builder: (context, scrollController) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
             return SingleChildScrollView(
               controller: scrollController,
               padding: const EdgeInsets.all(20),
@@ -169,18 +173,14 @@ class _DoaScreenState extends State<DoaScreen> {
                 children: [
                   Text(
                     doa.nama,
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600
-                      
-                    )
+                    style: Theme.of(context).textTheme.titleSmall
+                    
                   ),
                   SizedBox(height: 5),
                   Text(
                     doa.grup,
                      style: TextStyle(
-                            color: HexColor.fromHex("#676767"),
+                            color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : HexColor.fromHex("#676767"),
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
@@ -199,7 +199,7 @@ class _DoaScreenState extends State<DoaScreen> {
                         style: TextStyle(
                           fontFamily: fontFamily,
                           fontSize: 28,
-                          color: Colors.black,
+                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                           height: 2.5,
                         ),
                         textAlign: TextAlign.end,
@@ -211,7 +211,7 @@ class _DoaScreenState extends State<DoaScreen> {
                     doa.tr,
                     style: TextStyle(
                       fontSize: 14,
-                      color:  const Color.fromARGB(255, 45, 45, 45)
+                      color:  isDark ? AppColors.secondary : AppColors.primary
                     ),
                   ),
                   SizedBox(height: 20),
@@ -219,7 +219,7 @@ class _DoaScreenState extends State<DoaScreen> {
                     doa.idn,
                     style: TextStyle(
                       fontSize: 14,
-                      color:  const Color.fromARGB(255, 45, 45, 45)
+                      color:  isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight
                     ),
                   ),
                   SizedBox(height: 20),
@@ -227,8 +227,15 @@ class _DoaScreenState extends State<DoaScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       
-                      color: AppColors.primary,
+                      color: isDark ? Theme.of(context).cardColor :  AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
+                      border: isDark ? Border(
+                    left: BorderSide(
+                      width: 3,
+                      color: AppColors.secondary,
+                    ),
+                  ) : null,
+
                       
                       boxShadow: [
   BoxShadow(

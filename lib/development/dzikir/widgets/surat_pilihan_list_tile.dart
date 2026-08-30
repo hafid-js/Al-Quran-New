@@ -1,6 +1,5 @@
 import 'package:alquran_new/binding/surah_binding.dart';
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/dzikir/screens/detail_surat_pilihan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

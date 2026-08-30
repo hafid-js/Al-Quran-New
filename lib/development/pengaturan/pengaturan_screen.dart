@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_aplikasi.dart';
 import 'package:alquran_new/development/pengaturan/webview_page.dart';
 import 'package:alquran_new/development/pengaturan/pengaturan_notifikasi.dart';
