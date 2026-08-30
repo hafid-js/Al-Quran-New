@@ -109,7 +109,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context, _selectedDay),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor:                          isDark ?  AppColors.primary.withAlpha(50) : AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(

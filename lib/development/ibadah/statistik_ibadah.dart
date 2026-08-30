@@ -414,7 +414,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -859,7 +859,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           width: double.infinity,
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -889,7 +889,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           width: double.infinity,
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -1277,7 +1277,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 width: double.infinity,
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: isDark ?  AppColors.primary.withAlpha(50) : AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(

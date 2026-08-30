@@ -206,7 +206,6 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(8),
-                            border: isDark ? Border.all(width: 1, color: AppColors.textPrimaryDark.withAlpha(80)) : null
                           ),
                           child: ListTile(
                             visualDensity: const VisualDensity(vertical: -1),

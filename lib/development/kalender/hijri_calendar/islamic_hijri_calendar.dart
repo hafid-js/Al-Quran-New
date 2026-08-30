@@ -535,7 +535,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                       width: 50,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: isDark ? AppColors.primary.withAlpha(120) : AppColors.primary,
+                                        color: isDark ? AppColors.primary.withAlpha(50) : AppColors.primary,
                                       ),
                                       child: Center(
                                         child: Column(

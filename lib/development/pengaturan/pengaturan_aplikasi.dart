@@ -167,7 +167,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? Theme.of(context).colorScheme.primary.withAlpha(90)
-                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
+                                    : Theme.of(context).colorScheme.primary.withAlpha(50),
                                 border: isSelected
                                     ? BoxBorder.all(
                                               color: Theme.of(context).colorScheme.secondary,
@@ -250,7 +250,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? Theme.of(context).colorScheme.primary.withAlpha(90)
-                                    : Theme.of(context).colorScheme.primary.withAlpha(10),
+                                    : Theme.of(context).colorScheme.primary.withAlpha(50),
                                 border: isSelected
                                     ? BoxBorder.all(
                                               color: Theme.of(context).colorScheme.secondary,

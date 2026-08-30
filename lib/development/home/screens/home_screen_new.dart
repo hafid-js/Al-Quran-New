@@ -575,11 +575,12 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 4,
+                                horizontal: 6,
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: HexColor.fromHex("#246177"),
+                                color:                           isDark ?  AppColors.primary.withAlpha(100) : AppColors.primary,
+             
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
