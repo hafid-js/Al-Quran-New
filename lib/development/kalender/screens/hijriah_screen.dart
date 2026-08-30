@@ -10,12 +10,15 @@ class HijriahScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Kalender Islam",
-        backgroundColor: HexColor.fromHex("#F9F5EF"),
-        surfaceTintColor: Colors.transparent,
+        titleColor: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+        backIconColor:isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         child: Padding(

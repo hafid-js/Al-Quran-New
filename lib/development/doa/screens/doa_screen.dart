@@ -149,10 +149,10 @@ class _DoaScreenState extends State<DoaScreen> {
   }
 
   void _showDoaDetail(doa, String fontFamily) {
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                       backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),

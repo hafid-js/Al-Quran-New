@@ -741,13 +741,14 @@ class _CarouselItem {
 }
 
 void _showMurrotalScreen(BuildContext context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
   SurahBinding().dependencies();
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (bottomSheetContext) => [
       SliverWoltModalSheetPage(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: isDark ? Theme.of(context).cardColor : Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: isDark ? Theme.of(context).cardColor : Theme.of(context).scaffoldBackgroundColor,
         hasTopBarLayer: false,
         mainContentSliversBuilder: (context) => const [
           SliverToBoxAdapter(child: MurrotalContent()),

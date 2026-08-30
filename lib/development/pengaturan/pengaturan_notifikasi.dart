@@ -130,7 +130,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.labelSmall
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 14)
                   ),
                 ],
               ),
@@ -153,16 +153,15 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
               trackColor: WidgetStateProperty.resolveWith<Color>(
                 (states) {
                   if (states.contains(WidgetState.selected)) {
-                    return AppColors.primary;
+                    return AppColors.secondary;
                   }
                   return Colors.black.withAlpha(60);
                 },
               ),
-              trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
-                (states) {
-                  return Colors.white;
-                },
-              ),
+               trackOutlineColor: const WidgetStatePropertyAll(
+    Colors.transparent,
+  ),
+              
               onChanged: (bool value) => onTap(),
             ),
           ),

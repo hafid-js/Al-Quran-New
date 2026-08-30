@@ -103,49 +103,18 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                     states,
                                   ) {
                                     if (states.contains(WidgetState.selected)) {
-                                      return AppColors.primary;
+                                      return AppColors.secondary;
                                     }
 
                                     return Colors.black.withAlpha(60);
                                   }),
 
-                              trackOutlineColor:
-                                  WidgetStateProperty.resolveWith<Color>((
-                                    states,
-                                  ) {
-                                    return Colors.white;
-                                  }),
+                    trackOutlineColor: const WidgetStatePropertyAll(
+    Colors.transparent,
+  ),
 
                               onChanged: (bool value) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    backgroundColor: HexColor.fromHex("#F9F5EF"),
-                                    title: Text(
-                                      "Masih Dalam Pengembangan",
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    content: const Text(
-                                      "Fitur Tema Gelap masih dalam tahap pengembangan. "
-                                      "Silakan coba lagi pada pembaruan berikutnya.",
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                          "Mengerti",
-                                          style: TextStyle(
-                                            color: AppColors.primary,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                controller.changeMode(value ? 0 : 1);
                               },
                             ),
                           ),

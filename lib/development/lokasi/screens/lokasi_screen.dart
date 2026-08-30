@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/development/lokasi/controllers/location_controller.dart';
 import 'package:alquran_new/development/lokasi/services/location_service.dart';
@@ -42,9 +43,12 @@ class _LokasiScreenState extends State<LokasiScreen> {
 
   @override
   Widget build(BuildContext context) {
+   final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
+                surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_circle_left_rounded),
@@ -58,12 +62,12 @@ class _LokasiScreenState extends State<LokasiScreen> {
               width: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).textTheme.labelSmall?.color!.withAlpha(10),
               ),
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: Theme.of(context).colorScheme.primary,
+                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
               ),
             ),
             const SizedBox(width: 10),
@@ -72,7 +76,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
               children: [
                 Text(
                   "Pilih Lokasi",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
             ),
@@ -120,7 +124,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
 
                                   fontWeight: FontWeight.w400,
                                   color: selected
-                                      ? Theme.of(context).colorScheme.primary
+                                      ? (isDark ? AppColors.textPrimaryDark : Theme.of(context).colorScheme.primary)
                                       : null,
                                 ),
                               ),
@@ -154,11 +158,11 @@ class _LokasiScreenState extends State<LokasiScreen> {
                       ),
                     ),
                   ),
-                  hint: const Text(
+                  hint: Text(
                     "Pilih Provinsi",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.titleSmall!.color,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -181,10 +185,13 @@ class _LokasiScreenState extends State<LokasiScreen> {
                   ),
                   isExpanded: true,
                   valueListenable: cityNotifier,
+                  
                   items:
                       c.selectedProvince.value == null || c.isLoadingCity.value
+
                       ? []
                       : c.cities.map((e) {
+                                  final selectedCity = c.selectedCity.value == e;
                           return DropdownItem<String>(
                             value: e,
                             child: Text(
@@ -192,6 +199,9 @@ class _LokasiScreenState extends State<LokasiScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
+                                color: selectedCity
+                                      ? (isDark ? AppColors.textPrimaryDark : Theme.of(context).colorScheme.primary)
+                                      : null,
                               ),
                             ),
                           );
@@ -229,7 +239,11 @@ class _LokasiScreenState extends State<LokasiScreen> {
                         : c.selectedProvince.value == null
                         ? "Pilih provinsi dulu"
                         : "Pilih kota",
-                    style: Theme.of(context).textTheme.titleSmall
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).textTheme.titleSmall!.color,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
 
@@ -259,7 +273,11 @@ class _LokasiScreenState extends State<LokasiScreen> {
                       await prayerController.fetchPrayerTimes();
 
                       Get.back();
-                      Get.snackbar("Lokasi Disimpan", "$province, $city");
+                      Get.snackbar("Lokasi Disimpan", "$province, $city",   snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 2),
+        backgroundColor: Get.theme.cardColor,
+        colorText: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+        );
                      } finally {
                       c.isSaving.value = false;
                      }

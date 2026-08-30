@@ -88,8 +88,8 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
-                    surfaceTintColor:  isDark ? Theme.of(context).scaffoldBackgroundColor :  Colors.white,
+                    backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
+                    surfaceTintColor:  isDark ? Theme.of(context).cardColor :  Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(

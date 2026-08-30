@@ -157,6 +157,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
     required double rowHeight,
     required double fontSize,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onPanUpdate: (details) => _onPanUpdate(details),
       onPanEnd: (details) => _onPanEnd(),
@@ -181,13 +182,13 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
             fontSize: fontSize,
             dateHijriTextSize: 11,
             defaultTextColor:
-                Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+                AppColors.textPrimaryDark,
             highlightTextColor:
-                Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
+                AppColors.textPrimaryDark,
             day: days[index],
             highlightBorder: widget.highlightBorder,
             defaultBorder: widget.defaultBorder,
-            backgroundColor: AppColors.primary,
+            backgroundColor: isDark ? null : AppColors.primary,
             deActiveDateBorderColor: widget.defaultBorder,
             eventBackgroundColor: AppColors.secondary,
             style: textStyle,
@@ -247,6 +248,8 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
           fontSize = 16;
         }
 
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
         return Column(
           children: [
             // previous month button, month name & year, next month button
@@ -254,6 +257,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
               padding: EdgeInsets.symmetric(vertical: 30),
               width: double.infinity,
               decoration: BoxDecoration(
+                color: isDark ? Theme.of(context).cardColor : null,
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                     AppColors.primary.withAlpha(210),
@@ -263,7 +267,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                   image: AssetImage("assets/images/image.png"),
                 ),
                 borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
+                gradient: isDark ? null : LinearGradient(
                   colors: [
                     AppColors.primary,
                     AppColors.primary,
@@ -306,7 +310,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: AppColors.primary,
+                      color: isDark ? Theme.of(context).cardColor : AppColors.primary ,
                     ),
                     child: Icon(
                       Icons.arrow_circle_left_rounded,
@@ -327,7 +331,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                           textAlign: TextAlign.center,
                           style: textStyle.copyWith(
                             fontSize: 14,
-                            color: HexColor.fromHex("#1E4355"),
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary, fontWeight: FontWeight.w600
                           ),
                         ),
                         SizedBox(height: 5),
@@ -341,7 +345,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                           style: textStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
-                            color: HexColor.fromHex("#1E4355"),
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                           ),
                         ),
                       ],
@@ -358,7 +362,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: AppColors.primary,
+                      color:isDark ? Theme.of(context).cardColor : AppColors.primary
                     ),
                     child: Icon(
                       Icons.arrow_circle_right_rounded,
@@ -381,7 +385,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     padding: EdgeInsets.all(12),
                     
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12)
                     ),
                     child: 
@@ -459,7 +463,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                 width: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.primary,
+                                  color: isDark ? Theme.of(context).cardColor : AppColors.primary,
                                 ),
                                 child: Icon(
                                   Icons.star_rate_rounded,
@@ -472,7 +476,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                 "Hari Besar Bulan Ini",
                                 style: Theme.of(context).textTheme.titleMedium!
                                     .copyWith(
-                                      color: HexColor.fromHex("#1E4355"),
+                                      color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                     ),
                               ),
                             ],
@@ -521,7 +525,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                               Container(
                                 padding: EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Row(
@@ -531,7 +535,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                       width: 50,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: AppColors.primary,
+                                        color: isDark ? AppColors.primary.withAlpha(120) : AppColors.primary,
                                       ),
                                       child: Center(
                                         child: Column(
@@ -570,9 +574,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                               .textTheme
                                               .titleSmall!
                                               .copyWith(
-                                                color: HexColor.fromHex(
-                                                  "#256980",
-                                                ),
+                                                color:isDark ? AppColors.textPrimaryDark : AppColors.primary
                                               ),
                                         ),
                                         Row(

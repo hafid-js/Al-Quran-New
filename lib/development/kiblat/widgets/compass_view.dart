@@ -242,13 +242,14 @@ class _QiblahCompassWidget extends StatelessWidget {
                     child: Image.asset(
                       'assets/animations/bar_loader.gif',
                       height: 100,
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'Menunggu sensor kompas...',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? AppColors.textPrimaryDark : null),
                 ),
               ],
             ),
@@ -259,7 +260,7 @@ class _QiblahCompassWidget extends StatelessWidget {
           return Center(
             child: Text(
               'Menunggu data kompas...',
-              style: Theme.of(context).textTheme.labelMedium,
+ style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? AppColors.textPrimaryDark : null),
             ),
           );
         }
