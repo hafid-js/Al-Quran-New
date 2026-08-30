@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
@@ -22,7 +23,7 @@ class SettingsController extends GetxController {
      RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
   RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
 
-  var currentColor = HexColor.fromHex("#256980").obs;
+  var currentColor = AppColors.primary.obs;
 
   @override
   void onInit() {

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
           widget.label,
           style: TextStyle(
             fontSize: 16,
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -65,7 +66,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
                   overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
                 ),
                 child: Slider(
-                  activeColor: HexColor.fromHex("#D39D52"),
+                  activeColor: AppColors.secondary,
                   inactiveColor: HexColor.fromHex("#D7D4D5"),
                   value: _value,
                   min: widget.min,
@@ -77,7 +78,7 @@ class _SettingsSliderState extends State<SettingsSlider> {
                 ),
               ),
             ),
-            Text("${_value.toInt()} px", style: TextStyle(color: HexColor.fromHex("#256980")),),
+            Text("${_value.toInt()} px", style: TextStyle(color: AppColors.primary),),
           ],
         ),
 

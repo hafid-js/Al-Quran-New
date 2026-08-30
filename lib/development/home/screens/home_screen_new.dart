@@ -246,7 +246,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                   
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      HexColor.fromHex("#256980").withAlpha(210),
+                      AppColors.primary.withAlpha(210),
                       BlendMode.srcATop,
                     ),
                     fit: BoxFit.cover,
@@ -358,7 +358,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 TextSpan(
                                   text: controller.remainingText,
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ],
@@ -613,7 +613,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                               currentStep: _ibadahProgress.$1 > 0
                                   ? _ibadahProgress.$1 * 2 + 10
                                   : 0,
-                              selectedColor: HexColor.fromHex("#256980"),
+                              selectedColor: AppColors.primary,
                               size: 28,
                               padding: 3,
                               unselectedColor: Colors.grey.withAlpha(120),
@@ -679,7 +679,7 @@ Widget _buildPrayerTimeItem(
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12,
-            color: isNext ? HexColor.fromHex("#D39D52") : Colors.white,
+            color: isNext ? AppColors.secondary : Colors.white,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -687,7 +687,7 @@ Widget _buildPrayerTimeItem(
         Icon(
           prayerTime["icon"],
           size: 20,
-          color: isNext ? HexColor.fromHex("#D39D52") : Colors.white,
+          color: isNext ? AppColors.secondary : Colors.white,
         ),
         SizedBox(height: 5),
         Text(
@@ -695,7 +695,7 @@ Widget _buildPrayerTimeItem(
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12,
-            color: isNext ? HexColor.fromHex("#D39D52") : Colors.white,
+            color: isNext ? AppColors.secondary : Colors.white,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -721,7 +721,7 @@ class _MenuItemWidget extends StatelessWidget {
           Icon(
             menu["icon"],
             size: 30,
-            color: HexColor.fromHex("#D39D52"),
+            color: AppColors.secondary,
           ),
           SizedBox(height: 5),
           Text(
@@ -780,7 +780,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
           Text(
             "Popular",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -818,7 +818,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                         end: Alignment.bottomCenter,
                         colors: [
                           HexColor.fromHex("#F9F5EF"),
-                          HexColor.fromHex("#256980"),
+                          AppColors.primary,
                         ],
                       ),
                     ),
@@ -835,7 +835,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: HexColor.fromHex("#256980"),
+                                color: AppColors.primary,
                                 width: 30,
                               ),
                             ),
@@ -958,7 +958,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                       dotWidth: 8,
                       spacing: 8,
                       expansionFactor: 4,
-                      activeDotColor: HexColor.fromHex("#256980"),
+                      activeDotColor: AppColors.primary,
                       dotColor: Colors.white,
                     ),
                     controller: PageController(initialPage: _currentIndex),
@@ -971,7 +971,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
           Text(
             "Qori Terfavorit",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
           ),

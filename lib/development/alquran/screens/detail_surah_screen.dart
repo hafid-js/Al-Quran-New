@@ -1,5 +1,5 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/shared/theme/app_colors.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
@@ -173,7 +173,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -284,7 +284,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                       decoration: BoxDecoration(
                         color: isDark
                             ? Theme.of(context).cardColor
-                            : HexColor.fromHex("#256980"),
+                            : AppColors.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -306,7 +306,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     TextSpan(
                                       text: data.namaLatin,
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
+                                        color: AppColors.secondary,
                                       ),
                                     ),
                                   ),
@@ -325,7 +325,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     TextSpan(
                                       text: data.arti,
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
+                                        color: AppColors.secondary,
                                       ),
                                     ),
                                   ),
@@ -344,7 +344,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     TextSpan(
                                       text: data.jumlahAyat.toString(),
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
+                                        color: AppColors.secondary,
                                       ),
                                     ),
                                   ),
@@ -363,7 +363,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                     TextSpan(
                                       text: data.tempatTurun,
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
+                                        color: AppColors.secondary,
                                       ),
                                     ),
                                   ),
@@ -441,7 +441,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                     Text(
                       "${ayat.nomorAyat}",
                       style: TextStyle(
-                        color: HexColor.fromHex("#D39D52"),
+                        color: AppColors.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -479,7 +479,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                           ayat.teksLatin,
                           style: TextStyle(
                             color: isDark
-                                ? HexColor.fromHex("#D39D52")
+                                ? AppColors.secondary
                                 : Colors.black,
                             fontSize: controller.ukuranLatinTerjemah.value,
                           ),
@@ -579,7 +579,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                 child: Icon(
                                   saved ? Iconsax.save_21 : Iconsax.save_2,
                                   color: saved
-                                      ? HexColor.fromHex("#D39D52")
+                                      ? AppColors.secondary
                                       : isDark
                                       ? Colors.white
                                       : HexColor.fromHex("#504F52"),
@@ -624,8 +624,8 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                       : Iconsax.play_circle,
                                   color: kondisi == "playing"
                                       ? isDark
-                                            ? HexColor.fromHex("#D39D52")
-                                            : HexColor.fromHex("#256980")
+                                            ? AppColors.secondary
+                                            : AppColors.primary
                                       : isDark
                                       ? Colors.white
                                       : HexColor.fromHex("#504F52"),

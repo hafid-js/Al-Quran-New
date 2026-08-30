@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -24,10 +25,11 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -37,7 +39,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
          Center(
             child: Text(
               "Pilih Tanggal",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: HexColor.fromHex("#5a7b8a"),),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isDark ? Colors.white : HexColor.fromHex("#5a7b8a"),),
             ),
           ),
           SizedBox(
@@ -48,6 +50,10 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
               focusedDay: _focusedDay,
               startingDayOfWeek: StartingDayOfWeek.monday,
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontWeight: FontWeight.w600),
+                 weekendStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontWeight: FontWeight.w600)
+              ),
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
@@ -58,25 +64,25 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
-                titleTextStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
+                titleTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"), fontSize: 16, fontWeight: FontWeight.w500),
                 leftChevronIcon: Icon(
                   Iconsax.arrow_circle_left,
-                  color: HexColor.fromHex("#256980"),
+                  color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
                 ),
                 rightChevronIcon: Icon(
                   Iconsax.arrow_circle_right,
-                  color: HexColor.fromHex("#256980"),
+                  color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
                 ),
               ),
               calendarStyle: CalendarStyle(
-    defaultTextStyle: TextStyle(color: HexColor.fromHex("#256980")),
-      weekendTextStyle: TextStyle(color: HexColor.fromHex("#256980")),
+    defaultTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
+      weekendTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
                 todayDecoration: BoxDecoration(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: HexColor.fromHex("#D39D52"),
+                  color: AppColors.secondary,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -89,13 +95,13 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text("Batal"),
+                  child: Text("Batal", style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),),
                 ),
               ),
               const SizedBox(width: 12),
@@ -103,7 +109,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context, _selectedDay),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran/controllers/hizb_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
@@ -121,7 +122,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -258,7 +259,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                 TextSpan(
                                   text: "$hizbNumber",
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -277,7 +278,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                 TextSpan(
                                   text: firstSurah,
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -296,7 +297,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                 TextSpan(
                                   text: lastSurah,
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -315,7 +316,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                 TextSpan(
                                   text: "${ayatList.length}",
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -349,7 +350,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                         Text(
                           "${ayat.numberInSurah}",
                           style: TextStyle(
-                            color: HexColor.fromHex("#D39D52"),
+                            color: AppColors.secondary,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -357,7 +358,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                         Text(
                           "${ayat.surahNamaLatin}",
                           style: TextStyle(
-                            color: HexColor.fromHex("#D39D52"),
+                            color: AppColors.secondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -393,7 +394,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                         child: Text(
                           ayat.teksLatin,
                           style: TextStyle(
-                            color: isDark ? HexColor.fromHex("#D39D52") : Colors.black,
+                            color: isDark ? AppColors.secondary : Colors.black,
                             fontSize: fontController.ukuranLatinTerjemah.value,
                           ),
                         ),

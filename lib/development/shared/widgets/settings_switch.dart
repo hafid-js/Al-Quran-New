@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class SettingsSwitchTile extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 16,
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -32,7 +33,7 @@ class SettingsSwitchTile extends StatelessWidget {
             value: value,
             activeThumbColor: Colors.white,
             inactiveThumbColor: Colors.white,
-            activeTrackColor: HexColor.fromHex("#D39D52"),
+            activeTrackColor: AppColors.secondary,
             inactiveTrackColor: HexColor.fromHex("#D7D4D5"),
             trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
             onChanged: onChanged,

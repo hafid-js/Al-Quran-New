@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/shared/widgets/search_bar.dart';
 import 'package:alquran_new/development/doa/controllers/doa_controller.dart';
@@ -169,7 +170,7 @@ class _DoaScreenState extends State<DoaScreen> {
                   Text(
                     doa.nama,
                     style: TextStyle(
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600
                       
@@ -226,7 +227,7 @@ class _DoaScreenState extends State<DoaScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
                       
                       boxShadow: [

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran/controllers/juz_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
@@ -111,7 +112,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -239,7 +240,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                 TextSpan(
                                   text: "$juzNumber",
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -258,7 +259,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                 TextSpan(
                                   text: firstSurah,
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -277,7 +278,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                 TextSpan(
                                   text: lastSurah,
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -296,7 +297,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                 TextSpan(
                                   text: "${ayatList.length}",
                                   style: TextStyle(
-                                    color: HexColor.fromHex("#D39D52"),
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -330,7 +331,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                        Text(
                       "${ayat.numberInSurah}",
                       style: TextStyle(
-                        color: HexColor.fromHex("#D39D52"),
+                        color: AppColors.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -338,7 +339,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                      Text(
                       "${ayat.surahNamaLatin}",
                       style: TextStyle(
-                        color: HexColor.fromHex("#D39D52"),
+                        color: AppColors.secondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -374,7 +375,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                         child: Text(
                           ayat.teksLatin,
                           style: TextStyle(
-                            color: isDark? HexColor.fromHex("#D39D52") : Colors.black,
+                            color: isDark? AppColors.secondary : Colors.black,
                             fontSize: fontController.ukuranLatinTerjemah.value,
                           ),
                         ),

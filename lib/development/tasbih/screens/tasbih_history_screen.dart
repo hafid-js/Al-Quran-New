@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -110,18 +111,18 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
 backgroundColor: HexColor.fromHex("#F9F5EF"),
         title:  Text(
           "Konfirmasi",
-          style: TextStyle(color: HexColor.fromHex("#256980"), fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w600),
         ),
         content: Text(
           message,
-          style: TextStyle(color: HexColor.fromHex("#256980")),
+          style: TextStyle(color: AppColors.primary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(
               "Batal",
-              style: TextStyle(fontSize: 14,color: HexColor.fromHex("#D39D52")),
+              style: TextStyle(fontSize: 14,color: AppColors.secondary),
             ),
           ),
           TextButton(
@@ -177,7 +178,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
               onPressed: _confirmDeleteAll,
               child: Text(
                 "Hapus Semua",
-                style: TextStyle(fontSize: 14,color: HexColor.fromHex("#D39D52")),
+                style: TextStyle(fontSize: 14,color: AppColors.secondary),
               ),
             ),
         ],
@@ -188,7 +189,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
              decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-              HexColor.fromHex("#256980").withAlpha(210),
+              AppColors.primary.withAlpha(210),
               BlendMode.srcATop,
             ),
             fit: BoxFit.cover,
@@ -211,7 +212,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
        decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-              HexColor.fromHex("#256980").withAlpha(210),
+              AppColors.primary.withAlpha(210),
               BlendMode.srcATop,
             ),
             fit: BoxFit.cover,
@@ -278,7 +279,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
                   Icon(
                     Icons.calendar_today_outlined,
                     size: 16,
-                    color: HexColor.fromHex("#D39D52"),
+                    color: AppColors.secondary,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -314,7 +315,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
               Text(
                 "$total kali",
                 style: TextStyle(
-                  color: HexColor.fromHex("#D39D52"),
+                  color: AppColors.secondary,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -337,7 +338,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
                               : Icons.circle_outlined,
                           size: 14,
                           color: entry.value[i] >= target
-                              ? HexColor.fromHex("#D39D52")
+                              ? AppColors.secondary
                               : Colors.white38,
                         ),
                         const SizedBox(width: 6),

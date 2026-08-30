@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class KiblatMap extends StatelessWidget {
                 polylines: [
                   Polyline(
                     points: [userPoint, kaabaPoint],
-                    color: HexColor.fromHex("#256980"),
+                    color: AppColors.primary,
                     strokeWidth: 2.5,
                   ),
                 ],
@@ -73,7 +74,7 @@ class KiblatMap extends StatelessWidget {
                     height: 40,
                     child: Icon(
                       Icons.my_location,
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       size: 36,
                     ),
                   ),
@@ -136,7 +137,7 @@ class KiblatMap extends StatelessWidget {
                         .titleMedium
                         ?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: HexColor.fromHex("#D39D52"),
+                          color: AppColors.secondary,
                         ),
                   ),
                   Text(
@@ -171,11 +172,11 @@ class KiblatMap extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.map,
-                size: 64, color: HexColor.fromHex("#256980")),
+                size: 64, color: AppColors.primary),
             const SizedBox(height: 16),
             Text(
               'Lokasi belum tersedia',
-              style: TextStyle(fontSize: 18, color: HexColor.fromHex("#256980"), fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 18, color: AppColors.primary, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -188,7 +189,7 @@ class KiblatMap extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => controller.startLocation(),
                 style: ElevatedButton.styleFrom(
-    backgroundColor: HexColor.fromHex("#256980"),
+    backgroundColor: AppColors.primary,
     foregroundColor: Colors.white,
   ),
               icon: const Icon(Icons.refresh),
@@ -215,7 +216,7 @@ class KiblatMap extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               controller.errorMessage.value,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: HexColor.fromHex("#256980")),
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: AppColors.primary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -228,7 +229,7 @@ class KiblatMap extends StatelessWidget {
                 }
               },
                 style: ElevatedButton.styleFrom(
-    backgroundColor: HexColor.fromHex("#256980"),
+    backgroundColor: AppColors.primary,
     foregroundColor: Colors.white,
   ),
               icon: Icon(isPermanent ? Icons.settings : Icons.refresh),

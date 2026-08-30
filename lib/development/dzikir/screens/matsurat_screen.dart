@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/dzikir/screens/detail_matsurat_screen.dart';
@@ -222,7 +223,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
       
-        color:   HexColor.fromHex("#256980"),
+        color:   AppColors.primary,
         border: Border.all(
           color: Theme.of(context)
               .colorScheme
@@ -241,7 +242,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
             borderRadius: BorderRadius.circular(18),
           ),
           labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-          labelColor: isDark ? HexColor.fromHex("#256980") : Colors.white,
+          labelColor: isDark ? AppColors.primary : Colors.white,
           labelStyle: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w700,
@@ -312,7 +313,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
               Text(
                 "Bacaan Surat Pilihan",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
               ),
               SizedBox(height: 10),

@@ -1,5 +1,5 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/shared/theme/app_colors.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
@@ -173,7 +173,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -284,7 +284,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                       decoration: BoxDecoration(
                         color: isDark
                             ? Theme.of(context).cardColor
-                            : HexColor.fromHex("#256980"),
+                            : AppColors.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -306,7 +306,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                     TextSpan(
                                       text: data.namaLatin,
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
+                                        color: AppColors.secondary,
                                       ),
                                     ),
                                   ),
@@ -625,7 +625,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                   color: kondisi == "playing"
                                       ? isDark
                                             ? HexColor.fromHex("#D39D52")
-                                            : HexColor.fromHex("#256980")
+                                            : AppColors.primary
                                       : isDark
                                       ? Colors.white
                                       : HexColor.fromHex("#504F52"),

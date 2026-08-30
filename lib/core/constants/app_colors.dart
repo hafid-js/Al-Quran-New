@@ -33,7 +33,7 @@ final class AppColors {
 
   /// TEXT
   static const Color textPrimaryDark = Colors.white;
-  static Color textSecondaryDark = HexColor.fromHex("#256980");
+  static Color textSecondaryDark = AppColors.primary;
 // static Color get textPrimaryLight  =>
 //       setting.currentColor.value;
 static const Color textPrimaryLight = Color(0xFF2D4A52);

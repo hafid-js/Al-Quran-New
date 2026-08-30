@@ -2,7 +2,7 @@ import 'package:alquran_new/binding/bookmark_binding.dart';
 import 'package:alquran_new/development/core/db/hive_service.dart';
 import 'package:alquran_new/development/bookmark/models/bookmark_model.dart';
 import 'package:alquran_new/development/bookmark/screens/detail_surat_screen.dart';
-import 'package:alquran_new/development/shared/theme/app_colors.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vibration/vibration.dart';

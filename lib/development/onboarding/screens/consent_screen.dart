@@ -1,4 +1,5 @@
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
     return Scaffold(
       backgroundColor: HexColor.fromHex("#F9F5EF"),
       appBar: AppBar(
-        backgroundColor: HexColor.fromHex("#256980"),
-        surfaceTintColor: HexColor.fromHex("#256980"),
+        backgroundColor: AppColors.primary,
+        surfaceTintColor: AppColors.primary,
         toolbarHeight: 0,
       ),
       body: Column(
@@ -68,7 +69,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
       decoration: BoxDecoration(
-        color: HexColor.fromHex("#256980"),
+        color: AppColors.primary,
       ),
       child: Column(
         children: [
@@ -125,15 +126,15 @@ class _ConsentScreenState extends State<ConsentScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          iconColor: HexColor.fromHex("#256980"),
-          collapsedIconColor: HexColor.fromHex("#256980"),
+          iconColor: AppColors.primary,
+          collapsedIconColor: AppColors.primary,
           leading: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: HexColor.fromHex("#256980").withAlpha(20),
+              color: AppColors.primary.withAlpha(20),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: HexColor.fromHex("#256980"), size: 20),
+            child: Icon(icon, color: AppColors.primary, size: 20),
           ),
           title: Text(
             title,
@@ -260,7 +261,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
-              color: HexColor.fromHex("#D39D52"),
+              color: AppColors.secondary,
             ),
           ),
           const SizedBox(height: 4),
@@ -325,7 +326,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
       fillColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.selected)) {
-          return HexColor.fromHex("#D39D52");
+          return AppColors.secondary;
         }
         return Colors.white;
       }),
@@ -333,7 +334,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       checkColor: Colors.white,
 
       side: BorderSide(
-        color: HexColor.fromHex("#256980"),
+        color: AppColors.primary,
         width: 1.5,
       ),
 
@@ -361,7 +362,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
       fillColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.selected)) {
-          return HexColor.fromHex("#D39D52");
+          return AppColors.secondary;
         }
         return Colors.white;
       }),
@@ -369,7 +370,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       checkColor: Colors.white,
 
       side: BorderSide(
-        color: HexColor.fromHex("#256980"),
+        color: AppColors.primary,
         width: 1.5,
       ),
 
@@ -388,9 +389,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
       child: FilledButton(
         onPressed: _canProceed ? _lanjutkan : null,
         style: FilledButton.styleFrom(
-          backgroundColor: HexColor.fromHex("#D39D52"),
+          backgroundColor: AppColors.secondary,
           disabledBackgroundColor:
-              HexColor.fromHex("#D39D52").withAlpha(60),
+              AppColors.secondary.withAlpha(60),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

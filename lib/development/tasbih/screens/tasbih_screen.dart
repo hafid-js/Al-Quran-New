@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/development/tasbih/screens/tasbih_chart_screen.dart';
@@ -412,7 +413,7 @@ extendBody: true,
           color: Theme.of(context).cardColor,
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-              HexColor.fromHex("#256980").withAlpha(210),
+              AppColors.primary.withAlpha(210),
               BlendMode.srcATop,
             ),
             fit: BoxFit.cover,
@@ -471,7 +472,7 @@ extendBody: true,
                     onTap: resetSelectedDzikir,
                     child: Icon(
                       Iconsax.refresh5,
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                       size: 30,
                     ),
                   ),
@@ -479,7 +480,7 @@ extendBody: true,
                     onTap: _save,
                     child: Icon(
                       Icons.save,
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                       size: 30,
                     ),
                   ),
@@ -487,7 +488,7 @@ extendBody: true,
                     onTap: () => Get.to(() => TasbihHistoryScreen())?.then((_) => setState(() => _loadTodayData())),
                     child: Icon(
                       Icons.history,
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                       size: 35,
                     ),
                   ),
@@ -495,7 +496,7 @@ extendBody: true,
                   onTap: () => Get.to(() => TasbihChartScreen())?.then((_) => setState(() => _loadTodayData())),
                   child:  Icon(
                     Icons.bar_chart_rounded,
-                    color: HexColor.fromHex("#D39D52"),
+                    color: AppColors.secondary,
                     size: 30,
                   ),
                  )
@@ -544,7 +545,7 @@ extendBody: true,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
             color: isActive
-                ? HexColor.fromHex("#D39D52")
+                ? AppColors.secondary
                 : Colors.white.withAlpha(35),
             borderRadius: BorderRadius.circular(30),
             border: isActive ? null : Border.all(color: Colors.white24),
@@ -583,7 +584,7 @@ extendBody: true,
                   fontSize: 12,
                   color: isActive
                       ? Colors.white.withAlpha(220)
-                      : HexColor.fromHex("#D39D52"),
+                      : AppColors.secondary,
                 ),
               ),
             ],
@@ -641,7 +642,7 @@ extendBody: true,
               Text(
                 count.toString().padLeft(3, '0'),
                 style: TextStyle(
-                  color: HexColor.fromHex("#D39D52"),
+                  color: AppColors.secondary,
                   fontSize: 70,
                   fontWeight: FontWeight.bold,
                 ),

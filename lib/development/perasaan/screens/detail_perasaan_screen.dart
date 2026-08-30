@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
@@ -102,7 +103,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -267,7 +268,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
             Text(
               "${item.nomor}",
               style: TextStyle(
-                color: HexColor.fromHex("#D39D52"),
+                color: AppColors.secondary,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -296,7 +297,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
               Text(
                 item.latin,
                 style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   fontSize: ukuranLatin,
                 ),
               ),
@@ -321,10 +322,10 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                   border: Border(
                     left: BorderSide(
                       width: 3,
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                     ),
                   ),
-                  color: HexColor.fromHex("#D39D52").withAlpha(10),
+                  color: AppColors.secondary.withAlpha(10),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -398,7 +399,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                               'Berhasil Disalin',
                               style: TextStyle(color: Colors.white),
                             ),
-                            backgroundColor: HexColor.fromHex("#256980"),
+                            backgroundColor: AppColors.primary,
                             duration: Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
                           ),
@@ -451,7 +452,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
                             'Berhasil Disalin',
                             style: TextStyle(color: Colors.white),
                           ),
-                          backgroundColor: HexColor.fromHex("#256980"),
+                          backgroundColor: AppColors.primary,
                           duration: Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),

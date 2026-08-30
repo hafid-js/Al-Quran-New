@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/ibadah/calendar_picker_modal.dart';
@@ -431,6 +434,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
     String? currentMode,
     String? title,
     String? question,
+    required bool isDark,
+    
   }) {
     showModalBottomSheet(
       context: context,
@@ -448,7 +453,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               Icon(
                 Iconsax.tick_circle,
                 size: 45,
-                color: HexColor.fromHex("#D39D52"),
+                color: AppColors.secondary,
               ),
 
               const SizedBox(height: 10),
@@ -463,10 +468,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
               Text(
                 question ?? "Apakah kamu sudah melaksanakan shalat $name?",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? Colors.white : AppColors.primary, fontWeight: FontWeight.w400)
               ),
 
               const SizedBox(height: 20),
+
 
               if (onConfirmMode != null) ...[
                 Row(
@@ -481,16 +487,16 @@ class _IbadahScreenState extends State<IbadahScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: currentMode == 'berjamaah'
-                                ? HexColor.fromHex("#D39D52")
+                                ? AppColors.secondary
                                 : Colors.white,
                             foregroundColor: currentMode == 'berjamaah'
                                 ? Colors.white
-                                : HexColor.fromHex("#256980"),
+                                : AppColors.primary,
                             elevation: 0,
                             side: currentMode == 'berjamaah'
                                 ? null
                                 : BorderSide(
-                                    color: HexColor.fromHex("#256980"),
+                                    color: AppColors.primary,
                                   ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -513,16 +519,16 @@ class _IbadahScreenState extends State<IbadahScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: currentMode == 'sendiri'
-                                ? HexColor.fromHex("#D39D52")
+                                ? AppColors.secondary
                                 : Colors.white,
                             foregroundColor: currentMode == 'sendiri'
                                 ? Colors.white
-                                : HexColor.fromHex("#256980"),
+                                : AppColors.primary,
                             elevation: 0,
                             side: currentMode == 'sendiri'
                                 ? null
                                 : BorderSide(
-                                    color: HexColor.fromHex("#256980"),
+                                    color: AppColors.primary,
                                   ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -546,13 +552,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         onUndo();
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: HexColor.fromHex("#256980"),
-                        side: BorderSide(color: HexColor.fromHex("#256980")),
+                        foregroundColor: AppColors.primary,
+                        side: BorderSide(color: AppColors.primary),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text("Batalkan"),
+                      child: Text("Batalkan", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),),
                     ),
                   ),
                 ],
@@ -567,15 +573,15 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             onUndo();
                           },
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: HexColor.fromHex("#256980"),
+                            foregroundColor: AppColors.primary,
                             side: BorderSide(
-                              color: HexColor.fromHex("#256980"),
+                              color: AppColors.primary,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: const Text("Batalkan"),
+                  child: Text("Batalkan", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),),
                         ),
                       ),
 
@@ -591,7 +597,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             onConfirm?.call();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor.fromHex("#D39D52"),
+                            backgroundColor: AppColors.secondary,
                             foregroundColor: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -613,13 +619,15 @@ class _IbadahScreenState extends State<IbadahScreen> {
   }
 
   Widget _buildSunnahItem(String name, bool done) {
-    final inactiveColor = HexColor.fromHex("#256980");
-    final activeColor = HexColor.fromHex("#D39D52");
+    final inactiveColor = AppColors.primary;
+    final activeColor = AppColors.secondary;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final darkInactiveColor = HexColor.fromHex("#C9CFD4").withAlpha(180);
 
     return GestureDetector(
       onTap: () {
         _showSholatModal(
+          isDark : isDark,
           name,
           () {
             setState(() {
@@ -654,11 +662,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
         decoration: BoxDecoration(
           color: done ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: done ? activeColor : (isDark ? Colors.white : inactiveColor), width: 1.5),
+          border: Border.all(color: done ? activeColor : (isDark ? darkInactiveColor : inactiveColor), width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(Iconsax.sun_1, size: 24, color: done ? Colors.white : (isDark ? Colors.white : inactiveColor)),
+            Icon(Iconsax.sun_1, size: 24, color: done ? Colors.white : (isDark ? darkInactiveColor : inactiveColor)),
 
             SizedBox(height: 6),
 
@@ -667,7 +675,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: done ? Colors.white : (isDark ? Colors.white : inactiveColor),
+                color: done ? Colors.white : (isDark ? darkInactiveColor : inactiveColor),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -683,9 +691,10 @@ class _IbadahScreenState extends State<IbadahScreen> {
     bool done,
     IconData icon,
   ) {
-    final inactiveColor = HexColor.fromHex("#256980");
-    final activeColor = HexColor.fromHex("#D39D52");
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final inactiveColor = AppColors.primary;
+    final activeColor = AppColors.secondary;
+   final isDark = Theme.of(context).brightness == Brightness.dark;
+    final darkInactiveColor = HexColor.fromHex("#C9CFD4").withAlpha(180);
 
     final index = list.indexWhere((e) => e['name'] == name);
 
@@ -697,6 +706,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
     return GestureDetector(
       onTap: () {
         _showSholatModal(
+          isDark : isDark,
           name,
           () {
             setState(() {
@@ -727,11 +737,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
         decoration: BoxDecoration(
           color: done ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: done ? activeColor : (isDark ? Colors.white : inactiveColor), width: 1.5),
+          border: Border.all(color: done ? activeColor : (isDark ? darkInactiveColor : inactiveColor), width: 1.5),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 24, color: done ? Colors.white : (isDark ? Colors.white : inactiveColor)),
+            Icon(icon, size: 24, color: done ? Colors.white : (isDark ? darkInactiveColor: inactiveColor)),
 
             SizedBox(height: 6),
 
@@ -740,7 +750,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: done ? Colors.white : (isDark ? Colors.white : inactiveColor),
+                color: done ? Colors.white : (isDark ? darkInactiveColor : inactiveColor),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -751,9 +761,11 @@ class _IbadahScreenState extends State<IbadahScreen> {
   }
 
   Widget _buildSholatItem(String name, bool done, String? mode) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         _showSholatModal(
+          isDark : isDark,
           name,
           null,
           onUndo: done
@@ -793,8 +805,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
             done ? Icons.check_circle_rounded : Iconsax.tick_circle,
             size: 45,
             color: done
-                ? HexColor.fromHex("#D39D52")
-                : HexColor.fromHex("#C9CFD4"),
+                ? AppColors.secondary
+                : HexColor.fromHex("#C9CFD4").withAlpha(180),
           ),
 
           const SizedBox(height: 4),
@@ -804,7 +816,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: HexColor.fromHex("#5a7b8a"),
+              color: done ? (isDark ? HexColor.fromHex("#C9CFD4") : HexColor.fromHex("#5a7b8a") ) : HexColor.fromHex("#5a7b8a"),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -816,7 +828,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               mode == 'berjamaah' ? 'Berjamaah' : 'Sendiri',
               style: TextStyle(
                 fontSize: 10,
-                color: HexColor.fromHex("#D39D52"),
+                color: AppColors.secondary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -874,7 +886,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         Text(
                           "Progress Harian",
                           style: TextStyle(
-                            color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                            color: isDark ? Colors.white : AppColors.primary,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -887,7 +899,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               onTap: _showCalendarModal,
                               child: Icon(
                                 Iconsax.calendar_1,
-                                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                                color: isDark ? Colors.white : AppColors.primary,
                                 size: 30,
                               ),
                             ),
@@ -899,7 +911,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               onTap: () => Get.to(() => StatistikIbadah()),
                               child: Icon(
                                 Iconsax.chart_21,
-                                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                                color: isDark ? Colors.white : AppColors.primary,
                                 size: 30,
                               ),
                             ),
@@ -913,7 +925,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       _formattedDate,
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                        color: isDark ? Colors.white : AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
@@ -933,7 +945,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "$_totalDone dari $_totalAll Selesai",
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#256980"),
+                        color: isDark ? AppColors.secondary : AppColors.primary,
                         fontSize: 12,
                       ),
                     ),
@@ -943,7 +955,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     StepProgressIndicator(
                       totalSteps: _totalAll * 2 + 10,
                       currentStep: _totalDone > 0 ? _totalDone * 2 + 10 : 0 ,
-                      selectedColor: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#256980"),
+                      selectedColor: isDark ? AppColors.secondary : AppColors.primary,
                       size: 28,
                       padding: 3,
                       unselectedColor: Colors.grey,
@@ -955,7 +967,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isDark ? Theme.of(context).cardColor : HexColor.fromHex("#256980"),
+                        color: isDark ? Theme.of(context).cardColor : AppColors.primary,
                         borderRadius: BorderRadius.circular(12),
                         border: isDark ? Border.all(width: 0.5, color: Colors.white) : null
                       ),
@@ -985,7 +997,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Sholat Wajib",
                       style: TextStyle(
-                        color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                        color: isDark ? Colors.white : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1022,7 +1034,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Sholat Sunnah",
                       style: TextStyle(
-                        color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                        color: isDark ? Colors.white : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1063,7 +1075,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Ibadah Lainnya",
                       style: TextStyle(
-                        color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                        color: isDark ? Colors.white : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1106,7 +1118,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     Text(
                       "Puasa Sunnah",
                       style: TextStyle(
-                        color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                        color: isDark ? Colors.white : AppColors.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1153,7 +1165,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                           children: [
                             Icon(
                               Icons.menu_book_rounded,
-                              color: HexColor.fromHex("#256980"),
+                              color: AppColors.primary,
                             ),
 
                             SizedBox(width: 8),
@@ -1161,7 +1173,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             Text(
                               "Tilawah Hari Ini",
                               style: TextStyle(
-                                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                                color: isDark ? Colors.white : AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -1172,7 +1184,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showCatatModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor.fromHex("#256980"),
+                            backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
@@ -1186,7 +1198,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             children: [
                               Text(
                                 "Catat",
-                                style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600)
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.white,fontWeight: FontWeight.w600)
                               ),
 
                               SizedBox(width: 4),
@@ -1216,7 +1228,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: HexColor.fromHex("#D39D52"),
+                                      color: AppColors.secondary,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -1224,7 +1236,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                                   Text(
                                     "${_tilawahList[i]['halaman']} Halaman",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#256980"),
+                                      color: AppColors.primary,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
@@ -1272,7 +1284,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                           children: [
                             Icon(
                               Iconsax.card_coin,
-                              color: HexColor.fromHex("#256980"),
+                              color: AppColors.primary,
                               size: 20,
                             ),
 
@@ -1281,7 +1293,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             Text(
                               "Sedekah Hari Ini",
                               style: TextStyle(
-                                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                                color: isDark ? Colors.white : AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -1292,7 +1304,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                         ElevatedButton(
                           onPressed: _showSedekahModal,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor.fromHex("#256980"),
+                            backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 13,
@@ -1306,7 +1318,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             children: [
                               Text(
                                 "Catat",
-                                 style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600)
+                                 style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.white,fontWeight: FontWeight.w600)
                               ),
 
                               SizedBox(width: 4),
@@ -1336,7 +1348,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                               formatRupiah(_sedekahList[i]),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: HexColor.fromHex("#D39D52"),
+                                color: AppColors.secondary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -1364,7 +1376,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -1383,7 +1395,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                             formatRupiah(_totalSedekah),
                             style: TextStyle(
                               fontSize: 16,
-                              color: HexColor.fromHex("#D39D52"),
+                              color: AppColors.secondary,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -1444,12 +1456,12 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _surahController,
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: isDark ? Colors.white : HexColor.fromHex("#256980")),
+            style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
             decoration: InputDecoration(
               hintText: "Surah & Ayat",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
-              fillColor: isDark ? Colors.white.withAlpha(20) : Colors.white,
+              fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -1462,12 +1474,12 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           TextField(
             controller: _halamanController,
             keyboardType: TextInputType.number,
-            style: TextStyle(color: isDark ? Colors.white : HexColor.fromHex("#256980")),
+            style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
             decoration: InputDecoration(
               hintText: "Jumlah Halaman",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               filled: true,
-              fillColor: isDark ? Colors.white.withAlpha(20) : Colors.white,
+              fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -1483,13 +1495,13 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text("Batal"),
+                  child: Text("Batal", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),),
                 ),
               ),
 
@@ -1509,7 +1521,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -1568,21 +1580,21 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           TextField(
             controller: _nominalController,
             keyboardType: TextInputType.number,
-                  style: TextStyle(color: isDark ? Colors.white : HexColor.fromHex("#256980")),
+                  style: TextStyle(color: isDark ? Colors.white : AppColors.primary),
             inputFormatters: [_RupiahInputFormatter()],
             decoration: InputDecoration(
               hintText: "Nominal (Rp)",
               hintStyle: TextStyle(color: HexColor.fromHex("#5a7b8a")),
               prefixText: "Rp ",
               prefixStyle: TextStyle(
-                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                color: isDark ? Colors.white : AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
               filled: true,
               fillColor: isDark ? Colors.white.withAlpha(20) : HexColor.fromHex("#F9F5EF"),
               prefixIcon: Icon(
                 Iconsax.card_coin,
-                color: isDark ? Colors.white : HexColor.fromHex("#256980"),
+                color: isDark ? Colors.white : AppColors.primary,
                 size: 20,
               ),
               border: OutlineInputBorder(
@@ -1600,13 +1612,14 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HexColor.fromHex("#256980"),
-                    side: BorderSide(color: HexColor.fromHex("#256980")),
+                    foregroundColor: AppColors.primary,
+                    side: BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text("Batal"),
+ child: Text("Batal", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),),
+                
                 ),
               ),
 
@@ -1626,7 +1639,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
                     Navigator.pop(context, nominal);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("#256980"),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(

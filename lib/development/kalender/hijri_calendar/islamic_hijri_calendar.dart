@@ -187,9 +187,9 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
             day: days[index],
             highlightBorder: widget.highlightBorder,
             defaultBorder: widget.defaultBorder,
-            backgroundColor: HexColor.fromHex("#256980"),
+            backgroundColor: AppColors.primary,
             deActiveDateBorderColor: widget.defaultBorder,
-            eventBackgroundColor: HexColor.fromHex("#D39D52"),
+            eventBackgroundColor: AppColors.secondary,
             style: textStyle,
             onSelectedEnglishDate: (selectedDate) {
               if (widget.getSelectedEnglishDate != null) {
@@ -256,7 +256,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    HexColor.fromHex("#256980").withAlpha(210),
+                    AppColors.primary.withAlpha(210),
                     BlendMode.srcATop,
                   ),
                   fit: BoxFit.cover,
@@ -265,8 +265,8 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                 borderRadius: BorderRadius.circular(16),
                 gradient: LinearGradient(
                   colors: [
-                    HexColor.fromHex("#256980"),
-                    HexColor.fromHex("#256980"),
+                    AppColors.primary,
+                    AppColors.primary,
                   ],
                 ),
               ),
@@ -306,7 +306,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                     ),
                     child: Icon(
                       Icons.arrow_circle_left_rounded,
@@ -358,7 +358,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                     ),
                     child: Icon(
                       Icons.arrow_circle_right_rounded,
@@ -403,8 +403,8 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                           color:
                                               (DateTime.now().weekday - 1 ==
                                                   index)
-                                              ? HexColor.fromHex("#D39D52")
-                                              : HexColor.fromHex("#256980"),
+                                              ? AppColors.secondary
+                                              : AppColors.primary,
                                         ),
                                       ),
                                     ),
@@ -459,7 +459,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                 width: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: HexColor.fromHex("#256980"),
+                                  color: AppColors.primary,
                                 ),
                                 child: Icon(
                                   Icons.star_rate_rounded,
@@ -487,7 +487,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: HexColor.fromHex("#256980"),
+                                  color: AppColors.primary,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 padding: EdgeInsets.symmetric(
@@ -498,7 +498,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                   "Lihat Semua",
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: HexColor.fromHex("#256980"),
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ),
@@ -531,7 +531,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                       width: 50,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: HexColor.fromHex("#256980"),
+                                        color: AppColors.primary,
                                       ),
                                       child: Center(
                                         child: Column(

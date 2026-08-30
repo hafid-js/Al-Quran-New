@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +101,7 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
   }
 
   Widget _bead({int number = 0, required bool active}) {
-    final primary = HexColor.fromHex("#D39D52");
+    final primary = AppColors.secondary;
     return Container(
       width: _beadSize,
       height: _beadSize,
@@ -141,7 +142,7 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
               child: Container(
                 height: 3,
                 decoration: BoxDecoration(
-                  color: HexColor.fromHex("#D39D52").withAlpha(25),
+                  color: AppColors.secondary.withAlpha(25),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

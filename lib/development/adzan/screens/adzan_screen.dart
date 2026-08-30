@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/adzan/controllers/adzan_controller.dart';
 import 'package:alquran_new/development/home/screens/home_screen_new.dart';
@@ -71,10 +72,10 @@ class _AdzanScreenState extends State<AdzanScreen>
 
   @override
   Widget build(BuildContext context) {
-    final primary = HexColor.fromHex("#256980");
+    final primary = AppColors.primary;
 
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#256980"),
+      backgroundColor: AppColors.primary,
       body: Stack(
         children: [
           Positioned(

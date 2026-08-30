@@ -80,7 +80,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                   
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      HexColor.fromHex("#256980").withAlpha(210),
+                      AppColors.primary.withAlpha(210),
                       BlendMode.srcATop,
                     ),
                     fit: BoxFit.cover,
@@ -214,7 +214,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: HexColor.fromHex("#256980"),
+                                color: AppColors.primary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -229,7 +229,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                             ),
                             trailing: Icon(
                               Iconsax.play_circle5,
-                              color: HexColor.fromHex("#256980"),
+                              color: AppColors.primary,
                               size: 30,
                             ),
                           ),

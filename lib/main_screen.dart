@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/adzan/screens/adzan_screen.dart';
 import 'package:alquran_new/development/home/screens/home_screen_new.dart';
@@ -88,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        selectedItemColor: HexColor.fromHex("#256980"),
+        selectedItemColor: AppColors.primary,
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: TextStyle(
           fontSize: 14,

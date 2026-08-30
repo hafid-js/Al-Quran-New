@@ -1,4 +1,5 @@
 import 'package:alquran_new/binding/surah_binding.dart';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/dzikir/screens/detail_surat_pilihan_screen.dart';
 import 'package:flutter/material.dart';
@@ -39,11 +40,11 @@ class SuratPilihanListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                    Text(title, style: TextStyle(color: HexColor.fromHex("#256980"),fontSize: 16, fontWeight: FontWeight.w600)),
+                    Text(title, style: TextStyle(color: AppColors.primary,fontSize: 16, fontWeight: FontWeight.w600)),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/kalender/hijri_calendar/islamic_hijri_calendar.dart';
@@ -23,8 +24,8 @@ class HijriahScreen extends StatelessWidget {
             vertical: 10,
           ),
           child: IslamicHijriCalendar(
-            defaultBorder: HexColor.fromHex("#D39D52"),
-            defaultBackColor: HexColor.fromHex("#256980"),
+            defaultBorder: AppColors.secondary,
+            defaultBackColor: AppColors.primary,
           ),
         ),
       ),

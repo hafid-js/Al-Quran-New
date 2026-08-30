@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/murrotal/widgets/common.dart' hide ambiguate;
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
@@ -138,7 +139,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
       scaffoldMessengerKey: _scaffoldMessengerKey,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: HexColor.fromHex("#256980"),
+          backgroundColor: AppColors.primary,
           leading: GestureDetector(
             onTap: () => Get.back(),
             child: Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -148,13 +149,13 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
-                HexColor.fromHex("#256980").withAlpha(210),
+                AppColors.primary.withAlpha(210),
                 BlendMode.srcATop,
               ),
               fit: BoxFit.cover,
               image: AssetImage("assets/images/image.png"),
             ),
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
           ),
           child: SafeArea(
             child: Column(
@@ -288,14 +289,14 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
                                         leading: Icon(
                                           Iconsax.play_circle5,
                                           size: 40,
-                                          color: HexColor.fromHex("#256980"),
+                                          color: AppColors.primary,
                                         ),
                                         title: Text(
                                           meta.album,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -402,7 +403,7 @@ class ControlButtons extends StatelessWidget {
                 width: 55.0,
                 height: 55.0,
                 child: CircularProgressIndicator(
-                  color: HexColor.fromHex("#D39D52"),
+                  color: AppColors.secondary,
                 ),
               );
             } else if (!playing) {

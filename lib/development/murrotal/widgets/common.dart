@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -74,8 +75,8 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             padding: EdgeInsets.only(right: 12, left: 12, top: 12, bottom: 19),
-            activeTrackColor: HexColor.fromHex("#D39D52"),
-            thumbColor: HexColor.fromHex("#D39D52"),
+            activeTrackColor: AppColors.secondary,
+            thumbColor: AppColors.secondary,
             inactiveTrackColor: Colors.transparent,
           ),
           child: Slider(

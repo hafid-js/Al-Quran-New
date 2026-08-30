@@ -29,7 +29,7 @@ class AppTextTheme {
     titleSmall: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      color: AppColors.textPrimaryLight,
+      color: AppColors.menuTitle,
     ),
 
     /// BODY

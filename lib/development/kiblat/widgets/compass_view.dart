@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
 import 'package:alquran_new/development/kiblat/services/qibla_calculator.dart';
@@ -160,7 +161,7 @@ class _CompassViewState extends State<CompassView>
             const SizedBox(height: 16),
             Text(
               'Perangkat Tidak Memiliki Kompas',
-              style: TextStyle(color: HexColor.fromHex("#256980"), fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -199,7 +200,7 @@ class _LocationErrorWidget extends StatelessWidget {
             Text(
               error,
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: HexColor.fromHex("#256980"),
+                color: AppColors.primary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -207,7 +208,7 @@ class _LocationErrorWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: callback,
               style: ElevatedButton.styleFrom(
-                backgroundColor: HexColor.fromHex("#256980"),
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
               ),
               icon: const Icon(Icons.refresh),
@@ -298,7 +299,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                       height: 14,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                         border: Border.all(color: Colors.white, width: 2),
                       ),
                     ),
@@ -309,7 +310,7 @@ class _QiblahCompassWidget extends StatelessWidget {
               Text(
                 '${data.offset.toStringAsFixed(1)}° dari arah hadap',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: 24),
@@ -331,9 +332,9 @@ class _QiblahCompassWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: HexColor.fromHex("#256980").withAlpha(15),
+        color: AppColors.primary.withAlpha(15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: HexColor.fromHex("#256980").withAlpha(40)),
+        border: Border.all(color: AppColors.primary.withAlpha(40)),
       ),
       child: Column(
         children: [
@@ -342,14 +343,14 @@ class _QiblahCompassWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.explore, size: 28, color: HexColor.fromHex("#256980")),
+              Icon(Icons.explore, size: 28, color: AppColors.primary),
               const SizedBox(width: 8),
               Text(
                 '${data.qiblah.toStringAsFixed(1)}°',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(width: 8),
@@ -357,7 +358,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                 QiblaCalculator.getDirectionName(data.qiblah),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
               ),
             ],
@@ -392,7 +393,7 @@ class _QiblahCompassWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -409,7 +410,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                   Text(
                     controller.latitude.value.toStringAsFixed(4),
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],
@@ -427,7 +428,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                   Text(
                     controller.longitude.value.toStringAsFixed(4),
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],
@@ -467,11 +468,11 @@ class _CompassRosePainter extends CustomPainter {
 
       if (isMajor) {
         innerR = radius * 0.82;
-        markPaint.color = isDark ? HexColor.fromHex("#256980") : Colors.black54;
+        markPaint.color = isDark ? AppColors.primary : Colors.black54;
         markPaint.strokeWidth = 2.0;
       } else if (isMid) {
         innerR = radius * 0.88;
-        markPaint.color = isDark ? HexColor.fromHex("#256980") : Colors.black26;
+        markPaint.color = isDark ? AppColors.primary : Colors.black26;
         markPaint.strokeWidth = 1.5;
       } else {
         innerR = radius * 0.92;
@@ -517,7 +518,7 @@ class _CompassRosePainter extends CustomPainter {
         style: TextStyle(
           color: isNorth
               ? Colors.redAccent
-              : (isDark ? HexColor.fromHex("#256980") : Colors.black54),
+              : (isDark ? AppColors.primary : Colors.black54),
           fontSize: 20,
           fontWeight: isNorth ? FontWeight.bold : FontWeight.normal,
         ),

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/perasaan/screens/detail_perasaan_screen.dart';
@@ -76,7 +77,7 @@ class PerasaanScreen extends StatelessWidget {
                             height: 45,
                             item.icon,
                             colorFilter: ColorFilter.mode(
-                              HexColor.fromHex("#256980"),
+                              AppColors.primary,
                               BlendMode.srcIn,
                             ),
                           ),

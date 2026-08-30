@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/ibadah/calendar_picker_modal.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -367,7 +368,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             x: i,
             barRods: [
               BarChartRodData(
-                color: HexColor.fromHex("#256980"),
+                color: AppColors.primary,
                 toY: _mingguan[i][0].toDouble(),
                 width: 9,
                 borderRadius: const BorderRadius.only(
@@ -376,7 +377,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 ),
               ),
               BarChartRodData(
-                color: HexColor.fromHex("#D39D52"),
+                color: AppColors.secondary,
                 toY: _mingguan[i][1].toDouble(),
                 width: 9,
                 borderRadius: const BorderRadius.only(
@@ -398,8 +399,8 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        backgroundColor: active ? HexColor.fromHex("#D39D52") : Colors.white,
-        foregroundColor: active ? Colors.white : HexColor.fromHex("#256980"),
+        backgroundColor: active ? AppColors.secondary : Colors.white,
+        foregroundColor: active ? Colors.white : AppColors.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
       child: Text(label, style: const TextStyle(fontSize: 13)),
@@ -411,7 +412,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: HexColor.fromHex("#256980"),
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -435,7 +436,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               percent: percent,
               backgroundWidth: 30,
               backgroundColor: Colors.white24,
-              progressColor: HexColor.fromHex("#D39D52"),
+              progressColor: AppColors.secondary,
               animation: true,
               animationDuration: 1200,
               curve: Curves.easeOutCubic,
@@ -455,7 +456,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   Text(
                     "${(percent * 100).round()}%",
                     style: TextStyle(
-                      color: HexColor.fromHex("#D39D52"),
+                      color: AppColors.secondary,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -480,6 +481,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   }
 
   Widget _buildWeeklyDetail() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         Padding(
@@ -491,13 +493,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 onTap: _previousWeek,
                 child: Icon(
                   Iconsax.arrow_circle_left,
-                  color: HexColor.fromHex("#256980"),
+                   color: isDark ? Colors.white : AppColors.primary,
                 ),
               ),
               Text(
                 _weekRangeLabel,
                 style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
+                  fontSize: 16,
+                   color: isDark ? Colors.white : AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -505,7 +508,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 onTap: _nextWeek,
                 child: Icon(
                   Iconsax.arrow_circle_right,
-                  color: HexColor.fromHex("#256980"),
+                   color: isDark ? Colors.white : AppColors.primary,
                 ),
               ),
             ],
@@ -514,7 +517,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -523,7 +526,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Sholat Mingguan",
                 style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -545,7 +548,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: HexColor.fromHex("#256980"),
+                          backgroundColor: AppColors.primary,
                           radius: 8,
                         ),
                         SizedBox(width: 8),
@@ -554,7 +557,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: HexColor.fromHex("#256980"),
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -562,7 +565,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: HexColor.fromHex("#D39D52"),
+                          backgroundColor: AppColors.secondary,
                           radius: 8,
                         ),
                         SizedBox(width: 8),
@@ -571,7 +574,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: HexColor.fromHex("#256980"),
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -595,7 +598,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Sholat Sunnah Mingguan",
                 style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -687,7 +690,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           for (var i = 0; i < _mingguan.length; i++)
                             FlSpot(i.toDouble(), _mingguan[i][1].toDouble()),
                         ],
-                        color: HexColor.fromHex("#D39D52"),
+                        color: AppColors.secondary,
                         barWidth: 3,
                         isCurved: true,
                         curveSmoothness: 0.3,
@@ -721,7 +724,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 "Statistik Tilawah Mingguan (Halaman)",
                 style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -816,7 +819,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                               _tilawahMingguan[i].toDouble(),
                             ),
                         ],
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                         barWidth: 3,
                         isCurved: true,
                         curveSmoothness: 0.3,
@@ -842,7 +845,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           width: double.infinity,
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -872,7 +875,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           width: double.infinity,
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -890,7 +893,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 formatRupiah(_weeklySedekahTotal),
                 style: TextStyle(
                   fontSize: 16,
-                  color: HexColor.fromHex("#D39D52"),
+                  color: AppColors.secondary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -902,6 +905,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   }
 
   Widget _buildDailyDetail() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         Container(
@@ -915,11 +919,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             children: [
               Text(
                 "Rincian Harian",
-                style: TextStyle(
-                  color: HexColor.fromHex("#256980"),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.titleSmall
               ),
               const SizedBox(height: 16),
               Row(
@@ -938,7 +938,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: HexColor.fromHex("#256980"),
+                               color: isDark ? Colors.white : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -949,7 +949,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Sholat Wajib",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: HexColor.fromHex("#256980"),
+                                      color: isDark ? Colors.white : AppColors.primary,
                                     ),
                                   ),
 
@@ -964,24 +964,22 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                         style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
-                                          color: HexColor.fromHex("#D39D52"),
+                                          color: AppColors.secondary,
                                         ),
                                       ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          const Text(
+                                          Text(
                                             "Terlaksana",
-                                            style: TextStyle(fontSize: 12),
+                                            style: TextStyle(fontSize: 12, color : isDark ? Colors.white : AppColors.primary),
                                           ),
 
                                           Text(
                                             "${_readDay(_selectedDate).wajibBerjamaah} Berjamaah",
                                             style: TextStyle(
-                                              color: HexColor.fromHex(
-                                                "#256980",
-                                              ),
+                                                color: isDark ? Colors.white : AppColors.primary,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -1004,7 +1002,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: HexColor.fromHex("#256980"),
+                                   color: isDark ? Colors.white : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1015,7 +1013,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Sholat Sunnah",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: HexColor.fromHex("#256980"),
+                                       color: isDark ? Colors.white : AppColors.primary,
                                     ),
                                   ),
 
@@ -1030,12 +1028,12 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                         style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
-                                          color: HexColor.fromHex("#D39D52"),
+                                          color: AppColors.secondary,
                                         ),
                                       ),
-                                      const Text(
+                                     Text(
                                         "Amal",
-                                        style: TextStyle(fontSize: 12),
+                                        style: Theme.of(context).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1066,7 +1064,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: HexColor.fromHex("#256980"),
+                                    color: isDark ? Colors.white : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1077,7 +1075,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Puasa Sunnah",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: HexColor.fromHex("#256980"),
+                                        color: isDark ? Colors.white : AppColors.primary,
                                     ),
                                   ),
 
@@ -1092,12 +1090,12 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                         style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
-                                          color: HexColor.fromHex("#D39D52"),
+                                          color: AppColors.secondary,
                                         ),
                                       ),
-                                      const Text(
+                                      Text(
                                         "Hari Ini",
-                                        style: TextStyle(fontSize: 12),
+                                        style: Theme.of(context).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1115,7 +1113,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: HexColor.fromHex("#256980"),
+                                   color: isDark ? Colors.white : AppColors.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -1126,7 +1124,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                     "Tilawah Hari Ini",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: HexColor.fromHex("#256980"),
+                                       color: isDark ? Colors.white : AppColors.primary,
                                     ),
                                   ),
 
@@ -1141,12 +1139,12 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                                         style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
-                                          color: HexColor.fromHex("#D39D52"),
+                                          color: AppColors.secondary,
                                         ),
                                       ),
-                                      const Text(
+                                      Text(
                                         "Halaman",
-                                        style: TextStyle(fontSize: 12),
+                                        style: Theme.of(context).textTheme.labelSmall,
                                       ),
                                     ],
                                   ),
@@ -1186,14 +1184,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     children: [
                       Icon(
                         Iconsax.card_coin,
-                        color: HexColor.fromHex("#256980"),
+                         color: isDark ? Colors.white : AppColors.primary,
                         size: 20,
                       ),
                       SizedBox(width: 8),
                       Text(
                         "Sedekah Hari Ini",
                         style: TextStyle(
-                          color: HexColor.fromHex("#256980"),
+                           color: isDark ? Colors.white : AppColors.primary,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -1212,7 +1210,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               //         formatRupiah(_harianSedekahList[i]),
               //         style: TextStyle(
               //           fontSize: 14,
-              //           color: HexColor.fromHex("#D39D52"),
+              //           color: AppColors.secondary,
               //           fontWeight: FontWeight.w600,
               //         ),
               //       ),
@@ -1232,7 +1230,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 width: double.infinity,
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -1250,7 +1248,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                       formatRupiah(_harianSedekahTotal),
                       style: TextStyle(
                         fontSize: 16,
-                        color: HexColor.fromHex("#D39D52"),
+                        color: AppColors.secondary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -1265,7 +1263,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   }
 
   Color _consistencyColor(int count) {
-    final base = HexColor.fromHex("#256980");
+    final base = AppColors.primary;
     if (count == 0) return base.withAlpha(15);
     if (count == 1) return base.withAlpha(40);
     if (count == 2) return base.withAlpha(70);
@@ -1312,7 +1310,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           Text(
             "Konsistensi Ibadah (Bulan Ini)",
             style: TextStyle(
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -1344,16 +1342,16 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     titleCentered: true,
                     leftChevronIcon: Icon(
                       Iconsax.arrow_circle_left,
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                     ),
                     titleTextStyle: TextStyle(
                       fontSize: 16,
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                     rightChevronIcon: Icon(
                       Iconsax.arrow_circle_right,
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                     ),
                   ),
                   calendarBuilders: CalendarBuilders(
@@ -1362,7 +1360,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   calendarStyle: CalendarStyle(
                     cellMargin: const EdgeInsets.all(4),
                     todayDecoration: BoxDecoration(
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       // shape: BoxShape.circle,
                     ),
                     isTodayHighlighted: false,
@@ -1370,11 +1368,11 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                     defaultTextStyle: TextStyle(fontSize: 0),
                     weekendTextStyle: TextStyle(fontSize: 0),
                     defaultDecoration: BoxDecoration(
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     weekendDecoration: BoxDecoration(
-                      color: HexColor.fromHex("#256980"),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -1388,49 +1386,49 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                       "Sen",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Sel",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Rab",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Kam",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Jum",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Sab",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "Min",
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor.fromHex("#256980"),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -1448,14 +1446,14 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   "Sedikit",
                   style: TextStyle(
                     fontSize: 12,
-                    color: HexColor.fromHex("#256980"),
+                    color: AppColors.primary,
                   ),
                 ),
                 Container(
                   height: 15,
                   width: 15,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980").withAlpha(60),
+                    color: AppColors.primary.withAlpha(60),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -1463,7 +1461,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   height: 15,
                   width: 15,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980").withAlpha(160),
+                    color: AppColors.primary.withAlpha(160),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -1471,7 +1469,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   height: 15,
                   width: 15,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980").withAlpha(220),
+                    color: AppColors.primary.withAlpha(220),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -1479,7 +1477,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   height: 15,
                   width: 15,
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex("#256980"),
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -1487,7 +1485,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   "Banyak",
                   style: TextStyle(
                     fontSize: 12,
-                    color: HexColor.fromHex("#256980"),
+                    color: AppColors.primary,
                   ),
                 ),
               ],
@@ -1500,7 +1498,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
     // Container(
     //   padding: EdgeInsets.all(12),
     //   decoration: BoxDecoration(
-    //       color: HexColor.fromHex("#256980"),
+    //       color: AppColors.primary,
     //     borderRadius: BorderRadius.circular(16),
     //   ),
     //   child: 
@@ -1517,7 +1515,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           Text(
             "Ringkasan Bulan Ini",
             style: TextStyle(
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -1541,7 +1539,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
       decoration: BoxDecoration(
         border: BoxBorder.all(
           width: 1.5,
-          color: HexColor.fromHex("#256980"),
+          color: AppColors.primary,
         ),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -1555,7 +1553,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
       vertical: 2
     ),
     decoration: BoxDecoration(
-      color: HexColor.fromHex("#D39D52"),
+      color: AppColors.secondary,
       borderRadius: BorderRadius.circular(16),
     ),
     child: Row(
@@ -1585,7 +1583,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             item['value'] as String,
             style: TextStyle(
               fontSize: 18,
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -1596,7 +1594,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             item['label'] as String,
             style: TextStyle(
               fontSize: 12,
-              color: HexColor.fromHex("#256980"),
+              color: AppColors.primary,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -1605,7 +1603,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
             "${_monthData.fold(0, (a, d) => a + d.wajibBerjamaah)} Berjamaah",
             style: TextStyle(
               fontSize: 10,
-              color: HexColor.fromHex("#D39D52"),
+              color: AppColors.secondary,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -1672,7 +1670,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                         ),
                         Icon(
                           Iconsax.calendar_1,
-                          color: HexColor.fromHex("#256980"),
+                          color: Theme.of(context).textTheme.titleSmall!.color,
                           size: 28,
                         ),
                       ],

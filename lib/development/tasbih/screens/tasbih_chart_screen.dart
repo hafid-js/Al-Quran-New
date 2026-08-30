@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -144,8 +145,8 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        backgroundColor: active ? HexColor.fromHex("#D39D52") : Colors.white,
-        foregroundColor: active ? Colors.white : HexColor.fromHex("#256980"),
+        backgroundColor: active ? AppColors.secondary : Colors.white,
+        foregroundColor: active ? Colors.white : AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
@@ -190,7 +191,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                 color: Theme.of(context).cardColor,
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    HexColor.fromHex("#256980").withAlpha(210),
+                    AppColors.primary.withAlpha(210),
                     BlendMode.srcATop,
                   ),
                   fit: BoxFit.cover,
@@ -280,7 +281,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                                   Text(
                                     "$tasbihBulanan",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#D39D52"),
+                                      color: AppColors.secondary,
                                       height: 1,
                                       fontSize: 40,
                                       fontWeight: FontWeight.w600,
@@ -330,7 +331,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                                   Text(
                                     "$tasbihHarian",
                                     style: TextStyle(
-                                      color: HexColor.fromHex("#D39D52"),
+                                      color: AppColors.secondary,
                                       height: 1,
                                       fontSize: 40,
                                       fontWeight: FontWeight.w600,

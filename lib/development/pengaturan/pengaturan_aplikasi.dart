@@ -103,7 +103,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                     states,
                                   ) {
                                     if (states.contains(WidgetState.selected)) {
-                                      return HexColor.fromHex("#256980");
+                                      return AppColors.primary;
                                     }
 
                                     return Colors.black.withAlpha(60);
@@ -124,7 +124,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                     title: Text(
                                       "Masih Dalam Pengembangan",
                                       style: TextStyle(
-                                        color: HexColor.fromHex("#256980"),
+                                        color: AppColors.primary,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -139,7 +139,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                         child: Text(
                                           "Mengerti",
                                           style: TextStyle(
-                                            color: HexColor.fromHex("#256980"),
+                                            color: AppColors.primary,
                                           ),
                                         ),
                                       ),
@@ -237,8 +237,8 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                   Icon(
                                     Icons.check_circle,
                                     color:isSelected
-                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? isDark ? AppColors.light : AppColors.primary
+                                : AppColors.primary.withAlpha(130),
                           ),
                                 ],
                               ),
@@ -324,8 +324,8 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                                   Icon(
                                     Icons.check_circle,
                                     color:isSelected
-                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? isDark ? AppColors.light : AppColors.primary
+                                : AppColors.primary.withAlpha(130),
                           ),
                                 ],
                               ),
@@ -354,7 +354,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                             children: [
                               Icon(
                                 Iconsax.info_circle,
-                                color: HexColor.fromHex("#D39D52"),
+                                color: AppColors.secondary,
                               ),
                               SizedBox(width: 10),
                               Text(
@@ -366,7 +366,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                           Text(
                             "Versi 2.0.0",
                             style: TextStyle(
-                              color: isDark ? AppColors.secondary : HexColor.fromHex("#256980"),
+                              color: isDark ? AppColors.secondary : AppColors.primary,
                               fontSize: 12,
                             ),
                           ),
@@ -391,7 +391,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                           Icon(
                             Iconsax.instagram,
                             size: 20 * scale,
-                            color: isDark ? AppColors.light : HexColor.fromHex("#256980"),
+                            color: isDark ? AppColors.light : AppColors.primary,
                           ),
                           SizedBox(width: 10),
                           Text.rich(
@@ -409,7 +409,7 @@ Aplikasi resmi dari Hafid Tech yang menyediakan Al-Quran digital lengkap dengan 
                                   text: '@hafidtechcom',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: isDark ? AppColors.secondary : HexColor.fromHex("#256980"),
+                                    color: isDark ? AppColors.secondary : AppColors.primary,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/widgets/seek_playbar.dart';
@@ -22,7 +23,7 @@ class PlayBar extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(right: 12, left: 12, top: 0, bottom: 12),
           decoration: BoxDecoration(
-            color: HexColor.fromHex("#256980"),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

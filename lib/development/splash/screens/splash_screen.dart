@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/onboarding/screens/consent_screen.dart';
 import 'package:alquran_new/main_screen.dart';
@@ -49,18 +50,18 @@ class _SplashScreenState extends State<SplashScreen>
     final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#256980"),
+      backgroundColor: AppColors.primary,
       body: Container(
          decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      HexColor.fromHex("#256980").withAlpha(210),
+                      AppColors.primary.withAlpha(210),
                       BlendMode.srcATop,
                     ),
                     fit: BoxFit.cover,
                     image: AssetImage("assets/images/image.png"),
                   ),
-                  color: HexColor.fromHex("#256980"),
+                  color: AppColors.primary,
                 ),
         child: Center(
         child: Column(

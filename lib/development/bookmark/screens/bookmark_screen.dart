@@ -109,7 +109,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                                   Text(
                                     "Ayat ${bm.ayatNumber}",
                                     style: TextStyle(
-                                      color: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#676767"),
+                                      color: isDark ? AppColors.secondary : HexColor.fromHex("#676767"),
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
                                     ),
@@ -125,7 +125,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                         style: TextStyle(
                           fontFamily: fontFamily,
                           fontSize: 20,
-                          color: isDark ? HexColor.fromHex("#D39D52") : HexColor.fromHex("#1E4355"),
+                          color: isDark ? AppColors.secondary : HexColor.fromHex("#1E4355"),
                         ),
                       ),
                     ],

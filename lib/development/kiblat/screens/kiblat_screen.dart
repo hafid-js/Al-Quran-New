@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
 import 'package:alquran_new/development/kiblat/widgets/compass_view.dart';
@@ -57,8 +58,8 @@ class _KiblatScreenNewState extends State<KiblatScreenNew>
         titleColor: isDark ? Colors.white : Colors.black,
         bottom: TabBar(
           controller: tabController,
-          indicatorColor:  HexColor.fromHex("#256980"),
-          labelColor: isDark ? Colors.white : HexColor.fromHex("#256980"),
+          indicatorColor:  AppColors.primary,
+          labelColor: isDark ? Colors.white : AppColors.primary,
           unselectedLabelColor: HexColor.fromHex("#5a7b8a"),
            overlayColor: WidgetStateProperty.all(
     Colors.transparent,

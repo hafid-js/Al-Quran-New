@@ -154,7 +154,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
               trackColor: WidgetStateProperty.resolveWith<Color>(
                 (states) {
                   if (states.contains(WidgetState.selected)) {
-                    return HexColor.fromHex("#256980");
+                    return AppColors.primary;
                   }
                   return Colors.black.withAlpha(60);
                 },
@@ -235,8 +235,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     Icon(
                       Icons.check_circle,
                       color:isSelected
-                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? isDark ? AppColors.light : AppColors.primary
+                                : AppColors.primary.withAlpha(130),
                           ),
                   ],
                 ),
@@ -291,8 +291,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                     Icon(
                       Icons.check_circle,
                       color: isSelected
-                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? isDark ? AppColors.light : AppColors.primary
+                                : AppColors.primary.withAlpha(130),
                           ),
                   ],
                 ),
@@ -377,8 +377,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                         Icon(
                           Icons.check_circle,
                          color: isSelected
-                                ? isDark ? AppColors.light : HexColor.fromHex("#256980")
-                                : HexColor.fromHex("#256980").withAlpha(130),
+                                ? isDark ? AppColors.light : AppColors.primary
+                                : AppColors.primary.withAlpha(130),
                           ),
                       ],
                     ),

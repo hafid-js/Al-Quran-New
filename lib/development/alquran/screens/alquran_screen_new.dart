@@ -971,8 +971,8 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
           
           indicatorSize: TabBarIndicatorSize.tab,
           controller: tabController,
-          indicatorColor: HexColor.fromHex("#256980"),
-          labelColor: HexColor.fromHex("#256980"),
+          indicatorColor: AppColors.primary,
+          labelColor: AppColors.primary,
           unselectedLabelColor: Colors.black,
           indicatorWeight: 2.5,
           labelStyle: TextStyle(fontSize: 14),
