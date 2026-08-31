@@ -67,7 +67,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
               child: Icon(
                 Icons.menu_book_rounded,
                 size: 20,
-                color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(width: 10),

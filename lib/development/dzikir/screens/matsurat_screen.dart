@@ -1,5 +1,4 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/dzikir/screens/detail_matsurat_screen.dart';
 import 'package:alquran_new/development/dzikir/widgets/surat_pilihan_list_tile.dart';
@@ -198,18 +197,19 @@ class _MatsuratScreenState extends State<MatsuratScreen>
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#F9F5EF"),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar:  AppBar(
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).textTheme.titleSmall!.color),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
+                surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
         title: Text(
           "Dzikir",
           style: Theme.of(
             context,
-          ).textTheme.titleMedium!.copyWith(color: Colors.black),
+          ).textTheme.titleMedium,
         ),
 
         titleSpacing: 5,
@@ -223,8 +223,8 @@ class _MatsuratScreenState extends State<MatsuratScreen>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
       
-        color:   AppColors.primary,
-        border: Border.all(
+       color: Theme.of(context).cardColor,
+        border: isDark ? null : Border.all(
           color: Theme.of(context)
               .colorScheme
               .onSurface
@@ -238,7 +238,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(
-            color:    Colors.white,
+            color:  isDark ?   AppColors.textPrimaryDark: AppColors.primary,
             borderRadius: BorderRadius.circular(18),
           ),
           labelPadding: const EdgeInsets.symmetric(horizontal: 8),
@@ -313,7 +313,7 @@ class _MatsuratScreenState extends State<MatsuratScreen>
               Text(
                 "Bacaan Surat Pilihan",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: AppColors.primary,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                 ),
               ),
               SizedBox(height: 10),

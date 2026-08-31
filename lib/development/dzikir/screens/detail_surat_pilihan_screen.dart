@@ -1,11 +1,15 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
-import 'package:alquran_new/core/widgets/settings_slider.dart';
-import 'package:alquran_new/core/widgets/settings_switch.dart';
+import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
+import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
+import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
+import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/dzikir/widgets/surat_pilihan_card.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DetailSuratPilihanScreen extends StatefulWidget {
@@ -52,6 +56,19 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
     );
   }
+ bool _isRotated = false;
+
+  void _toggle() {
+    setState(() {
+      _isRotated = !_isRotated;
+    });
+
+    if (_isRotated) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
 
   @override
   void dispose() {
@@ -69,25 +86,19 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
   Widget build(BuildContext context) {
     final isLandscape =
     MediaQuery.of(context).orientation == Orientation.landscape;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return Loading();
+            if (controller.isLoading.value) {
+          return CommonLoadingWidget();
         }
         final data = controller.detailSurah.value;
-        if (data == null) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              title: const Text("Detail Surah"),
-            ),
-            body: const Center(child: Text("Data kosong")),
-          );
+       if (data == null) {
+          return CommonEmptyWidget();
         }
         _syncCardKeys(data.ayat.length);
-        if (controller.isLoading.value) {
-          return Loading();
-        }
+      
+       
         return CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -134,151 +145,120 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                   controller.detailSurah.value!.namaLatin,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                                Text("Gulir untuk mebaca seluruh dzikir"),
+                                Text("Gulir untuk mebaca seluruh dzikir", style: Theme.of(context).textTheme.labelSmall,),
                               ],
                             ),
                             GestureDetector(
-                              onTap: () async {
-                                _animationController.forward();
-                                await WoltModalSheet.show(
-                                  context: context,
-                                  pageListBuilder: (modalSheetContext) => [
-                                    SliverWoltModalSheetPage(
-                                      backgroundColor: Theme.of(
-                                        context,
-                                      ).cardColor,
-                                      hasTopBarLayer: false,
-                                      mainContentSliversBuilder: (context) => [
-                                        SliverToBoxAdapter(
-                                          child: StatefulBuilder(
-                                            builder: (context, modalSetState) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(
-                                                  16,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        "Pengaturan",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleLarge!
-                                                            .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 20),
-                                                    SettingsSlider(
-                                                      label: "Ukuran Teks Arab",
-                                                      value: controller
-                                                          .ukuranTeksArab
-                                                          .value,
-                                                      onChanged: (value) {
-                                                        modalSetState(() {
-                                                          controller
-                                                                  .ukuranTeksArab
-                                                                  .value =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    SettingsSlider(
-                                                      label:
-                                                          "Ukuran Teks latin & Terjemah",
-                                                      value: controller
-                                                          .ukuranLatinTerjemah
-                                                          .value,
-                                                      onChanged: (value) {
-                                                        modalSetState(() {
-                                                          controller
-                                                                  .ukuranLatinTerjemah
-                                                                  .value =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    SettingsSwitchTile(
-                                                      title: "Font Arab Tebal",
-                                                      value: controller
-                                                          .arabBold
-                                                          .value,
-                                                      onChanged: (value) {
-                                                        modalSetState(() {
-                                                          controller
-                                                                  .arabBold
-                                                                  .value =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    SettingsSwitchTile(
-                                                      title: "Tampilan Latin",
-                                                      value: controller
-                                                          .latin
-                                                          .value,
-                                                      onChanged: (value) {
-                                                        modalSetState(() {
-                                                          controller
-                                                                  .latin
-                                                                  .value =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    SettingsSwitchTile(
-                                                      title:
-                                                          "Tampilan Terjemah",
-                                                      value: controller
-                                                          .terjemah
-                                                          .value,
-                                                      onChanged: (value) {
-                                                        modalSetState(() {
-                                                          controller
-                                                                  .terjemah
-                                                                  .value =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
+            onTap: () async {
+              _toggle();
+
+              await WoltModalSheet.show(
+                context: context,
+                pageListBuilder: (context) => [
+                  SliverWoltModalSheetPage(
+                    backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
+                    surfaceTintColor:  isDark ? Theme.of(context).cardColor :  Colors.white,
+                    hasTopBarLayer: false,
+                    mainContentSliversBuilder: (context) => [
+                      SliverToBoxAdapter(
+                        child: StatefulBuilder(
+                          builder: (context, modalSetState) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Pengaturan",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                                if (mounted) {
-                                  await _animationController.reverse();
-                                }
-                              },
-                              child: RotationTransition(
-                                turns: _rotation,
-                                child: ScaleTransition(
-                                  scale: _scale,
-                                  child: Icon(
-                                    Icons.settings_rounded,
-                                    color: Colors.white,
-                                    size: Responsive.iconSize(
-                                      context,
-                                      phone: 22,
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(height: 5),
+                                  SettingsSwitchTile(
+                                    title: "Terjemah",
+                                    value: controller.terjemah.value,
+                                    onChanged: (v) {
+                                      modalSetState(() {
+                                        controller.terjemah.value = v;
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: 5),
+
+                                  SettingsSwitchTile(
+                                    title: "Latin",
+                                    value: controller.latin.value,
+                                    onChanged: (v) {
+                                      modalSetState(() {
+                                        controller.latin.value = v;
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: 5),
+
+                                  SettingsSwitchTile(
+                                    title: "Font Arab Tebal",
+                                    value: controller.arabBold.value,
+                                    onChanged: (v) {
+                                      modalSetState(() {
+                                        controller.arabBold.value = v;
+                                      });
+                                    },
+                                  ),
+
+                                  const SizedBox(height: 18),
+                                  SettingsSlider(
+                                    label: "Ukuran Teks Arab",
+                                    value: controller.ukuranTeksArab.value,
+                                    onChanged: (v) {
+                                      modalSetState(() {
+                                        controller.ukuranTeksArab.value = v;
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: 14),
+                                  SettingsSlider(
+                                    label: "Ukuran Teks latin & Terjemah",
+                                    value: controller.ukuranLatinTerjemah.value,
+                                    onChanged: (v) {
+                                      modalSetState(() {
+                                        controller.ukuranLatinTerjemah.value = v;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                            ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+
+              if (mounted) {
+                _toggle();
+              }
+            },
+            child: RotationTransition(
+              turns: _rotation,
+              child: ScaleTransition(
+                scale: _scale,
+                child: Icon(
+                  _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                ),
+              ),
+            ),
+          )
                           ],
                         ),
                       ),

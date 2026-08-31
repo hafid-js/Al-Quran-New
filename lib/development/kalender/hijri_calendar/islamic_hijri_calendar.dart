@@ -175,9 +175,9 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         itemBuilder: (BuildContext context, int index) {
           ///single day block
           return viewmodel.getDate(
-            hijriDefaultTextColor: Theme.of(
+            hijriDefaultTextColor: isDark ? Theme.of(
               context,
-            ).textTheme.labelSmall?.color,
+            ).textTheme.labelSmall?.color : AppColors.textPrimaryDark,
             isHijriView: widget.isHijriView!,
             fontSize: fontSize,
             dateHijriTextSize: 11,

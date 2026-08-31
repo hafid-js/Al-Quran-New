@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -44,6 +45,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
     final SettingsController setting = Get.find<SettingsController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["nama"];
+      final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -62,14 +64,15 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                                color:                           isDark ?  AppColors.primary.withAlpha(100) : AppColors.primary,
+             
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                 child: Text(
                   "Ayat ${widget.nomorAyat}",
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: AppColors.textPrimaryDark,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -88,7 +91,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                             },
                             icon: Icon(
                               Icons.play_circle_filled_rounded,
-                              color: Theme.of(context).colorScheme.primary,
+                                                                       color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                               size: 28,
                             ),
                           )
@@ -104,9 +107,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                                         },
                                         icon: Icon(
                                           Icons.pause,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
+                                          color: isDark ? AppColors.textPrimaryDark : AppColors.primary
                                         ),
                                       )
                                     : IconButton(
@@ -115,9 +116,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                                         },
                                         icon: Icon(
                                           Icons.play_arrow,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
+                                                                                    color: isDark ? AppColors.textPrimaryDark : AppColors.primary
                                         ),
                                       ),
                                 IconButton(
@@ -126,9 +125,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                                   },
                                   icon: Icon(
                                     Icons.stop,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                                                              color: isDark ? AppColors.textPrimaryDark : AppColors.primary
                                   ),
                                 ),
                               ],
@@ -152,7 +149,7 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                       softWrap: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                         fontWeight: widget.isBold ? FontWeight.bold : null,
                         fontSize: widget.ukuranTeksArab,
                         fontFamily: fontFamily,
@@ -164,29 +161,22 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                 if (controller.latin.value) ...[
                   SizedBox(height: 10),
                   Text(
-                    "${widget.teksLatin}",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: Responsive.fontSize(
-                        context,
-                        phone: controller.ukuranLatinTerjemah.value,
-                      ),
-                      fontFamily: fontFamily,
-                    ),
-                  ),
+                          widget.teksLatin,
+                          style: TextStyle(
+                            color: AppColors.secondary,
+                            fontSize: controller.ukuranLatinTerjemah.value,
+                          ),
+                        ),
                 ],
                 if (controller.terjemah.value) ...[
                   SizedBox(height: 10),
                   Text(
-                    "${widget.teksIndonesia}",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: Responsive.fontSize(
-                        context,
-                        phone: controller.ukuranLatinTerjemah.value,
-                      ),
-                      fontFamily: fontFamily,
-                    ),
-                  ),
+                        widget.teksIndonesia,
+                        style: TextStyle(
+                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
+                          fontSize: controller.ukuranLatinTerjemah.value,
+                        ),
+                      )
                 ],
               ],
             );

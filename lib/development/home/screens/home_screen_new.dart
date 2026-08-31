@@ -6,6 +6,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/alquran/screens/alquran_screen_new.dart';
+import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/development/murrotal/screens/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa/screens/doa_screen.dart';
 import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
@@ -93,7 +94,7 @@ final List<Map<String, dynamic>> menus = [
     "page": () => const BookmarkScreenNew(),
   },
   {"title": "Semua", "icon": Iconsax.menu, "page": () => {}},
-  {"title": "Dzikir", "icon": Iconsax.flash, "page": () => null},
+  {"title": "Dzikir", "icon": Iconsax.flash, "page": () => MatsuratScreen()},
   {
     "title": "Hijriah",
     "icon": Iconsax.calendar,
@@ -482,53 +483,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                           });
                                         }
                                       : () async {
-                                          if (menu["title"] == "Dzikir") {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  backgroundColor:
-                                                      HexColor.fromHex(
-                                                        "#F9F5EF",
-                                                      ),
-                                                  title: Text(
-                                                    "Masih Dalam Pengembangan",
-                                                    style: TextStyle(
-                                                      color: HexColor.fromHex(
-                                                        "#256980",
-                                                      ),
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                  content: const Text(
-                                                    "Fitur Dzikir masih dalam tahap pengembangan. "
-                                                    "Silakan coba lagi pada pembaruan berikutnya.",
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                            context,
-                                                          ),
-                                                      child: Text(
-                                                        "Mengerti",
-                                                        style: TextStyle(
-                                                          color:
-                                                              HexColor.fromHex(
-                                                                "#256980",
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-
-                                            return;
-                                          }
+                                          
 
                                           if (menu["onTap"] != null) {
                                             menu["onTap"](context);

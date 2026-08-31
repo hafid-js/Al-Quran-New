@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -47,6 +48,7 @@ class _DzikirCardState extends State<DzikirCard> {
     final SettingsController setting = Get.find<SettingsController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -64,14 +66,16 @@ class _DzikirCardState extends State<DzikirCard> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
+                  color: isDark
+                      ? AppColors.primary.withAlpha(100)
+                      : AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   "${widget.dibaca} x",
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: AppColors.textPrimaryDark,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -92,14 +96,16 @@ class _DzikirCardState extends State<DzikirCard> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(30),
+                  color: isDark
+                      ? AppColors.primary.withAlpha(100)
+                      : AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   "${widget.hitung}/${widget.jumlah}",
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: AppColors.textPrimaryDark,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -126,11 +132,8 @@ class _DzikirCardState extends State<DzikirCard> {
             Text(
               "${widget.latin}",
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: Responsive.fontSize(
-                  context,
-                  phone: widget.ukuranTeksLatinTerjemah,
-                ),
+                color: AppColors.secondary,
+                fontSize: widget.ukuranTeksLatinTerjemah,
               ),
             ),
           ],
@@ -139,6 +142,7 @@ class _DzikirCardState extends State<DzikirCard> {
             Text(
               "${widget.arti}",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: isDark ? AppColors.textPrimaryDark : Colors.black,
                 fontSize: Responsive.fontSize(
                   context,
                   phone: widget.ukuranTeksLatinTerjemah,
@@ -160,7 +164,9 @@ class _DzikirCardState extends State<DzikirCard> {
                 animationDuration: 500,
                 percent: (widget.hitung / widget.jumlah).clamp(0.0, 1.0),
                 linearStrokeCap: LinearStrokeCap.roundAll,
-                progressColor: Theme.of(context).colorScheme.primary,
+                progressColor: isDark
+                    ? Colors.greenAccent
+                    : Theme.of(context).colorScheme.primary,
               );
             },
           ),
@@ -169,16 +175,28 @@ class _DzikirCardState extends State<DzikirCard> {
             onTap: () {
               widget.onIncrement?.call();
             },
-            child: Center(
-              child: Text(
-                widget.hitung == widget.jumlah
-                    ? "Target tercapai"
-                    : "Tap kartu untuk + 1",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.hitung == widget.jumlah
+                      ? "Target tercapai"
+                      : "Tap kartu untuk + 1",
+                  style: TextStyle(
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+                SizedBox(width: 5),
+                widget.hitung == widget.jumlah
+                    ? Icon(
+                        Icons.check_circle_rounded,
+                        color: AppColors.secondary,
+                      )
+                    : SizedBox.shrink(),
+              ],
             ),
           ),
         ],

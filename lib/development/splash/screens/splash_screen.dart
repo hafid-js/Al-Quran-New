@@ -46,72 +46,70 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
-         decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                      AppColors.primary.withAlpha(210),
-                      BlendMode.srcATop,
-                    ),
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/images/image.png"),
-                  ),
-                  color: AppColors.primary,
-                ),
-        child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-  width: 150,
-  height: 150,
-  padding: const EdgeInsets.all(2),
-  decoration: BoxDecoration(
-    
-    borderRadius: BorderRadius.circular(16),
-  ),
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(14),
-    child: Image.asset(
-      'assets/images/logo/hafidtechlogo.png',
-      width: 150,
-      height: 150,
-      fit: BoxFit.contain,
-    ),
-  ),
-),
-            const SizedBox(height: 32),
-            AnimatedBuilder(
-              animation: _animController,
-              builder: (context, child) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(3, (i) {
-                    final phase = _animController.value * 2 * pi +
-                        i * 2.094;
-                    final opacity = (sin(phase) + 1) / 2;
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(
-                          (opacity * 255).toInt(),
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                    );
-                  }),
-                );
-              },
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              AppColors.primary.withAlpha(210),
+              BlendMode.srcATop,
             ),
-          ],
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/image.png"),
+          ),
+          color: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        ),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 150,
+                height: 150,
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.asset(
+                    'assets/images/logo/hafidtechlogo.png',
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              AnimatedBuilder(
+                animation: _animController,
+                builder: (context, child) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(3, (i) {
+                      final phase = _animController.value * 2 * pi + i * 2.094;
+                      final opacity = (sin(phase) + 1) / 2;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(
+                            (opacity * 255).toInt(),
+                          ),
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      )
     );
   }
 }

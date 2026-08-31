@@ -114,7 +114,7 @@ class AdzanAlarmReceiver : BroadcastReceiver() {
                    else "Waktunya sholat, jangan sampai terlewat"
 
         val builder = NotificationCompat.Builder(context, ALERT_CHANNEL_ID)
-            .setContentTitle("Al-Barokah : Quran & Sholat")
+            .setContentTitle("Al-Barokah : Quran & Ibadah")
             .setContentText(body)
             .setSmallIcon(android.R.drawable.ic_popup_reminder)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

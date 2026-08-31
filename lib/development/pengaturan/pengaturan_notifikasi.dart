@@ -158,9 +158,11 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                   return Colors.black.withAlpha(60);
                 },
               ),
-               trackOutlineColor: const WidgetStatePropertyAll(
-    Colors.transparent,
-  ),
+              // trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+              //   (states) {
+              //     return Colors.white;
+              //   },
+              // ),
               
               onChanged: (bool value) => onTap(),
             ),
