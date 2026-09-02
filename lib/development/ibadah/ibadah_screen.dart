@@ -118,6 +118,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
     final now = DateTime.now();
     final currentMonth = '${now.year}-${now.month.toString().padLeft(2, '0')}';
 
+    final keysToRemove = <String>[];
+
     for (final key in _storage.getKeys()) {
       final keyStr = key.toString();
       if (!keyStr.startsWith('ibadah_')) continue;
@@ -127,9 +129,13 @@ class _IbadahScreenState extends State<IbadahScreen> {
       if (parts.length == 3) {
         final keyMonth = '${parts[0]}-${parts[1]}';
         if (keyMonth != currentMonth) {
-          _storage.remove(keyStr);
+          keysToRemove.add(keyStr);
         }
       }
+    }
+
+    for (final key in keysToRemove) {
+      _storage.remove(key);
     }
   }
 

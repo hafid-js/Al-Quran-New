@@ -139,9 +139,12 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+         surfaceTintColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
         leading: GestureDetector(
           onTap: () => Get.back(),
           child: Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -157,7 +160,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
             fit: BoxFit.cover,
             image: AssetImage("assets/images/image.png"),
           ),
-          color: Theme.of(context).cardColor,
+          color: isDark ? Theme.of(context).cardColor : AppColors.primary,
         ),
         child: SafeArea(
           child: Column(
@@ -280,7 +283,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
                                       horizontal: 12,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
+                                      color:  Theme.of(context).cardColor,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: ListTile(

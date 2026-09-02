@@ -115,6 +115,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
   }) {
     return Obx(() {
       final active = isActive.value;
+    
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -158,11 +159,11 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                   return Colors.black.withAlpha(60);
                 },
               ),
-              // trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
-              //   (states) {
-              //     return Colors.white;
-              //   },
-              // ),
+              trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+                (states) {
+                  return Colors.white;
+                },
+              ),
               
               onChanged: (bool value) => onTap(),
             ),

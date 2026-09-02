@@ -138,6 +138,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
 
   Widget _periodButton(String label, int index) {
     final active = _selectedPeriod == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextButton(
       onPressed: () => setState(() => _selectedPeriod = index),
       style: TextButton.styleFrom(
@@ -156,18 +157,19 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
+        backgroundColor: isDark ? Colors.transparent : AppColors.textPrimaryDark,
+        surfaceTintColor: isDark ? Colors.transparent : AppColors.textPrimaryDark,
         toolbarHeight: 70,
         leadingWidth: 65,
         centerTitle: false,
 
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
         ),
         titleSpacing: 0,
         title: Text(
@@ -179,7 +181,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(right: 12, left: 12, bottom: 12),
+        padding: EdgeInsets.only(right: 12, left: 12, bottom: 12, top: 12),
         child: Column(
           children: [
             Container(
@@ -187,7 +189,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).cardColor,
+                color: isDark ? Theme.of(context).cardColor :  AppColors.primary,
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                     AppColors.primary.withAlpha(210),
@@ -228,7 +230,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                               getTitlesWidget: (value, meta) {
                                 return Text(
                                   value.toInt().toString(),
-                                  style: const TextStyle(fontSize: 11),
+                                  style: const TextStyle(fontSize: 12, color: AppColors.textPrimaryDark),
                                 );
                               },
                             ),
@@ -371,7 +373,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                         child: Container(
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
+                            color: isDark ? Theme.of(context).cardColor : AppColors.primary,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
@@ -383,6 +385,7 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                                     Icon(
                                       FlutterIslamicIcons.solidTasbihHand,
                                       size: 30,
+                                      color: AppColors.textPrimaryDark,
                                     ),
                                     SizedBox(width: 20),
                                     Flexible(
@@ -401,13 +404,27 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Text(
-                                "${dzikirCounts[i]} Total",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
+                              
+
+                              Row(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  text: "${dzikirCounts[i]}",
+                                  style: TextStyle(color: AppColors.secondary),
                                 ),
                               ),
+                              SizedBox(width: 5),
+                              Text.rich(
+                                TextSpan(
+                                  text: "Total",
+                                  style: TextStyle(
+                                    color: AppColors.textPrimaryDark,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                             ],
                           ),
                         ),

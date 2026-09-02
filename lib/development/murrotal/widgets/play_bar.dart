@@ -1,3 +1,4 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/widgets/seek_playbar.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class PlayBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<MurrotalController>();
     final player = controller.player;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Obx(() {
       final qariData =
@@ -21,7 +23,7 @@ class PlayBar extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(right: 12, left: 12, top: 0, bottom: 12),
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: isDark ? Theme.of(context).cardColor : AppColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

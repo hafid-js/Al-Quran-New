@@ -67,8 +67,8 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).cardColor,
-        surfaceTintColor: Colors.transparent,
+      backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+         surfaceTintColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
         leading: GestureDetector(
           onTap: () => Get.back(),
           child: Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -136,7 +136,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                   children: [
                     Text(
                       "Pilihan Surat",
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: isDark ? null : AppColors.textPrimaryDark),
                     ),
                     const Spacer(),
                     SizedBox(
@@ -145,9 +145,11 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                         controller: _searchController,
                         onChanged: _onSearchChanged,
                         autofocus: false,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Cari...',
-                          prefixIcon: Icon(Iconsax.search_normal_1),
+                          hintStyle: TextStyle(color : isDark ? null : AppColors.textPrimaryDark),
+                          prefixIcon: Icon(Iconsax.search_normal_1, color : isDark ? null : AppColors.textPrimaryDark),
+                         
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,

@@ -143,7 +143,7 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                               children: [
                                 Text(
                                   controller.detailSurah.value!.namaLatin,
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                  style: Theme.of(context).textTheme.titleSmall!.copyWith(color: isDark ? null : AppColors.textPrimaryLight),
                                 ),
                                 Text("Gulir untuk mebaca seluruh dzikir", style: Theme.of(context).textTheme.labelSmall,),
                               ],

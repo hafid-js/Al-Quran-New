@@ -402,14 +402,14 @@ extendBody: true,
         title: Text(
           "Tasbih",
           style: TextStyle(
-            color: Theme.of(context).textTheme.titleMedium?.color,
+            color: isDark ? Theme.of(context).textTheme.titleMedium?.color : AppColors.textPrimaryDark,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: isDark ? Theme.of(context).cardColor : AppColors.primary,
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
               AppColors.primary.withAlpha(210),
@@ -445,7 +445,7 @@ extendBody: true,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("usap ke kiri untuk berdzikir", style: TextStyle(fontSize: 12)),
+          Text("usap ke kiri untuk berdzikir", style: Theme.of(context).textTheme.labelSmall!.copyWith(color: AppColors.textPrimaryDark)),
              SizedBox(height: 10),
           TasbihBeadCounter(
             count: dzikirCount(selectedDzikir),

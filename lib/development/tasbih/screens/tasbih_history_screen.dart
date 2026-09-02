@@ -3,6 +3,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 
 class TasbihHistoryScreen extends StatefulWidget {
@@ -71,9 +72,7 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
         }
       });
     }
-    final list = map.entries
-        .where((e) => e.value.any((c) => c > 0))
-        .toList()
+    final list = map.entries.where((e) => e.value.any((c) => c > 0)).toList()
       ..sort((a, b) => b.key.compareTo(a.key));
     entries = list;
   }
@@ -105,31 +104,30 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-         shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(16),
-  ),
-backgroundColor: HexColor.fromHex("#F9F5EF"),
-        title:  Text(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: HexColor.fromHex("#F9F5EF"),
+        title: Text(
           "Konfirmasi",
-          style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        content: Text(
-          message,
-          style: TextStyle(color: AppColors.primary),
-        ),
+        content: Text(message, style: TextStyle(color: AppColors.primary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(
               "Batal",
-              style: TextStyle(fontSize: 14,color: AppColors.secondary),
+              style: TextStyle(fontSize: 14, color: AppColors.secondary),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
             child: Text(
               "Hapus",
-              style: TextStyle(fontSize: 14,color: Colors.red),
+              style: TextStyle(fontSize: 14, color: Colors.red),
             ),
           ),
         ],
@@ -152,11 +150,16 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
+        backgroundColor: isDark
+            ? Theme.of(context).cardColor
+            : AppColors.primary,
+        surfaceTintColor: isDark
+            ? Theme.of(context).cardColor
+            : AppColors.primary,
         toolbarHeight: 70,
         leadingWidth: 65,
         centerTitle: false,
@@ -167,10 +170,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
         titleSpacing: 0,
         title: const Text(
           "Riwayat Tasbih",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
         actions: [
           if (entries.isNotEmpty)
@@ -178,7 +178,7 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
               onPressed: _confirmDeleteAll,
               child: Text(
                 "Hapus Semua",
-                style: TextStyle(fontSize: 14,color: AppColors.secondary),
+                style: TextStyle(fontSize: 14, color: AppColors.secondary),
               ),
             ),
         ],
@@ -186,87 +186,97 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
       body: entries.isEmpty
           ? _emptyState()
           : Container(
-             decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-              AppColors.primary.withAlpha(210),
-              BlendMode.srcATop,
+              decoration: BoxDecoration(
+                color: isDark ? Theme.of(context).cardColor : AppColors.primary,
+                image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                    AppColors.primary.withAlpha(210),
+                    BlendMode.srcATop,
+                  ),
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/images/image.png"),
+                ),
+              ),
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                itemCount: entries.length,
+                itemBuilder: (context, index) => _historyCard(entries[index]),
+              ),
             ),
-            fit: BoxFit.cover,
-            image: AssetImage("assets/images/image.png"),
-          ),
-        ),
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              itemCount: entries.length,
-              itemBuilder: (context, index) =>
-                  _historyCard(entries[index]),
-            ),
-          )
     );
   }
 
   Widget _emptyState() {
-
     return Container(
-       decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-              AppColors.primary.withAlpha(210),
-              BlendMode.srcATop,
-            ),
-            fit: BoxFit.cover,
-            image: AssetImage("assets/images/image.png"),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+            AppColors.primary.withAlpha(210),
+            BlendMode.srcATop,
+          ),
+          fit: BoxFit.cover,
+          image: AssetImage("assets/images/image.png"),
+        ),
+      ),
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Stack(
+            children: [
+              Positioned(
+                top: -100,
+                right: 0,
+                left: 0,
+                bottom: 0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'assets/animations/empty.json',
+                      width: 180,
+                      height: 180,
+                    ),
+
+                    const Text(
+                      "Belum ada riwayat",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "Simpan tasbih harian Anda untuk melihat riwayat.",
+                      style: TextStyle(
+                        color: Colors.white.withAlpha(180),
+                        fontSize: 13,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-      child: Center(
-                child: Padding(padding: EdgeInsets.all(8), child: Stack(
-                    children: [
-                      Positioned(
-                        top: -100,
-                        right: 0,
-                        left: 0,
-                        bottom: 0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Lottie.asset(
-                              'assets/animations/empty.json',
-                              width: 180,
-                              height: 180,
-                            ),
-
-                            const Text(
-            "Belum ada riwayat",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            "Simpan tasbih harian Anda untuk melihat riwayat.",
-            style: TextStyle(color: Colors.white.withAlpha(180), fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),)
-              ),
+      ),
     );
   }
 
   Widget _historyCard(MapEntry<String, List<int>> entry) {
     final total = entry.value.fold(0, (a, b) => a + b);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-             color: Theme.of(context).cardColor,
+        color: isDark ? Theme.of(context).cardColor : AppColors.primary,
         borderRadius: BorderRadius.circular(16),
+        border: BoxBorder.all(width: 0.3, color: AppColors.textPrimaryDark),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,8 +294,8 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
                   const SizedBox(width: 8),
                   Text(
                     _formatDate(entry.key),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: AppColors.textPrimaryDark,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -294,31 +304,47 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
               ),
               GestureDetector(
                 onTap: () => _confirmDeleteEntry(entry.key),
-                child: const Icon(
-                  Icons.delete_outline,
-                  size: 18,
-                  color: Colors.white70,
+                child: Icon(
+                  Iconsax.close_circle,
+                  color: HexColor.fromHex("#D35252"),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          const Divider(color: Colors.white24, height: 1),
+          Divider(
+            color: isDark
+                ? Colors.white24
+                : AppColors.textPrimaryDark.withAlpha(100),
+            height: 1,
+          ),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Total",
-                style: TextStyle(color: Colors.white70, fontSize: 13),
-              ),
               Text(
-                "$total kali",
+                "Total",
                 style: TextStyle(
-                  color: AppColors.secondary,
+                  color: AppColors.textPrimaryDark,
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
                 ),
+              ),
+              Row(
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: "$total",
+                      style: TextStyle(color: AppColors.secondary),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text.rich(
+                    TextSpan(
+                      text: "kali",
+                      style: TextStyle(color: AppColors.textPrimaryDark),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -351,12 +377,22 @@ backgroundColor: HexColor.fromHex("#F9F5EF"),
                         ),
                       ],
                     ),
-                    Text(
-                      "${entry.value[i]}x",
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
+                    Row(
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: "${entry.value[i]}",
+                            style: TextStyle(color: AppColors.secondary),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Text.rich(
+                          TextSpan(
+                            text: "kali",
+                            style: TextStyle(color: AppColors.textPrimaryDark),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
