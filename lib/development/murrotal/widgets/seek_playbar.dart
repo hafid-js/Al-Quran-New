@@ -1,4 +1,4 @@
-import 'package:alquran_new/development/murrotal/widgets/common.dart';
+import 'package:alquran_new/development/murrotal/widgets/seek_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:just_audio/just_audio.dart';

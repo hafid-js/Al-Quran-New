@@ -1,4 +1,4 @@
-import 'package:alquran_new/development/murrotal/widgets/common.dart';
+import 'package:alquran_new/development/murrotal/widgets/seek_bar.dart';
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -22,6 +22,7 @@ class MurrotalController extends GetxController with WidgetsBindingObserver {
   final player = AudioPlayer(maxSkipsOnError: 3);
   final isMurrotalPlaying = false.obs;
   final murrotalSurahName = ''.obs;
+  final murrotalSurahArti = ''.obs;
   final murrotalSurahNomor = 0.obs;
   final murrotalQariIndex = 0.obs;
 
@@ -102,6 +103,7 @@ class MurrotalController extends GetxController with WidgetsBindingObserver {
     murrotalQariIndex.value = qariIndex;
     murrotalSurahNomor.value = surah.nomor;
     murrotalSurahName.value = surah.namaLatin;
+    murrotalSurahArti.value = surah.arti;
     isMurrotalPlaying.value = true;
   }
 

@@ -89,8 +89,9 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
       appBar: CommonAppBar(
         title: "Hizb $hizbNumber",
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        titleColor: Theme.of(context).textTheme.titleSmall!.color,
-        backIconColor: Theme.of(context).textTheme.titleSmall!.color,
+         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        titleColor: isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
+        backIconColor: isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
         actions: [
           Icon(Iconsax.book_1, color: isDark ? AppColors.textPrimaryDark : Colors.black),
           SizedBox(width: 15),
@@ -237,7 +238,9 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                 child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+   color: isDark
+                            ? Theme.of(context).cardColor
+                            : AppColors.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

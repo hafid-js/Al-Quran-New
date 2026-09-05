@@ -73,7 +73,7 @@ class SeekBarState extends State<SeekBar> {
         ),
         SliderTheme(
           data: _sliderThemeData.copyWith(
-            padding: EdgeInsets.only(right: 12, left: 12, top: 12, bottom: 19),
+            padding: EdgeInsets.only(right: 12, left: 12, top: 11, bottom: 19),
             activeTrackColor: AppColors.secondary,
             thumbColor: AppColors.secondary,
             inactiveTrackColor: Colors.transparent,

@@ -22,8 +22,8 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
-        backIconColor:  Theme.of(context).textTheme.titleSmall!.color,
-        titleColor: Theme.of(context).textTheme.titleSmall!.color,
+            backIconColor:  Theme.of(context).textTheme.titleMedium!.color,
+        titleColor: Theme.of(context).textTheme.titleMedium!.color,
         title: "Pengaturan Notifikasi",
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
@@ -159,11 +159,9 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                   return Colors.black.withAlpha(60);
                 },
               ),
-              trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
-                (states) {
-                  return Colors.white;
-                },
-              ),
+           trackOutlineColor: const WidgetStatePropertyAll(
+    Colors.transparent,
+  ),
               
               onChanged: (bool value) => onTap(),
             ),
@@ -201,7 +199,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                                     : Theme.of(context).colorScheme.primary.withAlpha(10),
                               border: isSelected
                                     ? BoxBorder.all(
-                                              color: Theme.of(context).colorScheme.secondary,
+                                              color: Theme.of(context).colorScheme.primary,
                                         width: 0.8,
                                       )
                                     : null,
@@ -257,7 +255,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                                     : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                              color: Theme.of(context).colorScheme.secondary,
+                                              color: Theme.of(context).colorScheme.primary,
                                         width: 0.8,
                                       )
                                     : null,
@@ -343,7 +341,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                                     : Theme.of(context).colorScheme.primary.withAlpha(10),
                                 border: isSelected
                                     ? BoxBorder.all(
-                                        color: Theme.of(context).colorScheme.secondary,
+                                        color: Theme.of(context).colorScheme.primary,
                                         width: 0.8,
                                       )
                                     : null,

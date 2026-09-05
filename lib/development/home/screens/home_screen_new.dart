@@ -234,7 +234,9 @@ class _HomeScreenNewState extends State<HomeScreenNew>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        backgroundColor: isDark
+            ? Theme.of(context).cardColor
+            : AppColors.primary,
         toolbarHeight: 0,
       ),
       body: Stack(
@@ -244,7 +246,6 @@ class _HomeScreenNewState extends State<HomeScreenNew>
               Container(
                 padding: EdgeInsets.only(right: 16, left: 16, bottom: 60),
                 decoration: BoxDecoration(
-                  
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                       AppColors.primary.withAlpha(210),
@@ -253,8 +254,10 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                     fit: BoxFit.cover,
                     image: AssetImage("assets/images/image.png"),
                   ),
-                
-                  color: isDark ? Theme.of(context).cardColor : AppColors.primary,
+
+                  color: isDark
+                      ? Theme.of(context).cardColor
+                      : AppColors.primary,
                 ),
                 child: Obx(() {
                   final item = controller.todayPrayer.value;
@@ -323,7 +326,10 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                         ),
                                       ),
                                     )
-                                  : const Icon(Iconsax.location_add, color: AppColors.textPrimaryDark),
+                                  : const Icon(
+                                      Iconsax.location_add,
+                                      color: AppColors.textPrimaryDark,
+                                    ),
                             );
                           }),
                         ],
@@ -358,9 +364,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 ),
                                 TextSpan(
                                   text: controller.remainingText,
-                                  style: TextStyle(
-                                    color: AppColors.secondary,
-                                  ),
+                                  style: TextStyle(color: AppColors.secondary),
                                 ),
                               ],
                             ),
@@ -483,21 +487,24 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                           });
                                         }
                                       : () async {
-                                          
-
                                           if (menu["onTap"] != null) {
                                             menu["onTap"](context);
+                                            return;
+                                          }
+
+                                          final builder = menu["page"];
+                                          if (builder is! Widget Function()) {
                                             return;
                                           }
 
                                           final binding = menu["binding"];
                                           if (binding != null) {
                                             await Get.to(
-                                              menu["page"](),
+                                              builder,
                                               binding: binding,
                                             );
                                           } else {
-                                            await Get.to(menu["page"]());
+                                            await Get.to(builder);
                                           }
 
                                           if (mounted) {
@@ -526,7 +533,10 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                           children: [
                             Text(
                               "Progress Hari ini",
-                              style: isDark ? Theme.of(context).textTheme.titleSmall : Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.primary),
+                              style: isDark
+                                  ? Theme.of(context).textTheme.titleSmall
+                                  : Theme.of(context).textTheme.titleSmall!
+                                        .copyWith(color: AppColors.primary),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
@@ -534,8 +544,10 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color:                           isDark ?  AppColors.primary.withAlpha(100) : AppColors.primary,
-             
+                                color: isDark
+                                    ? AppColors.primary.withAlpha(100)
+                                    : AppColors.primary,
+
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -559,13 +571,13 @@ class _HomeScreenNewState extends State<HomeScreenNew>
 
                             Text(
                               "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
-                              style: Theme.of(context).textTheme.labelSmall
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
 
                             const SizedBox(height: 6),
 
                             StepProgressIndicator(
-                              totalSteps: max(2, _ibadahProgress.$2 * 2 + 10),
+                              totalSteps: max(2, _ibadahProgress.$2 * 2),
                               currentStep: _ibadahProgress.$1 > 0
                                   ? _ibadahProgress.$1 * 2 + 10
                                   : 0,
@@ -590,7 +602,9 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Center(
@@ -626,36 +640,36 @@ Widget _buildPrayerTimeItem(
 ) {
   final isNext = prayerTime["title"] == nextPrayerName;
   return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          prayerTime["title"],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            overflow: .ellipsis,
-            color: isNext ? AppColors.secondary : Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(height: 5),
-        Icon(
-          prayerTime["icon"],
-          size: 20,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        prayerTime["title"],
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+          overflow: .ellipsis,
           color: isNext ? AppColors.secondary : Colors.white,
+          fontWeight: FontWeight.w500,
         ),
-        SizedBox(height: 5),
-        Text(
-          prayerTime["time"],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: isNext ? AppColors.secondary : Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
+      ),
+      SizedBox(height: 5),
+      Icon(
+        prayerTime["icon"],
+        size: 20,
+        color: isNext ? AppColors.secondary : Colors.white,
+      ),
+      SizedBox(height: 5),
+      Text(
+        prayerTime["time"],
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+          color: isNext ? AppColors.secondary : Colors.white,
+          fontWeight: FontWeight.w500,
         ),
-      ],
-    );
+      ),
+    ],
+  );
 }
 
 class _MenuItemWidget extends StatelessWidget {
@@ -673,16 +687,14 @@ class _MenuItemWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            menu["icon"],
-            size: 30,
-            color: AppColors.secondary,
-          ),
+          Icon(menu["icon"], size: 30, color: AppColors.secondary),
           SizedBox(height: 5),
           Text(
             menu["title"],
             textAlign: TextAlign.center,
-            style: TextTheme.of(context).labelSmall!.copyWith(color:  isDark ? AppColors.textPrimaryDark : AppColors.menuTitle)
+            style: TextTheme.of(context).labelSmall!.copyWith(
+              color: isDark ? AppColors.textPrimaryDark : AppColors.menuTitle,
+            ),
           ),
         ],
       ),
@@ -697,14 +709,18 @@ class _CarouselItem {
 }
 
 void _showMurrotalScreen(BuildContext context) {
-      final isDark = Theme.of(context).brightness == Brightness.dark;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   SurahBinding().dependencies();
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (bottomSheetContext) => [
       SliverWoltModalSheetPage(
-        backgroundColor: isDark ? Theme.of(context).cardColor : Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: isDark ? Theme.of(context).cardColor : Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: isDark
+            ? Theme.of(context).cardColor
+            : Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: isDark
+            ? Theme.of(context).cardColor
+            : Theme.of(context).scaffoldBackgroundColor,
         hasTopBarLayer: false,
         mainContentSliversBuilder: (context) => const [
           SliverToBoxAdapter(child: MurrotalContent()),
@@ -735,7 +751,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
         children: [
           Text(
             "Popular",
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
@@ -812,6 +828,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                                             .qariData[item.qariIndex]["title"]!,
                                         qariImage: MurrotalController
                                             .qariData[item.qariIndex]["image"]!,
+                                            positionDuration: Duration.zero,
                                       ),
                                     );
                                   },
@@ -846,6 +863,8 @@ class _MurrotalContentState extends State<MurrotalContent> {
                                               Icon(
                                                 Iconsax.play_circle5,
                                                 size: 30,
+                                                color:
+                                                    AppColors.textPrimaryDark,
                                               ),
                                             ],
                                           ),
@@ -926,8 +945,8 @@ class _MurrotalContentState extends State<MurrotalContent> {
           SizedBox(height: 10),
           Text(
             "Qori Terfavorit",
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-     color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -967,7 +986,9 @@ class _MurrotalContentState extends State<MurrotalContent> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,
-                            color: isDark? Colors.white : HexColor.fromHex("#1E4355"),
+                            color: isDark
+                                ? Colors.white
+                                : HexColor.fromHex("#1E4355"),
                             fontWeight: FontWeight.w600,
                           ),
                         ),

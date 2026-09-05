@@ -30,60 +30,64 @@ class _DoaScreenState extends State<DoaScreen> {
         title: "Doa",
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-        titleColor: Theme.of(context).textTheme.titleSmall!.color,
+        titleColor: Theme.of(context).textTheme.titleMedium!.color,
         backIconColor: Theme.of(context).textTheme.titleSmall!.color,
       ),
       body: Stack(
         children: [
           PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: Column(
+            preferredSize: Size.fromHeight(60),
+            child: Column(
               children: [
-                Padding(padding: EdgeInsets.only(right: 8, left: 8, top: 8), child: Column(
-                  children: [
-                    AppSearchBar(
-                  onChanged: controller.search,
-                  hintText: "Cari Doa...",
+                Padding(
+                  padding: EdgeInsets.only(right: 8, left: 8, top: 8),
+                  child: Column(
+                    children: [
+                      AppSearchBar(
+                        onChanged: controller.search,
+                        hintText: "Cari Doa...",
+                      ),
+                      SizedBox(height: 8),
+                      Obx(() {
+                        final categories =
+                            controller.doaList
+                                .map((e) => e.grup)
+                                .toSet()
+                                .toList()
+                              ..sort();
+
+                        return CategoryFilter(
+                          categories: categories,
+                          activeCategory: controller.activeCategory.value,
+                          onCategorySelected: (category) {
+                            controller.filter(category, null);
+                          },
+                        );
+                      }),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 8),
-                Obx(() {
-                  final categories =
-                      controller.doaList.map((e) => e.grup).toSet().toList()
-                        ..sort();
-
-                  return CategoryFilter(
-                    categories: categories,
-                    activeCategory: controller.activeCategory.value,
-                    onCategorySelected: (category) {
-                      controller.filter(category, null);
-                    },
-                  );
-                }),
-                  ],
-                ),),
-                Expanded(child:  
-
-                Obx(() {
-            if (controller.isLoading.value) {
-              return CommonLoadingWidget(padded: true, bordered: true);
-            }
-            if (controller.categories.isEmpty) {
-              return CommonEmptyWidget(padded: true, bordered: true);
-            }
-            return ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              itemCount: controller.filteredDoa.length,
-              itemBuilder: (context, index) {
-                final doa = controller.filteredDoa[index];
-                return _buildDoaItem(doa);
-              },
-            );
-          }),
-               )
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return CommonLoadingWidget(padded: true, bordered: true);
+                    }
+                    if (controller.filteredDoa.isEmpty) {
+                      return CommonEmptyWidget(padded: true, bordered: true);
+                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      itemCount: controller.filteredDoa.length,
+                      itemBuilder: (context, index) {
+                        final doa = controller.filteredDoa[index];
+                        return _buildDoaItem(doa);
+                      },
+                    );
+                  }),
+                ),
               ],
             ),
-        ),
-        
+          ),
         ],
       ),
     );
@@ -126,14 +130,18 @@ class _DoaScreenState extends State<DoaScreen> {
                             doa.nama,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(fontSize: 14),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleSmall!.copyWith(fontSize: 14),
                           ),
                           Text(
                             doa.grup,
-                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : null),
+                            style: Theme.of(context).textTheme.labelSmall!
+                                .copyWith(
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark.withAlpha(120)
+                                      : null,
+                                ),
                           ),
                         ],
                       ),
@@ -152,7 +160,7 @@ class _DoaScreenState extends State<DoaScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
-                       backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
+      backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -171,26 +179,23 @@ class _DoaScreenState extends State<DoaScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    doa.nama,
-                    style: Theme.of(context).textTheme.titleSmall
-                    
-                  ),
+                  Text(doa.nama, style: Theme.of(context).textTheme.titleSmall),
                   SizedBox(height: 5),
                   Text(
                     doa.grup,
-                     style: TextStyle(
-                            color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : HexColor.fromHex("#676767"),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                          ),
+                    style: TextStyle(
+                      color: isDark
+                          ? AppColors.textPrimaryDark.withAlpha(120)
+                          : HexColor.fromHex("#676767"),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
                   ),
-     
+
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-            
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -199,7 +204,9 @@ class _DoaScreenState extends State<DoaScreen> {
                         style: TextStyle(
                           fontFamily: fontFamily,
                           fontSize: 28,
-                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.textPrimaryLight,
                           height: 2.5,
                         ),
                         textAlign: TextAlign.end,
@@ -211,7 +218,7 @@ class _DoaScreenState extends State<DoaScreen> {
                     doa.tr,
                     style: TextStyle(
                       fontSize: 14,
-                      color:  isDark ? AppColors.secondary : AppColors.primary
+                      color: isDark ? AppColors.secondary : AppColors.primary,
                     ),
                   ),
                   SizedBox(height: 20),
@@ -219,40 +226,42 @@ class _DoaScreenState extends State<DoaScreen> {
                     doa.idn,
                     style: TextStyle(
                       fontSize: 14,
-                      color:  isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimaryLight,
                     ),
                   ),
                   SizedBox(height: 20),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      
-                      color: isDark ? Theme.of(context).cardColor :  AppColors.primary,
+                      color: isDark
+                          ? Theme.of(context).cardColor
+                          : AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
-                      border: isDark ? Border(
-                    left: BorderSide(
-                      width: 3,
-                      color: AppColors.secondary,
-                    ),
-                  ) : null,
+                      border: isDark
+                          ? Border(
+                              left: BorderSide(
+                                width: 3,
+                                color: AppColors.secondary,
+                              ),
+                            )
+                          : null,
 
-                      
                       boxShadow: [
-  BoxShadow(
-    color: Colors.black.withAlpha(10),
-    blurRadius: 20,
-    spreadRadius: 0,
-    offset: const Offset(0, 4),
-  ),
-],
+                        BoxShadow(
+                          color: Colors.black.withAlpha(10),
+                          blurRadius: 20,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         doa.tentang,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.start,
                       ),
                     ),

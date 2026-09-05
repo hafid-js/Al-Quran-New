@@ -46,7 +46,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                 Text(
                   "Belum ada bookmark",
                   style: TextStyle(
-                    color: HexColor.fromHex("#1E4355"),
+                    color: AppColors.primary,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -55,7 +55,7 @@ class _BookmarkScreenNewState extends State<BookmarkScreenNew> {
                 Text(
                   "Ayat yang kamu simpan akan muncul di sini.",
                   style: TextStyle(
-                    color: HexColor.fromHex("#676767"),
+                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                     fontSize: 13,
                   ),
                 ),

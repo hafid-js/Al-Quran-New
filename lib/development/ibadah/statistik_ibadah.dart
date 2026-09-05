@@ -411,6 +411,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
 
   Widget _buildSummaryCard() {
     final percent = _totalAll == 0 ? 0.0 : _totalDone / _totalAll;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -437,7 +438,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               lineWidth: 40,
               percent: percent,
               backgroundWidth: 30,
-              backgroundColor: Colors.white24,
+              backgroundColor: isDark ? Colors.white24 : AppColors.primary.withAlpha(50),
               progressColor: AppColors.secondary,
               animation: true,
               animationDuration: 1200,
@@ -448,8 +449,8 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 children: [
                   Text(
                     "$_totalDone/$_totalAll",
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
@@ -501,7 +502,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               Text(
                 _weekRangeLabel,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
@@ -543,8 +544,9 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Row(
+                  spacing: 12,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
@@ -947,7 +949,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                         children: [
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
@@ -1022,7 +1024,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
 
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
@@ -1090,7 +1092,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                         children: [
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.all(16),
+                                 padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
@@ -1145,7 +1147,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
 
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(12),
@@ -1368,7 +1370,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   children: [
                     TableCalendar(
@@ -1399,7 +1401,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                           size: 24,
                         ),
                         titleTextStyle: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: isDark
                               ? AppColors.textPrimaryDark
                               : AppColors.primary,
@@ -1511,7 +1513,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 70, vertical: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1614,12 +1616,12 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   return Container(
                     padding: item['label'] == 'Sholat Wajib'
                         ? const EdgeInsets.only(
-                            top: 18,
+                            top: 12,
                             right: 18,
                             left: 16,
                             bottom: 0,
                           )
-                        : const EdgeInsets.all(18),
+                        : const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       border: BoxBorder.all(
                         width: 1.5,
@@ -1668,7 +1670,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                         Text(
                           item['value'] as String,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : AppColors.primary,
@@ -1758,7 +1760,7 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                       children: [
                         Text(
                           _formattedDate,
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14),
                         ),
                         Icon(
                           Iconsax.calendar_1,

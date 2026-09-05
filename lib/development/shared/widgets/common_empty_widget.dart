@@ -1,4 +1,7 @@
+import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class CommonEmptyWidget extends StatelessWidget {
@@ -14,10 +17,11 @@ class CommonEmptyWidget extends StatelessWidget {
   });
 
   Widget _buildInner() {
+    final isDark = Get.theme.brightness == Brightness.dark;
     return Container(
       decoration: bordered
           ? BoxDecoration(
-              color: Colors.white,
+              color: Get.theme.cardColor,
               borderRadius: BorderRadius.circular(16),
             )
           : null,
@@ -39,7 +43,7 @@ class CommonEmptyWidget extends StatelessWidget {
                 ),
                 Text(
                   message,
-                  style: TextStyle(color: Color(0xFF246177)),
+                  style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
                 ),
               ],
             ),

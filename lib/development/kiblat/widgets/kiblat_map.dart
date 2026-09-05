@@ -14,6 +14,7 @@ class KiblatMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<KiblatController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Obx(() {
       if (controller.errorMessage.value.isNotEmpty) {
@@ -99,7 +100,9 @@ class KiblatMap extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 10, vertical: 12),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                    color: isDark
+                            ? Theme.of(context).cardColor
+                            : AppColors.primary,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -151,7 +154,7 @@ class KiblatMap extends StatelessWidget {
                         .labelSmall
                         ?.copyWith(
                           fontStyle: FontStyle.italic,
-                          color: Theme.of(context).colorScheme.outline,
+                          color: isDark ? Theme.of(context).colorScheme.outline : AppColors.textPrimaryDark,
                         ),
                   ),
                 ],

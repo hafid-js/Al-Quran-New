@@ -42,54 +42,52 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isDark ? AppColors.textPrimaryDark : HexColor.fromHex("#5a7b8a"),),
             ),
           ),
-          SizedBox(
-            height: 390,
-            child: TableCalendar(
-              firstDay: DateTime(2020, 1, 1),
-              lastDay: DateTime(2100, 12, 31),
-              focusedDay: _focusedDay,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontWeight: FontWeight.w600),
-                 weekendStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontWeight: FontWeight.w600)
+          Column(
+              children: [
+                TableCalendar(
+                firstDay: DateTime(2020, 1, 1),
+                lastDay: DateTime(2100, 12, 31),
+                focusedDay: _focusedDay,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontSize: 12, fontWeight: FontWeight.w600),
+                   weekendStyle: TextStyle(color: isDark ? AppColors.secondary : HexColor.fromHex("#5a7b8a"), fontSize: 12, fontWeight: FontWeight.w600)
+                ),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                onPageChanged: (focusedDay) => _focusedDay = focusedDay,
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"), fontSize: 14, fontWeight: FontWeight.w500),
+                  leftChevronIcon: Icon(
+                    Iconsax.arrow_circle_left,
+                    color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
+                  ),
+                  rightChevronIcon: Icon(
+                    Iconsax.arrow_circle_right,
+                    color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
+                  ),
+                ),
+                calendarStyle: CalendarStyle(
+      defaultTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
+        weekendTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
+                  todayDecoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
               ),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              onPageChanged: (focusedDay) => _focusedDay = focusedDay,
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-                titleTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"), fontSize: 16, fontWeight: FontWeight.w500),
-                leftChevronIcon: Icon(
-                  Iconsax.arrow_circle_left,
-                  color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
-                ),
-                rightChevronIcon: Icon(
-                  Iconsax.arrow_circle_right,
-                  color: isDark? Colors.white : HexColor.fromHex("#5a7b8a"),
-                ),
-              ),
-              calendarStyle: CalendarStyle(
-    defaultTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
-      weekendTextStyle: TextStyle(color: isDark? Colors.white : HexColor.fromHex("#5a7b8a")),
-                todayDecoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                selectedDecoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
+              Row(
             children: [
               Expanded(
                 child: OutlinedButton(
@@ -109,7 +107,7 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context, _selectedDay),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:                          isDark ?  AppColors.primary.withAlpha(50) : AppColors.primary,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -121,6 +119,9 @@ class _CalendarPickerModalState extends State<CalendarPickerModal> {
               ),
             ],
           ),
+              ],
+            ),
+          
         ],
       ),
     );

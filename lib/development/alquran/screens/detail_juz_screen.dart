@@ -77,10 +77,10 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Juz $juzNumber",
-        titleColor: Theme.of(context).textTheme.titleMedium!.color,
+        titleColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
         backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
         surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
-        backIconColor: Theme.of(context).textTheme.titleMedium!.color,
+        backIconColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
         actions: [
           Icon(Iconsax.book_1, color: Theme.of(context).textTheme.titleMedium!.color),
           SizedBox(width: 15),
@@ -222,7 +222,9 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+        color: isDark
+                            ? Theme.of(context).cardColor
+                            : AppColors.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

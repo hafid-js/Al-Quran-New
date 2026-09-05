@@ -23,7 +23,8 @@ class PerasaanScreen extends StatelessWidget {
         surfaceTintColor: isDark
             ? Theme.of(context).scaffoldBackgroundColor
             : Colors.white,
-        title: Text(
+        title: Center(
+          child: Text(
           "Perasaan",
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
             color: isDark
@@ -33,6 +34,7 @@ class PerasaanScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        )
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

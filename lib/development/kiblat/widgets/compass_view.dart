@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/kiblat/controllers/kiblat_controller.dart';
 import 'package:alquran_new/development/kiblat/services/qibla_calculator.dart';
+import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:geolocator/geolocator.dart';
@@ -70,17 +71,6 @@ class _CompassViewState extends State<CompassView>
       return _buildNoCompassView(context);
     }
 
-    if (_hasCompassSensor == false) {
-      return Center(
-        child: Container(
-          color: Colors.transparent,
-          child: Center(
-            child: Image.asset('assets/animations/bar_loader.gif', height: 100),
-          ),
-        ),
-      );
-    }
-
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8.0),
@@ -88,17 +78,7 @@ class _CompassViewState extends State<CompassView>
         stream: stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(
-                    'assets/animations/bar_loader.gif',
-                    height: 100,
-                  ),
-                ),
-              ),
-            );
+            return CommonLoadingWidget(padded: true, bordered: true);
           }
 
           if (!snapshot.hasData || !snapshot.data!.enabled) {
@@ -236,16 +216,7 @@ class _QiblahCompassWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/animations/bar_loader.gif',
-                      height: 100,
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
-                    ),
-                  ),
-                ),
+                CommonLoadingWidget(padded: true, bordered: true),
                 const SizedBox(height: 16),
                 Text(
                   'Menunggu sensor kompas...',
@@ -387,13 +358,14 @@ class _QiblahCompassWidget extends StatelessWidget {
   }
 
   Widget _buildLocationCard(BuildContext context, KiblatController controller) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: isDark ? Theme.of(context).cardColor : AppColors.primary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(

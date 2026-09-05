@@ -443,7 +443,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
+        return Padding(padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
@@ -619,7 +619,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
               ],
             ],
           ),
-        );
+        ),);
       },
     );
   }
@@ -835,7 +835,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
         children: [
           Icon(
             done ? Icons.check_circle_rounded : Iconsax.tick_circle,
-            size: 45,
+            size: 42,
             color: done
                 ? AppColors.secondary
                 : HexColor.fromHex("#C9CFD4").withAlpha(180),
@@ -847,7 +847,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
             name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               color: done
                   ? (isDark
                         ? HexColor.fromHex("#C9CFD4")
@@ -993,8 +993,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 6),
 
                     StepProgressIndicator(
-                      totalSteps: _totalAll * 2 + 10,
-                      currentStep: _totalDone > 0 ? _totalDone * 2 + 10 : 0,
+                      totalSteps: _totalAll * 2,
+                      currentStep: _totalDone > 0 ? _totalDone * 2 : 0,
                       selectedColor: isDark
                           ? AppColors.secondary
                           : AppColors.primary,
@@ -1020,7 +1020,7 @@ class _IbadahScreenState extends State<IbadahScreen> {
                       child: Center(
                         child: Text(
                           _quotes[_quoteIndex],
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 13),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -1508,7 +1508,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return Padding(padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), child: Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -1622,7 +1622,7 @@ class _CatatTilawahModalState extends State<_CatatTilawahModal> {
           ),
         ],
       ),
-    );
+    ),);
   }
 }
 

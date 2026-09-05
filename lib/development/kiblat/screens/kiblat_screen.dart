@@ -65,7 +65,7 @@ class _KiblatScreenNewState extends State<KiblatScreenNew>
     Colors.transparent,
   ),
           tabs: const [
-            Tab(text: "Kompas"),
+            Tab(text: "Kompas",),
             Tab(text: "Peta"),
           ],
         ),

@@ -297,8 +297,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
               ),
             ),
 
-            SizedBox(height: 20),
-            Row(
+            Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -330,7 +329,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                           "${viewmodel.getHijriMonthYear()} - ${HijriCalendarConfig.fromDate(viewmodel.currentDisplayMonthYear).hYear} H",
                           textAlign: TextAlign.center,
                           style: textStyle.copyWith(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: isDark ? AppColors.textPrimaryDark : AppColors.primary, fontWeight: FontWeight.w600
                           ),
                         ),
@@ -344,7 +343,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                           viewmodel.getMonthYearRange(),
                           style: textStyle.copyWith(
                             fontWeight: FontWeight.w500,
-                            fontSize: 14,
+                            fontSize: 12,
                             color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                           ),
                         ),
@@ -372,9 +371,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                   ),
                 ),
               ],
-            ),
-
-            SizedBox(height: 30),
+            ),),
 
             ///show hijri calendar current month name & year
             !widget.isHijriView!
@@ -447,34 +444,33 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                       ],
                     ),
                   ),
-            SizedBox(height: 30),
             viewmodel
                     .getMonthlyEvents(viewmodel.currentDisplayMonthYear)
                     .isNotEmpty
                 ? Column(
                     children: [
-                      Row(
+                      Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Container(
-                                height: 40,
-                                width: 40,
+                                height: 35,
+                                width: 35,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(8),
                                   color: isDark ? Theme.of(context).cardColor : AppColors.primary,
                                 ),
                                 child: Icon(
                                   Icons.star_rate_rounded,
-                                  size: 30,
+                                  size: 25,
                                   color: Colors.white,
                                 ),
                               ),
                               SizedBox(width: 10),
                               Text(
                                 "Hari Besar Bulan Ini",
-                                style: Theme.of(context).textTheme.titleMedium!
+                                style: Theme.of(context).textTheme.titleSmall!
                                     .copyWith(
                                       color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
                                     ),
@@ -508,8 +504,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                               ),
                             ),
                         ],
-                      ),
-                      SizedBox(height: 20),
+                      ),),
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
@@ -574,9 +569,11 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                               .textTheme
                                               .titleSmall!
                                               .copyWith(
+                                                fontSize: 14,
                                                 color:isDark ? AppColors.textPrimaryDark : AppColors.primary
                                               ),
                                         ),
+                                        SizedBox(height: 4),
                                         Row(
                                           children: [
                                             Text(
@@ -593,13 +590,14 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                                               ),
                                             ),
                                             SizedBox(width: 6),
-                                            Text(
+                                            Expanded(child: Text(
                                               event['date'],
+                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(
                                                 context,
                                               ).textTheme.labelSmall,
-                                            ),
+                                            ),)
                                           ],
                                         ),
                                       ],

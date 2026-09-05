@@ -142,14 +142,14 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                     SizedBox(
                       width: 140,
                       child: TextField(
+                        style: TextStyle(color: AppColors.textPrimaryDark),
                         controller: _searchController,
                         onChanged: _onSearchChanged,
                         autofocus: false,
                         decoration: InputDecoration(
                           hintText: 'Cari...',
-                          hintStyle: TextStyle(color : isDark ? null : AppColors.textPrimaryDark),
+                          hintStyle: TextStyle(color : isDark ? null: AppColors.textPrimaryDark),
                           prefixIcon: Icon(Iconsax.search_normal_1, color : isDark ? null : AppColors.textPrimaryDark),
-                         
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
@@ -200,6 +200,7 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                               surahArti: surah.arti,
                               qariNama: qariData["title"]!,
                               qariImage: qariData["image"]!,
+                              positionDuration: Duration.zero,
                             ),
                           );
                         },

@@ -1,6 +1,7 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/murrotal/widgets/seek_playbar.dart';
+import 'package:alquran_new/development/murrotal/screens/detail_murrotal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,7 +19,8 @@ class PlayBar extends StatelessWidget {
       final qariData =
           MurrotalController.qariData[controller.murrotalQariIndex.value];
 
-      return Padding(
+      return
+      Padding(
         padding: EdgeInsets.symmetric(horizontal: 12),
         child: Container(
           padding: EdgeInsets.only(right: 12, left: 12, top: 0, bottom: 12),
@@ -31,6 +33,21 @@ class PlayBar extends StatelessWidget {
               children: [
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  onTap: () {
+                    Get.to(
+                      () => DetailMurrotalScreen(
+                        qariIndex: controller.murrotalQariIndex.value,
+                        surahNomor: controller.murrotalSurahNomor.value,
+                        surahNama: controller.murrotalSurahName.value,
+                        surahArti: controller.murrotalSurahArti.value,
+                        positionDuration: controller.player.position,
+                        qariNama: MurrotalController
+                            .qariData[controller.murrotalQariIndex.value]["title"]!,
+                        qariImage: MurrotalController
+                            .qariData[controller.murrotalQariIndex.value]["image"]!,
+                      ),
+                    );
+                  },
                   leading: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(8),
                     child: Image.asset(

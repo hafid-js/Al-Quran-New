@@ -48,16 +48,52 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
     });
   }
 
-  Future<void> _requestReview() => _inAppReview.requestReview();
-
-  Future<void> _openWhatsApp() async {
-    final Uri url = Uri.parse('https://wa.me/6288298654539');
-
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+Future<void> _requestReview() async {
+  try {
+    await _inAppReview.requestReview();
+  } catch (e) {
+    if (mounted) {
+     ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Gagal: $e', style: TextStyle(color: AppColors.textPrimaryDark),),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        ),
+    );
     }
   }
+}
 
+ Future<void> _openWhatsApp() async {
+  final Uri url = Uri.parse(
+    'https://wa.me/+6288298654539',
+  );
+
+  try {
+    final result = await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Tidak dapat membuka WhatsApp', style: TextStyle(color: AppColors.textPrimaryDark),),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        ),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Terjadi kesalahan: $e', style: TextStyle(color: AppColors.textPrimaryDark),),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        ),
+    );
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,6 +190,7 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
             ),
             SizedBox(height: 20),
             GestureDetector(
+              
               onTap: _openWhatsApp,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

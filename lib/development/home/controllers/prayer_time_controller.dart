@@ -42,6 +42,8 @@ class PrayerTimeController extends GetxController {
   LocationCache? _cachedLocation;
   var locationStatus = "Sedang memuat data...".obs;
 
+  final isDark = Get.isDarkMode;
+
   @override
   void onInit() {
     super.onInit();
@@ -117,6 +119,7 @@ class PrayerTimeController extends GetxController {
   }
 
   Future<void> detectLocation() async {
+    
     try {
       isLoading.value = true;
 
@@ -143,11 +146,14 @@ class PrayerTimeController extends GetxController {
         snackPosition: SnackPosition.TOP,
         duration: Duration(seconds: 2),
         backgroundColor: Get.theme.cardColor,
-        colorText: AppColors.textPrimaryDark,
+        colorText: isDark ? AppColors.textPrimaryDark : AppColors.primary
         );
     } catch (e) {
       locationStatus.value = "Gagal";
-      Get.snackbar("Error", e.toString());
+      Get.snackbar("Error", e.toString(),  snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 2),
+        backgroundColor: Get.theme.cardColor,
+        colorText: Colors.red);
     } finally {
       isLoading.value = false;
 

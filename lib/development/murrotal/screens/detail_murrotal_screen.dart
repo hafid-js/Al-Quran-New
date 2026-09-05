@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/development/murrotal/widgets/common.dart'
+import 'package:alquran_new/development/murrotal/widgets/seek_bar.dart'
     hide ambiguate;
 import 'package:alquran_new/development/murrotal/controllers/murrotal_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
@@ -20,6 +20,7 @@ class DetailMurrotalScreen extends StatefulWidget {
   final String surahArti;
   final String qariNama;
   final String qariImage;
+  final Duration positionDuration;
 
   const DetailMurrotalScreen({
     super.key,
@@ -29,6 +30,7 @@ class DetailMurrotalScreen extends StatefulWidget {
     required this.surahArti,
     required this.qariNama,
     required this.qariImage,
+    required this.positionDuration,
   });
 
   @override
@@ -83,12 +85,25 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
     );
 
     try {
-      final playlist = _buildPlaylist();
-      await _player.setAudioSources(
-        playlist,
-        initialIndex: widget.surahNomor - 1,
-      );
-      await _player.play();
+      final loaded = _player.sequence;
+      final sameQari = loaded.isNotEmpty &&
+          (loaded.first.tag as AudioMetadata).artwork == widget.qariImage;
+
+      if (!sameQari) {
+        final playlist = _buildPlaylist();
+        await _player.setAudioSources(
+          playlist,
+          initialIndex: widget.surahNomor - 1,
+        );
+      } else {
+        final currentIndex = _player.currentIndex;
+        if (currentIndex != null && currentIndex != widget.surahNomor - 1) {
+          await _player.seek(Duration.zero, index: widget.surahNomor - 1);
+        }
+      }
+      if (!_player.playing) {
+        await _player.play();
+      }
     } on PlayerException catch (e) {
       print("Error loading playlist: $e");
     }
@@ -222,7 +237,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
                   final positionData = snapshot.data;
                   return SeekBar(
                     duration: positionData?.duration ?? Duration.zero,
-                    position: positionData?.position ?? Duration.zero,
+                    position: positionData?.position ?? widget.positionDuration,
                     bufferedPosition:
                         positionData?.bufferedPosition ?? Duration.zero,
                     onChangeEnd: (newPosition) {

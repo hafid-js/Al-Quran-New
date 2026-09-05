@@ -210,8 +210,10 @@ class _TasbihHistoryScreenState extends State<TasbihHistoryScreen> {
   }
 
   Widget _emptyState() {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
+          color: isDark ? Theme.of(context).cardColor : AppColors.primary,
         image: DecorationImage(
           colorFilter: ColorFilter.mode(
             AppColors.primary.withAlpha(210),

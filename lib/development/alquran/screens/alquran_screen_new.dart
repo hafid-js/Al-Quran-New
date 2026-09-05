@@ -958,14 +958,15 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Quran",
-        backIconColor:  Theme.of(context).textTheme.titleSmall!.color,
-        titleColor: Theme.of(context).textTheme.titleSmall!.color,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        backIconColor: isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
+        titleColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
+        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
+        surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
         bottom: TabBar(
           
           indicatorSize: TabBarIndicatorSize.tab,

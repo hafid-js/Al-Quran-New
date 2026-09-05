@@ -73,9 +73,10 @@ class _AdzanScreenState extends State<AdzanScreen>
   @override
   Widget build(BuildContext context) {
     final primary = AppColors.primary;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Positioned(
@@ -86,7 +87,7 @@ class _AdzanScreenState extends State<AdzanScreen>
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: HexColor.fromHex("#0F202B").withAlpha(20),
+                color: isDark ? Theme.of(context).cardColor : AppColors.primary,
               ),
             ),
           ),
@@ -98,7 +99,7 @@ class _AdzanScreenState extends State<AdzanScreen>
               height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: HexColor.fromHex("#0F202B").withAlpha(15),
+                color: isDark ? Theme.of(context).cardColor : AppColors.primary,
               ),
             ),
           ),
@@ -111,7 +112,7 @@ class _AdzanScreenState extends State<AdzanScreen>
                   height: 120,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: primary.withAlpha(30),
+                    color: AppColors.primary,
                     image: DecorationImage(
                 image: AssetImage(
                   "assets/icon/albarokah.png",
