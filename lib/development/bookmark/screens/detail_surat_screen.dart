@@ -1,8 +1,8 @@
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -263,7 +263,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
         final data = controller.detailSurah.value;
 
         if (controller.isLoading.value) {
-          return CommonLoadingWidget();
+          return const ShimmerAyatList();
         }
         if (data == null) {
           return CommonEmptyWidget(
@@ -496,9 +496,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                 child: Text(
                                   ayat.teksArab,
                                   style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).textTheme.labelSmall!.color,
+                                    color: isDark
+                                        ? AppColors.textPrimaryDark
+                                        : AppColors.textPrimaryLight,
                                     fontSize: controller.ukuranTeksArab.value,
                                     fontFamily: fontFamily,
                                     fontWeight: controller.arabBold.value

@@ -5,8 +5,9 @@ import 'package:alquran_new/development/doa/controllers/doa_controller.dart';
 import 'package:alquran_new/development/shared/widgets/category_filter.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,7 +72,7 @@ class _DoaScreenState extends State<DoaScreen> {
                 Expanded(
                   child: Obx(() {
                     if (controller.isLoading.value) {
-                      return CommonLoadingWidget(padded: true, bordered: true);
+                      return _buildDoaShimmer();
                     }
                     if (controller.filteredDoa.isEmpty) {
                       return CommonEmptyWidget(
@@ -165,6 +166,59 @@ class _DoaScreenState extends State<DoaScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDoaShimmer() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    const subWidths = [160.0, 120.0, 140.0, 180.0];
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: 8,
+      itemBuilder: (context, index) {
+        final subWidth = subWidths[index % subWidths.length];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: Shimmer.fromColors(
+            baseColor: isDark
+                ? const Color(0xFF263238)
+                : const Color(0xFFE3E7EC),
+            highlightColor: isDark
+                ? const Color(0xFF3A464F)
+                : const Color(0xFFF4F6F9),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  const ShimmerBox(width: 40, height: 40, radius: 10),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ShimmerBox(
+                          width: double.infinity,
+                          height: 14,
+                          radius: 6,
+                        ),
+                        const SizedBox(height: 8),
+                        ShimmerBox(width: subWidth, height: 12, radius: 6),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const ShimmerBox(width: 55, height: 55, radius: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

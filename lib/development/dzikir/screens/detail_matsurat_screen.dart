@@ -2,13 +2,12 @@ import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/error_view.dart';
-import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_dzikir_grid.dart';
 import 'package:alquran_new/development/dzikir/controllers/matsurat_controller.dart';
 import 'package:alquran_new/development/dzikir/widgets/dzikir_card.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
@@ -92,7 +91,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
       body: Obx(() {
         _syncCardKeys();
         if (controller.isLoading.value) {
-          return CommonLoadingWidget();
+          return const ShimmerDzikirGrid();
         }
         if (controller.data.isEmpty || controller.error.isNotEmpty) {
           return ErrorView(

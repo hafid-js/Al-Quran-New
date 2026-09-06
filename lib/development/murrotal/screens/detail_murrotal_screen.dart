@@ -87,9 +87,15 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
 
       if (!sameQari) {
         final playlist = _buildPlaylist();
+        final initialIndex = playlist.indexWhere(
+          (source) =>
+              ((source as IndexedAudioSource).tag as AudioMetadata?)
+                  ?.album ==
+              widget.surahNama,
+        );
         await _player.setAudioSources(
           playlist,
-          initialIndex: widget.surahNomor - 1,
+          initialIndex: initialIndex < 0 ? 0 : initialIndex,
         );
       } else {
         final currentIndex = _player.currentIndex;
@@ -97,7 +103,14 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
           final currentAlbum =
               (loaded[currentIndex].tag as AudioMetadata).album;
           if (currentAlbum != widget.surahNama) {
-            await _player.seek(Duration.zero, index: widget.surahNomor - 1);
+            final targetIndex = loaded.indexWhere(
+              (source) =>
+                  (source.tag as AudioMetadata).album == widget.surahNama,
+            );
+            await _player.seek(
+              Duration.zero,
+              index: targetIndex < 0 ? currentIndex : targetIndex,
+            );
           }
         }
       }

@@ -21,6 +21,7 @@ import 'package:alquran_new/development/tasbih/screens/tasbih_screen.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/development/lokasi/screens/lokasi_screen.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,7 @@ import 'package:alquran_new/binding/doa_binding.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreenNew extends StatefulWidget {
   const HomeScreenNew({super.key});
@@ -141,6 +143,20 @@ class _HomeScreenNewState extends State<HomeScreenNew>
   late final PrayerTimeController controller;
   bool _showAllMenus = false;
   bool isRefreshing = false;
+
+  Widget _shimmerBox({double? width, double? height}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Shimmer.fromColors(
+      baseColor: isDark ? const Color(0xFF263238) : const Color(0xFFE3E7EC),
+      highlightColor:
+          isDark ? const Color(0xFF3A464F) : const Color(0xFFF4F6F9),
+      child: ShimmerBox(width: width, height: height),
+    );
+  }
+
+  Widget _shimmerLine({double? width}) {
+    return _shimmerBox(width: width, height: 14);
+  }
 
   @override
   void initState() {
@@ -363,12 +379,12 @@ class _HomeScreenNewState extends State<HomeScreenNew>
 
                                 Column(
                                   children: [
-                                    Text(
-                                      hijri != null
-                                          ? "${hijri.longMonthName} ${hijri.hDay}, ${hijri.hYear} H"
-                                          : "Sedang memuat...",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    hijri != null
+                                        ? Text(
+                                            "${hijri.longMonthName} ${hijri.hDay}, ${hijri.hYear} H",
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        : _shimmerLine(width: 180),
                                     SizedBox(height: 8),
                                     Row(
                                       mainAxisAlignment:
@@ -384,14 +400,19 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                           ),
                                         ),
                                         SizedBox(width: 10),
-                                        Text(
-                                          jam,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
+                                        nextTime != null
+                                            ? Text(
+                                                jam,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              )
+                                            : _shimmerBox(
+                                                width: 80,
+                                                height: 32,
+                                              ),
                                       ],
                                     ),
                                     SizedBox(height: 8),
@@ -400,7 +421,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${controller.nextPrayerName.value} akan tiba dalam ",
+                                                "akan tiba dalam ",
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -822,6 +843,8 @@ class MurrotalContent extends StatefulWidget {
 class _MurrotalContentState extends State<MurrotalContent> {
   final c = Get.find<MurrotalController>();
   int _currentIndex = 0;
+  List<_CarouselItem>? _cachedCarouselItems;
+  int _cachedSurahLength = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -842,24 +865,52 @@ class _MurrotalContentState extends State<MurrotalContent> {
           Obx(() {
             final surahList = c.surahList;
             if (surahList.isEmpty) {
+              final isDark = Theme.of(context).brightness == Brightness.dark;
               return SizedBox(
                 height: 210,
-                child: Center(child: CircularProgressIndicator()),
+                child: Shimmer.fromColors(
+                  baseColor: isDark
+                      ? const Color(0xFF263238)
+                      : const Color(0xFFE3E7EC),
+                  highlightColor: isDark
+                      ? const Color(0xFF3A464F)
+                      : const Color(0xFFF4F6F9),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 28),
+                        const ShimmerBox(width: 160, height: 14, radius: 6),
+                        const SizedBox(height: 10),
+                        const ShimmerBox(width: 100, height: 12, radius: 6),
+                        const SizedBox(height: 30),
+                        const ShimmerBox(width: 40, height: 40, radius: 20),
+                      ],
+                    ),
+                  ),
+                ),
               );
             }
-            final random = Random();
-            final displayList = List.generate(
-              MurrotalController.qariData.length,
-              (qariIndex) {
-                final qariKey = (qariIndex + 1).toString().padLeft(2, '0');
-                final available = surahList
-                    .where((s) => s.audioFull.containsKey(qariKey))
-                    .toList();
-                if (available.isEmpty) return null;
-                final surah = available[random.nextInt(available.length)];
-                return _CarouselItem(surah: surah, qariIndex: qariIndex);
-              },
-            ).whereType<_CarouselItem>().toList();
+            if (_cachedCarouselItems == null ||
+                _cachedSurahLength != surahList.length) {
+              final random = Random();
+              _cachedCarouselItems = List.generate(
+                MurrotalController.qariData.length,
+                (qariIndex) {
+                  final qariKey = (qariIndex + 1).toString().padLeft(2, '0');
+                  final available = surahList
+                      .where((s) => s.audioFull.containsKey(qariKey))
+                      .toList();
+                  if (available.isEmpty) return null;
+                  final surah = available[
+                      random.nextInt(available.length)];
+                  return _CarouselItem(surah: surah, qariIndex: qariIndex);
+                },
+              ).whereType<_CarouselItem>().toList();
+              _cachedSurahLength = surahList.length;
+            }
+            final displayList = _cachedCarouselItems!;
             return SizedBox(
               height: 210,
               child: Column(

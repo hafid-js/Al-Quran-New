@@ -3,7 +3,7 @@ import 'package:alquran_new/development/alquran/controllers/juz_controller.dart'
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:flutter/material.dart';
@@ -225,7 +225,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
       body: Obx(() {
         final data = controller.juzAyatList;
         if (controller.isLoading.value && data.isEmpty) {
-          return CommonLoadingWidget();
+          return const ShimmerAyatList();
         }
 
         if (data.isEmpty) {

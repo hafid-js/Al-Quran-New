@@ -8,9 +8,11 @@ import 'package:alquran_new/development/murrotal/screens/detail_murrotal_screen.
 
 import 'package:alquran_new/development/alquran/controllers/surah_controller.dart';
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailQariScreen extends StatefulWidget {
   final int qariIndex;
@@ -174,12 +176,20 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                     ? _filteredSurah
                     : surahController.surahList;
                 if (surahList.isEmpty) {
-                  return Center(
-                    child: Text(
-                      _isSearching ? "Surat tidak ditemukan" : "Memuat...",
-                      style: TextStyle(fontSize: 16,color: isDark ? AppColors.textPrimaryDark : Colors.white70),
-                    ),
-                  );
+                  if (_isSearching) {
+                    return Center(
+                      child: Text(
+                        "Surat tidak ditemukan",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : Colors.white70,
+                        ),
+                      ),
+                    );
+                  }
+                  return _buildSurahShimmer();
                 }
                 return ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 12),
@@ -246,6 +256,56 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSurahShimmer() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    const subWidths = [160.0, 120.0, 140.0, 180.0];
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      itemCount: 8,
+      itemBuilder: (context, index) {
+        final subWidth = subWidths[index % subWidths.length];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Shimmer.fromColors(
+            baseColor: isDark
+                ? const Color(0xFF263238)
+                : const Color(0xFFE3E7EC),
+            highlightColor: isDark
+                ? const Color(0xFF3A464F)
+                : const Color(0xFFF4F6F9),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ShimmerBox(
+                          width: double.infinity,
+                          height: 14,
+                          radius: 6,
+                        ),
+                        const SizedBox(height: 8),
+                        ShimmerBox(width: subWidth, height: 12, radius: 6),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const ShimmerBox(width: 30, height: 30, radius: 15),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

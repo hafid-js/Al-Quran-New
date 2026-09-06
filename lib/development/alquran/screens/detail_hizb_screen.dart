@@ -3,9 +3,9 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/alquran/controllers/hizb_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +228,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
       body: Obx(() {
         final data = controller.hizbAyatList;
         if (controller.isLoading.value && data.isEmpty) {
-          return CommonLoadingWidget();
+          return const ShimmerAyatList();
         }
 
         if (data.isEmpty) {

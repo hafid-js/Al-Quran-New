@@ -4,9 +4,11 @@ import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/development/lokasi/controllers/location_controller.dart';
 import 'package:alquran_new/development/lokasi/services/location_service.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LokasiScreen extends StatefulWidget {
   const LokasiScreen({super.key});
@@ -96,7 +98,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
               ),
               SizedBox(height: 10),
               if (c.isLoadingProvince.value)
-                const Center(child: CircularProgressIndicator())
+                _dropDownShimmer()
               else
                 DropdownButtonFormField2<String>(
                   dropdownStyleData: DropdownStyleData(
@@ -175,7 +177,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
               ),
               SizedBox(height: 10),
               if (c.isLoadingCity.value)
-                const Center(child: CircularProgressIndicator())
+                _dropDownShimmer()
               else
                 DropdownButtonFormField2<String>(
                   dropdownStyleData: DropdownStyleData(
@@ -296,6 +298,26 @@ class _LokasiScreenState extends State<LokasiScreen> {
             ],
           );
         }),
+      ),
+    );
+  }
+
+  Widget _dropDownShimmer() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Shimmer.fromColors(
+      baseColor: isDark ? const Color(0xFF263238) : const Color(0xFFE3E7EC),
+      highlightColor:
+          isDark ? const Color(0xFF3A464F) : const Color(0xFFF4F6F9),
+      child: Container(
+        height: 56,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const ShimmerBox(width: 120, height: 14, radius: 6),
       ),
     );
   }

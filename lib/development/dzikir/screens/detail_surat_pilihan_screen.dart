@@ -1,8 +1,8 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/dzikir/widgets/surat_pilihan_card.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
@@ -90,7 +90,7 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {
-          return CommonLoadingWidget();
+          return const ShimmerAyatList();
         }
         final data = controller.detailSurah.value;
         if (data == null) {

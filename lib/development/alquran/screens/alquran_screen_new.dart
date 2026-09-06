@@ -7,12 +7,13 @@ import 'package:alquran_new/development/alquran/controllers/surah_controller.dar
 import 'package:alquran_new/development/alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
-import 'package:alquran_new/development/shared/widgets/common_loading_widget.dart';
 import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
 import 'package:alquran_new/development/shared/widgets/search_bar.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HizbData {
   final int number;
@@ -975,6 +976,60 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
     );
   }
 
+  Widget _buildSurahListShimmer() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    const subWidths = [160.0, 120.0, 140.0, 180.0];
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: 9,
+      itemBuilder: (context, index) {
+        final subWidth = subWidths[index % subWidths.length];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: Shimmer.fromColors(
+            baseColor: isDark
+                ? const Color(0xFF263238)
+                : const Color(0xFFE3E7EC),
+            highlightColor: isDark
+                ? const Color(0xFF3A464F)
+                : const Color(0xFFF4F6F9),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const ShimmerBox(width: 40, height: 40, radius: 10),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ShimmerBox(
+                          width: double.infinity,
+                          height: 14,
+                          radius: 6,
+                        ),
+                        const SizedBox(height: 8),
+                        ShimmerBox(width: subWidth, height: 12, radius: 6),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const ShimmerBox(width: 55, height: 55, radius: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -1067,7 +1122,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                   Obx(() {
                     if (controller.isLoading.value &&
                         controller.filteredSurah.isEmpty) {
-                      return CommonLoadingWidget(padded: true, bordered: true);
+                      return _buildSurahListShimmer();
                     }
                     if (controller.filteredSurah.isEmpty) {
                       return CommonEmptyWidget(
@@ -1106,7 +1161,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                               .toList();
                     if (controller.isLoading.value &&
                         controller.filteredSurah.isEmpty) {
-                      return CommonLoadingWidget(padded: true, bordered: true);
+                      return _buildSurahListShimmer();
                     }
                     if (filteredList.isEmpty) {
                       return CommonEmptyWidget(
@@ -1144,7 +1199,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                               .toList();
                     if (controller.isLoading.value &&
                         controller.filteredSurah.isEmpty) {
-                      return CommonLoadingWidget(padded: true, bordered: true);
+                      return _buildSurahListShimmer();
                     }
                     if (filteredList.isEmpty) {
                       return CommonEmptyWidget(
