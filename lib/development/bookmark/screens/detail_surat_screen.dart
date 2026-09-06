@@ -2,7 +2,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
-import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/bookmark/controllers/bookmark_controller.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -263,7 +263,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
         final data = controller.detailSurah.value;
 
         if (controller.isLoading.value) {
-          return const ShimmerAyatList();
+          return const ShimmerDetailSurah();
         }
         if (data == null) {
           return CommonEmptyWidget(

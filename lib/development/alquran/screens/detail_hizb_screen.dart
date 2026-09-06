@@ -5,7 +5,7 @@ import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
-import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +228,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
       body: Obx(() {
         final data = controller.hizbAyatList;
         if (controller.isLoading.value && data.isEmpty) {
-          return const ShimmerAyatList();
+          return const ShimmerDetailSurah();
         }
 
         if (data.isEmpty) {

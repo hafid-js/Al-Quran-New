@@ -3,7 +3,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
-import 'package:alquran_new/development/shared/widgets/shimmer_ayat_list.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:alquran_new/development/perasaan/controllers/doa_perasaan_controller.dart';
 import 'package:alquran_new/development/perasaan/models/doa_perasaan_model.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
@@ -202,7 +202,7 @@ class _DetailPerasaanScreenState extends State<DetailPerasaanScreen>
         final isBold = controller.arabBold.value;
 
         if (controller.isLoading.value) {
-          return const ShimmerAyatList();
+          return const ShimmerDetailSurah();
         }
 
         if (controller.data.isEmpty) {

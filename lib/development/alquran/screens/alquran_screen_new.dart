@@ -10,6 +10,7 @@ import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart'
 import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
 import 'package:alquran_new/development/shared/widgets/search_bar.dart';
 import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
+import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -809,6 +810,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
 
   Widget _buildSurahItem(Surah surah) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () => Get.to(
         () => DetailSurahScreen(),
@@ -1120,7 +1122,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 controller: tabController,
                 children: [
                   Obx(() {
-                    if (controller.isLoading.value &&
+                    if (!controller.isLoading.value &&
                         controller.filteredSurah.isEmpty) {
                       return _buildSurahListShimmer();
                     }

@@ -83,8 +83,6 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-        final selectedIndex = setting.fontSelected.value;
-    final fontFamily = fontArabs[selectedIndex]["title"];
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBody: true,
@@ -384,8 +382,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
         );
       }),
       bottomNavigationBar: Obx(
-        () => controller.tasbih.value
-            ? SafeArea(
+        () => controller.tasbih.value && !controller.isLoading.value
+            ?  SafeArea(
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(

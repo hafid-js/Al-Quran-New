@@ -2,11 +2,10 @@ import 'package:alquran_new/development/shared/widgets/shimmer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ShimmerDzikirGrid extends StatelessWidget {
-  const ShimmerDzikirGrid({super.key});
+class ShimmerDetailSurah extends StatelessWidget {
+  const ShimmerDetailSurah({super.key});
 
-
-  @override
+   @override
 Widget build(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -22,13 +21,12 @@ Widget build(BuildContext context) {
         : const Color(0xFFF4F6F9),
     child: Column(
       children: [
-        const SizedBox(height: 40),
 
         Padding(
           padding: const EdgeInsets.all(12),
           child: Container(
             width: double.infinity,
-            height: 80,
+            height: 100,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -36,16 +34,17 @@ Widget build(BuildContext context) {
           ),
         ),
 
+
         Expanded(
           child: GridView.builder(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate:
                 const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 1,
+              childAspectRatio: 1.2,
             ),
             itemCount: 2,
             itemBuilder: (context, index) {
