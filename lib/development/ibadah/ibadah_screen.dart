@@ -1645,7 +1645,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return Padding(padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom), child: Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -1748,7 +1748,7 @@ class _CatatSedekahModalState extends State<_CatatSedekahModal> {
           ),
         ],
       ),
-    );
+    ),);
   }
 }
 
