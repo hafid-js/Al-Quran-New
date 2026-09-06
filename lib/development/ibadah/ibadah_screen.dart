@@ -993,8 +993,8 @@ class _IbadahScreenState extends State<IbadahScreen> {
                     SizedBox(height: 6),
 
                     StepProgressIndicator(
-                      totalSteps: _totalAll * 2,
-                      currentStep: _totalDone > 0 ? _totalDone * 2 : 0,
+                      totalSteps: _totalAll * 2 + 10,
+                      currentStep: _totalDone > 0 ? _totalDone * 2 + 10 : 0,
                       selectedColor: isDark
                           ? AppColors.secondary
                           : AppColors.primary,

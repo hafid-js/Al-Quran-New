@@ -118,9 +118,14 @@ class AdzanAlarmReceiver : BroadcastReceiver() {
             .setContentText(body)
             .setSmallIcon(android.R.drawable.ic_popup_reminder)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setFullScreenIntent(openPendingIntent, true)
             .setAutoCancel(true)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
+
+        if (soundType != "default") {
+            builder.setFullScreenIntent(openPendingIntent, true)
+        } else {
+            builder.setContentIntent(openPendingIntent)
+        }
 
         var defaults = 0
         if (playSound) defaults = defaults or NotificationCompat.DEFAULT_SOUND

@@ -29,24 +29,28 @@ class HizbController extends GetxController {
     ayatAudioStates.putIfAbsent(nomor, () => "stop".obs).value = state;
   }
 
-  Future<void> fetchHizb(int hizbNumber) async {
-    isLoading.value = true;
-    hizbAyatList.clear();
+  Future<void> fetchHizb(int hizbNumber, {bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      isLoading.value = true;
+      hizbAyatList.clear();
+    }
 
     final cached = await _cacheDatasource.getHizb(hizbNumber);
-    if (cached != null && cached.isNotEmpty) {
+    if (cached != null && cached.isNotEmpty && !forceRefresh) {
       hizbAyatList.value = cached;
       isLoading.value = false;
       return;
     }
 
     if (!net.isConnected.value) {
-      Get.snackbar(
-        "Tidak Ada Koneksi",
-        "Periksa koneksi internet untuk memuat data hizb.",
-        backgroundColor: Colors.red,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (hizbAyatList.isEmpty) {
+        Get.snackbar(
+          "Tidak Ada Koneksi",
+          "Periksa koneksi internet untuk memuat data hizb.",
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
       isLoading.value = false;
       return;
     }

@@ -24,6 +24,7 @@ class _DoaScreenState extends State<DoaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
@@ -73,15 +74,26 @@ class _DoaScreenState extends State<DoaScreen> {
                       return CommonLoadingWidget(padded: true, bordered: true);
                     }
                     if (controller.filteredDoa.isEmpty) {
-                      return CommonEmptyWidget(padded: true, bordered: true);
+                      return CommonEmptyWidget(
+                        showRefresh: false,
+                        padded: true,
+                        bordered: true,
+                        refresh: () => controller.fetchDoa(),
+                      );
                     }
-                    return ListView.builder(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      itemCount: controller.filteredDoa.length,
-                      itemBuilder: (context, index) {
-                        final doa = controller.filteredDoa[index];
-                        return _buildDoaItem(doa);
-                      },
+                    return RefreshIndicator(
+          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+          color: AppColors.secondary,
+                      onRefresh: controller.fetchDoa,
+                      child: ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: controller.filteredDoa.length,
+                        itemBuilder: (context, index) {
+                          final doa = controller.filteredDoa[index];
+                          return _buildDoaItem(doa);
+                        },
+                      ),
                     );
                   }),
                 ),

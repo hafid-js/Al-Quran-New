@@ -141,20 +141,15 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
               _toggle();
 
               await WoltModalSheet.show(
-                // modalDecorator: (child) {
-                //   return BackdropFilter(
-                //     filter: ImageFilter.blur(
-                //       sigmaX: 3,
-                //       sigmaY: 3,
-                //     ),
-                //     child: child,
-                //   );
-                // },
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: Colors.white,
-                    surfaceTintColor: Colors.white,
+                    backgroundColor: isDark
+                        ? Theme.of(context).cardColor
+                        : Colors.white,
+                    surfaceTintColor: isDark
+                        ? Theme.of(context).cardColor
+                        : Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -173,7 +168,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.primary,
+                                            color: isDark
+                                                ? AppColors.textPrimaryDark
+                                                : AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -252,7 +249,9 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: Theme.of(context).textTheme.titleMedium!.color,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
                 ),
               ),
             ),
@@ -267,510 +266,600 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
           return CommonLoadingWidget();
         }
         if (data == null) {
-          return CommonEmptyWidget();
+          return CommonEmptyWidget(
+            refresh: () => controller.fetchDetailSurah(nomor),
+          );
         }
 
-        return ScrollablePositionedList.builder(
-          itemScrollController: itemScrollController,
-          itemCount: data.ayat.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Padding(
-                padding: EdgeInsets.all(16),
-                child: Stack(
+    return RefreshIndicator(
+          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+          color: AppColors.secondary,
+          onRefresh: () =>
+              controller.fetchDetailSurah(nomor, forceRefresh: true),
+          child: data.ayat.isEmpty
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Theme.of(context).cardColor
-                            : AppColors.primary,
-                        borderRadius: BorderRadius.circular(8),
+                    CommonEmptyWidget(
+                        message:
+                            "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
+                        refresh: () async {
+                          await controller.fetchDetailSurah(
+                            nomor,
+                            forceRefresh: true,
+                          );
+                        },
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  ],
+                )
+              : ScrollablePositionedList.builder(
+                  itemScrollController: itemScrollController,
+                  itemCount: data.ayat.length + 2,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? Theme.of(context).cardColor
+                                    : AppColors.primary,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              text: "Surah:",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: data.namaLatin,
+                                              style: TextStyle(
+                                                color: AppColors.secondary,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              text: "Arti:",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: data.arti,
+                                              style: TextStyle(
+                                                color: HexColor.fromHex(
+                                                  "#D39D52",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              text: "Jumlah Ayat:",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: data.jumlahAyat.toString(),
+                                              style: TextStyle(
+                                                color: HexColor.fromHex(
+                                                  "#D39D52",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              text: "Tempat Turun:",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: data.tempatTurun,
+                                              style: TextStyle(
+                                                color: HexColor.fromHex(
+                                                  "#D39D52",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              top: -15,
+                              right: -5,
+                              child: SvgPicture.asset(
+                                width: 140,
+                                height: 140,
+                                "assets/svg_arab_kaligrafi/Surah_${data.nomor}_of_114.svg",
+                                colorFilter: ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    if (index == 1) {
+                      if (data.namaLatin == "Al-Fatihah") {
+                        return SizedBox.shrink();
+                      } else {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Stack(
                             children: [
-                              Row(
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: "Surah:",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text.rich(
-                                    TextSpan(
-                                      text: data.namaLatin,
-                                      style: TextStyle(
-                                        color: AppColors.secondary,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              Container(
+                                height: 55,
+                                width: double.infinity,
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
-                              Row(
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: "Arti:",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text.rich(
-                                    TextSpan(
-                                      text: data.arti,
-                                      style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: "Jumlah Ayat:",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text.rich(
-                                    TextSpan(
-                                      text: data.jumlahAyat.toString(),
-                                      style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: "Tempat Turun:",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text.rich(
-                                    TextSpan(
-                                      text: data.tempatTurun,
-                                      style: TextStyle(
-                                        color: HexColor.fromHex("#D39D52"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              Positioned(
+                                top: -30,
+                                right: 90,
+                                child: Image.asset(
+                                  "assets/images/bismillah.png",
+                                  height: 90,
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : Colors.black,
+                                ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: -15,
-                      right: -5,
-                      child: SvgPicture.asset(
-                        width: 140,
-                        height: 140,
-                        "assets/svg_arab_kaligrafi/Surah_${data.nomor}_of_114.svg",
-                        colorFilter: ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
+                        );
+                      }
+                    }
 
-            if (index == 1) {
-              if (data.namaLatin == "Al-Fatihah") {
-                return SizedBox.shrink();
-              } else {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 55,
+                    final ayat = data.ayat[index - 2];
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 5,
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(12),
                         width: double.infinity,
-                        padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                      ),
-                      Positioned(
-                        top: -30,
-                        right: 90,
-                        child: Image.asset(
-                          "assets/images/bismillah.png",
-                          height: 90,
-                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            }
-
-            final ayat = data.ayat[index - 2];
-
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: Container(
-                padding: EdgeInsets.all(12),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${ayat.nomorAyat}",
-                      style: TextStyle(
-                        color: HexColor.fromHex("#D39D52"),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(() {
-                      return Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ayat.teksArab,
-                          style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.labelSmall!.color,
-                            fontSize: controller.ukuranTeksArab.value,
-                            fontFamily: fontFamily,
-                            fontWeight: controller.arabBold.value
-                                ? FontWeight.w600
-                                : null,
-                            height: 2.5,
-                          ),
-                        ),
-                      );
-                    }),
-                    Obx(() {
-                      if (!controller.latin.value && !controller.terjemah.value)
-                        return SizedBox.shrink();
-                      return SizedBox(height: 30);
-                    }),
-                    Obx(() {
-                      if (!controller.latin.value) return SizedBox.shrink();
-                      return Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ayat.teksLatin,
-                          style: TextStyle(
-                            color: isDark
-                                ? HexColor.fromHex("#D39D52")
-                                : Colors.black,
-                            fontSize: controller.ukuranLatinTerjemah.value,
-                          ),
-                        ),
-                      );
-                    }),
-
-                    SizedBox(height: 10),
-                    Obx(() {
-                      if (!controller.terjemah.value) return SizedBox.shrink();
-                      return Text(
-                        ayat.teksIndonesia,
-                        style: TextStyle(
-                          color: isDark ? AppColors.textPrimaryDark : Colors.black,
-                          fontSize: controller.ukuranLatinTerjemah.value,
-                        ),
-                      );
-                    }),
-                    Divider(
-                      thickness: 1,
-                      color: const Color.fromARGB(81, 158, 158, 158),
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              final buffer = StringBuffer();
-                              buffer.writeln(ayat.teksArab);
-                              if (ayat.teksLatin.isNotEmpty) {
-                                buffer.writeln('');
-                                buffer.writeln(ayat.teksLatin);
-                              }
-                              buffer.writeln('');
-                              buffer.writeln(ayat.teksIndonesia);
-                              Clipboard.setData(
-                                ClipboardData(text: buffer.toString()),
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Teks disalin',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: AppColors.primary,
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(37, 158, 158, 158),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Icon(
-                                Iconsax.copy,
-                                color: isDark
-                                    ? Colors.white
-                                    : HexColor.fromHex("#504F52"),
-                                size: 16,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${ayat.nomorAyat}",
+                              style: TextStyle(
+                                color: HexColor.fromHex("#D39D52"),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              bookmarkC.toggle(
-                                nomor,
-                                data.nama,
-                                data.namaLatin,
-                                ayat.nomorAyat,
-                              );
-                            },
-                            child: Obx(() {
-                              final saved = bookmarkC.isBookmarked(
-                                nomor,
-                                ayat.nomorAyat,
-                              );
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(
-                                    37,
-                                    158,
-                                    158,
-                                    158,
+                            SizedBox(height: 10),
+                            Obx(() {
+                              return Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  ayat.teksArab,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall!.color,
+                                    fontSize: controller.ukuranTeksArab.value,
+                                    fontFamily: fontFamily,
+                                    fontWeight: controller.arabBold.value
+                                        ? FontWeight.w600
+                                        : null,
+                                    height: 2.5,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Icon(
-                                  saved ? Iconsax.save_21 : Iconsax.save_2,
-                                  color: saved
-                                      ? HexColor.fromHex("#D39D52")
-                                      : isDark
-                                      ? Colors.white
-                                      : HexColor.fromHex("#504F52"),
-                                  size: 16,
                                 ),
                               );
                             }),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: Obx(() {
-                            final kondisi = controller.getAyatAudioState(
-                              ayat.nomorAyat,
-                            );
-                            return GestureDetector(
-                              onTap: () {
-                                if (kondisi == "stop") {
-                                  controller.playAudio(ayat);
-                                } else if (kondisi == "playing") {
-                                  controller.pauseAudio(ayat);
-                                } else {
-                                  controller.resumeAudio(ayat);
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(
-                                    37,
-                                    158,
-                                    158,
-                                    158,
+                            Obx(() {
+                              if (!controller.latin.value &&
+                                  !controller.terjemah.value)
+                                return SizedBox.shrink();
+                              return SizedBox(height: 30);
+                            }),
+                            Obx(() {
+                              if (!controller.latin.value)
+                                return SizedBox.shrink();
+                              return Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  ayat.teksLatin,
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? HexColor.fromHex("#D39D52")
+                                        : Colors.black,
+                                    fontSize:
+                                        controller.ukuranLatinTerjemah.value,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Icon(
-                                  kondisi == "playing"
-                                      ? Iconsax.pause
-                                      : Iconsax.play_circle,
-                                  color: kondisi == "playing"
-                                      ? isDark
-                                            ? HexColor.fromHex("#D39D52")
-                                            : AppColors.primary
-                                      : isDark
-                                      ? Colors.white
-                                      : HexColor.fromHex("#504F52"),
-                                  size: 16,
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              final buffer = StringBuffer();
-                              buffer.writeln(data.namaLatin);
-                              buffer.writeln('');
-                              buffer.writeln(
-                                '${ayat.nomorAyat}. ${ayat.teksArab}',
-                              );
-                              if (ayat.teksLatin.isNotEmpty) {
-                                buffer.writeln('');
-                                buffer.writeln(ayat.teksLatin);
-                              }
-                              buffer.writeln('');
-                              buffer.writeln(ayat.teksIndonesia);
-                              SharePlus.instance.share(
-                                ShareParams(
-                                  title: data.namaLatin,
-                                  text: buffer.toString(),
                                 ),
                               );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(37, 158, 158, 158),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Icon(
-                                Iconsax.export_2,
-                                color: isDark
-                                    ? Colors.white
-                                    : HexColor.fromHex("#504F52"),
-                                size: 16,
-                              ),
+                            }),
+
+                            SizedBox(height: 10),
+                            Obx(() {
+                              if (!controller.terjemah.value)
+                                return SizedBox.shrink();
+                              return Text(
+                                ayat.teksIndonesia,
+                                style: TextStyle(
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark
+                                      : Colors.black,
+                                  fontSize:
+                                      controller.ukuranLatinTerjemah.value,
+                                ),
+                              );
+                            }),
+                            Divider(
+                              thickness: 1,
+                              color: const Color.fromARGB(81, 158, 158, 158),
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              final tafsir = controller.tafsirList
-                                  .firstWhereOrNull(
-                                    (t) => t.ayat == ayat.nomorAyat,
-                                  );
-                              showModalBottomSheet(
-                                backgroundColor: Colors.white,
-                                context: context,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(16),
-                                  ),
-                                ),
-                                builder: (context) {
-                                  return DraggableScrollableSheet(
-                                    expand: false,
-                                    initialChildSize: 0.5,
-                                    minChildSize: 0.3,
-                                    maxChildSize: 1.0,
-                                    builder: (context, scrollController) {
-                                      return SingleChildScrollView(
-                                        controller: scrollController,
-                                        padding: const EdgeInsets.all(20),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Iconsax.book_1,
-                                                  color: HexColor.fromHex(
-                                                    "#D39D52",
-                                                  ),
-                                                  size: 20,
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "Tafsir",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: HexColor.fromHex(
-                                                      "#256980",
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final buffer = StringBuffer();
+                                      buffer.writeln(ayat.teksArab);
+                                      if (ayat.teksLatin.isNotEmpty) {
+                                        buffer.writeln('');
+                                        buffer.writeln(ayat.teksLatin);
+                                      }
+                                      buffer.writeln('');
+                                      buffer.writeln(ayat.teksIndonesia);
+                                      Clipboard.setData(
+                                        ClipboardData(text: buffer.toString()),
+                                      );
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Teks disalin',
+                                            style: TextStyle(
+                                              color: Colors.white,
                                             ),
-                                            SizedBox(height: 16),
-                                            Text(
-                                              tafsir?.teks ??
-                                                  "Tafsir tidak tersedia.",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black87,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                            SizedBox(height: 20),
-                                          ],
+                                          ),
+                                          duration: Duration(seconds: 1),
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: AppColors.primary,
                                         ),
                                       );
                                     },
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(37, 158, 158, 158),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Icon(
-                                Iconsax.info_circle,
-                                color: isDark
-                                    ? Colors.white
-                                    : HexColor.fromHex("#504F52"),
-                                size: 16,
-                              ),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                          37,
+                                          158,
+                                          158,
+                                          158,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(
+                                        Iconsax.copy,
+                                        color: isDark
+                                            ? Colors.white
+                                            : HexColor.fromHex("#504F52"),
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      bookmarkC.toggle(
+                                        nomor,
+                                        data.nama,
+                                        data.namaLatin,
+                                        ayat.nomorAyat,
+                                      );
+                                    },
+                                    child: Obx(() {
+                                      final saved = bookmarkC.isBookmarked(
+                                        nomor,
+                                        ayat.nomorAyat,
+                                      );
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                            37,
+                                            158,
+                                            158,
+                                            158,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          saved
+                                              ? Iconsax.save_21
+                                              : Iconsax.save_2,
+                                          color: saved
+                                              ? HexColor.fromHex("#D39D52")
+                                              : isDark
+                                              ? Colors.white
+                                              : HexColor.fromHex("#504F52"),
+                                          size: 16,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: Obx(() {
+                                    final kondisi = controller
+                                        .getAyatAudioState(ayat.nomorAyat);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (kondisi == "stop") {
+                                          controller.playAudio(ayat);
+                                        } else if (kondisi == "playing") {
+                                          controller.pauseAudio(ayat);
+                                        } else {
+                                          controller.resumeAudio(ayat);
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                            37,
+                                            158,
+                                            158,
+                                            158,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          kondisi == "playing"
+                                              ? Iconsax.pause
+                                              : Iconsax.play_circle,
+                                          color: kondisi == "playing"
+                                              ? isDark
+                                                    ? HexColor.fromHex(
+                                                        "#D39D52",
+                                                      )
+                                                    : AppColors.primary
+                                              : isDark
+                                              ? Colors.white
+                                              : HexColor.fromHex("#504F52"),
+                                          size: 16,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final buffer = StringBuffer();
+                                      buffer.writeln(data.namaLatin);
+                                      buffer.writeln('');
+                                      buffer.writeln(
+                                        '${ayat.nomorAyat}. ${ayat.teksArab}',
+                                      );
+                                      if (ayat.teksLatin.isNotEmpty) {
+                                        buffer.writeln('');
+                                        buffer.writeln(ayat.teksLatin);
+                                      }
+                                      buffer.writeln('');
+                                      buffer.writeln(ayat.teksIndonesia);
+                                      SharePlus.instance.share(
+                                        ShareParams(
+                                          title: data.namaLatin,
+                                          text: buffer.toString(),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                          37,
+                                          158,
+                                          158,
+                                          158,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(
+                                        Iconsax.export_2,
+                                        color: isDark
+                                            ? Colors.white
+                                            : HexColor.fromHex("#504F52"),
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final tafsir = controller.tafsirList
+                                          .firstWhereOrNull(
+                                            (t) => t.ayat == ayat.nomorAyat,
+                                          );
+                                      showModalBottomSheet(
+                                        backgroundColor: Colors.white,
+                                        context: context,
+                                        isScrollControlled: true,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(16),
+                                          ),
+                                        ),
+                                        builder: (context) {
+                                          return DraggableScrollableSheet(
+                                            expand: false,
+                                            initialChildSize: 0.5,
+                                            minChildSize: 0.3,
+                                            maxChildSize: 1.0,
+                                            builder: (context, scrollController) {
+                                              return SingleChildScrollView(
+                                                controller: scrollController,
+                                                padding: const EdgeInsets.all(
+                                                  20,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(height: 16),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Iconsax.book_1,
+                                                          color:
+                                                              HexColor.fromHex(
+                                                                "#D39D52",
+                                                              ),
+                                                          size: 20,
+                                                        ),
+                                                        SizedBox(width: 8),
+                                                        Text(
+                                                          "Tafsir",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                HexColor.fromHex(
+                                                                  "#256980",
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    Text(
+                                                      tafsir?.teks ??
+                                                          "Tafsir tidak tersedia.",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black87,
+                                                        height: 1.5,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 20),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                          37,
+                                          158,
+                                          158,
+                                          158,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(
+                                        Iconsax.info_circle,
+                                        color: isDark
+                                            ? Colors.white
+                                            : HexColor.fromHex("#504F52"),
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    );
+                  },
                 ),
-              ),
-            );
-          },
         );
       }),
     );

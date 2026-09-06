@@ -783,7 +783,6 @@ class AlquranScreenNew extends StatefulWidget {
   State<AlquranScreenNew> createState() => _AlquranScreenNewState();
 }
 
-
 class _AlquranScreenNewState extends State<AlquranScreenNew>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
@@ -796,6 +795,9 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(() {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -805,7 +807,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildSurahItem(Surah surah) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => Get.to(
         () => DetailSurahScreen(),
@@ -826,7 +828,10 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    OctagramBadge(number: "${surah.nomor}", numberColor: isDark ? AppColors.light : AppColors.dark),
+                    OctagramBadge(
+                      number: "${surah.nomor}",
+                      numberColor: isDark ? AppColors.light : AppColors.dark,
+                    ),
                     SizedBox(width: 15),
                     Flexible(
                       child: Column(
@@ -837,11 +842,18 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                             "${surah.namaLatin} (${surah.arti})",
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleSmall!.copyWith(fontSize: 14),
                           ),
                           Text(
                             "${surah.tempatTurun.name} - ${surah.jumlahAyat} Ayat",
-                            style: Theme.of(context).textTheme.labelSmall!.copyWith(  color: isDark ? AppColors.textPrimaryDark.withAlpha(120) : HexColor.fromHex("#676767"),)
+                            style: Theme.of(context).textTheme.labelSmall!
+                                .copyWith(
+                                  color: isDark
+                                      ? AppColors.textPrimaryDark.withAlpha(120)
+                                      : HexColor.fromHex("#676767"),
+                                ),
                           ),
                         ],
                       ),
@@ -853,7 +865,10 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 width: 55,
                 height: 55,
                 "assets/svg_arab_kaligrafi/Surah_${surah.nomor}_of_114.svg",
-                colorFilter: ColorFilter.mode(isDark ? AppColors.light : AppColors.dark, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                  isDark ? AppColors.light : AppColors.dark,
+                  BlendMode.srcIn,
+                ),
               ),
             ],
           ),
@@ -863,7 +878,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildHizbItem(HizbData hizb) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () =>
           Get.to(() => DetailHizbScreen(), arguments: {"hizb": hizb.number}),
@@ -892,11 +907,13 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                         "Hizb ${hizb.number}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleSmall!.copyWith(fontSize: 14),
                       ),
                       Text(
                         "${hizb.startSurah}: ${hizb.startAyah} - ${hizb.endSurah}: ${hizb.endAyah}",
-                        style: Theme.of(context).textTheme.labelSmall
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],
                   ),
@@ -910,7 +927,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
   }
 
   Widget _buildJuzItem(JuzData juz) {
-       final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () =>
           Get.to(() => DetailJuzScreen(), arguments: {"juz": juz.number}),
@@ -929,7 +946,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 children: [
                   OctagramBadge(
                     number: "${juz.number}",
- numberColor: isDark ? AppColors.light : AppColors.dark,
+                    numberColor: isDark ? AppColors.light : AppColors.dark,
                   ),
                   SizedBox(width: 15),
                   Column(
@@ -939,11 +956,13 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                         "Juz ${juz.number}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 14)
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleSmall!.copyWith(fontSize: 14),
                       ),
                       Text(
                         "${juz.startSurah}: ${juz.startAyah} - ${juz.endSurah}: ${juz.endAyah}",
-                          style: Theme.of(context).textTheme.labelSmall
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],
                   ),
@@ -963,12 +982,19 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Quran",
-        backIconColor: isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
-        titleColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
-        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
-        surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : AppColors.textPrimaryDark,
+        backIconColor: isDark
+            ? Theme.of(context).textTheme.titleSmall!.color
+            : Theme.of(context).textTheme.titleMedium!.color,
+        titleColor: isDark
+            ? Theme.of(context).textTheme.titleSmall!.color
+            : Theme.of(context).textTheme.titleMedium!.color,
+        backgroundColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : AppColors.textPrimaryDark,
+        surfaceTintColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : AppColors.textPrimaryDark,
         bottom: TabBar(
-          
           indicatorSize: TabBarIndicatorSize.tab,
           controller: tabController,
           indicatorColor: AppColors.primary,
@@ -980,19 +1006,40 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [Text("Surah", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color),)],
+                children: [
+                  Text(
+                    "Surah",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.labelSmall!.color,
+                    ),
+                  ),
+                ],
               ),
             ),
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [Text("Juz", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color))],
+                children: [
+                  Text(
+                    "Juz",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.labelSmall!.color,
+                    ),
+                  ),
+                ],
               ),
             ),
             Tab(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [Text("Hizb", style: TextStyle(color: Theme.of(context).textTheme.labelSmall!.color))],
+                children: [
+                  Text(
+                    "Hizb",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.labelSmall!.color,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -1004,61 +1051,119 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
             padding: EdgeInsets.only(right: 8, left: 8, top: 8),
             child: AppSearchBar(
               onChanged: controller.search,
-              hintText: "Cari Surah...",
+              hintText: switch (tabController.index) {
+                1 => "Cari Juz...",
+                2 => "Cari Hizb...",
+                _ => "Cari Surah...",
+              },
             ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [
-                 Obx(() {
-                  if (controller.isLoading.value) {
-                    return CommonLoadingWidget(padded: true, bordered: true);
-                  }
-                  if (controller.filteredSurah.isEmpty) {
-                    return CommonEmptyWidget(padded: true, bordered: true);
-                  }
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    itemCount: controller.filteredSurah.length,
-                    itemBuilder: (context, index) {
-                      return _buildSurahItem(controller.filteredSurah[index]);
-                    },
-                  );
-                }),
+            child: RefreshIndicator(
+              onRefresh: controller.refreshSurah,
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  Obx(() {
+                    if (controller.isLoading.value &&
+                        controller.filteredSurah.isEmpty) {
+                      return CommonLoadingWidget(padded: true, bordered: true);
+                    }
+                    if (controller.filteredSurah.isEmpty) {
+                      return CommonEmptyWidget(
+                        showRefresh: false,
+                        padded: true,
+                        bordered: true,
+                        refresh: controller.refreshSurah,
+                      );
+                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: controller.filteredSurah.length,
+                      itemBuilder: (context, index) {
+                        return _buildSurahItem(controller.filteredSurah[index]);
+                      },
+                    );
+                  }),
 
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return CommonLoadingWidget(padded: true, bordered: true);
-                  }
-                  if (controller.filteredSurah.isEmpty) {
-                    return CommonEmptyWidget(padded: true, bordered: true);
-                  }
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    itemCount: juzList.length,
-                    itemBuilder: (context, index) {
-                      return _buildJuzItem(juzList[index]);
-                    },
-                  );
-                }),
+                  Obx(() {
+                    final query = controller.searchQuery.value
+                        .toLowerCase()
+                        .trim();
+                    final filteredList = query.isEmpty
+                        ? juzList
+                        : juzList
+                              .where(
+                                (j) =>
+                                    j.number.toString() == query ||
+                                    'juz ${j.number}'.contains(query) ||
+                                    j.startSurah.toLowerCase().contains(
+                                      query,
+                                    ) ||
+                                    j.endSurah.toLowerCase().contains(query),
+                              )
+                              .toList();
+                    if (controller.isLoading.value &&
+                        controller.filteredSurah.isEmpty) {
+                      return CommonLoadingWidget(padded: true, bordered: true);
+                    }
+                    if (filteredList.isEmpty) {
+                      return CommonEmptyWidget(
+                        padded: true,
+                        bordered: true,
+                        refresh: controller.refreshSurah,
+                      );
+                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        return _buildJuzItem(filteredList[index]);
+                      },
+                    );
+                  }),
 
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return CommonLoadingWidget(padded: true, bordered: true);
-                  }
-                  if (controller.filteredSurah.isEmpty) {
-                    return CommonEmptyWidget(padded: true, bordered: true);
-                  }
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    itemCount: hizbList.length,
-                    itemBuilder: (context, index) {
-                      return _buildHizbItem(hizbList[index]);
-                    },
-                  );
-                }),
-              ],
+                  Obx(() {
+                    final query = controller.searchQuery.value
+                        .toLowerCase()
+                        .trim();
+                    final filteredList = query.isEmpty
+                        ? hizbList
+                        : hizbList
+                              .where(
+                                (h) =>
+                                    h.number.toString() == query ||
+                                    'hizb ${h.number}'.contains(query) ||
+                                    h.startSurah.toLowerCase().contains(
+                                      query,
+                                    ) ||
+                                    h.endSurah.toLowerCase().contains(query),
+                              )
+                              .toList();
+                    if (controller.isLoading.value &&
+                        controller.filteredSurah.isEmpty) {
+                      return CommonLoadingWidget(padded: true, bordered: true);
+                    }
+                    if (filteredList.isEmpty) {
+                      return CommonEmptyWidget(
+                        padded: true,
+                        bordered: true,
+                        refresh: controller.refreshSurah,
+                      );
+                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        return _buildHizbItem(filteredList[index]);
+                      },
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         ],

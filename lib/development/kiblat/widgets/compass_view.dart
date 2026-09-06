@@ -164,6 +164,7 @@ class _LocationErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -178,8 +179,8 @@ class _LocationErrorWidget extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               error,
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: AppColors.primary,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: isDark ? AppColors.secondary : AppColors.textPrimaryLight
               ),
               textAlign: TextAlign.center,
             ),

@@ -140,6 +140,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
     with WidgetsBindingObserver {
   late final PrayerTimeController controller;
   bool _showAllMenus = false;
+  bool isRefreshing = false;
 
   @override
   void initState() {
@@ -239,395 +240,476 @@ class _HomeScreenNewState extends State<HomeScreenNew>
             : AppColors.primary,
         toolbarHeight: 0,
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 60),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                      AppColors.primary.withAlpha(210),
-                      BlendMode.srcATop,
-                    ),
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/images/image.png"),
-                  ),
-
-                  color: isDark
-                      ? Theme.of(context).cardColor
-                      : AppColors.primary,
-                ),
-                child: Obx(() {
-                  final item = controller.todayPrayer.value;
-                  final nextTime = controller.nextPrayerTime.value;
-                  final jam = nextTime != null
-                      ? DateFormat('HH:mm').format(nextTime)
-                      : "--:--";
-                  final hijri = item != null
-                      ? HijriCalendar.fromDate(_parseDate(item.tanggalLengkap))
-                      : null;
-                  return Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Get.to(() => LokasiScreen()),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withAlpha(30),
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Iconsax.location,
-                                    color: Colors.white,
-                                    size: 15,
-                                  ),
-                                  SizedBox(width: 3),
-                                  Text(
-                                    controller.currentCity.value,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+      body: RefreshIndicator(
+               backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+          color: AppColors.secondary,
+        onRefresh: () => controller.fetchPrayerTimes(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                            right: 16,
+                            left: 16,
+                            bottom: 60,
                           ),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              colorFilter: ColorFilter.mode(
+                                AppColors.primary.withAlpha(210),
+                                BlendMode.srcATop,
+                              ),
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/images/image.png"),
+                            ),
 
-                          Obx(() {
-                            final loading = controller.isLoading.value;
-                            return TapScaleWidget(
-                              scaleDown: 0.8,
-                              onTap: loading
-                                  ? null
-                                  : () => controller.detectLocation(),
-                              child: loading
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: SizedBox(
-                                        width: 14,
-                                        height: 14,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
+                            color: isDark
+                                ? Theme.of(context).cardColor
+                                : AppColors.primary,
+                          ),
+                          child: Obx(() {
+                            final item = controller.todayPrayer.value;
+                            final nextTime = controller.nextPrayerTime.value;
+                            final jam = nextTime != null
+                                ? DateFormat('HH:mm').format(nextTime)
+                                : "--:--";
+                            final hijri = item != null
+                                ? HijriCalendar.fromDate(
+                                    _parseDate(item.tanggalLengkap),
+                                  )
+                                : null;
+                            return Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(() => LokasiScreen()),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(30),
+                                          borderRadius: BorderRadius.circular(
+                                            18,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Iconsax.location,
+                                              color: Colors.white,
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 3),
+                                            Text(
+                                              controller.currentCity.value,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    )
-                                  : const Icon(
-                                      Iconsax.location_add,
-                                      color: AppColors.textPrimaryDark,
                                     ),
-                            );
-                          }),
-                        ],
-                      ),
-                      SizedBox(height: Platform.isAndroid ? 20 : 30),
 
-                      Column(
-                        children: [
-                          Text(
-                            hijri != null
-                                ? "${hijri.longMonthName} ${hijri.hDay}, ${hijri.hYear} H"
-                                : "Sedang memuat...",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            jam,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text:
-                                      "${controller.nextPrayerName.value} akan tiba dalam ",
-                                  style: TextStyle(color: Colors.white),
+                                    Obx(() {
+                                      final loading =
+                                          controller.isLoading.value;
+                                      return TapScaleWidget(
+                                        scaleDown: 0.8,
+                                        onTap: loading
+                                            ? null
+                                            : () => controller.detectLocation(),
+                                        child: loading
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(2),
+                                                child: SizedBox(
+                                                  width: 14,
+                                                  height: 14,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                              )
+                                            : const Icon(
+                                                Iconsax.location_add,
+                                                color:
+                                                    AppColors.textPrimaryDark,
+                                              ),
+                                      );
+                                    }),
+                                  ],
                                 ),
-                                TextSpan(
-                                  text: controller.remainingText,
-                                  style: TextStyle(color: AppColors.secondary),
+                                SizedBox(height: Platform.isAndroid ? 20 : 30),
+
+                                Column(
+                                  children: [
+                                    Text(
+                                      hijri != null
+                                          ? "${hijri.longMonthName} ${hijri.hDay}, ${hijri.hYear} H"
+                                          : "Sedang memuat...",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+
+                                      children: [
+                                        Text(
+                                          controller.nextPrayerName.value,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          jam,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 35,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                "${controller.nextPrayerName.value} akan tiba dalam ",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: controller.remainingText,
+                                            style: TextStyle(
+                                              color: AppColors.secondary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider(
+                                  height: Platform.isAndroid ? 45 : 50,
+                                  thickness: 0.5,
+                                  color: Colors.white60,
+                                ),
+                                AnimatedSize(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  child: GridView.count(
+                                    crossAxisCount: Responsive.gridColumns(
+                                      context,
+                                      phone: 6,
+                                      tablet: 6,
+                                    ),
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    crossAxisSpacing: Responsive.value(
+                                      context,
+                                      phone: 6,
+                                      tablet: 16,
+                                    ),
+                                    mainAxisSpacing: Responsive.value(
+                                      context,
+                                      phone: 6,
+                                      tablet: 16,
+                                    ),
+                                    childAspectRatio: Responsive.value(
+                                      context,
+                                      phone: 0.7,
+                                      tablet: 1.0,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    children: _prayerList()
+                                        .map(
+                                          (prayerTime) => _buildPrayerTimeItem(
+                                            context,
+                                            prayerTime,
+                                            controller.nextPrayerName.value,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(
-                        height: Platform.isAndroid ? 45 : 50,
-                        thickness: 0.5,
-                        color: Colors.white60,
-                      ),
-                      AnimatedSize(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: GridView.count(
-                          crossAxisCount: Responsive.gridColumns(
-                            context,
-                            phone: 6,
-                            tablet: 6,
-                          ),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisSpacing: Responsive.value(
-                            context,
-                            phone: 6,
-                            tablet: 16,
-                          ),
-                          mainAxisSpacing: Responsive.value(
-                            context,
-                            phone: 6,
-                            tablet: 16,
-                          ),
-                          childAspectRatio: Responsive.value(
-                            context,
-                            phone: 0.7,
-                            tablet: 1.0,
-                          ),
-                          padding: EdgeInsets.zero,
-                          children: _prayerList()
-                              .map(
-                                (prayerTime) => _buildPrayerTimeItem(
-                                  context,
-                                  prayerTime,
-                                  controller.nextPrayerName.value,
-                                ),
-                              )
-                              .toList(),
+                            );
+                          }),
                         ),
-                      ),
-                    ],
-                  );
-                }),
-              ),
-            ],
-          ),
+                      ],
+                    ),
 
-          Positioned(
-            top: Platform.isAndroid ? 290 : 310,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                children: [
-                  ClipPath(
-                    clipper: TopNotchClipper(),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        right: 10,
-                        left: 10,
-                        bottom: 16,
-                        top: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    Positioned(
+                      top: Platform.isAndroid ? 290 : 310,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Column(
+                          children: [
+                            ClipPath(
+                              clipper: TopNotchClipper(),
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                  right: 10,
+                                  left: 10,
+                                  bottom: 16,
+                                  top: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
 
-                      child: AnimatedSize(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: GridView.count(
-                          crossAxisCount: Responsive.gridColumns(
-                            context,
-                            phone: 4,
-                            tablet: 4,
-                          ),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisSpacing: Responsive.value(
-                            context,
-                            phone: 4,
-                            tablet: 16,
-                          ),
-                          mainAxisSpacing: Responsive.value(
-                            context,
-                            phone: 4,
-                            tablet: 16,
-                          ),
-                          childAspectRatio: Responsive.value(
-                            context,
-                            phone: 1.1,
-                            tablet: 1.0,
-                          ),
-                          padding: EdgeInsets.zero,
-                          children: menus
-                              .where(
-                                (menu) =>
-                                    _showAllMenus ||
-                                    (menu["title"] != "Dzikir" &&
-                                        menu["title"] != "Hijriah"),
-                              )
-                              .map(
-                                (menu) => _MenuItemWidget(
-                                  menu: menu,
-                                  onTap: menu["title"] == "Semua"
-                                      ? () {
-                                          setState(() {
-                                            _showAllMenus = !_showAllMenus;
-                                          });
-                                        }
-                                      : () async {
-                                          if (menu["onTap"] != null) {
-                                            menu["onTap"](context);
-                                            return;
-                                          }
+                                child: AnimatedSize(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  child: GridView.count(
+                                    crossAxisCount: Responsive.gridColumns(
+                                      context,
+                                      phone: 4,
+                                      tablet: 4,
+                                    ),
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    crossAxisSpacing: Responsive.value(
+                                      context,
+                                      phone: 4,
+                                      tablet: 16,
+                                    ),
+                                    mainAxisSpacing: Responsive.value(
+                                      context,
+                                      phone: 4,
+                                      tablet: 16,
+                                    ),
+                                    childAspectRatio: Responsive.value(
+                                      context,
+                                      phone: 1.1,
+                                      tablet: 1.0,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    children: menus
+                                        .where(
+                                          (menu) =>
+                                              _showAllMenus ||
+                                              (menu["title"] != "Dzikir" &&
+                                                  menu["title"] != "Hijriah"),
+                                        )
+                                        .map(
+                                          (menu) => _MenuItemWidget(
+                                            menu: menu,
+                                            onTap: menu["title"] == "Semua"
+                                                ? () {
+                                                    setState(() {
+                                                      _showAllMenus =
+                                                          !_showAllMenus;
+                                                    });
+                                                  }
+                                                : () async {
+                                                    if (menu["onTap"] != null) {
+                                                      menu["onTap"](context);
+                                                      return;
+                                                    }
 
-                                          final builder = menu["page"];
-                                          if (builder is! Widget Function()) {
-                                            return;
-                                          }
+                                                    final builder =
+                                                        menu["page"];
+                                                    if (builder
+                                                        is! Widget Function()) {
+                                                      return;
+                                                    }
 
-                                          final binding = menu["binding"];
-                                          if (binding != null) {
-                                            await Get.to(
-                                              builder,
-                                              binding: binding,
-                                            );
-                                          } else {
-                                            await Get.to(builder);
-                                          }
+                                                    final binding =
+                                                        menu["binding"];
+                                                    if (binding != null) {
+                                                      await Get.to(
+                                                        builder,
+                                                        binding: binding,
+                                                      );
+                                                    } else {
+                                                      await Get.to(builder);
+                                                    }
+
+                                                    if (mounted) {
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Progress Hari ini",
+                                        style: isDark
+                                            ? Theme.of(
+                                                context,
+                                              ).textTheme.titleSmall
+                                            : Theme.of(
+                                                context,
+                                              ).textTheme.titleSmall!.copyWith(
+                                                color: AppColors.primary,
+                                              ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isDark
+                                              ? AppColors.primary.withAlpha(100)
+                                              : AppColors.primary,
+
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "${_ibadahProgress.$2 == 0 ? 0 : (_ibadahProgress.$1 * 100 / _ibadahProgress.$2).round()}%",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Selesaikan checklist ibadah hari ini.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .copyWith(
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                      ),
+
+                                      const SizedBox(height: 10),
+
+                                      Text(
+                                        "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall,
+                                      ),
+
+                                      const SizedBox(height: 6),
+
+                                      StepProgressIndicator(
+                                        totalSteps: max(
+                                          2,
+                                          _ibadahProgress.$2 * 2 +10,
+                                        ),
+                                        currentStep: _ibadahProgress.$1 > 0
+                                            ? _ibadahProgress.$1 * 2 + 10
+                                            : 0,
+                                        selectedColor: AppColors.primary,
+                                        size: 28,
+                                        padding: 3,
+                                        unselectedColor: Colors.grey.withAlpha(
+                                          120,
+                                        ),
+                                        roundedEdges: const Radius.circular(5),
+                                      ),
+
+                                      const SizedBox(height: 12),
+
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await Get.to(
+                                            () => const IbadahScreen(),
+                                          );
 
                                           if (mounted) {
                                             setState(() {});
                                           }
                                         },
-                                ),
-                              )
-                              .toList(),
+                                        child: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Buka Daftar Checklist",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Progress Hari ini",
-                              style: isDark
-                                  ? Theme.of(context).textTheme.titleSmall
-                                  : Theme.of(context).textTheme.titleSmall!
-                                        .copyWith(color: AppColors.primary),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppColors.primary.withAlpha(100)
-                                    : AppColors.primary,
-
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                "${_ibadahProgress.$2 == 0 ? 0 : (_ibadahProgress.$1 * 100 / _ibadahProgress.$2).round()}%",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Selesaikan checklist ibadah hari ini.",
-                              style: Theme.of(context).textTheme.labelSmall!
-                                  .copyWith(fontWeight: FontWeight.w400),
-                            ),
-
-                            const SizedBox(height: 10),
-
-                            Text(
-                              "${_ibadahProgress.$1} dari ${_ibadahProgress.$2} Selesai",
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-
-                            const SizedBox(height: 6),
-
-                            StepProgressIndicator(
-                              totalSteps: max(2, _ibadahProgress.$2 * 2),
-                              currentStep: _ibadahProgress.$1 > 0
-                                  ? _ibadahProgress.$1 * 2 + 10
-                                  : 0,
-                              selectedColor: AppColors.primary,
-                              size: 28,
-                              padding: 3,
-                              unselectedColor: Colors.grey.withAlpha(120),
-                              roundedEdges: const Radius.circular(5),
-                            ),
-
-                            const SizedBox(height: 12),
-
-                            GestureDetector(
-                              onTap: () async {
-                                await Get.to(() => const IbadahScreen());
-
-                                if (mounted) {
-                                  setState(() {});
-                                }
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.secondary,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Buka Daftar Checklist",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -828,7 +910,6 @@ class _MurrotalContentState extends State<MurrotalContent> {
                                             .qariData[item.qariIndex]["title"]!,
                                         qariImage: MurrotalController
                                             .qariData[item.qariIndex]["image"]!,
-                                            positionDuration: Duration.zero,
                                       ),
                                     );
                                   },

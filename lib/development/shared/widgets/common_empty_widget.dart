@@ -1,19 +1,22 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class CommonEmptyWidget extends StatelessWidget {
   final String message;
   final bool padded;
   final bool bordered;
+  final bool showRefresh;
+  final VoidCallback refresh;
 
   const CommonEmptyWidget({
     super.key,
     this.message = "Data Tidak Ditemukan",
     this.padded = false,
     this.bordered = false,
+    this.showRefresh = true,
+    required this.refresh
   });
 
   Widget _buildInner() {
@@ -25,13 +28,13 @@ class CommonEmptyWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             )
           : null,
-      color: bordered ? null : Colors.white,
+      color: bordered ? null : (isDark ? Get.theme.cardColor : Colors.white) ,
       child: Stack(
         children: [
           Positioned(
             top: -100,
-            right: 0,
-            left: 0,
+            right: 16,
+            left: 16,
             bottom: 0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -43,8 +46,23 @@ class CommonEmptyWidget extends StatelessWidget {
                 ),
                 Text(
                   message,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
                 ),
+                SizedBox(height: 10),
+                showRefresh ? ElevatedButton(
+                  onPressed: refresh,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(AppColors.primary)
+                  ),
+                   child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.refresh, color: AppColors.textPrimaryDark, size: 18),
+                    SizedBox(width: 5),
+                    Text("Refresh", style: TextStyle(fontSize: 14,color: AppColors.textPrimaryDark))
+                  ],
+                )) : SizedBox.shrink()
               ],
             ),
           ),

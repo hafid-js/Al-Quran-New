@@ -29,24 +29,28 @@ class JuzController extends GetxController {
     ayatAudioStates.putIfAbsent(nomor, () => "stop".obs).value = state;
   }
 
-  Future<void> fetchJuz(int juzNumber) async {
-    isLoading.value = true;
-    juzAyatList.clear();
+  Future<void> fetchJuz(int juzNumber, {bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      isLoading.value = true;
+      juzAyatList.clear();
+    }
 
     final cached = await _cacheDatasource.getJuz(juzNumber);
-    if (cached != null && cached.isNotEmpty) {
+    if (cached != null && cached.isNotEmpty && !forceRefresh) {
       juzAyatList.value = cached;
       isLoading.value = false;
       return;
     }
 
     if (!net.isConnected.value) {
-      Get.snackbar(
-        "Tidak Ada Koneksi",
-        "Periksa koneksi internet untuk memuat data juz.",
+      if (juzAyatList.isEmpty) {
+        Get.snackbar(
+          "Tidak Ada Koneksi",
+          "Periksa koneksi internet untuk memuat data juz.",
           backgroundColor: Colors.red,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
       isLoading.value = false;
       return;
     }

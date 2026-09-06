@@ -40,7 +40,7 @@ class SeekBarState extends State<SeekBar> {
       children: [
         SliderTheme(
           data: _sliderThemeData.copyWith(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 19),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7.5),
             thumbShape: HiddenThumbComponentShape(),
             activeTrackColor: const Color.fromARGB(132, 187, 222, 251),
             inactiveTrackColor: Colors.black,
@@ -73,7 +73,7 @@ class SeekBarState extends State<SeekBar> {
         ),
         SliderTheme(
           data: _sliderThemeData.copyWith(
-            padding: EdgeInsets.only(right: 12, left: 12, top: 11, bottom: 19),
+            padding: EdgeInsets.only(right: 12, left: 12, top: 0, bottom: 18),
             activeTrackColor: AppColors.secondary,
             thumbColor: AppColors.secondary,
             inactiveTrackColor: Colors.transparent,

@@ -21,7 +21,7 @@ class DetailJuzScreen extends StatefulWidget {
 
 class _DetailJuzScreenState extends State<DetailJuzScreen>
     with SingleTickerProviderStateMixin {
-  final jusController = Get.put(JuzController(), permanent: false);
+  final controller = Get.put(JuzController(), permanent: false);
   final fontController = Get.find<DetailSurahController>();
   final ItemScrollController itemScrollController = ItemScrollController();
   late AnimationController _animationController;
@@ -35,7 +35,7 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
     super.initState();
     final args = Get.arguments as Map;
     juzNumber = args["juz"];
-    jusController.fetchJuz(juzNumber);
+    controller.fetchJuz(juzNumber);
 
     _animationController = AnimationController(
       vsync: this,
@@ -63,8 +63,8 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    if (jusController.juzAyatList.isNotEmpty) {
-      jusController.stopAudio(jusController.juzAyatList.first);
+    if (controller.juzAyatList.isNotEmpty) {
+      controller.stopAudio(controller.juzAyatList.first);
     }
     Get.delete<JuzController>();
     super.dispose();
@@ -72,17 +72,28 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
 
   @override
   Widget build(BuildContext context) {
-      final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CommonAppBar(
         title: "Juz $juzNumber",
-        titleColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
-        backgroundColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
-        surfaceTintColor: isDark ? Theme.of(context).scaffoldBackgroundColor : Colors.white,
-        backIconColor:isDark ? Theme.of(context).textTheme.titleSmall!.color : Theme.of(context).textTheme.titleMedium!.color,
+        titleColor: isDark
+            ? Theme.of(context).textTheme.titleSmall!.color
+            : Theme.of(context).textTheme.titleMedium!.color,
+        backgroundColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
+        surfaceTintColor: isDark
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.white,
+        backIconColor: isDark
+            ? Theme.of(context).textTheme.titleSmall!.color
+            : Theme.of(context).textTheme.titleMedium!.color,
         actions: [
-          Icon(Iconsax.book_1, color: Theme.of(context).textTheme.titleMedium!.color),
+          Icon(
+            Iconsax.book_1,
+            color: Theme.of(context).textTheme.titleMedium!.color,
+          ),
           SizedBox(width: 15),
           GestureDetector(
             onTap: () async {
@@ -92,8 +103,12 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 context: context,
                 pageListBuilder: (context) => [
                   SliverWoltModalSheetPage(
-                    backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
-                    surfaceTintColor:  isDark ? Theme.of(context).cardColor :  Colors.white,
+                    backgroundColor: isDark
+                        ? Theme.of(context).cardColor
+                        : Colors.white,
+                    surfaceTintColor: isDark
+                        ? Theme.of(context).cardColor
+                        : Colors.white,
                     hasTopBarLayer: false,
                     mainContentSliversBuilder: (context) => [
                       SliverToBoxAdapter(
@@ -112,7 +127,9 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                           .titleMedium!
                                           .copyWith(
                                             fontWeight: FontWeight.w600,
-                                            color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+                                            color: isDark
+                                                ? AppColors.textPrimaryDark
+                                                : AppColors.primary,
                                           ),
                                     ),
                                   ),
@@ -162,10 +179,15 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                                   const SizedBox(height: 14),
                                   SettingsSlider(
                                     label: "Ukuran Teks latin & Terjemah",
-                                    value: fontController.ukuranLatinTerjemah.value,
+                                    value: fontController
+                                        .ukuranLatinTerjemah
+                                        .value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController.ukuranLatinTerjemah.value = v;
+                                        fontController
+                                                .ukuranLatinTerjemah
+                                                .value =
+                                            v;
                                       });
                                     },
                                   ),
@@ -190,222 +212,246 @@ class _DetailJuzScreenState extends State<DetailJuzScreen>
                 scale: _scale,
                 child: Icon(
                   _isRotated ? Iconsax.setting_45 : Iconsax.setting_4,
-                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
                 ),
               ),
             ),
-          )
+          ),
         ],
         actionsPadding: EdgeInsets.all(16),
       ),
       body: Obx(() {
-         if (jusController.isLoading.value) {
+        final data = controller.juzAyatList;
+        if (controller.isLoading.value && data.isEmpty) {
           return CommonLoadingWidget();
         }
 
-        final ayatList = jusController.juzAyatList;
-
-        if (ayatList.isEmpty) {
-          return CommonEmptyWidget();
+        if (data.isEmpty) {
+          return CommonEmptyWidget(
+            refresh: () async {
+              await controller.fetchJuz(juzNumber);
+            },
+          );
         }
+        final lastSurah = data.last.surahNamaLatin;
+        final firstSurah = data.first.surahNamaLatin;
 
-        final firstSurah = ayatList.first.surahNamaLatin;
-        final lastSurah = ayatList.last.surahNamaLatin;
-
-        return ScrollablePositionedList.builder(
-          itemScrollController: itemScrollController,
-          itemCount: ayatList.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Padding(
-                padding: EdgeInsets.all(16),
-                child: Container(
+        return RefreshIndicator(
+          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+          color: AppColors.secondary,
+          onRefresh: () async {
+            await controller.fetchJuz(juzNumber, forceRefresh: true);
+          },
+          child: ScrollablePositionedList.builder(
+            itemScrollController: itemScrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: data.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Padding(
                   padding: EdgeInsets.all(16),
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? Theme.of(context).cardColor
+                          : AppColors.primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: "Juz:",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text.rich(
+                                  TextSpan(
+                                    text: "$juzNumber",
+                                    style: TextStyle(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: "Dari:",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text.rich(
+                                  TextSpan(
+                                    text: firstSurah,
+                                    style: TextStyle(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: "Sampai:",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text.rich(
+                                  TextSpan(
+                                    text: lastSurah,
+                                    style: TextStyle(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: "Jumlah Ayat:",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text.rich(
+                                  TextSpan(
+                                    text: "${data.length}",
+                                    style: TextStyle(
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              final ayat = data[index - 1];
+
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  width: double.infinity,
                   decoration: BoxDecoration(
-        color: isDark
-                            ? Theme.of(context).cardColor
-                            : AppColors.primary,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  text: "Juz:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text.rich(
-                                TextSpan(
-                                  text: "$juzNumber",
-                                  style: TextStyle(
-                                    color: AppColors.secondary,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            "${ayat.numberInSurah}",
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  text: "Dari:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text.rich(
-                                TextSpan(
-                                  text: firstSurah,
-                                  style: TextStyle(
-                                    color: AppColors.secondary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  text: "Sampai:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text.rich(
-                                TextSpan(
-                                  text: lastSurah,
-                                  style: TextStyle(
-                                    color: AppColors.secondary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  text: "Jumlah Ayat:",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text.rich(
-                                TextSpan(
-                                  text: "${ayatList.length}",
-                                  style: TextStyle(
-                                    color: AppColors.secondary,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            "${ayat.surahNamaLatin}",
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
+                      SizedBox(height: 10),
+                      Obx(() {
+                        return Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            ayat.teksArab,
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).textTheme.titleSmall!.color,
+                              fontSize: fontController.ukuranTeksArab.value,
+                              fontWeight: fontController.arabBold.value
+                                  ? FontWeight.w600
+                                  : null,
+                              height: 2.5,
+                            ),
+                          ),
+                        );
+                      }),
+
+                      Obx(() {
+                        if (!fontController.latin.value &&
+                            !fontController.terjemah.value)
+                          return SizedBox.shrink();
+                        return SizedBox(height: 30);
+                      }),
+                      Obx(() {
+                        if (!fontController.latin.value)
+                          return SizedBox.shrink();
+                        return Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            ayat.teksLatin,
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppColors.secondary
+                                  : Colors.black,
+                              fontSize:
+                                  fontController.ukuranLatinTerjemah.value,
+                            ),
+                          ),
+                        );
+                      }),
+                      Obx(() {
+                        if (!fontController.terjemah.value)
+                          return SizedBox.shrink();
+                        return SizedBox(height: 10);
+                      }),
+                      Obx(() {
+                        if (!fontController.terjemah.value)
+                          return SizedBox.shrink();
+                        return Text(
+                          ayat.teksIndonesia,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).textTheme.titleSmall!.color,
+                            fontSize: fontController.ukuranLatinTerjemah.value,
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),
               );
-            }
-
-            final ayat = ayatList[index - 1];
-
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: Container(
-                padding: EdgeInsets.all(12),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text(
-                      "${ayat.numberInSurah}",
-                      style: TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                     Text(
-                      "${ayat.surahNamaLatin}",
-                      style: TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    ],
-                   ),
-                    SizedBox(height: 10),
-                    Obx(() {
-                      return Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ayat.teksArab,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.titleSmall!.color,
-                            fontSize: fontController.ukuranTeksArab.value,
-                            fontWeight: fontController.arabBold.value
-                                ? FontWeight.w600
-                                : null,
-                            height: 2.5,
-                          ),
-                        ),
-                      );
-                    }),
-                      
-                    Obx(() {
-                      if(!fontController.latin.value && !fontController.terjemah.value) return SizedBox.shrink();
-                      return SizedBox(height: 30);
-                    }),
-                    Obx(() {
-                      if (!fontController.latin.value) return SizedBox.shrink();
-                      return Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ayat.teksLatin,
-                          style: TextStyle(
-                            color: isDark? AppColors.secondary : Colors.black,
-                            fontSize: fontController.ukuranLatinTerjemah.value,
-                          ),
-                        ),
-                      );
-                    }),
-                    Obx(() {
-                      if (!fontController.terjemah.value) return SizedBox.shrink();
-                      return SizedBox(height: 10);
-                    }),
-                    Obx(() {
-                      if (!fontController.terjemah.value) return SizedBox.shrink();
-                      return Text(
-                        ayat.teksIndonesia,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.titleSmall!.color,
-                          fontSize: fontController.ukuranLatinTerjemah.value,
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            );
-          },
+            },
+          ),
         );
       }),
     );

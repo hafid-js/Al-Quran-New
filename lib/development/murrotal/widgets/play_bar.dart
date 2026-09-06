@@ -40,7 +40,6 @@ class PlayBar extends StatelessWidget {
                         surahNomor: controller.murrotalSurahNomor.value,
                         surahNama: controller.murrotalSurahName.value,
                         surahArti: controller.murrotalSurahArti.value,
-                        positionDuration: controller.player.position,
                         qariNama: MurrotalController
                             .qariData[controller.murrotalQariIndex.value]["title"]!,
                         qariImage: MurrotalController

@@ -119,7 +119,7 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
-          fullScreenIntent: true,
+          fullScreenIntent: soundType == 'adzan',
         );
 
     final DarwinNotificationDetails iosNotificationDetails =
@@ -201,7 +201,7 @@ class NotificationService {
               : null,
           enableVibration: vibrate,
           silent: isSilent,
-          fullScreenIntent: true,
+          fullScreenIntent: soundType == 'adzan',
         );
 
     final DarwinNotificationDetails iosNotificationDetails =

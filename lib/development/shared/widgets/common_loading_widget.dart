@@ -14,7 +14,6 @@ class CommonLoadingWidget extends StatelessWidget {
   });
 
   Widget _buildInner(context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: bordered
           ? BoxDecoration(
@@ -27,7 +26,7 @@ class CommonLoadingWidget extends StatelessWidget {
         child: Image.asset(
           'assets/animations/bar_loader.gif',
           height: height,
-          color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+          color: AppColors.primary,
         ),
       ),
     );

@@ -20,7 +20,6 @@ class DetailMurrotalScreen extends StatefulWidget {
   final String surahArti;
   final String qariNama;
   final String qariImage;
-  final Duration positionDuration;
 
   const DetailMurrotalScreen({
     super.key,
@@ -30,7 +29,6 @@ class DetailMurrotalScreen extends StatefulWidget {
     required this.surahArti,
     required this.qariNama,
     required this.qariImage,
-    required this.positionDuration,
   });
 
   @override
@@ -79,10 +77,8 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
     _player.errorStream.listen((e) {
       print('A stream error occurred: $e');
     });
-    murrotalController.setMurrotalAudio(
-      widget.qariIndex,
-      surahController.surahList[widget.surahNomor - 1],
-    );
+    final surah = surahController.surahList[widget.surahNomor - 1];
+    murrotalController.setMurrotalAudio(widget.qariIndex, surah);
 
     try {
       final loaded = _player.sequence;
@@ -97,8 +93,12 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
         );
       } else {
         final currentIndex = _player.currentIndex;
-        if (currentIndex != null && currentIndex != widget.surahNomor - 1) {
-          await _player.seek(Duration.zero, index: widget.surahNomor - 1);
+        if (currentIndex != null && currentIndex < loaded.length) {
+          final currentAlbum =
+              (loaded[currentIndex].tag as AudioMetadata).album;
+          if (currentAlbum != widget.surahNama) {
+            await _player.seek(Duration.zero, index: widget.surahNomor - 1);
+          }
         }
       }
       if (!_player.playing) {
@@ -237,7 +237,7 @@ class DetailMurrotalScreenState extends State<DetailMurrotalScreen> {
                   final positionData = snapshot.data;
                   return SeekBar(
                     duration: positionData?.duration ?? Duration.zero,
-                    position: positionData?.position ?? widget.positionDuration,
+                    position: positionData?.position ?? Duration.zero,
                     bufferedPosition:
                         positionData?.bufferedPosition ?? Duration.zero,
                     onChangeEnd: (newPosition) {

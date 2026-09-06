@@ -200,7 +200,6 @@ class _DetailQariScreenState extends State<DetailQariScreen> {
                               surahArti: surah.arti,
                               qariNama: qariData["title"]!,
                               qariImage: qariData["image"]!,
-                              positionDuration: Duration.zero,
                             ),
                           );
                         },

@@ -1,7 +1,9 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
+import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/error_view.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/dzikir/controllers/matsurat_controller.dart';
@@ -29,6 +31,7 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
   late AnimationController _animationController;
   late Animation<double> _rotation;
   late Animation<double> _scale;
+    final SettingsController setting = Get.find<SettingsController>();
 
   @override
   void initState() {
@@ -81,6 +84,8 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+        final selectedIndex = setting.fontSelected.value;
+    final fontFamily = fontArabs[selectedIndex]["title"];
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBody: true,

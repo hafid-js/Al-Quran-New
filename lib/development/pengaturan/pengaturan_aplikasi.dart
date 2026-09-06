@@ -76,7 +76,7 @@ class _PengaturanAplikasiState extends State<PengaturanAplikasi> {
                               SizedBox(width: 18),
                               Text(
                                 "Tema Gelap",
-                                style: Theme.of(context).textTheme.labelSmall
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 14)
                               ),
                             ],
                           ),

@@ -52,14 +52,14 @@ class DetailSurahController extends GetxController {
     ayatAudioStates.putIfAbsent(nomorAyat, () => "stop".obs).value = state;
   }
 
-  Future<void> fetchDetailSurah(int nomor) async {
+  Future<void> fetchDetailSurah(int nomor, {bool forceRefresh = false}) async {
     await debugPrintSurahByNomor(nomor);
     try {
       isLoading.value = true;
 
       final cache = await local.getByNomor(nomor);
 
-      if (cache != null) {
+      if (cache != null && !forceRefresh) {
         final ayatList = DevHiveService.ayatBox.values
             .where((a) => a.surahNomor == nomor)
             .toList();
