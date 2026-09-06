@@ -262,8 +262,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
       body: Obx(() {
         final data = controller.detailSurah.value;
 
-        // if (controller.isLoading.value && data == null) {
-           if (controller.isLoading.value) {
+        if (controller.isLoading.value) {
           return const ShimmerDetailSurah();
         }
         if (data == null) {
@@ -275,21 +274,23 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
         }
 
         return RefreshIndicator(
-          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+          backgroundColor: isDark
+              ? Theme.of(context).cardColor
+              : AppColors.primary,
           color: AppColors.secondary,
           onRefresh: () =>
               controller.fetchDetailSurah(nomor, forceRefresh: true),
           child: data.ayat.isEmpty
               ? CommonEmptyWidget(
-                        message:
-                            "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
-                        refresh: () async {
-                          await controller.fetchDetailSurah(
-                            nomor,
-                            forceRefresh: true,
-                          );
-                        },
-                      )
+                  message:
+                      "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
+                  refresh: () async {
+                    await controller.fetchDetailSurah(
+                      nomor,
+                      forceRefresh: true,
+                    );
+                  },
+                )
               : ScrollablePositionedList.builder(
                   itemScrollController: itemScrollController,
                   physics: const AlwaysScrollableScrollPhysics(),

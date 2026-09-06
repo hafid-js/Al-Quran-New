@@ -5,71 +5,61 @@ import 'package:shimmer/shimmer.dart';
 class ShimmerDzikirGrid extends StatelessWidget {
   const ShimmerDzikirGrid({super.key});
 
-
   @override
-Widget build(BuildContext context) {
-  final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = Theme.of(context).cardColor;
 
-
-  return SizedBox(
-  height: double.infinity,
-  child: Shimmer.fromColors(
-    baseColor: isDark
-        ? const Color(0xFF263238)
-        : const Color(0xFFE3E7EC),
-    highlightColor: isDark
-        ? const Color(0xFF3A464F)
-        : const Color(0xFFF4F6F9),
-    child: Column(
-      children: [
-        const SizedBox(height: 40),
-
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: Container(
-            width: double.infinity,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
-
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(12),
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 1,
-            ),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.all(10),
+    return SizedBox(
+      height: double.infinity,
+      child: Shimmer.fromColors(
+        baseColor: isDark ? const Color(0xFF263238) : const Color(0xFFE3E7EC),
+        highlightColor: isDark
+            ? const Color(0xFF3A464F)
+            : const Color(0xFFF4F6F9),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Container(
+                width: double.infinity,
+                height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Align(
-                  alignment: Alignment.topLeft,
-                  child: ShimmerBox(
-                    width: 44,
-                    height: 20,
-                    radius: 12,
-                  ),
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(12),
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1,
                 ),
-              );
-            },
-          ),
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Align(
+                      alignment: Alignment.topLeft,
+                      child: ShimmerBox(width: 44, height: 20, radius: 12),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  ),
-);
-}
+      ),
+    );
+  }
 }

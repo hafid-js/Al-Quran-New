@@ -1122,7 +1122,7 @@ class _AlquranScreenNewState extends State<AlquranScreenNew>
                 controller: tabController,
                 children: [
                   Obx(() {
-                    if (!controller.isLoading.value &&
+                    if (controller.isLoading.value &&
                         controller.filteredSurah.isEmpty) {
                       return _buildSurahListShimmer();
                     }
