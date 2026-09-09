@@ -49,6 +49,34 @@ class _DetailMatsuratScreenState extends State<DetailMatsuratScreen>
     _scale = Tween<double>(begin: 1, end: 1.25).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
     );
+
+    void scrollToNextTarget(dynamic _) {
+      if (controller.data.isEmpty) return;
+      if (controller.hitungList.isEmpty) return;
+
+      final allCompleted = List.generate(
+        controller.data.length,
+        (i) => controller.hitungList[i] >= (controller.data[i]["jumlah"] as int),
+      );
+
+      final hasProgress = allCompleted.any((done) => done);
+      if (!hasProgress) return;
+
+      final firstIncomplete = allCompleted.indexWhere((done) => !done);
+      final targetIndex = firstIncomplete == -1
+          ? controller.data.length - 1
+          : firstIncomplete;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _cardKeys.length > targetIndex) {
+            controller.scrollToCard(targetIndex, _cardKeys);
+          }
+        });
+      });
+    }
+
+    ever(controller.data, scrollToNextTarget);
   }
 
   bool _isRotated = false;

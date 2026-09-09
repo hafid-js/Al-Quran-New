@@ -18,12 +18,20 @@ class MatsuratController extends GetxController {
   final _ukuran = Get.find<UkuranController>();
   final _box = GetStorage();
   String get _cacheKey => 'dzikir_matsurat_$type';
+  String get _hitungKey => 'dzikir_hitung_$type';
+  String get _currentIndexKey => 'dzikir_current_index_$type';
+  String get _lastDateKey => 'dzikir_last_date_$type';
 
   final data = <Map<String, dynamic>>[].obs;
   final isLoading = true.obs;
   final error = RxString('');
   final hitungList = <int>[].obs;
   final currentIndex = 0.obs;
+
+  String get _today {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
 
   RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
   RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
@@ -75,14 +83,35 @@ class MatsuratController extends GetxController {
     if (cached != null && cached.isNotEmpty) {
       final List<dynamic> jsonList = json.decode(cached);
       data.value = jsonList.cast<Map<String, dynamic>>();
-      hitungList.value = List.filled(data.length, 0);
-      currentIndex.value = 0;
+
+      final savedDate = _box.read<String>(_lastDateKey);
+      if (savedDate == _today) {
+        final savedHitung = _box.read<List>(_hitungKey);
+        final savedIndex = _box.read<int>(_currentIndexKey);
+        if (savedHitung != null && savedHitung.length == data.length) {
+          hitungList.value = savedHitung.cast<int>();
+          currentIndex.value = savedIndex ?? 0;
+        } else {
+          hitungList.value = List.filled(data.length, 0);
+          currentIndex.value = 0;
+        }
+      } else {
+        hitungList.value = List.filled(data.length, 0);
+        currentIndex.value = 0;
+      }
+
       isLoading.value = false;
     }
   }
 
   void _saveCache() {
     _box.write(_cacheKey, json.encode(data));
+  }
+
+  void _saveProgress() {
+    _box.write(_hitungKey, hitungList.toList());
+    _box.write(_currentIndexKey, currentIndex.value);
+    _box.write(_lastDateKey, _today);
   }
 
   Future<void> fetchData() async {
@@ -95,9 +124,17 @@ class MatsuratController extends GetxController {
       result.when(
         success: (response) {
           final List<dynamic> jsonList = json.decode(response.data as String);
-          data.value = jsonList.cast<Map<String, dynamic>>();
-          hitungList.value = List.filled(data.length, 0);
-          currentIndex.value = 0;
+          final newData = jsonList.cast<Map<String, dynamic>>();
+
+          final savedDate = _box.read<String>(_lastDateKey);
+          if (savedDate == _today && data.isNotEmpty && newData.length == data.length) {
+            data.value = newData;
+          } else {
+            data.value = newData;
+            hitungList.value = List.filled(data.length, 0);
+            currentIndex.value = 0;
+            _saveProgress();
+          }
           _saveCache();
         },
         failure: (message, statusCode) {
@@ -130,12 +167,14 @@ class MatsuratController extends GetxController {
     final updated = [...hitungList];
     updated[index]++;
     hitungList.value = updated;
+    _saveProgress();
 
     if (updated[index] >= jumlah && index < data.length - 1) {
       final nextIndex = index + 1;
       Future.delayed(const Duration(milliseconds: 800), () {
         currentIndex.value = nextIndex;
         scrollToCard(nextIndex, cardKeys);
+        _saveProgress();
       });
     }
   }
