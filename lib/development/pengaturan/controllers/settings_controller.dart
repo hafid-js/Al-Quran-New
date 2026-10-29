@@ -19,8 +19,14 @@ class SettingsController extends GetxController {
   var modeSelected = 0.obs;
   var colorSelected = 0.obs;
      final _ukuran = Get.find<UkuranController>();
-     RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
+
+    RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
   RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
+  RxBool get latin => _ukuran.latin;
+  RxBool get terjemah => _ukuran.terjemah;
+  RxBool get arabBold => _ukuran.arabBold;
+
+    
 
   var currentColor = AppColors.primary.obs;
 

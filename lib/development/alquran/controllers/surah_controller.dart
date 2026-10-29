@@ -16,8 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
-class SurahController extends GetxController
-    with WidgetsBindingObserver {
+class SurahController extends GetxController with WidgetsBindingObserver {
   late final GetAllSurah _getAllSurah;
   final SurahLocalDatasource local = SurahLocalDatasource();
 
@@ -28,8 +27,8 @@ class SurahController extends GetxController
   var filteredSurah = <Surah>[].obs;
   var activeCategory = "Surah".obs;
   var searchQuery = ''.obs;
-   final _ukuran = Get.find<UkuranController>();
-     RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
+  final _ukuran = Get.find<UkuranController>();
+  RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
   RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
   RxBool get latin => _ukuran.latin;
   RxBool get terjemah => _ukuran.terjemah;
@@ -72,58 +71,59 @@ class SurahController extends GetxController
   }
 
   void _listenToAudio() {
-  _audioSub?.cancel();
+    _audioSub?.cancel();
 
-  _audioSub = player.positionStream.listen((position) async {
-    final duration = player.duration;
-    if (duration == null || duration == Duration.zero) return;
-    if (!player.playing) return;
-    if (position < duration * 0.98) return;
+    _audioSub = player.positionStream.listen((position) async {
+      final duration = player.duration;
+      if (duration == null || duration == Duration.zero) return;
+      if (!player.playing) return;
+      if (position < duration * 0.98) return;
 
-    final currentSurah = activeSurahNomor.value;
-    if (currentSurah == null) return;
+      final currentSurah = activeSurahNomor.value;
+      if (currentSurah == null) return;
 
-    if (_lastCompletedSurah == currentSurah) return;
-    if (_isAutoPlaying) return;
+      if (_lastCompletedSurah == currentSurah) return;
+      if (_isAutoPlaying) return;
 
-    _lastCompletedSurah = currentSurah;
-    _isAutoPlaying = true;
+      _lastCompletedSurah = currentSurah;
+      _isAutoPlaying = true;
 
-    try {
-      await playNext();
-    } finally {
-      _isAutoPlaying = false;
-    }
-  });
-}
-  Future<void> playNext() async {
-  if (surahList.isEmpty) return;
-  if (activeSurahNomor.value == null) return;
-
-  final currentIndex = _currentIndex;
-
-  if (currentIndex == -1 || currentIndex + 1 >= surahList.length) {
-    await player.stop();
-
-    activeSurahNomor.value = null;
-
-    for (final s in surahList) {
-      _setSurahAudioState(s.nomor, "stop");
-    }
-
-    Get.snackbar(
-      "Selesai",
-      "Sudah sampai surah terakhir",
-      snackPosition: SnackPosition.BOTTOM,
-    );
-
-    return;
+      try {
+        await playNext();
+      } finally {
+        _isAutoPlaying = false;
+      }
+    });
   }
 
-  final nextSurah = surahList[currentIndex + 1];
+  Future<void> playNext() async {
+    if (surahList.isEmpty) return;
+    if (activeSurahNomor.value == null) return;
 
-  await playAudio(nextSurah);
-}
+    final currentIndex = _currentIndex;
+
+    if (currentIndex == -1 || currentIndex + 1 >= surahList.length) {
+      await player.stop();
+
+      activeSurahNomor.value = null;
+
+      for (final s in surahList) {
+        _setSurahAudioState(s.nomor, "stop");
+      }
+
+      Get.snackbar(
+        "Selesai",
+        "Sudah sampai surah terakhir",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+      return;
+    }
+
+    final nextSurah = surahList[currentIndex + 1];
+
+    await playAudio(nextSurah);
+  }
 
   Future<void> playAudio(Surah surah) async {
     if (isAudioLoading.value) {
@@ -142,9 +142,10 @@ class SurahController extends GetxController
 
       final setting = Get.find<SettingsController>();
 
-      final qariKey = (setting.qariSelected.value + 1)
-          .toString()
-          .padLeft(2, '0');
+      final qariKey = (setting.qariSelected.value + 1).toString().padLeft(
+        2,
+        '0',
+      );
 
       final url = surah.audioFull[qariKey] ?? "";
       if (url.isEmpty) {
@@ -187,10 +188,11 @@ class SurahController extends GetxController
             .padLeft(2, '0');
 
         surahList.value = cache.map((e) {
-          final ayatList = DevHiveService.ayatBox.values
-              .where((a) => a.surahNomor == e.nomor)
-              .toList()
-            ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
+          final ayatList =
+              DevHiveService.ayatBox.values
+                  .where((a) => a.surahNomor == e.nomor)
+                  .toList()
+                ..sort((a, b) => a.nomorAyat.compareTo(b.nomorAyat));
 
           Map<String, String> audioFull;
           try {
@@ -312,19 +314,23 @@ class SurahController extends GetxController
 
     if (activeCategory.value != "Surah") {
       result = result
-          .where((e) =>
-              e.tempatTurun.name.toLowerCase() ==
-              activeCategory.value.toLowerCase())
+          .where(
+            (e) =>
+                e.tempatTurun.name.toLowerCase() ==
+                activeCategory.value.toLowerCase(),
+          )
           .toList();
     }
 
     final query = searchQuery.value.toLowerCase().trim();
     if (query.isNotEmpty) {
       result = result
-          .where((e) =>
-              e.namaLatin.toLowerCase().contains(query) ||
-              e.nama.toLowerCase().contains(query) ||
-              e.arti.toLowerCase().contains(query))
+          .where(
+            (e) =>
+                e.namaLatin.toLowerCase().contains(query) ||
+                e.nama.toLowerCase().contains(query) ||
+                e.arti.toLowerCase().contains(query),
+          )
           .toList();
     }
 

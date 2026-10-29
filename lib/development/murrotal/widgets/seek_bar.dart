@@ -44,7 +44,6 @@ class SeekBarState extends State<SeekBar> {
             thumbShape: HiddenThumbComponentShape(),
             activeTrackColor: const Color.fromARGB(132, 187, 222, 251),
             inactiveTrackColor: Colors.black,
-            // trackHeight: 4,
           ),
           child: ExcludeSemantics(
             child: Slider(

@@ -1,7 +1,6 @@
 import 'dart:core';
 
 abstract class DateFunctions {
-  ///Hijri numbers list
   static const List<String> hijriNumbers = [
   '0',
   '1',
@@ -15,7 +14,6 @@ abstract class DateFunctions {
   '9'
 ];
 
-  ///get last date of current showed month
   static DateTime getLastDayOfCurrentMonth({required DateTime currentMonth}) {
     DateTime firstDayOfNextMonth =
         DateTime(currentMonth.year, currentMonth.month + 1, 1);
@@ -24,7 +22,6 @@ abstract class DateFunctions {
     return lastDayOfCurrentMonth;
   }
 
-  ///Convert english to hijri n numbers
   static String convertEnglishToHijriNumber(int numbers) {
     String hijriNumber = "";
     '$numbers'.split('').forEach((char) {

@@ -2,13 +2,10 @@ import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class TasbihBeadCounter extends StatefulWidget {
-  /// jumlah hitungan saat ini (ditampilkan di biji paling kiri)
   final int count;
 
-  /// apakah masih bisa dihitung (false saat sudah mencapai target)
   final bool enabled;
 
-  /// dipanggil saat biji diusap ke kanan
   final VoidCallback onCount;
 
   const TasbihBeadCounter({
@@ -135,7 +132,6 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
       child: Stack(
         alignment: Alignment.centerRight,
         children: [
-          // tali tasbih
           Positioned.fill(
             child: Center(
               child: Container(
@@ -147,13 +143,11 @@ class _TasbihBeadCounterState extends State<TasbihBeadCounter>
               ),
             ),
           ),
-          // biji di kiri (tumpukan) tanpa nomor
           for (int i = 1; i < _slots; i++)
             Positioned(
               left: contentWidth - (i * _step) - _beadSize,
               child: _bead(active: false),
             ),
-          // biji aktif paling kanan yang bisa diusap ke kiri
           Positioned(
             left: contentWidth - _beadSize,
             child: GestureDetector(

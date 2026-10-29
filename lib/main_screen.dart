@@ -32,8 +32,14 @@ class _MainScreenState extends State<MainScreen> {
     }
     _murrotalController = Get.find<MurrotalController>();
 
-    _playingWorker = ever(_murrotalController.isMurrotalPlaying, (_) => _updatePlayBarVisibility());
-    _nomorWorker = ever(_murrotalController.murrotalSurahNomor, (_) => _updatePlayBarVisibility());
+    _playingWorker = ever(
+      _murrotalController.isMurrotalPlaying,
+      (_) => _updatePlayBarVisibility(),
+    );
+    _nomorWorker = ever(
+      _murrotalController.murrotalSurahNomor,
+      (_) => _updatePlayBarVisibility(),
+    );
   }
 
   @override
@@ -44,7 +50,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _updatePlayBarVisibility() {
-    final show = _murrotalController.isMurrotalPlaying.value ||
+    final show =
+        _murrotalController.isMurrotalPlaying.value ||
         _murrotalController.murrotalSurahNomor.value != 0;
     if (show != _showPlayBar) {
       _showPlayBar = show;
@@ -55,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomeScreenNew(),
     const PerasaanScreen(),
-    const PengaturanScreen()
+    const PengaturanScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -69,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Expanded(
@@ -84,7 +91,9 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        selectedItemColor: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
+        selectedItemColor: isDark
+            ? AppColors.textPrimaryDark
+            : AppColors.primary,
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: TextStyle(
           fontSize: 14,

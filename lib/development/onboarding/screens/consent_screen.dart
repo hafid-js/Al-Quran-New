@@ -1,6 +1,4 @@
-
 import 'package:alquran_new/core/constants/app_colors.dart';
-import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,9 +21,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
     if (!_canProceed) return;
     final box = GetStorage();
     box.write('has_consented', true);
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const MainScreen()),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const MainScreen()));
   }
 
   @override
@@ -34,8 +32,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
-        surfaceTintColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        backgroundColor: isDark
+            ? Theme.of(context).cardColor
+            : AppColors.primary,
+        surfaceTintColor: isDark
+            ? Theme.of(context).cardColor
+            : AppColors.primary,
         toolbarHeight: 0,
       ),
       body: Column(
@@ -72,13 +74,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
       decoration: BoxDecoration(
         color: isDark ? Theme.of(context).cardColor : AppColors.primary,
-        image: DecorationImage(      colorFilter: ColorFilter.mode(
-                      AppColors.primary.withAlpha(210),
-                      BlendMode.srcATop,
-                    ),
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/images/image.png"),
-                  )
+        image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+            AppColors.primary.withAlpha(210),
+            BlendMode.srcATop,
+          ),
+          fit: BoxFit.cover,
+          image: AssetImage("assets/images/image.png"),
+        ),
       ),
       child: Column(
         children: [
@@ -118,9 +121,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
     required String title,
     required IconData icon,
     required Widget content,
-    
   }) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -137,22 +139,28 @@ class _ConsentScreenState extends State<ConsentScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          iconColor: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
+          iconColor: isDark ? AppColors.textPrimaryDark : AppColors.primary,
           collapsedIconColor: AppColors.primary,
           leading: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isDark ? AppColors.textPrimaryDark.withAlpha(20) :  AppColors.primary.withAlpha(20),
+              color: isDark
+                  ? AppColors.textPrimaryDark.withAlpha(20)
+                  : AppColors.primary.withAlpha(20),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: isDark ? AppColors.textPrimaryDark :  AppColors.primary, size: 20),
+            child: Icon(
+              icon,
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
+              size: 20,
+            ),
           ),
           title: Text(
             title,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 15,
-              color: isDark ? AppColors.textPrimaryDark :  AppColors.primary,
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primary,
             ),
           ),
           initiallyExpanded: true,
@@ -273,13 +281,18 @@ class _ConsentScreenState extends State<ConsentScreen> {
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
-              color:AppColors.secondary,
+              color: AppColors.secondary,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             isi,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(height: 1.5, color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight)
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              height: 1.5,
+              color: isDark
+                  ? AppColors.textPrimaryDark
+                  : AppColors.textPrimaryLight,
+            ),
           ),
         ],
       ),
@@ -292,7 +305,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.labelSmall!.copyWith(height: 1.5, color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight)
+        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+          height: 1.5,
+          color: isDark
+              ? AppColors.textPrimaryDark
+              : AppColors.textPrimaryLight,
+        ),
       ),
     );
   }
@@ -312,101 +330,94 @@ class _ConsentScreenState extends State<ConsentScreen> {
         ],
       ),
       child: Column(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    CheckboxListTile(
-      contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
-      controlAffinity: ListTileControlAffinity.leading,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            controlAffinity: ListTileControlAffinity.leading,
 
-      title: Text(
-        "Saya menyetujui Syarat & Ketentuan",
-         style: Theme.of(context).textTheme.labelSmall
-      ),
+            title: Text(
+              "Saya menyetujui Syarat & Ketentuan",
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
 
-      value: _syaratChecked,
+            value: _syaratChecked,
 
-      fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.selected)) {
-          return AppColors.secondary;
-        }
-        return Colors.white;
-      }),
+            fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return AppColors.secondary;
+              }
+              return Colors.white;
+            }),
 
-      checkColor: Colors.white,
+            checkColor: Colors.white,
 
-      side: BorderSide(
-        color: AppColors.primary,
-        width: 1.5,
-      ),
+            side: BorderSide(color: AppColors.primary, width: 1.5),
 
-      onChanged: (v) {
-        setState(() {
-          _syaratChecked = v ?? false;
-        });
-      },
-    ),
-
-    CheckboxListTile(
-      contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
-      controlAffinity: ListTileControlAffinity.leading,
-
-      title: Text(
-        "Saya menyetujui Kebijakan Privasi",
-        style: Theme.of(context).textTheme.labelSmall
-      ),
-
-      value: _privasiChecked,
-
-      fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.selected)) {
-          return AppColors.secondary;
-        }
-        return Colors.white;
-      }),
-
-      checkColor: Colors.white,
-
-      side: BorderSide(
-        color: AppColors.primary,
-        width: 1.5,
-      ),
-
-      onChanged: (v) {
-        setState(() {
-          _privasiChecked = v ?? false;
-        });
-      },
-    ),
-
-    const SizedBox(height: 8),
-
-    SizedBox(
-      width: double.infinity,
-      height: 48,
-      child: FilledButton(
-        onPressed: _canProceed ? _lanjutkan : null,
-        style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          disabledBackgroundColor:
-              AppColors.primary.withAlpha(60),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            onChanged: (v) {
+              setState(() {
+                _syaratChecked = v ?? false;
+              });
+            },
           ),
-        ),
-        child: Text(
-          "Lanjutkan",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: _canProceed ? Colors.white : Colors.white60,
+
+          CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            controlAffinity: ListTileControlAffinity.leading,
+
+            title: Text(
+              "Saya menyetujui Kebijakan Privasi",
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+
+            value: _privasiChecked,
+
+            fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return AppColors.secondary;
+              }
+              return Colors.white;
+            }),
+
+            checkColor: Colors.white,
+
+            side: BorderSide(color: AppColors.primary, width: 1.5),
+
+            onChanged: (v) {
+              setState(() {
+                _privasiChecked = v ?? false;
+              });
+            },
           ),
-        ),
+
+          const SizedBox(height: 8),
+
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: FilledButton(
+              onPressed: _canProceed ? _lanjutkan : null,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                disabledBackgroundColor: AppColors.primary.withAlpha(60),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                "Lanjutkan",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: _canProceed ? Colors.white : Colors.white60,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-    ),
-  ],
-)
     );
   }
 }

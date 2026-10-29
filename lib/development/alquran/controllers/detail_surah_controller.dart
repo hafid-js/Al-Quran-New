@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:alquran_new/development/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
-import 'package:alquran_new/core/services/ukuran_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
 import 'package:alquran_new/development/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/development/alquran/data/local/datasource/surah_local_datasource.dart';
@@ -35,14 +34,6 @@ class DetailSurahController extends GetxController {
 
   final ayatAudioStates = <int, RxString>{};
   var activeAyatNomor = Rxn<int>();
-
-  final _ukuran = Get.find<UkuranController>();
-
-  RxDouble get ukuranTeksArab => _ukuran.ukuranTeksArab;
-  RxDouble get ukuranLatinTerjemah => _ukuran.ukuranLatinTerjemah;
-  RxBool get latin => _ukuran.latin;
-  RxBool get terjemah => _ukuran.terjemah;
-  RxBool get arabBold => _ukuran.arabBold;
 
   String getAyatAudioState(int nomorAyat) {
     return ayatAudioStates.putIfAbsent(nomorAyat, () => "stop".obs).value;
@@ -242,7 +233,6 @@ class DetailSurahController extends GetxController {
   }
 
   Future<void> debugPrintSurahByNomor(int nomor) async {
-    // await clearAllCache();
 
     final data = DevHiveService.surahBox.values
         .where((s) => s.nomor == nomor)

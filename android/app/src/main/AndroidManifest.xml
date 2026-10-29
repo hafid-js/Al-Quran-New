@@ -52,6 +52,10 @@
             android:name="io.flutter.embedding.android.EnableImpeller"
             android:value="false" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}"/>
+
         <service
             android:name=".AdzanService"
             android:exported="false"
@@ -78,6 +82,10 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
         </intent>
     </queries>
 </manifest>

@@ -38,6 +38,12 @@ migrate_working_dir/
 *.keystore
 key.properties
 
+# Local secrets / environment
+.env
+.env.*
+!.env.example
+ios/Flutter/Secrets.xcconfig
+
 # Symbolication related
 app.*.symbols
 

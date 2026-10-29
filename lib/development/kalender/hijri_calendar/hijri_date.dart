@@ -1,4 +1,3 @@
-///model class for hijri date datatype to manage date
 class HijriDate {
   final String year;
   final String month;

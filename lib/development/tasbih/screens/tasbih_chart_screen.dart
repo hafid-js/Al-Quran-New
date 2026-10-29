@@ -138,7 +138,6 @@ class _TasbihChartScreenState extends State<TasbihChartScreen> {
 
   Widget _periodButton(String label, int index) {
     final active = _selectedPeriod == index;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextButton(
       onPressed: () => setState(() => _selectedPeriod = index),
       style: TextButton.styleFrom(

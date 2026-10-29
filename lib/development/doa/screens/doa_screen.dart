@@ -265,7 +265,9 @@ class _DoaScreenState extends State<DoaScreen> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Text(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
                         doa.ar,
                         style: TextStyle(
                           fontFamily: fontFamily,
@@ -275,8 +277,9 @@ class _DoaScreenState extends State<DoaScreen> {
                               : AppColors.textPrimaryLight,
                           height: 2.5,
                         ),
-                        textAlign: TextAlign.end,
+                        textAlign: TextAlign.right,
                       ),
+                      )
                     ),
                   ),
                   SizedBox(height: 15),

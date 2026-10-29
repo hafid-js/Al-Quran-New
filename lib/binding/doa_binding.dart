@@ -9,21 +9,18 @@ class DoaBinding extends Bindings {
   @override
   void dependencies() {
 
-    // datasource
     Get.lazyPut<DoaRemoteDataSource>(
       () => DoaRemoteDataSourceImpl(
         Get.find<DioClient>(),
       ),
     );
 
-    // repository
     Get.lazyPut<DoaRepository>(
       () => DoaRepositoryImpl(
         Get.find<DoaRemoteDataSource>(),
       ),
     );
 
-    // usecase
     Get.lazyPut(
       () => GetAllDoa(
         Get.find<DoaRepository>(),

@@ -193,8 +193,6 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
   int get _weeklySedekahTotal =>
       _weekData.fold(0, (a, d) => a + d.sedekahTotal);
 
-  List<int> get _harianSedekahList => _readDay(_selectedDate).sedekah;
-
   int get _harianSedekahTotal => _readDay(_selectedDate).sedekahTotal;
 
   List<Map<String, String>> get _ringkasanBulanan {
@@ -1204,10 +1202,6 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                 ],
               ),
 
-              // for (var i = 0; i < _harianCategories.length; i++) ...[
-              //   if (i > 0) const SizedBox(height: 14),
-              //   _buildCategoryRow(_harianCategories[i]),
-              // ],
             ],
           ),
         ),
@@ -1249,31 +1243,6 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                   ),
                 ],
               ),
-              // const SizedBox(height: 12),
-              // for (var i = 0; i < _harianSedekahList.length; i++) ...[
-              //   if (i > 0) const SizedBox(height: 12),
-              //   Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Text(
-              //         formatRupiah(_harianSedekahList[i]),
-              //         style: TextStyle(
-              //           fontSize: 14,
-              //           color: AppColors.secondary,
-              //           fontWeight: FontWeight.w600,
-              //         ),
-              //       ),
-              //       GestureDetector(
-              //         onTap: () {
-              //           setState(() {
-              //             _harianSedekahList.removeAt(i);
-              //           });
-              //         },
-              //         child: Icon(Iconsax.close_circle, color: Colors.red),
-              //       ),
-              //     ],
-              //   ),
-              // ],
               SizedBox(height: 16),
               Container(
                 width: double.infinity,
@@ -1422,7 +1391,6 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
                         cellMargin: const EdgeInsets.all(4),
                         todayDecoration: BoxDecoration(
                           color: AppColors.primary,
-                          // shape: BoxShape.circle,
                         ),
                         isTodayHighlighted: false,
                         outsideDaysVisible: false,
@@ -1574,14 +1542,6 @@ class _StatistikIbadahState extends State<StatistikIbadah> {
           ),
         ),
         SizedBox(height: 16),
-        // Container(
-        //   padding: EdgeInsets.all(12),
-        //   decoration: BoxDecoration(
-        //       color: AppColors.primary,
-        //     borderRadius: BorderRadius.circular(16),
-        //   ),
-        //   child:
-        // )
         Container(
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(

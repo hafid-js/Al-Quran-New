@@ -890,7 +890,6 @@ class _IbadahScreenState extends State<IbadahScreen> {
           ),
         ),
         title: Text("Ibadah", style: Theme.of(context).textTheme.titleMedium),
-        // toolbarHeight: 0,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -14,7 +14,7 @@ class SettingsSlider extends StatefulWidget {
     required this.value,
     required this.onChanged,
     this.min = 10,
-    this.max = 30,
+    this.max = 40,
     this.divisions = 30,
   });
 

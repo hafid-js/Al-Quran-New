@@ -1,10 +1,4 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
 part of 'hizb_ayat_cache.dart';
-
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
 
 class HizbAyatCacheAdapter extends TypeAdapter<HizbAyatCache> {
   @override

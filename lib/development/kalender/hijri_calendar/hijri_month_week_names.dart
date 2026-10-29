@@ -1,4 +1,3 @@
-///Hijri month full names
 const Map<int, String> monthNames = {
   1: 'Muharram',
   2: 'Safar',
@@ -14,7 +13,6 @@ const Map<int, String> monthNames = {
   12: 'Zulhijah',
 };
 
-///Hijri month short names
 const Map<int, String> monthShortNames = {
   1: 'Muh',
   2: 'Saf',
@@ -30,7 +28,6 @@ const Map<int, String> monthShortNames = {
   12: 'DhuH'
 };
 
-///hijri month arabic full names
 const Map<int, String> arMonthNames = {
   1: 'محرم',
   2: 'صفر',
@@ -46,7 +43,6 @@ const Map<int, String> arMonthNames = {
   12: 'ذو الحجة'
 };
 
-///hijri month arabic short names
 const Map<int, String> arMonthShortNames = {
   1: 'محرم',
   2: 'صفر',
@@ -62,7 +58,6 @@ const Map<int, String> arMonthShortNames = {
   12: 'الجة'
 };
 
-///calendar week names full
 const Map<int, String> wdNames = {
   7: "Sunday",
   1: "Monday",
@@ -73,7 +68,6 @@ const Map<int, String> wdNames = {
   6: "Saturday"
 };
 
-///calendar week names short
 const Map<int, String> shortWdNames = {
   7: "Sun",
   1: "Mon",
@@ -84,7 +78,6 @@ const Map<int, String> shortWdNames = {
   6: "Sat"
 };
 
-///arabic week names full
 const Map<int, String> arWkNames = {
   7: "الأحد",
   1: "الإثنين",
@@ -95,7 +88,6 @@ const Map<int, String> arWkNames = {
   6: "السبت"
 };
 
-///arabic week names short
 const Map<int, String> arShortWdNames = {
   7: "أحد",
   1: "إثنين",
@@ -106,7 +98,6 @@ const Map<int, String> arShortWdNames = {
   6: "سبت"
 };
 
-///ummAlquraDate values
 const List<int> ummAlquraDateArray = [
   28607,
   28636,

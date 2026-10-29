@@ -12,6 +12,18 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(keystorePropertiesFile.inputStream())
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+// Key diambil dari android/local.properties (tidak di-commit) atau environment variable.
+val googleMapsApiKey: String =
+    localProperties.getProperty("GOOGLE_MAPS_API_KEY")
+        ?: System.getenv("GOOGLE_MAPS_API_KEY")
+        ?: ""
+
 android {
     namespace = "com.hafidtech.alquran"
     compileSdk = 36
@@ -33,9 +45,10 @@ android {
         applicationId = "com.hafidtech.alquran"
         minSdk = 24
         targetSdk = 36
-        versionCode = 18 
-        versionName = "2.1.0"
+        versionCode = 19 
+        versionName = "2.1.1"
         multiDexEnabled = true
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = googleMapsApiKey
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }

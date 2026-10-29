@@ -17,6 +17,7 @@ import 'package:alquran_new/development/pengaturan/services/settings_service.dar
 import 'package:alquran_new/development/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -25,11 +26,19 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:alquran_new/core/services/injection_container.dart' as di;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   initMediaKit();
+
+  // Muat konfigurasi rahasia (API key) dari file .env.
+  try {
+    await dotenv.load();
+  } catch (e) {
+    debugPrint('dotenv load error: $e');
+  }
 
   _configureSystemUI();
 
@@ -73,6 +82,8 @@ void main() async {
   }
 
   _registerDependencies();
+
+  di.init();
 
   runApp(const MyApp());
 }

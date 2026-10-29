@@ -177,10 +177,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                   const SizedBox(height: 5),
                                   SettingsSwitchTile(
                                     title: "Terjemah",
-                                    value: controller.terjemah.value,
+                                    value: setting.terjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.terjemah.value = v;
+                                        setting.terjemah.value = v;
                                       });
                                     },
                                   ),
@@ -188,10 +188,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
 
                                   SettingsSwitchTile(
                                     title: "Latin",
-                                    value: controller.latin.value,
+                                    value: setting.latin.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.latin.value = v;
+                                        setting.latin.value = v;
                                       });
                                     },
                                   ),
@@ -199,10 +199,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
 
                                   SettingsSwitchTile(
                                     title: "Font Arab Tebal",
-                                    value: controller.arabBold.value,
+                                    value: setting.arabBold.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.arabBold.value = v;
+                                        setting.arabBold.value = v;
                                       });
                                     },
                                   ),
@@ -210,21 +210,20 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                   const SizedBox(height: 18),
                                   SettingsSlider(
                                     label: "Ukuran Teks Arab",
-                                    value: controller.ukuranTeksArab.value,
+                                    value: setting.ukuranTeksArab.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.ukuranTeksArab.value = v;
+                                        setting.ukuranTeksArab.value = v;
                                       });
                                     },
                                   ),
                                   const SizedBox(height: 14),
                                   SettingsSlider(
                                     label: "Ukuran Teks latin & Terjemah",
-                                    value: controller.ukuranLatinTerjemah.value,
+                                    value: setting.ukuranLatinTerjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.ukuranLatinTerjemah.value =
-                                            v;
+                                        setting.ukuranLatinTerjemah.value = v;
                                       });
                                     },
                                   ),
@@ -271,8 +270,10 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
           );
         }
 
-    return RefreshIndicator(
-          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
+        return RefreshIndicator(
+          backgroundColor: isDark
+              ? Theme.of(context).cardColor
+              : AppColors.primary,
           color: AppColors.secondary,
           onRefresh: () =>
               controller.fetchDetailSurah(nomor, forceRefresh: true),
@@ -281,15 +282,15 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
                     CommonEmptyWidget(
-                        message:
-                            "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
-                        refresh: () async {
-                          await controller.fetchDetailSurah(
-                            nomor,
-                            forceRefresh: true,
-                          );
-                        },
-                      ),
+                      message:
+                          "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
+                      refresh: () async {
+                        await controller.fetchDetailSurah(
+                          nomor,
+                          forceRefresh: true,
+                        );
+                      },
+                    ),
                   ],
                 )
               : ScrollablePositionedList.builder(
@@ -495,13 +496,14 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   ayat.teksArab,
+                                  textAlign: TextAlign.right,
                                   style: TextStyle(
                                     color: isDark
                                         ? AppColors.textPrimaryDark
                                         : AppColors.textPrimaryLight,
-                                    fontSize: controller.ukuranTeksArab.value,
+                                    fontSize: setting.ukuranTeksArab.value,
                                     fontFamily: fontFamily,
-                                    fontWeight: controller.arabBold.value
+                                    fontWeight: setting.arabBold.value
                                         ? FontWeight.w600
                                         : null,
                                     height: 2.5,
@@ -510,13 +512,13 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                               );
                             }),
                             Obx(() {
-                              if (!controller.latin.value &&
-                                  !controller.terjemah.value)
+                              if (!setting.latin.value &&
+                                  !setting.terjemah.value)
                                 return SizedBox.shrink();
                               return SizedBox(height: 30);
                             }),
                             Obx(() {
-                              if (!controller.latin.value)
+                              if (!setting.latin.value)
                                 return SizedBox.shrink();
                               return Align(
                                 alignment: Alignment.centerRight,
@@ -526,8 +528,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                     color: isDark
                                         ? HexColor.fromHex("#D39D52")
                                         : Colors.black,
-                                    fontSize:
-                                        controller.ukuranLatinTerjemah.value,
+                                    fontSize: setting.ukuranLatinTerjemah.value,
                                   ),
                                 ),
                               );
@@ -535,7 +536,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
 
                             SizedBox(height: 10),
                             Obx(() {
-                              if (!controller.terjemah.value)
+                              if (!setting.terjemah.value)
                                 return SizedBox.shrink();
                               return Text(
                                 ayat.teksIndonesia,
@@ -543,8 +544,7 @@ class _DetailSuratScreenState extends State<DetailSuratScreen>
                                   color: isDark
                                       ? AppColors.textPrimaryDark
                                       : Colors.black,
-                                  fontSize:
-                                      controller.ukuranLatinTerjemah.value,
+                                  fontSize: setting.ukuranLatinTerjemah.value,
                                 ),
                               );
                             }),

@@ -177,10 +177,10 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                   const SizedBox(height: 5),
                                   SettingsSwitchTile(
                                     title: "Terjemah",
-                                    value: controller.terjemah.value,
+                                    value: setting.terjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.terjemah.value = v;
+                                        setting.terjemah.value = v;
                                       });
                                     },
                                   ),
@@ -188,10 +188,10 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
 
                                   SettingsSwitchTile(
                                     title: "Latin",
-                                    value: controller.latin.value,
+                                    value: setting.latin.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.latin.value = v;
+                                        setting.latin.value = v;
                                       });
                                     },
                                   ),
@@ -199,10 +199,10 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
 
                                   SettingsSwitchTile(
                                     title: "Font Arab Tebal",
-                                    value: controller.arabBold.value,
+                                    value: setting.arabBold.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.arabBold.value = v;
+                                        setting.arabBold.value = v;
                                       });
                                     },
                                   ),
@@ -210,20 +210,20 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                   const SizedBox(height: 18),
                                   SettingsSlider(
                                     label: "Ukuran Teks Arab",
-                                    value: controller.ukuranTeksArab.value,
+                                    value: setting.ukuranTeksArab.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.ukuranTeksArab.value = v;
+                                        setting.ukuranTeksArab.value = v;
                                       });
                                     },
                                   ),
                                   const SizedBox(height: 14),
                                   SettingsSlider(
                                     label: "Ukuran Teks latin & Terjemah",
-                                    value: controller.ukuranLatinTerjemah.value,
+                                    value: setting.ukuranLatinTerjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        controller.ukuranLatinTerjemah.value =
+                                        setting.ukuranLatinTerjemah.value =
                                             v;
                                       });
                                     },
@@ -489,13 +489,14 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   ayat.teksArab,
+                                  textAlign: TextAlign.right,
                                   style: TextStyle(
                                     color: isDark
                                         ? AppColors.textPrimaryDark
                                         : AppColors.textPrimaryLight,
-                                    fontSize: controller.ukuranTeksArab.value,
+                                    fontSize: setting.ukuranTeksArab.value,
                                     fontFamily: fontFamily,
-                                    fontWeight: controller.arabBold.value
+                                    fontWeight: setting.arabBold.value
                                         ? FontWeight.w600
                                         : null,
                                     height: 2.5,
@@ -504,13 +505,13 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                               );
                             }),
                             Obx(() {
-                              if (!controller.latin.value &&
-                                  !controller.terjemah.value)
+                              if (!setting.latin.value &&
+                                  !setting.terjemah.value)
                                 return SizedBox.shrink();
                               return SizedBox(height: 30);
                             }),
                             Obx(() {
-                              if (!controller.latin.value)
+                              if (!setting.latin.value)
                                 return SizedBox.shrink();
                               return Align(
                                 alignment: Alignment.centerRight,
@@ -521,7 +522,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                         ? AppColors.secondary
                                         : Colors.black,
                                     fontSize:
-                                        controller.ukuranLatinTerjemah.value,
+                                        setting.ukuranLatinTerjemah.value,
                                   ),
                                 ),
                               );
@@ -529,7 +530,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
 
                             SizedBox(height: 10),
                             Obx(() {
-                              if (!controller.terjemah.value)
+                              if (!setting.terjemah.value)
                                 return SizedBox.shrink();
                               return Text(
                                 ayat.teksIndonesia,
@@ -538,7 +539,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
                                       ? AppColors.textPrimaryDark
                                       : Colors.black,
                                   fontSize:
-                                      controller.ukuranLatinTerjemah.value,
+                                      setting.ukuranLatinTerjemah.value,
                                 ),
                               );
                             }),

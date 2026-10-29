@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:alquran_new/development/lokasi/services/location_service.dart';
 import 'package:get/get.dart';

@@ -140,7 +140,11 @@ class _CompassViewState extends State<CompassView>
             const SizedBox(height: 16),
             Text(
               'Perangkat Tidak Memiliki Kompas',
-              style: TextStyle(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -180,7 +184,9 @@ class _LocationErrorWidget extends StatelessWidget {
             Text(
               error,
               style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: isDark ? AppColors.secondary : AppColors.textPrimaryLight
+                color: isDark
+                    ? AppColors.secondary
+                    : AppColors.textPrimaryLight,
               ),
               textAlign: TextAlign.center,
             ),
@@ -221,7 +227,9 @@ class _QiblahCompassWidget extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   'Menunggu sensor kompas...',
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? AppColors.textPrimaryDark : null),
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    color: isDark ? AppColors.textPrimaryDark : null,
+                  ),
                 ),
               ],
             ),
@@ -232,7 +240,9 @@ class _QiblahCompassWidget extends StatelessWidget {
           return Center(
             child: Text(
               'Menunggu data kompas...',
- style: Theme.of(context).textTheme.labelMedium!.copyWith(color: isDark ? AppColors.textPrimaryDark : null),
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: isDark ? AppColors.textPrimaryDark : null,
+              ),
             ),
           );
         }
@@ -274,7 +284,7 @@ class _QiblahCompassWidget extends StatelessWidget {
                         color: AppColors.primary,
                         border: Border.all(color: Colors.white, width: 2),
                       ),
-                    ), 
+                    ),
                   ],
                 ),
               ),

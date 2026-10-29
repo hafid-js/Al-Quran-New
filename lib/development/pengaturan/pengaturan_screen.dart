@@ -29,15 +29,11 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
   void initState() {
     super.initState();
 
-    // (<T>(T? o) => o!) ensures that the following expression is not null for backwards compatibility.
     (<T>(T? o) => o!)(WidgetsBinding.instance).addPostFrameCallback((_) async {
       try {
         final isAvailable = await _inAppReview.isAvailable();
 
         setState(() {
-          // This plugin cannot be tested on Android by installing your app
-          // locally. See https://github.com/britannio/in_app_review#testing for
-          // more information.
           _availability = isAvailable && !Platform.isAndroid
               ? Availability.available
               : Availability.unavailable;

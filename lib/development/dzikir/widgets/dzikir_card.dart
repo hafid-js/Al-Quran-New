@@ -42,9 +42,12 @@ class DzikirCard extends StatefulWidget {
   State<DzikirCard> createState() => _DzikirCardState();
 }
 
+
+
 class _DzikirCardState extends State<DzikirCard> {
   @override
   Widget build(BuildContext context) {
+    
     final SettingsController setting = Get.find<SettingsController>();
     final selectedIndex = setting.fontSelected.value;
     final fontFamily = fontArabs[selectedIndex]["title"];
@@ -114,19 +117,23 @@ class _DzikirCardState extends State<DzikirCard> {
           ),
           SizedBox(height: 20),
           Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              widget.arab,
-              softWrap: true,
-              textAlign: TextAlign.right,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: widget.isBold ? FontWeight.bold : FontWeight.w200,
-                fontFamily: fontFamily,
-                height: 2.5,
-                fontSize: widget.ukuranTeksArab,
-              ),
-            ),
-          ),
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  widget.arab,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? AppColors.textPrimaryDark
+                                        : AppColors.textPrimaryLight,
+                                    fontSize: setting.ukuranTeksArab.value,
+                                    fontFamily: fontFamily,
+                                    fontWeight: setting.arabBold.value
+                                        ? FontWeight.w600
+                                        : null,
+                                    height: 2.5,
+                                  ),
+                                ),
+                              ),
           if (widget.showLatin) ...[
             SizedBox(height: 10),
             Text(
@@ -171,17 +178,14 @@ class _DzikirCardState extends State<DzikirCard> {
             },
           ),
           SizedBox(height: 10),
-          InkWell(
-            onTap: () {
-              widget.onIncrement?.call();
-            },
-            child: Row(
+
+          Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   widget.hitung == widget.jumlah
                       ? "Target tercapai"
-                      : "Tap kartu untuk + 1",
+                      : "",
                   style: TextStyle(
                     color: isDark
                         ? AppColors.textPrimaryDark
@@ -198,7 +202,6 @@ class _DzikirCardState extends State<DzikirCard> {
                     : SizedBox.shrink(),
               ],
             ),
-          ),
         ],
       ),
     );

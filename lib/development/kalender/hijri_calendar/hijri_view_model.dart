@@ -7,20 +7,16 @@ import 'hijri_calendar_config.dart';
 import 'hijri_date.dart';
 
 class HijriViewModel {
-  ///adjustment value for hijri calendar
   int adjustmentValue = 0;
 
-  ///each day header value
   var headerOfDay = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 
   var showOfDay = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
-  ///below date variables to manage highlight, disable, selected date ui
   DateTime currentDisplayMonthYear = DateTime.now();
   DateTime selectedDate = DateTime.now();
   DateTime todayDate = DateTime.now();
 
-  ///this function is used to set each day block
   Widget getDate({
     required bool isHijriView,
     required double fontSize,
@@ -145,7 +141,6 @@ final isEventDay = hasEvent(day);
       );
   }
 
-  ///get hijri month year values by passing current displayed month & year
   String getHijriMonthYear() {
     int lastDayOfMonth = DateFunctions.getLastDayOfCurrentMonth(
       currentMonth: currentDisplayMonthYear,
@@ -166,10 +161,8 @@ final isEventDay = hasEvent(day);
   }
 
 String getMonthYearRange() {
-  // Ambil awal bulan Hijriah (tanggal 1)
   DateTime firstDate = currentDisplayMonthYear;
 
-  // Ambil akhir bulan Hijriah (misalnya 30 hari)
   DateTime lastDate = currentDisplayMonthYear.add(const Duration(days: 29));
 
   String firstMonth = DateFormat('MMMM yyyy', 'id_ID').format(firstDate);
@@ -192,7 +185,6 @@ String getHeadHijriNow() {
   return "${hijri.hDay} ${hijri.hYear} ${hijri.monthArName}";
 }
 
-  ///show previous month
   void getPreviousMonth() {
     int year = currentDisplayMonthYear.year;
     int month = currentDisplayMonthYear.month - 1;
@@ -202,7 +194,6 @@ String getHeadHijriNow() {
       year--;
     }
 
-    // Ensure the day is valid for the new month and year
     int day = currentDisplayMonthYear.day;
     int lastDayOfPreviousMonth = DateTime(year, month + 1, 0).day;
     if (day > lastDayOfPreviousMonth) {
@@ -211,7 +202,6 @@ String getHeadHijriNow() {
     currentDisplayMonthYear = DateTime(year, month, day);
   }
 
-  ///show next month
   void getNextMonth() {
     int year = currentDisplayMonthYear.year;
     int month = currentDisplayMonthYear.month + 1;

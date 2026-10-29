@@ -9,42 +9,30 @@ import 'hijri_date.dart';
 import 'hijri_view_model.dart';
 
 class IslamicHijriCalendar extends StatefulWidget {
-  ///allowing users to set either the English calendar only or display the Hijri calendar alongside the English calendar
   final bool? isHijriView;
 
-  ///set selected date border color
   final Color highlightBorder;
 
-  ///set default date border color
   final Color defaultBorder;
 
-  ///set today date text color
   final Color? highlightTextColor;
 
   final DateTime? day;
 
-  ///set others dates text color
   final Color defaultTextColor;
 
-  ///set default date background color
   final Color defaultBackColor;
 
-  ///set hijri calendar adjustment value which is set  by user side
   final int adjustmentValue;
 
-  ///set it true if you want to use google fonts else false
   final bool? isGoogleFont;
 
-  ///set your custom font family name or google font name
   final String? fontFamilyName;
 
-  ///when user taps on date get selected date
   final Function(DateTime selectedDate)? getSelectedEnglishDate;
 
-  ///when user taps on date get selected hijri date
   final Function(HijriDate selectedDate)? getSelectedHijriDate;
 
-  ///set dates which are not included in current month should show disabled or enabled
   final bool? isDisablePreviousNextMonthDates;
 
   const IslamicHijriCalendar({
@@ -74,7 +62,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
   bool showAllEvents = false;
 
-  ///update calendar view when directly value change form user side without set state
   @override
   void didUpdateWidget(IslamicHijriCalendar oldWidget) {
     if (oldWidget.adjustmentValue != widget.adjustmentValue) {
@@ -85,7 +72,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
   String direction = 'None';
 
-  ///on pan update event check direction
   void _onPanUpdate(DragUpdateDetails details) {
     if (details.delta.dx > 0) {
       direction = 'Right';
@@ -98,7 +84,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
     }
   }
 
-  ///on pan gesture update current month
   void _onPanEnd() {
     switch (direction) {
       case "None":
@@ -118,13 +103,11 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
     }
   }
 
-  ///click events of previous & next button
   void funcGetMonth({required bool isPrevious}) {
     isPrevious ? viewmodel.getPreviousMonth() : viewmodel.getNextMonth();
     setState(() {});
   }
 
-  ///get total days in month with previous & next month days in first & last week
   List<DateTime> _getDaysInMonth(DateTime date) {
     days = [];
 
@@ -134,24 +117,20 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
     int firstWeekday = firstDayOfMonth.weekday;
     int lastWeekday = lastDayOfMonth.weekday;
 
-    // Add days from previous month
     for (int i = firstWeekday - 1; i > 0; i--) {
       days.add(firstDayOfMonth.subtract(Duration(days: i)));
     }
 
-    // Add days of current month
     for (int i = 0; i < lastDayOfMonth.day; i++) {
       days.add(firstDayOfMonth.add(Duration(days: i)));
     }
 
-    // Add days from next month
     for (int i = 1; i <= 7 - lastWeekday; i++) {
       days.add(lastDayOfMonth.add(Duration(days: i)));
     }
     return days;
   }
 
-  ///set calendar grid view
   Widget funcCalendarDaysView({
     required TextStyle textStyle,
     required double rowHeight,
@@ -173,7 +152,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         ),
         itemCount: days.length,
         itemBuilder: (BuildContext context, int index) {
-          ///single day block
           return viewmodel.getDate(
             hijriDefaultTextColor: isDark ? Theme.of(
               context,
@@ -213,7 +191,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    ///get total days in current month with previous(first week) & next months(last week) dates
     days = _getDaysInMonth(viewmodel.currentDisplayMonthYear);
     viewmodel.adjustmentValue = widget.adjustmentValue;
     final events = viewmodel.getMonthlyEvents(
@@ -233,18 +210,14 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
         double parentWidth = constraints.maxWidth;
         double parentHeight = constraints.maxHeight;
 
-        ///minimum height of particular day box
         double minRowHeight = 58;
         double fontSize = 16;
 
         if (parentWidth > 600) {
-          // Large screen (e.g., tablets), use larger font size
           fontSize = 18;
         } else if (parentWidth > 400) {
-          // Medium screen (e.g., larger phones), use medium font size
           fontSize = 16;
         } else {
-          // Smaller screen (e.g., small phones), use smaller font size
           fontSize = 16;
         }
 
@@ -252,7 +225,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
         return Column(
           children: [
-            // previous month button, month name & year, next month button
             Container(
               padding: EdgeInsets.symmetric(vertical: 30),
               width: double.infinity,
@@ -287,11 +259,7 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  // Text(
-                  //       viewmodel.getHeadHijriNow(),
 
-                  //   style: TextStyle(fontSize: 16, color: AppColors.light),
-                  // ),
                   Text(dateNow, style: TextStyle(color: AppColors.light)),
                 ],
               ),
@@ -301,7 +269,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ///navigate to previous month button
                 GestureDetector(
                   onTap: () => funcGetMonth(isPrevious: true),
                   child: Container(
@@ -319,7 +286,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                   ),
                 ),
 
-                ///rest of the space set english month name & year
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
@@ -337,9 +303,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
 
                         SizedBox(height: 5),
                         Text(
-                          // DateFormat(
-                          //   'MMM yyyy',
-                          // ).format(viewmodel.currentDisplayMonthYear),
                           viewmodel.getMonthYearRange(),
                           style: textStyle.copyWith(
                             fontWeight: FontWeight.w500,
@@ -352,7 +315,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                   ),
                 ),
 
-                ///navigate to next month button
                 GestureDetector(
                   onTap: () => funcGetMonth(isPrevious: false),
                   child: Container(
@@ -373,11 +335,9 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
               ],
             ),),
 
-            ///show hijri calendar current month name & year
             !widget.isHijriView!
                 ? const SizedBox()
                 :
-                  ///show week name Mon to Sun in a row
                   Container(
                     padding: EdgeInsets.all(12),
                     
@@ -414,7 +374,6 @@ class _HijriCalendarWidgetsState extends State<IslamicHijriCalendar> {
                               ),
                             ),
                           ),
-                        ///in a rest of the space show calendar
                         parentHeight == double.infinity
                             ? funcCalendarDaysView(
                                 textStyle: textStyle,

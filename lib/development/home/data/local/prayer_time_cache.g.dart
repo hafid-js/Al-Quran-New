@@ -1,10 +1,4 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
 part of 'prayer_time_cache.dart';
-
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
 
 class PrayerTimeCacheAdapter extends TypeAdapter<PrayerTimeCache> {
   @override

@@ -111,10 +111,8 @@ static Future<Map<String, String?>> getAddressFromPosition(
 }
 
 static Future<LocationCache> detectAndSaveLocation() async {
-  // 1. GPS
   final position = await getCurrentPosition();
 
-  // 2. Reverse geocode
   final address = await getAddressFromPosition(position);
 
 final detectedProvince =
@@ -122,7 +120,6 @@ final detectedProvince =
 final detectedCity =
     normalizeCity(address["city"] ?? "");
 
-  // 3. Ambil list dari API
   final provinces = await getProvinces();
 
   final matchedProvince = _match(detectedProvince, provinces);
@@ -140,14 +137,11 @@ final detectedCity =
         orElse: () => cities.first,
       );
 
-  // Heuristic: jika DKI Jakarta tapi geocode balikin Kepulauan Seribu
-  // override ke Kota Jakarta (GPS sering meleset ke area administrasi itu)
   if (matchedProvince == "DKI Jakarta" && matchedCity != "Kota Jakarta") {
     final kota = cities.where((c) => c == "Kota Jakarta");
     if (kota.isNotEmpty) matchedCity = "Kota Jakarta";
   }
 
-  // 4. Save ke Hive
   final cache = LocationCache()
     ..province = matchedProvince
     ..city = matchedCity

@@ -7,7 +7,6 @@ import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
-import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -26,7 +25,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
   final controller = Get.put(HizbController(), permanent: false);
   final ItemScrollController itemScrollController = ItemScrollController();
   final SettingsController setting = Get.find<SettingsController>();
-  final fontController = Get.find<DetailSurahController>();
+
 
   late int hizbNumber;
   late AnimationController _animationController;
@@ -141,10 +140,10 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                   const SizedBox(height: 5),
                                   SettingsSwitchTile(
                                     title: "Terjemah",
-                                    value: fontController.terjemah.value,
+                                    value: setting.terjemah.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController.terjemah.value = v;
+                                        setting.terjemah.value = v;
                                       });
                                     },
                                   ),
@@ -152,10 +151,10 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
 
                                   SettingsSwitchTile(
                                     title: "Latin",
-                                    value: fontController.latin.value,
+                                    value: setting.latin.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController.latin.value = v;
+                                        setting.latin.value = v;
                                       });
                                     },
                                   ),
@@ -163,10 +162,10 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
 
                                   SettingsSwitchTile(
                                     title: "Font Arab Tebal",
-                                    value: fontController.arabBold.value,
+                                    value: setting.arabBold.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController.arabBold.value = v;
+                                        setting.arabBold.value = v;
                                       });
                                     },
                                   ),
@@ -174,22 +173,22 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                   const SizedBox(height: 18),
                                   SettingsSlider(
                                     label: "Ukuran Teks Arab",
-                                    value: fontController.ukuranTeksArab.value,
+                                    value: setting.ukuranTeksArab.value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController.ukuranTeksArab.value = v;
+                                        setting.ukuranTeksArab.value = v;
                                       });
                                     },
                                   ),
                                   const SizedBox(height: 14),
                                   SettingsSlider(
                                     label: "Ukuran Teks latin & Terjemah",
-                                    value: fontController
+                                    value: setting
                                         .ukuranLatinTerjemah
                                         .value,
                                     onChanged: (v) {
                                       modalSetState(() {
-                                        fontController
+                                        setting
                                                 .ukuranLatinTerjemah
                                                 .value =
                                             v;
@@ -392,29 +391,32 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                       SizedBox(height: 10),
                       Obx(() {
                         return Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            ayat.teksArab,
-                            style: TextStyle(
-                              color: isDark ? Colors.white : Colors.black,
-                              fontSize: fontController.ukuranTeksArab.value,
-                              fontFamily: fontFamily,
-                              fontWeight: fontController.arabBold.value
-                                  ? FontWeight.w600
-                                  : null,
-                              height: 2.5,
-                            ),
-                          ),
-                        );
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  ayat.teksArab,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? AppColors.textPrimaryDark
+                                        : AppColors.textPrimaryLight,
+                                    fontSize: setting.ukuranTeksArab.value,
+                                    fontFamily: fontFamily,
+                                    fontWeight: setting.arabBold.value
+                                        ? FontWeight.w600
+                                        : null,
+                                    height: 2.5,
+                                  ),
+                                ),
+                              );
                       }),
                       Obx(() {
-                        if (!fontController.latin.value &&
-                            !fontController.terjemah.value)
+                        if (!setting.latin.value &&
+                            !setting.terjemah.value)
                           return SizedBox.shrink();
                         return SizedBox(height: 30);
                       }),
                       Obx(() {
-                        if (!fontController.latin.value)
+                        if (!setting.latin.value)
                           return SizedBox.shrink();
                         return Align(
                           alignment: Alignment.centerRight,
@@ -425,19 +427,19 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                                   ? AppColors.secondary
                                   : Colors.black,
                               fontSize:
-                                  fontController.ukuranLatinTerjemah.value,
+                                  setting.ukuranLatinTerjemah.value,
                             ),
                           ),
                         );
                       }),
 
                       Obx(() {
-                        if (!fontController.terjemah.value)
+                        if (!setting.terjemah.value)
                           return SizedBox.shrink();
                         return SizedBox(height: 10);
                       }),
                       Obx(() {
-                        if (!fontController.terjemah.value)
+                        if (!setting.terjemah.value)
                           return SizedBox.shrink();
                         return Text(
                           ayat.teksIndonesia,
@@ -445,7 +447,7 @@ class _DetailHizbScreenState extends State<DetailHizbScreen>
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : Colors.black,
-                            fontSize: fontController.ukuranLatinTerjemah.value,
+                            fontSize: setting.ukuranLatinTerjemah.value,
                           ),
                         );
                       }),

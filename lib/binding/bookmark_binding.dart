@@ -11,9 +11,6 @@ import 'package:get/get.dart';
 class BookmarkBinding extends Bindings {
   @override
   void dependencies() {
-    // // ======================
-    // // CORE DEPENDENCY
-    // // ======================
     Get.lazyPut<DioClient>(() => DioClient());
 
     Get.lazyPut<SurahRemoteDataSource>(

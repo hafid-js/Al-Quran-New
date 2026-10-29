@@ -1,6 +1,5 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/helper_functions.dart';
-import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
 import 'package:flutter/material.dart';
@@ -158,23 +157,23 @@ class _SuratPilihanCardState extends State<SuratPilihanCard> {
                     ),
                   ),
                 ),
-                if (controller.latin.value) ...[
+                if (setting.latin.value) ...[
                   SizedBox(height: 10),
                   Text(
                           widget.teksLatin,
                           style: TextStyle(
                             color: AppColors.secondary,
-                            fontSize: controller.ukuranLatinTerjemah.value,
+                            fontSize: setting.ukuranLatinTerjemah.value,
                           ),
                         ),
                 ],
-                if (controller.terjemah.value) ...[
+                if (setting.terjemah.value) ...[
                   SizedBox(height: 10),
                   Text(
                         widget.teksIndonesia,
                         style: TextStyle(
                           color: isDark ? AppColors.textPrimaryDark : Colors.black,
-                          fontSize: controller.ukuranLatinTerjemah.value,
+                          fontSize: setting.ukuranLatinTerjemah.value,
                         ),
                       )
                 ],

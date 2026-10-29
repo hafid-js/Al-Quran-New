@@ -13,14 +13,6 @@ class EventCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // URoundedImage(
-          //   fit: BoxFit.cover,
-          //   imageUrl: event['image']!,
-          //   isNetworkImage: false,
-          //   width: 90,
-          //   height: 90,
-          //   borderRadius: 8,
-          // ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

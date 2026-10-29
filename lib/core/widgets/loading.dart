@@ -37,25 +37,6 @@ class _LoadingState extends State<Loading>
     super.dispose();
   }
 
-  Widget _dot(Animation<double> anim) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, _) {
-        return Transform.translate(
-          offset: Offset(0, anim.value),
-          child: Container(
-            width: 10,
-            height: 10,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

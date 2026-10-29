@@ -7,6 +7,7 @@ import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/alquran/screens/alquran_screen_new.dart';
 import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
+import 'package:alquran_new/development/masjid_terdekat/presentation/pages/masjid_terdekat_page.dart';
 import 'package:alquran_new/development/murrotal/screens/detail_qari_screen.dart';
 import 'package:alquran_new/development/doa/screens/doa_screen.dart';
 import 'package:alquran_new/development/ibadah/ibadah_screen.dart';
@@ -91,9 +92,9 @@ final List<Map<String, dynamic>> menus = [
     "onTap": _showMurrotalScreen,
   },
   {
-    "title": "Bookmark",
-    "icon": Iconsax.save_2,
-    "page": () => const BookmarkScreenNew(),
+    "title": "Masjid",
+    "icon": FlutterIslamicIcons.mosque,
+    "page": () => const MasjidTerdekatPage(),
   },
   {"title": "Semua", "icon": Iconsax.menu, "page": () => {}},
   {"title": "Dzikir", "icon": Iconsax.flash, "page": () => MatsuratScreen()},
@@ -101,6 +102,11 @@ final List<Map<String, dynamic>> menus = [
     "title": "Hijriah",
     "icon": Iconsax.calendar,
     "page": () => const HijriahScreen(),
+  },
+  {
+    "title": "Bookmark",
+    "icon": Iconsax.save_2,
+    "page": () => const BookmarkScreenNew(),
   },
 ];
 
@@ -543,7 +549,7 @@ class _HomeScreenNewState extends State<HomeScreenNew>
                                           (menu) =>
                                               _showAllMenus ||
                                               (menu["title"] != "Dzikir" &&
-                                                  menu["title"] != "Hijriah"),
+                                                  menu["title"] != "Bookmark" && menu["title"] != "Hijriah"),
                                         )
                                         .map(
                                           (menu) => _MenuItemWidget(
@@ -943,7 +949,7 @@ class _MurrotalContentState extends State<MurrotalContent> {
                                 color: AppColors.primary,
                                 width: 30,
                               ),
-                            ),
+                            ), 
                           ),
                         ),
                         CarouselSlider(

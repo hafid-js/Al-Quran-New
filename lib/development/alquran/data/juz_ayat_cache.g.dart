@@ -1,10 +1,4 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
 part of 'juz_ayat_cache.dart';
-
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
 
 class JuzAyatCacheAdapter extends TypeAdapter<JuzAyatCache> {
   @override

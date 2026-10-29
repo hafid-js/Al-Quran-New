@@ -1,8 +1,8 @@
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
+import 'package:alquran_new/development/pengaturan/controllers/settings_controller.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/settings_slider.dart';
-import 'package:alquran_new/development/shared/widgets/shimmer_detail_surah.dart';
 import 'package:alquran_new/development/shared/widgets/settings_switch.dart';
 import 'package:alquran_new/development/dzikir/widgets/surat_pilihan_card.dart';
 import 'package:alquran_new/development/alquran/controllers/detail_surah_controller.dart';
@@ -23,6 +23,8 @@ class DetailSuratPilihanScreen extends StatefulWidget {
 class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
     with SingleTickerProviderStateMixin {
   final controller = Get.find<DetailSurahController>();
+  final SettingsController setting = Get.find<SettingsController>();
+
   List<GlobalKey> _cardKeys = [];
   late AnimationController _animationController;
   late Animation<double> _rotation;
@@ -217,12 +219,12 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                                       const SizedBox(height: 5),
                                                       SettingsSwitchTile(
                                                         title: "Terjemah",
-                                                        value: controller
+                                                        value: setting
                                                             .terjemah
                                                             .value,
                                                         onChanged: (v) {
                                                           modalSetState(() {
-                                                            controller
+                                                            setting
                                                                     .terjemah
                                                                     .value =
                                                                 v;
@@ -233,12 +235,12 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
 
                                                       SettingsSwitchTile(
                                                         title: "Latin",
-                                                        value: controller
+                                                        value: setting
                                                             .latin
                                                             .value,
                                                         onChanged: (v) {
                                                           modalSetState(() {
-                                                            controller
+                                                            setting
                                                                     .latin
                                                                     .value =
                                                                 v;
@@ -250,12 +252,12 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                                       SettingsSwitchTile(
                                                         title:
                                                             "Font Arab Tebal",
-                                                        value: controller
+                                                        value: setting
                                                             .arabBold
                                                             .value,
                                                         onChanged: (v) {
                                                           modalSetState(() {
-                                                            controller
+                                                            setting
                                                                     .arabBold
                                                                     .value =
                                                                 v;
@@ -269,12 +271,12 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                                       SettingsSlider(
                                                         label:
                                                             "Ukuran Teks Arab",
-                                                        value: controller
+                                                        value: setting
                                                             .ukuranTeksArab
                                                             .value,
                                                         onChanged: (v) {
                                                           modalSetState(() {
-                                                            controller
+                                                            setting
                                                                     .ukuranTeksArab
                                                                     .value =
                                                                 v;
@@ -287,12 +289,12 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                                                       SettingsSlider(
                                                         label:
                                                             "Ukuran Teks latin & Terjemah",
-                                                        value: controller
+                                                        value: setting
                                                             .ukuranLatinTerjemah
                                                             .value,
                                                         onChanged: (v) {
                                                           modalSetState(() {
-                                                            controller
+                                                            setting
                                                                     .ukuranLatinTerjemah
                                                                     .value =
                                                                 v;
@@ -354,11 +356,11 @@ class _DetailSuratPilihanScreenState extends State<DetailSuratPilihanScreen>
                               ayat: ayat,
                               key: _cardKeys.isNotEmpty ? _cardKeys[i] : null,
                               nomorAyat: ayat.nomorAyat,
-                              ukuranTeksArab: controller.ukuranTeksArab.value,
+                              ukuranTeksArab: setting.ukuranTeksArab.value,
                               ukuranTeksLatinTerjemah:
-                                  controller.ukuranLatinTerjemah.value,
+                                  setting.ukuranLatinTerjemah.value,
                               nama: data.nama,
-                              isBold: controller.arabBold.value,
+                              isBold: setting.arabBold.value,
                               teksArab: ayat.teksArab,
                               teksLatin: ayat.teksLatin,
                               teksIndonesia: ayat.teksIndonesia,
