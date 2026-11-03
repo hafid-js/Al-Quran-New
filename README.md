@@ -34,3 +34,8 @@ diterminal jalankan :
 flutter pub get
 
 flutter run
+
+
+<img width="1677" height="706" alt="Screenshot 2026-11-03 at 7 12 14 AM" src="https://github.com/user-attachments/assets/491a8f99-86a3-4f36-b6ec-02eb69b11b11" />
+
+
