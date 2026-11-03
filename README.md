@@ -36,7 +36,11 @@ flutter pub get
 flutter run
 
 
-<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 13 - 2026-09-02 at 22 00 45" src="https://github.com/user-attachments/assets/a8b1a39b-6b6d-4233-a5b8-3a989b1df576" />
+<img width="1170" height="2532" alt="IMG_5971" src="https://github.com/user-attachments/assets/fbcfadc7-cd31-4ced-bebe-7d0891515a37" />
+
+<img width="1170" height="2532" alt="IMG_5975" src="https://github.com/user-attachments/assets/2398f36a-b0cd-49c9-9075-ff1460ef5a18" />
+
+<img width="1170" height="2532" alt="IMG_5974" src="https://github.com/user-attachments/assets/0fbeff5d-b7c2-484c-b71d-77c316f04f4e" />
 
 <img width="1170" height="2532" alt="Simulator Screenshot - iPhone 13 - 2026-09-02 at 22 00 55" src="https://github.com/user-attachments/assets/3173496c-d990-4ae4-be7f-7bf5109d1656" />
 
