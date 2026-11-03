@@ -10,6 +10,10 @@ API key **tidak** disimpan di repo. Sebelum menjalankan project:
 cp .env.example .env
 ```
 
+Buat API Key terlebih dahulu di Google Cloud dan gunakan 3 API ini :
+<img width="1677" height="706" alt="Screenshot 2026-11-03 at 7 12 14 AM" src="https://github.com/user-attachments/assets/dba796ee-353b-4398-a931-d9f6558e104e" />
+
+
 Lalu isi `GOOGLE_MAPS_API_KEY` di file `.env`.
 
 > `.env` didaftarkan sebagai asset di `pubspec.yaml`, jadi **wajib ada**
@@ -25,18 +29,8 @@ GOOGLE_MAPS_API_KEY=xxx
 Untuk iOS, salin `ios/Flutter/Secrets.xcconfig.example` menjadi
 `ios/Flutter/Secrets.xcconfig` dan isi key-nya.
 
-File `.env`, `android/local.properties`, dan
-`ios/Flutter/Secrets.xcconfig` sudah masuk `.gitignore`.
+diterminal jalankan :
 
-## Getting Started
+flutter pub get
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+flutter run
