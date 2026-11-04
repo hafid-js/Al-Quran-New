@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'hizb_ayat_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class HizbAyatCacheAdapter extends TypeAdapter<HizbAyatCache> {
   @override
-  final int typeId = 10;
+  final typeId = 10;
 
   @override
   HizbAyatCache read(BinaryReader reader) {
@@ -11,7 +17,7 @@ class HizbAyatCacheAdapter extends TypeAdapter<HizbAyatCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return HizbAyatCache()
-      ..hizbNumber = fields[0] as int
+      ..hizbNumber = (fields[0] as num).toInt()
       ..ayatJson = fields[1] as String;
   }
 

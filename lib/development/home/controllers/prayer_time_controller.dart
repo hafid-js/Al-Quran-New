@@ -111,7 +111,7 @@ class PrayerTimeController extends GetxController {
       final id = prayerIds[latestMissed] ?? 1;
       await NotificationService().showNotification(
         id: id,
-        title: "Al-Barokah: Quran & Sholat",
+        title: "Al-Barokah: Quran & Ibadah",
         body: "Saatnya sholat $latestMissed",
         notificationMode: 0,
       );
@@ -356,7 +356,7 @@ class PrayerTimeController extends GetxController {
         final isImsak = entry.key == "Imsak";
         await NotificationService().scheduleNotification(
           id: prayerIds[entry.key]!,
-          title: "Al-Barokah: Quran & Sholat",
+          title: "Al-Barokah: Quran & Ibadah",
           body: isImsak ? "Waktu imsak tiba, bersiaplah untuk berpuasa" : "Saatnya sholat ${entry.key}",
           scheduledDate: prayerTime,
           soundType: isImsak ? 'default' : settingsController.soundType.value,

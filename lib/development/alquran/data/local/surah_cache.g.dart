@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'surah_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class SurahCacheAdapter extends TypeAdapter<SurahCache> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   SurahCache read(BinaryReader reader) {
@@ -11,10 +17,10 @@ class SurahCacheAdapter extends TypeAdapter<SurahCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SurahCache()
-      ..nomor = fields[0] as int
+      ..nomor = (fields[0] as num).toInt()
       ..namaLatin = fields[1] as String
       ..nama = fields[2] as String
-      ..jumlahAyat = fields[3] as int
+      ..jumlahAyat = (fields[3] as num).toInt()
       ..tempatTurun = fields[4] as String
       ..arti = fields[5] as String
       ..deskripsi = fields[6] as String

@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'prayer_time_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class PrayerTimeCacheAdapter extends TypeAdapter<PrayerTimeCache> {
   @override
-  final int typeId = 8;
+  final typeId = 8;
 
   @override
   PrayerTimeCache read(BinaryReader reader) {
@@ -11,7 +17,7 @@ class PrayerTimeCacheAdapter extends TypeAdapter<PrayerTimeCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PrayerTimeCache()
-      ..day = fields[0] as int
+      ..day = (fields[0] as num).toInt()
       ..tanggalLengkap = fields[1] as String
       ..hari = fields[2] as String
       ..imsak = fields[3] as String

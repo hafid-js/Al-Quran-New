@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alquran_new/core/constants/app_colors.dart';
 import 'package:alquran_new/core/services/injection_container.dart';
 import 'package:alquran_new/core/widgets/loading.dart';
+import 'package:alquran_new/core/widgets/maps_loading.dart';
 import 'package:alquran_new/development/home/controllers/prayer_time_controller.dart';
 import 'package:alquran_new/development/masjid_terdekat/domain/entities/masjid.dart';
 import 'package:alquran_new/development/masjid_terdekat/presentation/bloc/masjid_bloc.dart';
@@ -188,7 +189,7 @@ class _MasjidViewState extends State<MasjidView> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'Cari Masjid Terdekat',
+          'Masjid Terdekat',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -225,44 +226,57 @@ class _MasjidViewState extends State<MasjidView> {
       ),
       body: BlocConsumer<MasjidBloc, MasjidState>(
         listener: (context, state) {
-          if (state is MasjidLoaded) {
-            _lastLoaded = state;
-
-            if (state.masjids.isNotEmpty) {
-              _mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(
-                  LatLng(
-                    state.userPosition.latitude,
-                    state.userPosition.longitude,
+          state.maybeWhen(
+            loaded: (masjids, userPosition) {
+              if(masjids.isNotEmpty) {
+                _mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(
+                    LatLng(userPosition.latitude, userPosition.longitude),
+                    _getZoomLevel(_selectedRadius)
                   ),
-                  _getZoomLevel(_selectedRadius),
-                ),
-              );
-            }
-          } else if (state is MasjidError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Gagal memuat masjid: ${state.message}')),
-            );
-          }
+                );
+              }
+            },
+            // error: (message) {
+            //   ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(content: Text('Gagal memuat masjidd: $message'))
+            //   );
+            // },
+            orElse: () {}
+          );
         },
         builder: (context, state) {
-          if (state is MasjidLoaded) {
-            _lastLoaded = state;
-          }
 
-          final data = state is MasjidLoaded ? state : _lastLoaded;
+          state.maybeWhen(
+            loaded: (masjids, userPosition) {
+              _lastLoaded = MasjidLoaded(masjids: masjids, userPosition: userPosition);
+            },
+            orElse: () {}
+          );
+
+          final data = state.maybeWhen(
+            loaded: (masjids, userPosition) => MasjidLoaded(masjids: masjids, userPosition: userPosition),
+            orElse: () => _lastLoaded
+          );
 
           if (data == null) {
-            if (_locationError != null) {
-              return _buildErrorView(_locationError!);
-            }
-            if (state is MasjidError) {
-              return _buildErrorView('Terjadi kesalahan: ${state.message}');
-            }
-            return const Center(child: Loading(message: ''));
+            return state.maybeWhen(
+              error: (message) => _buildErrorView(message),
+              orElse: () {
+                if(_locationError != null) {
+                  return _buildErrorView(_locationError!);
+                }
+                return MapsLoading();
+              }
+            );
           }
 
-          final isRefreshing = state is MasjidLoading;
+          final isRefreshing = state.maybeWhen(
+            loading: () => true,
+            orElse: () => false
+          );
+          
+
           Set<Marker> markers = data.masjids.map((masjid) {
             final isSelected = _selectedMasjid?.id == masjid.id;
 
@@ -308,6 +322,7 @@ class _MasjidViewState extends State<MasjidView> {
                   });
                 },
               ),
+
 
               Positioned(
                 top: 16,
@@ -414,7 +429,7 @@ class _MasjidViewState extends State<MasjidView> {
                             _selectedMasjid!.address,
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
 
                           if (_userPosition != null)
                             Builder(
@@ -434,12 +449,13 @@ class _MasjidViewState extends State<MasjidView> {
                                       color: AppColors.secondary,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Text(
-                                      status['message'] ??
-                                          'Jadwal salat belum tersedia.',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                    child: Center(
+                                      child: Text(
+                                        status['message'] ??
+                                            'Jadwal salat belum tersedia.',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall,
                                       ),
                                     ),
                                   );
@@ -459,7 +475,6 @@ class _MasjidViewState extends State<MasjidView> {
                                         const SizedBox(width: 6),
                                         Expanded(
                                           child: Text(
-                                            'Iqamah ${status['prayerName']} ±${status['iqamahTime']}\n'
                                             'Jarak ${status['distanceKm']} km • '
                                             'estimasi perjalanan ±${status['etaMinutes']} menit',
                                             style: Theme.of(
@@ -469,13 +484,14 @@ class _MasjidViewState extends State<MasjidView> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 8),
+
                                     if (showWarning) ...[
-                                      const SizedBox(height: 10),
                                       Container(
                                         width: double.infinity,
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: isLate
+                                          color: !isLate
                                               ? Colors.red.withAlpha(70)
                                               : AppColors.primary.withAlpha(70),
                                           borderRadius: BorderRadius.circular(
@@ -499,16 +515,12 @@ class _MasjidViewState extends State<MasjidView> {
                                             Expanded(
                                               child: Text(
                                                 isLate
-                                                    ? 'Perkiraan tiba pukul ${status['arrivalTime']}.\n'
+                                                    ? 'Perkiraan tiba pukul ${status['arrivalTime']}.\n\n'
                                                           'Kemungkinan terlambat ${status['diffMinutes']} menit '
                                                           'dari iqamah ${status['prayerName']} pukul '
                                                           '${status['iqamahTime']}. \n'
-                                                          'Jarak ${status['distanceKm']} km, '
-                                                          'estimasi perjalanan ${status['etaMinutes']} menit.'
                                                     : 'Masih memungkinkan untuk Sholat '
                                                           '${status['prayerName']} Berjamaah!\n\n'
-                                                          'Jarak ${status['distanceKm']} km, '
-                                                          'estimasi perjalanan ${status['etaMinutes']} menit. '
                                                           'Perkiraan tiba pukul ${status['arrivalTime']},\n'
                                                           '(${status['diffMinutes']} menit sebelum iqamah '
                                                           '${status['prayerName']} pukul '
@@ -531,7 +543,7 @@ class _MasjidViewState extends State<MasjidView> {
                               },
                             ),
 
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
 
                           SizedBox(
                             width: double.infinity,
@@ -587,7 +599,16 @@ class _MasjidViewState extends State<MasjidView> {
                 foregroundColor: Colors.white,
               ),
               icon: Icon(Iconsax.refresh),
-              label: _isResolvingLocation ? Loading() : Text('Coba Lagi'),
+             label: _isResolvingLocation
+    ? const SizedBox(
+        width: 18,
+        height: 18,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Colors.white,
+        ),
+      )
+    : const Text('Coba Lagi'),
             ),
           ],
         ),

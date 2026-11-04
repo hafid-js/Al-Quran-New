@@ -1,17 +1,15 @@
-class Masjid {
-  final String id;
-  final String name;
-  final String address;
-  final double latitude;
-  final double longitude;
-  final double? rating;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const Masjid({
-    required this.id,
-    required this.name,
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-    this.rating,
-  });
+part 'masjid.freezed.dart';
+
+@freezed
+abstract class Masjid with _$Masjid {
+  const factory Masjid({
+    required String id,
+    required String name,
+    required String address,
+    required double latitude,
+    required double longitude,
+    double? rating,
+  }) = _Masjid;
 }

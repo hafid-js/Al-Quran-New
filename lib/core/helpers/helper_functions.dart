@@ -30,6 +30,11 @@ String formatRupiah(int nominal) {
   return 'Rp $buffer';
 }
 
+
+
+
+
+
 Map<String, dynamic> calculateIqamahStatus(
   Masjid masjid,
   Position userPos,
@@ -117,8 +122,6 @@ Map<String, dynamic> calculateIqamahStatus(
   DateTime iqamahOf(DateTime adhan) =>
       adhan.add(const Duration(minutes: iqamahBufferMinutes));
 
-  // Pilih salat yang iqamah-nya belum lewat. Ini membuat salat saat ini tetap
-  // muncul ketika adzan sudah berkumandang tetapi iqamah belum tiba.
   MapEntry<String, DateTime>? target;
   String targetSuffix = '';
 

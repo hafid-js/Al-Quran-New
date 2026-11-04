@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'bookmark_model.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class BookmarkModelAdapter extends TypeAdapter<BookmarkModel> {
   @override
-  final int typeId = 0;
+  final typeId = 0;
 
   @override
   BookmarkModel read(BinaryReader reader) {
@@ -11,10 +17,10 @@ class BookmarkModelAdapter extends TypeAdapter<BookmarkModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BookmarkModel()
-      ..surahNumber = fields[0] as int
+      ..surahNumber = (fields[0] as num).toInt()
       ..arabName = fields[1] as String
       ..surahName = fields[2] as String
-      ..ayatNumber = fields[3] as int
+      ..ayatNumber = (fields[3] as num).toInt()
       ..createdAt = fields[4] as DateTime;
   }
 

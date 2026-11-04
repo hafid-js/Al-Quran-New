@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'doa_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class DoaCacheAdapter extends TypeAdapter<DoaCache> {
   @override
-  final int typeId = 5;
+  final typeId = 5;
 
   @override
   DoaCache read(BinaryReader reader) {
@@ -11,7 +17,7 @@ class DoaCacheAdapter extends TypeAdapter<DoaCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DoaCache()
-      ..doaId = fields[0] as int
+      ..doaId = (fields[0] as num).toInt()
       ..grup = fields[1] as String
       ..nama = fields[2] as String
       ..ar = fields[3] as String

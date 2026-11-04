@@ -43,6 +43,7 @@ key.properties
 .env.*
 !.env.example
 ios/Flutter/Secrets.xcconfig
+ios/Flutter/Release.xcconfig
 
 # Symbolication related
 app.*.symbols

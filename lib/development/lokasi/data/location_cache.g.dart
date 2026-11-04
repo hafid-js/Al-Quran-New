@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'location_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class LocationCacheAdapter extends TypeAdapter<LocationCache> {
   @override
-  final int typeId = 6;
+  final typeId = 6;
 
   @override
   LocationCache read(BinaryReader reader) {

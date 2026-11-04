@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:alquran_new/core/constants/app_colors.dart';
+import 'package:alquran_new/core/widgets/loading.dart';
 import 'package:alquran_new/development/onboarding/screens/consent_screen.dart';
 import 'package:alquran_new/main_screen.dart';
 import 'package:flutter/material.dart';

@@ -18,6 +18,6 @@ class MasjidRepositoryImpl implements MasjidRepository {
       lng,
       radius,
     );
-    return remoteModels;
+    return remoteModels.map((model) => model.toEntity()).toList();
   }
 }

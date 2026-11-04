@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'app_settings.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class AppSettingsAdapter extends TypeAdapter<AppSettings> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   AppSettings read(BinaryReader reader) {
@@ -11,11 +17,11 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AppSettings()
-      ..qariSelected = fields[0] as int
-      ..fontSelected = fields[1] as int
-      ..modeSelected = fields[2] as int
-      ..colorSelected = fields[3] as int
-      ..customColor = fields[4] as int;
+      ..qariSelected = (fields[0] as num).toInt()
+      ..fontSelected = (fields[1] as num).toInt()
+      ..modeSelected = (fields[2] as num).toInt()
+      ..colorSelected = (fields[3] as num).toInt()
+      ..customColor = (fields[4] as num).toInt();
   }
 
   @override

@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'ayat_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class AyatCacheAdapter extends TypeAdapter<AyatCache> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   AyatCache read(BinaryReader reader) {
@@ -11,12 +17,12 @@ class AyatCacheAdapter extends TypeAdapter<AyatCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AyatCache()
-      ..nomorAyat = fields[0] as int
+      ..nomorAyat = (fields[0] as num).toInt()
       ..teksArab = fields[1] as String
       ..teksLatin = fields[2] as String
       ..teksIndonesia = fields[3] as String
       ..audioJson = fields[4] as String
-      ..surahNomor = fields[5] as int;
+      ..surahNomor = (fields[5] as num).toInt();
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:alquran_new/development/home/domain/entities/prayer_time.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 part 'prayer_time_cache.g.dart';
 

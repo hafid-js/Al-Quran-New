@@ -9,10 +9,11 @@ class MasjidBloc extends Bloc<MasjidEvent, MasjidState> {
 
   int _requestId = 0;
 
-  MasjidBloc({required this.getMasjidsTerdekat}) : super(MasjidInitial()) {
+  MasjidBloc({required this.getMasjidsTerdekat})
+    : super(const MasjidState.initial()) {
     on<FetchMasjidEvent>((event, emit) async {
       final requestId = ++_requestId;
-      emit(MasjidLoading());
+      emit(const MasjidState.loading());
       try {
         final position = Position(
           longitude: event.lng,
@@ -33,10 +34,10 @@ class MasjidBloc extends Bloc<MasjidEvent, MasjidState> {
           event.radius,
         );
         if (isClosed || requestId != _requestId) return;
-        emit(MasjidLoaded(masjids: masjids, userPosition: position));
+        emit(MasjidState.loaded(masjids: masjids, userPosition: position));
       } catch (e) {
         if (isClosed || requestId != _requestId) return;
-        emit(MasjidError(_cleanErrorMessage(e)));
+        emit(MasjidState.error(message: _cleanErrorMessage(e)));
       }
     });
   }

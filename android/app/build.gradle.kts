@@ -45,8 +45,8 @@ android {
         applicationId = "com.hafidtech.alquran"
         minSdk = 24
         targetSdk = 36
-        versionCode = 19 
-        versionName = "2.1.1"
+        versionCode = 21 
+        versionName = "2.1.2"
         multiDexEnabled = true
         manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = googleMapsApiKey
         ndk {

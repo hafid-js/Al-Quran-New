@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'notification_settings.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class NotificationSettingsAdapter extends TypeAdapter<NotificationSettings> {
   @override
-  final int typeId = 7;
+  final typeId = 7;
 
   @override
   NotificationSettings read(BinaryReader reader) {
@@ -11,14 +17,14 @@ class NotificationSettingsAdapter extends TypeAdapter<NotificationSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return NotificationSettings(
-      notificationMode: fields[0] as int,
-      soundType: fields[1] as String,
-      imsakEnabled: fields[2] as bool,
-      subuhEnabled: fields[3] as bool,
-      dzuhurEnabled: fields[4] as bool,
-      asharEnabled: fields[5] as bool,
-      maghribEnabled: fields[6] as bool,
-      isyaEnabled: fields[7] as bool,
+      notificationMode: fields[0] == null ? 0 : (fields[0] as num).toInt(),
+      soundType: fields[1] == null ? 'default' : fields[1] as String,
+      imsakEnabled: fields[2] == null ? true : fields[2] as bool,
+      subuhEnabled: fields[3] == null ? true : fields[3] as bool,
+      dzuhurEnabled: fields[4] == null ? true : fields[4] as bool,
+      asharEnabled: fields[5] == null ? true : fields[5] as bool,
+      maghribEnabled: fields[6] == null ? true : fields[6] as bool,
+      isyaEnabled: fields[7] == null ? true : fields[7] as bool,
     );
   }
 

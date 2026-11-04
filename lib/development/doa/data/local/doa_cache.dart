@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:alquran_new/development/doa/domain/entities/doa.dart';
 
 part 'doa_cache.g.dart';

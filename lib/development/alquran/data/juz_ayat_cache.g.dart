@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'juz_ayat_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class JuzAyatCacheAdapter extends TypeAdapter<JuzAyatCache> {
   @override
-  final int typeId = 9;
+  final typeId = 9;
 
   @override
   JuzAyatCache read(BinaryReader reader) {
@@ -11,7 +17,7 @@ class JuzAyatCacheAdapter extends TypeAdapter<JuzAyatCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return JuzAyatCache()
-      ..juzNumber = fields[0] as int
+      ..juzNumber = (fields[0] as num).toInt()
       ..ayatJson = fields[1] as String;
   }
 

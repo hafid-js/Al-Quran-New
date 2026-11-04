@@ -1,30 +1,21 @@
 import 'package:alquran_new/development/masjid_terdekat/domain/entities/masjid.dart';
-import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-abstract class MasjidState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+part 'masjid_state.freezed.dart';
 
-class MasjidInitial extends MasjidState {}
+@freezed
+sealed class MasjidState with _$MasjidState {
+  const factory MasjidState.initial() = MasjidInitial;
 
-class MasjidLoading extends MasjidState {}
+  const factory MasjidState.loading() = MasjidLoading;
 
-class MasjidLoaded extends MasjidState {
-  final List<Masjid> masjids;
-  final Position userPosition;
+  const factory MasjidState.loaded({
+    required List<Masjid> masjids,
+    required Position userPosition
+  }) = MasjidLoaded;
 
-  MasjidLoaded({required this.masjids, required this.userPosition});
-
-  @override
-  List<Object?> get props => [masjids, userPosition];
-}
-
-class MasjidError extends MasjidState {
-  final String message;
-  MasjidError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  const factory MasjidState.error({
+    required String message,
+  }) = MasjidError;
 }

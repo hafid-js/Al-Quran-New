@@ -10,7 +10,7 @@ import 'package:alquran_new/development/lokasi/data/location_cache.dart';
 import 'package:alquran_new/development/pengaturan/models/app_settings.dart';
 import 'package:alquran_new/development/pengaturan/models/notification_settings.dart';
 
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HiveService {

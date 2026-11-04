@@ -1,8 +1,14 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'tafsir_cache.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class TafsirCacheAdapter extends TypeAdapter<TafsirCache> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   TafsirCache read(BinaryReader reader) {
@@ -11,8 +17,8 @@ class TafsirCacheAdapter extends TypeAdapter<TafsirCache> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TafsirCache()
-      ..nomorSurah = fields[0] as int
-      ..nomorAyat = fields[1] as int
+      ..nomorSurah = (fields[0] as num).toInt()
+      ..nomorAyat = (fields[1] as num).toInt()
       ..tafsir = fields[2] as String;
   }
 
