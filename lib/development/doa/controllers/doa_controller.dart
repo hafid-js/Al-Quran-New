@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:alquran_new/core/network/network_controller.dart';
 import 'package:alquran_new/core/utils/result.dart';
-import 'package:alquran_new/development/doa/data/local/datasource/doa_local_datasource.dart';
+import 'package:alquran_new/development/doa/data/datasources/doa_local_datasource.dart';
 import 'package:alquran_new/development/doa/domain/entities/doa.dart';
 import 'package:alquran_new/development/doa/domain/usecases/get_all_doa.dart';
 import 'package:flutter/foundation.dart';
@@ -25,13 +25,15 @@ class DoaController extends GetxController {
   }
 
   Future<void> fetchDoa() async {
+        isLoading.value = true;
     try {
-      isLoading.value = true;
-
+  
       final cache = await _local.getAllDoa();
+
       if (cache.isNotEmpty) {
         doaList.value = cache;
         filteredDoa.value = cache;
+        isLoading.value = false;
         return;
       }
 
@@ -47,11 +49,14 @@ class DoaController extends GetxController {
 
       final result = await _getAllDoa.call();
       if (result is Success<List<Doa>>) {
-        await _local.saveAllDoa(result.data);
+        if(result.data.isNotEmpty) {
         doaList.value = result.data;
         filteredDoa.value = result.data;
+        await _local.saveAllDoa(result.data);
+        }
+
       } else if (result is Failure<List<Doa>>) {
-        Get.snackbar('Error', result.message);
+        if(cache.isEmpty) Get.snackbar('Error', result.message);
       }
     } catch (e) {
       debugPrint('fetchDoa error: $e');

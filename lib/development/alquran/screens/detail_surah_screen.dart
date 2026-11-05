@@ -283,7 +283,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen>
           child: data.ayat.isEmpty
               ? CommonEmptyWidget(
                   message:
-                      "Ayat belum terunduh. Periksa koneksi lalu tarik ke bawah.",
+                      "Ayat belum terunduh. Periksa koneksi lalu klik tombol Refresh.",
                   refresh: () async {
                     await controller.fetchDetailSurah(
                       nomor,

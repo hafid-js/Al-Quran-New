@@ -24,7 +24,7 @@ class DoaCacheAdapter extends TypeAdapter<DoaCache> {
       ..tr = fields[4] as String
       ..idn = fields[5] as String
       ..tentang = fields[6] as String
-      ..tagJson = fields[7] as String;
+      ..tag = (fields[7] as List).cast<String>();
   }
 
   @override
@@ -46,7 +46,7 @@ class DoaCacheAdapter extends TypeAdapter<DoaCache> {
       ..writeByte(6)
       ..write(obj.tentang)
       ..writeByte(7)
-      ..write(obj.tagJson);
+      ..write(obj.tag);
   }
 
   @override

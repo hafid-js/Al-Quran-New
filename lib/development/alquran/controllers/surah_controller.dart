@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:alquran_new/development/core/db/hive_service.dart';
 import 'package:alquran_new/core/network/network_controller.dart';
@@ -179,8 +180,9 @@ class SurahController extends GetxController with WidgetsBindingObserver {
       isLoading.value = true;
 
       final cache = await local.getSurah();
+      final hasCache = cache.isNotEmpty;
 
-      if (cache.isNotEmpty) {
+      if (hasCache) {
         final settingController = Get.find<SettingsController>();
 
         final qariKey = (settingController.qariSelected.value + 1)
@@ -212,9 +214,7 @@ class SurahController extends GetxController with WidgetsBindingObserver {
             nama: e.nama,
             deskripsi: e.deskripsi,
             jumlahAyat: e.jumlahAyat,
-            tempatTurun: TempatTurun.values.firstWhere(
-              (t) => t.name == e.tempatTurun,
-            ),
+            tempatTurun: TempatTurunX.fromString(e.tempatTurun),
             arti: e.arti,
             audioFull: audioFull,
             ayat: ayatList.map((a) {
@@ -230,16 +230,18 @@ class SurahController extends GetxController with WidgetsBindingObserver {
         }).toList();
 
         filteredSurah.value = surahList;
-        return;
+        isLoading.value = false;
       }
 
       final net = Get.find<NetworkController>();
       if (!net.isConnected.value) {
-        Get.snackbar(
-          "Tidak Ada Koneksi",
-          "Periksa koneksi internet untuk memuat daftar surah.",
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        if (!hasCache) {
+          Get.snackbar(
+            "Tidak Ada Koneksi",
+            "Periksa koneksi internet untuk memuat daftar surah.",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
         return;
       }
 
@@ -283,6 +285,27 @@ class SurahController extends GetxController with WidgetsBindingObserver {
             }
           }
         }
+      } else if (result is Failure<List<Surah>>) {
+        if (!hasCache) {
+          Get.snackbar(
+            "Gagal memuat",
+            result.message,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        } else {
+          debugPrint('fetchSurah gagal, memakai cache: ${result.message}');
+        }
+      }
+    } catch (e) {
+      debugPrint('fetchSurah error: $e');
+      if (surahList.isEmpty) {
+        Get.snackbar(
+          "Terjadi Kesalahan",
+          e is SocketException || e is HttpException
+              ? 'Periksa Koneksi Jaringan Anda'
+              : e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } finally {
       isLoading.value = false;
@@ -290,7 +313,6 @@ class SurahController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> refreshSurah() async {
-    await DevHiveService.surahBox.clear();
     await fetchSurah();
   }
 

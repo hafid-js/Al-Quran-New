@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:hive_ce/hive_ce.dart';
 import 'package:alquran_new/development/doa/domain/entities/doa.dart';
 
@@ -21,7 +20,7 @@ class DoaCache extends HiveObject {
   @HiveField(6)
   late String tentang;
   @HiveField(7)
-  late String tagJson;
+  late List<String> tag;
 
   Doa toEntity() {
     return Doa(
@@ -32,9 +31,7 @@ class DoaCache extends HiveObject {
       tr: tr,
       idn: idn,
       tentang: tentang,
-      tag: tagJson.isNotEmpty
-          ? List<String>.from(jsonDecode(tagJson))
-          : [],
+      tag: tag,
     );
   }
 
@@ -47,6 +44,6 @@ class DoaCache extends HiveObject {
       ..tr = doa.tr
       ..idn = doa.idn
       ..tentang = doa.tentang
-      ..tagJson = jsonEncode(doa.tag);
+      ..tag = doa.tag;
   }
 }

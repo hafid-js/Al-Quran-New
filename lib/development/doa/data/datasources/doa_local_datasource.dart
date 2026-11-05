@@ -9,10 +9,12 @@ class DoaLocalDataSource {
   }
 
   Future<void> saveAllDoa(List<Doa> doaList) async {
-    await DevHiveService.doaBox.clear();
+    final box = DevHiveService.doaBox;
+
     final caches = doaList.map((e) => DoaCache.fromEntity(e)).toList();
+    await box.clear();
     for (final item in caches) {
-      await DevHiveService.doaBox.add(item);
+      await box.add(item);
     }
   }
 }
