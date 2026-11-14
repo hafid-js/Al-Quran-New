@@ -6,6 +6,7 @@ import 'package:alquran_new/core/helpers/helper_functions.dart';
 import 'package:alquran_new/core/helpers/responsive_helper.dart';
 import 'package:alquran_new/core/widgets/tap_scale_widget.dart';
 import 'package:alquran_new/development/alquran/screens/alquran_screen_new.dart';
+import 'package:alquran_new/development/dev_alquran/presentation/pages/alquran_page.dart';
 import 'package:alquran_new/development/dzikir/screens/matsurat_screen.dart';
 import 'package:alquran_new/development/masjid_terdekat/presentation/pages/masjid_terdekat_page.dart';
 import 'package:alquran_new/development/murrotal/screens/detail_qari_screen.dart';
@@ -58,11 +59,16 @@ final List<Map<String, dynamic>> prayerTimes = [
   {"title": "Isya", "icon": Iconsax.moon, "time": "19:10"},
 ];
 final List<Map<String, dynamic>> menus = [
-  {
+  // {
+  //   "title": "Quran",
+  //   "icon": Iconsax.book_1,
+  //   "page": () => const AlquranScreenNew(),
+  //   "binding": SurahBinding(),
+  // },
+   {
     "title": "Quran",
     "icon": Iconsax.book_1,
-    "page": () => const AlquranScreenNew(),
-    "binding": SurahBinding(),
+    "page": () => const AlquranPage(),
   },
   {
     "title": "Doa",

@@ -18,7 +18,7 @@ class DoaController extends GetxController {
   var activeCategory = RxnString();
   var searchQuery = ''.obs;
 
-  @override
+  @override 
   void onInit() {
     super.onInit();
     fetchDoa();

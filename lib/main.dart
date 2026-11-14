@@ -27,6 +27,8 @@ import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:alquran_new/core/services/injection_container.dart' as di;
+import 'package:alquran_new/core/services/dev_alquran_di.dart' as di_dev;
+
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -84,6 +86,10 @@ void main() async {
   _registerDependencies();
 
   di.init();
+  di_dev.initDevAlquran();
+
+
+
 
   runApp(const MyApp());
 }

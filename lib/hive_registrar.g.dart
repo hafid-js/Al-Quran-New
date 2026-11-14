@@ -9,6 +9,8 @@ import 'package:alquran_new/development/alquran/data/local/ayat_cache.dart';
 import 'package:alquran_new/development/alquran/data/local/surah_cache.dart';
 import 'package:alquran_new/development/alquran/data/local/tafsir_cache.dart';
 import 'package:alquran_new/development/bookmark/models/bookmark_model.dart';
+import 'package:alquran_new/development/dev_alquran/data/local/ayat_cache.dart';
+import 'package:alquran_new/development/dev_alquran/data/local/surah_cache.dart';
 import 'package:alquran_new/development/doa/data/local/doa_cache.dart';
 import 'package:alquran_new/development/home/data/local/prayer_time_cache.dart';
 import 'package:alquran_new/development/lokasi/data/location_cache.dart';
@@ -19,6 +21,7 @@ extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AppSettingsAdapter());
     registerAdapter(AyatCacheAdapter());
+    registerAdapter(AyatCacheAdapter());
     registerAdapter(BookmarkModelAdapter());
     registerAdapter(DoaCacheAdapter());
     registerAdapter(HizbAyatCacheAdapter());
@@ -26,6 +29,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(LocationCacheAdapter());
     registerAdapter(NotificationSettingsAdapter());
     registerAdapter(PrayerTimeCacheAdapter());
+    registerAdapter(SurahCacheAdapter());
     registerAdapter(SurahCacheAdapter());
     registerAdapter(TafsirCacheAdapter());
   }
@@ -35,6 +39,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AppSettingsAdapter());
     registerAdapter(AyatCacheAdapter());
+    registerAdapter(AyatCacheAdapter());
     registerAdapter(BookmarkModelAdapter());
     registerAdapter(DoaCacheAdapter());
     registerAdapter(HizbAyatCacheAdapter());
@@ -42,6 +47,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(LocationCacheAdapter());
     registerAdapter(NotificationSettingsAdapter());
     registerAdapter(PrayerTimeCacheAdapter());
+    registerAdapter(SurahCacheAdapter());
     registerAdapter(SurahCacheAdapter());
     registerAdapter(TafsirCacheAdapter());
   }
