@@ -5,6 +5,7 @@ import 'package:alquran_new/development/dev_alquran/domain/entities/surah.dart';
 import 'package:alquran_new/development/dev_alquran/presentation/bloc/surah_bloc.dart';
 import 'package:alquran_new/development/dev_alquran/presentation/bloc/surah_event.dart';
 import 'package:alquran_new/development/dev_alquran/presentation/bloc/surah_state.dart';
+import 'package:alquran_new/development/dev_alquran/presentation/pages/detail_surah_page.dart';
 import 'package:alquran_new/development/shared/widgets/common_app_bar.dart';
 import 'package:alquran_new/development/shared/widgets/common_empty_widget.dart';
 import 'package:alquran_new/development/shared/widgets/octagram_badge.dart';
@@ -165,13 +166,13 @@ class _SurahItem extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
-      // onTap: () {
-      //   Navigator.of(context).push(
-      //     MaterialPageRoute<void>(
-      //       builder: (_) => DetailSurahPage(nomor: surah.nomor),
-      //     ),
-      //   );
-      // },
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => DetailSurahPage(nomor: surah.nomor),
+          ),
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Container(

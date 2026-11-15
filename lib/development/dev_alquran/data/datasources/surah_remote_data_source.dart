@@ -40,7 +40,7 @@ class SurahRemoteDataSourceImpl implements SurahRemoteDataSource {
         } on FormatException catch (e) {
           return Failure(e.message);
         } catch (_) {
-          return const Failure('Gagal memproses detail surah.');
+          return const Failure('Gagal memproses data surah.');
         }
       },
       failure: (message, statusCode) =>

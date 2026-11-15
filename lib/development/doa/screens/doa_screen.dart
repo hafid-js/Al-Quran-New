@@ -83,8 +83,10 @@ class _DoaScreenState extends State<DoaScreen> {
                       );
                     }
                     return RefreshIndicator(
-          backgroundColor: isDark ? Theme.of(context).cardColor : AppColors.primary,
-          color: AppColors.secondary,
+                      backgroundColor: isDark
+                          ? Theme.of(context).cardColor
+                          : AppColors.primary,
+                      color: AppColors.secondary,
                       onRefresh: controller.fetchDoa,
                       child: ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 8),
@@ -268,18 +270,18 @@ class _DoaScreenState extends State<DoaScreen> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                        doa.ar,
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: 28,
-                          color: isDark
-                              ? AppColors.textPrimaryDark
-                              : AppColors.textPrimaryLight,
-                          height: 2.5,
+                          doa.ar,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: 28,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                            height: 2.5,
+                          ),
+                          textAlign: TextAlign.right,
                         ),
-                        textAlign: TextAlign.right,
                       ),
-                      )
                     ),
                   ),
                   SizedBox(height: 15),
